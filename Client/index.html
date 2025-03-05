@@ -9,12 +9,6 @@
         font-family: "tanuki";
         src: url("re/font/TanukiMagic.ttf") format("truetype");
         font-display: swap;
-        /*.woff：'woff'
-.woff2：'woff2'
- .ttf：'truetype'
-.otf：'opentype'
-.eot：'embedded-opentype'（IEのみ）
-.svg：'svg'*/
       }
       @font-face {
         font-family: "anka";
@@ -22,12 +16,14 @@
         font-display: swap;
       }
 
+      body {
+        background-color: #f0f0f0;
+      }
       .menu {
         display: flex;
-        justify-content: center;
+        flex-direction: column;
         align-items: center;
-        flex-wrap: wrap;
-        gap: 20px; /* 要素間のスペース */
+        gap: 20px;
         height: 100vh;
         margin: 0;
         background-color: #f0f0f0;
@@ -42,8 +38,12 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        margin-bottom: 20px;
       }
-
+      .contalex {
+        display: flex;
+        gap: 20px;
+      }
       .container:after {
         content: "";
         width: 100%;
@@ -122,54 +122,70 @@
         width: 20px;
         height: 20px;
       }
+      .title {
+        font-size: 70px;
+        display: inline-block;
+        background: -webkit-linear-gradient(
+          45deg,
+          #ac7304,
+          #aca904 30%,
+          #96ac04 40%,
+          #36ac04 50%,
+          #02d45a 60%,
+          #35a75b 90%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: blue;
+      }
     </style>
   </head>
   <body>
     <div class="menu">
       <div class="TEXTFILED">
-        <h1>Deep-School</h1>
+        <h1 class="title">Deep-School</h1>
         <p class="time-er">2025 Jan 17 4:10 P.M.</p>
       </div>
-      <div class="container">
-        <div class="text">SCR</div>
-      </div>
-      <div class="container">
-        <div class="text">全校</div>
-      </div>
-      <div class="container">
-        <div class="text">学年</div>
-      </div>
-      <div class="container">
-        <div class="text">学級</div>
-      </div>
-      <img class="icon" src="./re/ico/Setting.png" />
-      <div class="study-timer-container">
-        <div class="study-timer-text-sti">Sti</div>
-        <div class="study-timer-line-diagonal"></div>
-        <div class="study-timer-line-vertical"></div>
-        <div class="study-timer-number" id="StudyHour">41</div>
-        <div class="study-timer-pencil">
-          <svg
-            version="1.1"
-            id="_x32_"
-            xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
-            x="0px"
-            y="0px"
-            viewBox="0 0 512 512"
-            style="width: 26px; height: 26px; opacity: 1"
-            xml:space="preserve"
-          >
-            <style type="text/css"></style>
-            <g>
-              <path
-                class="st0"
-                d="M392.052,0l-0.642,0.01c0,0,0,0,0.009,0c0,0,0-0.01,0.008,0L392.052,0z"
-                style="fill: #daf1f8"
-              ></path>
-              <path
-                class="st0"
-                d="M487.66,61.494l-0.037-0.037c-0.056-0.056-0.102-0.111-0.156-0.166h-0.01
+      <div class="contalex">
+        <div class="container">
+          <div class="text">SCR</div>
+        </div>
+        <div class="container">
+          <div class="text">全校</div>
+        </div>
+        <div class="container">
+          <div class="text">学年</div>
+        </div>
+        <div class="container">
+          <div class="text">学級</div>
+        </div>
+        <img class="icon" src="./re/ico/Setting.png" />
+        <div class="study-timer-container">
+          <div class="study-timer-text-sti">Sti</div>
+          <div class="study-timer-line-diagonal"></div>
+          <div class="study-timer-line-vertical"></div>
+          <div class="study-timer-number" id="StudyHour">41</div>
+          <div class="study-timer-pencil">
+            <svg
+              version="1.1"
+              id="_x32_"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              x="0px"
+              y="0px"
+              viewBox="0 0 512 512"
+              style="width: 26px; height: 26px; opacity: 1"
+              xml:space="preserve"
+            >
+              <g>
+                <path
+                  class="st0"
+                  d="M392.052,0l-0.642,0.01c0,0,0,0,0.009,0c0,0,0-0.01,0.008,0L392.052,0z"
+                  style="fill: #daf1f8"
+                ></path>
+                <path
+                  class="st0"
+                  d="M487.66,61.494l-0.037-0.037c-0.056-0.056-0.102-0.111-0.156-0.166h-0.01
                     c-0.064-0.056-0.092-0.092-0.193-0.183l-36.51-36.511c-0.009-0.018-0.028-0.027-0.046-0.046
                     C434.386,8.23,412.811-0.027,391.419,0.01c-21.392-0.037-42.968,8.211-59.308,24.56L297.75,58.931l-13.043,13.033L0,356.681V512
                     h155.327l284.708-284.698l13.042-13.042l34.362-34.37c16.34-16.332,24.588-37.916,24.56-59.299
@@ -177,10 +193,11 @@
                     L136.572,466.736z M455.429,147.878l-21.327,21.318l-91.29-91.299L364.13,56.58c7.578-7.569,17.35-11.279,27.289-11.306
                     c9.938,0.027,19.702,3.738,27.288,11.306l36.722,36.712c7.569,7.587,11.279,17.36,11.298,27.298
                     C466.708,130.528,462.998,140.292,455.429,147.878z"
-                style="fill: #daf1f8"
-              ></path>
-            </g>
-          </svg>
+                  style="fill: #daf1f8"
+                ></path>
+              </g>
+            </svg>
+          </div>
         </div>
       </div>
     </div>
