@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Deep-School</title>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="54111871338-nv4bn99r48cohhverg3l9oicirthmtpp.apps.googleusercontent.com">
     <style>
       @font-face {
         font-family: "tanuki";
@@ -157,7 +159,8 @@
           <div class="text">学年</div>
         </div>
         <div class="container">
-          <div class="text">学級</div>
+          <div class="g-signin2" data-onsuccess="onSignIn"></div>
+
         </div>
         <img class="icon" src="./re/ico/Setting.png" />
         <div class="study-timer-container">
