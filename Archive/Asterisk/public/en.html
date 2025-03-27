@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel="manifest" href="/manifest.json">
+	<link id="icon" rel="icon" href="/logo/Aterisk.ico">
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+	<title>Åsterisk</title>
+	<meta property="analytics-track" content="Asterisk - Index/Tab" />
+	<meta property="analytics-s-channel" content="homepage" />
+	<meta property="analytics-s-bucket-0" content="Asterisk" />
+	<meta property="analytics-s-bucket-1" content="Asterisk" />
+	<meta property="analytics-s-bucket-2" content="Asterisk" />
+	<meta name="Description" content="Asterisk"/>
+	<meta property="og:title" content="Asterisk" />
+	<meta property="og:description" content="Asterisk" />
+	<meta property="og:url" content="https://asterisk.jsjs8.repl.co/" />
+	<meta property="og:locale" content="en_US" />
+	<meta property="og:type" content="website" />
+	<meta property="og:site_name" content="Asterisk" />
+	<link rel="stylesheet" type="text/css" href="/astrerisk_en.css"/>
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script src="js/jscookie.js"></script>
+	<script src="js/main/main.js"></script>
+	<script src="js/shortcut.js"></script>
+</head>
+
+<body>
+	<div class="menu">
+		<ul role="menubar" class="can-hover">
+		  <li role="menuitem" tabindex="0" aria-haspopup="true">
+		    File
+		    <ul role="menu">
+		      <li role="menuitem">
+			<a href="#menubar"onclick="openandel()">
+			  New Andel <span>Ctrl+O</span>
+			</a>
+		      </li>
+		      <li role="menuitem">
+			<a href="#menubar">
+			  View Andel <span>Ctrl+S</span>
+			</a>
+		      </li>
+		      <li role="menuitem" class="has-divider">
+			<a href="#menubar">
+			 Open plads <span>Ctrl+Shift+S</span>
+			</a>
+		      </li>
+		      <li role="menuitem"><a href="#menubar">Exit</a></li>
+		    </ul>
+		  </li>
+		  <li role="menuitem" tabindex="0" aria-haspopup="true">
+		    Edit
+		    <ul role="menu">
+		      <li role="menuitem"><a href="#menubar">Undo</a></li>
+		      <li role="menuitem"><a href="#menubar">Copy</a></li>
+		      <li role="menuitem"><a href="#menubar">Cut</a></li>
+		      <li role="menuitem" class="has-divider"><a href="#menubar">Paste</a></li>
+		      <li role="menuitem"><a href="#menubar">Delete</a></li>
+		      <li role="menuitem"><a href="#menubar">Find...</a></li>
+		      <li role="menuitem"><a href="#menubar">Replace...</a></li>
+		      <li role="menuitem"><a href="#menubar">Go to...</a></li>
+		    </ul>
+		  </li>
+		  <li role="menuitem" tabindex="0" aria-haspopup="true">
+		    View
+		    <ul role="menu">
+		      <li role="menuitem" tabindex="0" aria-haspopup="true">
+			Zoom
+			<ul role="menu">
+			  <li role="menuitem"><button>Zoom In</button></li>
+			  <li role="menuitem"><button>Zoom Out</button></li>
+			</ul>
+		      </li>
+		      <li role="menuitem"><a href="#menubar">Status Bar</a></li>
+		    </ul>
+		  </li>
+		  <li role="menuitem" tabindex="0" aria-haspopup="true">
+		    Help
+		    <ul role="menu">
+		      <li role="menuitem"><a href="#menubar">View Help</a></li>
+		      <li role="menuitem"><a href="#menubar">About</a></li>
+		    </ul>
+		  </li>
+		<span style="margin-right:60%"></span>
+		<div id="search">
+				<form action="#" class="search-form-006">
+				    <label>
+					<input type="text" placeholder="Enter keywords">
+				    </label>
+				    <button type="submit" aria-label="Search"></button>
+				</form>
+			</div>
+		</ul>
+	</div>
+	<div id="welcome_main_screen">
+		<div class="welcome_msg">
+			Let's begin.
+		</div>
+		<div class="welcome_msg_minimal">
+			Emotional sharing software, Åsterisk
+		</div>
+		<div style="display:flex;">
+		<br>
+			<button class="singin_big">Singin!!!</button>
+		</div>
+	</div>
+	<div class="cookie" id="cookie">
+		<p>          </p>
+		<p class="Cookie_setting_msg">First, please set your cookie🍪.</p>
+		<div style="display:flex;">
+		<button class="cookieonof" onclick="usecookie();">Use cookies. </button>
+		<button class="cookieonof" onclick="usecookie();">Does not use cookies.</button>
+		</div>
+		<p onclick="window.open('https://asterisk.jsjs8.repl.co/data/help/Cookie.html')" class="">How do you use cookies?</p>
+	</div>
+	<div class="newandel" id="newandel">
+		<label id="title_div">
+		    <textarea class="textbox-001" placeholder="title"id="title"></textarea>
+		</label>
+		<label id="at_div">
+		    <textarea class="textbox-001" placeholder="@(option)"id="at"></textarea>
+		</label>
+		<label id="at2_div">
+		    <textarea class="textbox-001" placeholder="@(2)(option)"id="at2"></textarea>
+		</label>
+		<label id="naiyou_div">
+		    <textarea class="textbox-003" placeholder="andel"id="naiyou"></textarea>
+		</label>
+		<br>
+		<button onclick="fetchData()">追加</button>
+	</div>
+	<script>
+		let title;
+		let user;
+		let at;
+		let at2;
+		let andel;
+		let loginuser;
+		document.getElementById("newandel").style.display = "none";
+		//Serviceworkerの登録
+		if ('serviceWorker' in navigator) {
+		    navigator.serviceWorker.register('/sw.js')
+		    .then((registration) => {
+			console.log('Service Worker registered with scope: ', registration.scope);
+		    })
+		    .catch((err) => {
+			console.log('Service Worker registration failed: ', err);
+		    });
+		}
+		function fetchData(){
+		   update_fetch();
+		   // ブラウザ側のJavaScriptコード
+		   let data = {
+		       title: title,
+		       user:user,
+		       //imgpass:img,
+		       at:at,
+		       at2:at2,
+		       andel:andel
+		   };
+			fetch('https://asterisk.jsjs8.repl.co/send', {
+			    method: 'POST',
+			    headers: {
+			      'Content-Type': 'application/json'
+			    },
+			    body: JSON.stringify(data)
+			   })
+			   .then(response => response.json())
+			   .then(data => console.log(data))
+			   .catch((error) => console.error('Error:', error));
+		}
+		function update_fetch(){
+			title = document.getElementById("title").value
+			user = loginuser
+			at = document.getElementById("at").value
+			at2 = document.getElementById("at2").value
+			andel = document.getElementById("naiyou").value
+		}
+		function Hex() {
+	      let hex = '';
+	      for(let i = 0; i < 15; i++) {
+		  hex += Math.floor(Math.random() * 16).toString(16);
+	      }
+	      return hex;
+	  }
+		let id = Hex();
+		function openandel() {
+		  var change = document.getElementById("newandel")
+
+		  if (change.style.display == "block") {
+			  change.style.display = "none";
+		  } else {
+			  change.style.display = "block";
+		  }
+	  }
+		function usecookie(){
+			var change = document.getElementById("cookie")
+
+			  if (change.style.display == "block") {
+				  change.style.display = "none";
+			  } 
+			  else {
+				  change.style.display = "block";
+			  }
+		}
+		loginuser = "test2539"
+  </script>
+</body>
+
+</html>

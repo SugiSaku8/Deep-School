@@ -1,0 +1,25 @@
+{
+  "s_name": "Enter your unique server name.",
+  "rateLimit": "100/15m",
+  "error": "Deep-School'sサーバーのリクエスト制限を超過しました",
+  "name": "deep-school-server-node",
+  "version": "1.0.0",
+  "description": "This is Deep-School's Client Server",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "deep-school",
+    "carnation-studio"
+  ],
+  "author": "Carnation Studio",
+  "license": "MPL-2.0",
+  "dependencies": {
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.1.0",
+    "speakeasy": "^2.0.0"
+  }
+}

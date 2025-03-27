@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <link rel="manifest" href="/manifest.json">
+  <link id="icon" rel="icon" href="/logo/Aterisk.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Åsterisk</title>
+  <meta property="analytics-track" content="Asterisk - Index/Tab" />
+  <meta property="analytics-s-channel" content="homepage" />
+  <meta property="analytics-s-bucket-0" content="Asterisk" />
+  <meta property="analytics-s-bucket-1" content="Asterisk" />
+  <meta property="analytics-s-bucket-2" content="Asterisk" />
+  <meta name="Description" content="Asterisk" />
+  <meta property="og:title" content="Asterisk" />
+  <meta property="og:description" content="Asterisk" />
+  <meta property="og:url" content="https://asterisk.jsjs8.repl.co/" />
+  <meta property="og:locale" content="ja" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Asterisk" />
+  <link rel="stylesheet" type="text/css" href="/astrerisk_ja.css" />
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="js/jscookie.js" type="module"></script>
+  <script src="js/shortcut.js" type="module"></script>
+</head>
+
+<body>
+
+  <!---<div id="loading">
+		<div class="video-container">
+		 <video src="data/video/Aterisk起動画面.mp4" autoplay muted loop></video>
+		</div>
+	</div>
+	--->
+  <div id="hamburger">
+    <input type="checkbox" id="checkbox" />
+    <label class="burger" for="checkbox" onclick="var nav = document.getElementById('nav');
+			 if (nav.classList.contains('show')) {
+			   nav.classList.remove('show');
+			 } else {
+			   nav.classList.add('show');
+			 }">
+      <button>
+        <div class="container top">
+          <div id="line" class="line top"></div>
+        </div>
+        <div class="container bottom">
+          <div id="line" class="line bottom"></div>
+        </div>
+      </button>
+    </label>
+  </div>
+
+  <nav id="nav">
+    <ul>
+      <li><a onclick="openandel()">新しい投稿を作る</a></li>
+      <li><a href="#">勉強相談室を見る</a></li>
+      <li><a href="#">Pladsを見る</a></li>
+      <li><a href="#">設定</a></li>
+      <li><a href="about.html">Asteriskについて</a></li>
+    </ul>
+  </nav>
+
+  <div id="welcome_main_screen">
+    <div class="welcome_msg">
+      さあ、始めよう。
+    </div>
+    <div class="welcome_msg_minimal" style="text-align: center;">
+      <p style="width:27%"></p>はじめまして。Åsterisk
+    </div>
+    <div style="display:flex;">
+      <br>
+      <button class="singin_big">さぁ、サインインして<br>始めよう。</button>
+    </div>
+  </div>
+  <div class="cookie" id="cookie">
+    <p>          </p>
+    <p class="Cookie_setting_msg">まず、Cookie🍪の設定をしてください。</p>
+    <div style="display:flex;">
+      <button class="cookieonof" onclick="usecookie();">Cookiesの使用を<br>許可します。</button>
+      <button class="cookieonof" onclick="usecookie();">Cookiesの使用を<br>拒否します。</button>
+    </div>
+    <p onclick="window.open('https://ba425a15-614c-41e5-84c7-a956b8036f1c-00-djb2x7uiecgk.sisko.replit.dev/data/help/Cookieja.html')" class="">何にCookieを使用しますか？</p>
+  </div>
+  <div class="newandel" id="newandel">
+    <p>タイトル:</p>
+    <label>
+      <textarea id="title" class="textbox-001" placeholder="投稿のタイトル"></textarea>
+    </label>
+    <p>あなたのユーザー名:</p>
+    <label>
+      <textarea id="user" class="textbox-001" placeholder="ユーザー名"></textarea>
+    </label>
+    <p>ジャンル:</p>
+    <textarea class="textbox-003" placeholder="ジャンル" id="genre"></textarea>
+    </label>
+    <p>内容:</p>
+    <label>
+      <textarea id="naiyou" class="textbox-003" placeholder="投稿の内容"></textarea>
+    </label>
+    <button id="go" onclick="RUN()">送信する　</button>
+  </div>
+  <div id="andel-container"></div> 
+  <script>
+    /*
+  let data = {
+  "andel": "テスト",
+  "title": "テスト",
+  "user": "さくや",
+  "body": "これはテストで有り続ける限りテストです。",
+  "genre": "テスト"
+}
+*/
+    /*window.onload = function() {
+		  const spinner = document.getElementById('loading');
+		  spinner.classList.add('loaded');
+		}*/
+    let classs_name_idx = 0;
+
+    function print(content, className, id) {
+      var newElement = document.createElement("div");
+      newElement.textContent = content;
+      newElement.className = className;
+      newElement.id = id;
+      document.body.appendChild(newElement);
+    }
+
+    let data = {
+      "andel": null,
+      "title": null,
+      "user": null,
+      "body": null,
+      "genre": null
+    }
+
+    function output_andel(data) {
+      let output_andel = data.andel;
+      let output_title = data.title;
+      let output_user = data.user;
+      let output_body = data.body;
+      let output_genre = data.genre;
+      print(output_andel, classs_name_idx, "andel")
+      print(output_title, classs_name_idx, "title")
+      print(output_user, classs_name_idx, "user")
+      print(output_body, classs_name_idx, "body")
+      print(output_genre, classs_name_idx, "body")
+    }
+
+    document.getElementById("newandel").style.display = "none";
+
+    function RUN(data) {
+      console.log(data)
+      let title = document.getElementById("title").value
+      let user = document.getElementById("user").value
+      let genre = document.getElementById("genre").value
+      let naiyou = document.getElementById("naiyou").value
+      data = {
+        "andel": title,
+        "title": title,
+        "user": user,
+        "body": naiyou,
+        "genre": genre
+        /* "andel": "テスト",
+				  "title": "分数の計算について",
+				  "user": "杉山",
+				  "body": "分数の掛け算の方法を教えてください。\nお願いします。",
+				  "genre": "勉強相談室"
+      */
+      }
+      andel(data)
+      document.getElementById("newandel").style.display = "none";
+    }
+
+    function secu() {
+      let set = Cookies.get('odls')
+      if (set === undefined) {
+        let s1 = Cookies.get('sec_1');
+        let s2 = Cookies.get('sec_2');
+        let s3 = Cookies.get('sec_3');
+        let s4 = Cookies.get('sec_4');
+        let sh1 = ((s1 && s2) === undefined)
+        let sh2 = ((s3 && s4) === undefined)
+        let she = (sh1 && sh2)
+        if (she === true) {
+          Cookies.set('odls', 'true', { expires: 28 });
+          //28日で有効期限切れになるCookie。
+          console.warn("The security protection cookie expires after 28 days.")
+        }
+      }
+    }
+
+    function update() {
+      console.log("helloworld")
+    }
+
+    //Serviceworkerの登録
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+        .then((registration) => {
+          console.log('Service Worker registered with scope: ', registration.scope);
+        })
+        .catch((err) => {
+          console.log('Service Worker registration failed: ', err);
+        });
+    }
+
+    function andel(data) {
+      fetch('https://ba425a15-614c-41e5-84c7-a956b8036f1c-00-djb2x7uiecgk.sisko.replit.dev/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch((error) => console.error('Error:', error));
+    }
+
+    function get(andel) {
+      fetch('https://ba425a15-614c-41e5-84c7-a956b8036f1c-00-djb2x7uiecgk.sisko.replit.dev/get', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ "andel": andel }) // Pass the random number
+      })
+        .then(response => response.json()) // Parse the response as JSON
+        .then(data => {
+          console.log(data); // Log the data
+          let content = data;
+          console.log(content); // Log the content
+
+          // Andel-container要素を取得
+          const andelContainer = document.getElementById("andel-container");
+
+          // 取得したデータをAndel-container要素に書き込む
+          andelContainer.innerHTML = `
+            <div class="andel">${content.andel}</div>
+            <div class="title">${content.title}</div>
+            <div class="user">${content.user}</div>
+            <div class="body">${content.body}</div>
+            <div class="genre">${content.genre}</div>
+          `;
+          
+          // output_andel(content);
+          // Open a new window with the content
+          // window.open('', '_blank', 'width=800,height=600');
+        })
+        .catch((error) => console.error('Error:', error));
+    }
+
+    function Hex() {
+      let hex = '';
+      for (let i = 0; i < 15; i++) {
+        hex += Math.floor(Math.random() * 16).toString(16);
+      }
+      return hex;
+    }
+
+    let id = Hex();
+
+    function openandel() {
+      var change = document.getElementById("newandel")
+
+      if (change.style.display == "block") {
+        change.style.display = "none";
+      } else {
+        change.style.display = "block";
+      }
+    }
+
+    function usecookie() {
+      var change = document.getElementById("cookie")
+
+      if (change.style.display == "block") {
+        change.style.display = "none";
+      } else {
+        change.style.display = "block";
+      }
+    }
+  </script>
+  <script id="get">
+	  function get(andel) {
+	    fetch('https://ba425a15-614c-41e5-84c7-a956b8036f1c-00-djb2x7uiecgk.sisko.replit.dev/get', {
+	      method: 'POST',
+	      headers: {
+		'Content-Type': 'application/json'
+	      },
+	      body: JSON.stringify({ "andel": andel }) // Pass the andel value
+	    })
+	      .then(response => response.json()) // Parse the response as JSON
+	      .then(data => {
+		console.log(data); // Log the data
+		let content = data;
+		console.log(content); // Log the content
+
+		// Andel-container要素を取得
+		const andelContainer = document.getElementById("andel-container");
+
+		// 取得したデータをAndel-container要素に書き込む
+		andelContainer.innerHTML = `
+		  <div class="andel">${content.andel}</div>
+		  <div class="title">${content.title}</div>
+		  <div class="user">${content.user}</div>
+		  <div class="body">${content.body}</div>
+		  <div class="genre">${content.genre}</div>
+		`;
+
+		// output_andel(content);
+		// Open a new window with the content
+		// window.open('', '_blank', 'width=800,height=600');
+	      })
+	      .catch((error) => console.error('Error:', error));
+	  }
+	  let andelValue = "Sakuya Sugiyama_Welcome to the Åsterisk..json"; 
+	  get(andelValue);
+  </script>
+</body>
+
+</html>

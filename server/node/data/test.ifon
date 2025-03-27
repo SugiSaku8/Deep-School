@@ -1,0 +1,7 @@
+{
+    "user": "admin",
+    "pass": "hashedPassword123",
+    "permissions": ["read", "write", "admin"],
+    "twoFactorSecret": "ABCDEF123456",
+    "lastModified": "2024-03-20T12:00:00Z"
+}

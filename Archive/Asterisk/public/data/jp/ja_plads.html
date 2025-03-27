@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<link rel="manifest" href="/manifest.json">
+	<link id="icon" rel="icon" href="img/basic/logo.png">
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+	<title>Åsterisk</title>
+	<meta property="analytics-track" content="Asterisk - Index/Tab" />
+	<meta property="analytics-s-channel" content="homepage" />
+	<meta property="analytics-s-bucket-0" content="Asterisk" />
+	<meta property="analytics-s-bucket-1" content="Asterisk" />
+	<meta property="analytics-s-bucket-2" content="Asterisk" />
+	<meta name="Description" content="Asterisk"/>
+	<meta property="og:title" content="Asterisk" />
+	<meta property="og:description" content="Asterisk" />
+	<meta property="og:url" content="https://asterisk.jsjs8.repl.co/" />
+	<meta property="og:locale" content="ja" />
+	<meta property="og:type" content="website" />
+	<meta property="og:site_name" content="Asterisk" />
+	<link rel="stylesheet" type="text/css" href="./astrerisk_ja.css" />
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script src="js/jscookie.js"　type="module"></script>
+	<script src="js/shortcut.js"　type="module"></script>
+</head>
+
+<body>
+	<div id="hamburger">
+		<input type="checkbox" id="checkbox" />
+		<label class="burger" for="checkbox" onclick="var nav = document.getElementById('nav');
+			 if (nav.classList.contains('show')) {
+			   nav.classList.remove('show');
+			 } else {
+			   nav.classList.add('show');
+			 }">
+		  <button>
+		    <div class="container top">
+		      <div id="line" class="line top"></div>
+		    </div>
+		    <div class="container bottom">
+		      <div id="line" class="line bottom"></div>
+		    </div>
+		  </button>
+		</label>
+	</div>
+
+	<nav id="nav">
+	   <ul>
+		<li><a href="#">新しい投稿を作る</a></li>
+	       <li><a href="#">勉強相談室を見る</a></li>
+	       <li><a href="#">Pladsを見る</a></li>
+	       <li><a href="#">設定</a></li>
+		<li><a href="#">Asteriskについて</a></li>
+	   </ul>
+	</nav>
+
+	<script>
+		let data;
+
+		document.getElementById("newandel").style.display = "none";
+
+		function output_andel(data){
+			console.log(data)
+			/*document.getElementById("title").value = data.title;
+			document.getElementById("user").value = data.user;
+			document.getElementById("genre").value = data.genre;
+			document.getElementById("naiyou").value = data.naiyou;
+			document.getElementById("newandel").style.display = "block";*/
+		}
+		function secu(){
+			let set = Cookies.get('odls')
+			if(set === undefined){
+				let s1 = Cookies.get('sec_1');
+				let s2 = Cookies.get('sec_2');
+				let s3 = Cookies.get('sec_3');
+				let s4 = Cookies.get('sec_4');
+				let sh1 = ((s1 && s2)===undefined)
+				let sh2 = ((s3 && s4)===undefined)
+				let she = (sh1&&sh2)
+				if(she === true){
+							Cookies.set('odls', 'true', {expires: 28});
+							//28日で有効期限切れになるCookie。
+					console.warn("The security protection cookie expires after 28 days.")
+							}
+			}
+		}
+		function update(){
+			console.log("helloworld")
+		}
+		//Serviceworkerの登録
+		if ('serviceWorker' in navigator) {
+		    navigator.serviceWorker.register('/sw.js')
+		    .then((registration) => {
+			console.log('Service Worker registered with scope: ', registration.scope);
+		    })
+		    .catch((err) => {
+			console.log('Service Worker registration failed: ', err);
+		    });
+		}
+		function andel(data){
+			fetch('https://asterisk.jsjs8.repl.co/send', {
+			    method: 'POST',
+			    headers: {
+			      'Content-Type': 'application/json'
+			    },
+			    body: JSON.stringify(data)
+			   })
+			   .then(response => response.json())
+			   .then(data => console.log(data))
+			   .catch((error) => console.error('Error:', error));
+			}
+		function get(data){
+			fetch('https://asterisk.jsjs8.repl.co/get', {
+			 method: 'POST',
+			 headers: {
+			  'Content-Type': 'application/json'
+			 },
+			 body: JSON.stringify(data)
+			})
+			.then(response => response.json()) // レスポンスをJSONとしてパース
+			.then(data => {
+			 console.log(data); // データをログに出力
+			 // ここでdataを変数として使う
+			 let content = data;
+			 console.log(content); // contentをログに出力
+				output_andel(content);
+			})
+			.catch((error) => console.error('Error:', error));
+
+		}
+		function Hex(){
+	      let hex = '';
+	      for(let i = 0; i < 15; i++) {
+		  hex += Math.floor(Math.random() * 16).toString(16);
+	      }
+	      return hex;
+	  }
+		let id = Hex();
+		function openandel(){
+		  var change = document.getElementById("newandel")
+
+		  if (change.style.display == "block") {
+			  change.style.display = "none";
+		  } else {
+			  change.style.display = "block";
+		  }
+	  }
+		function usecookie(){
+			var change = document.getElementById("cookie")
+
+			  if (change.style.display == "block") {
+				  change.style.display = "none";
+			  } 
+			  else {
+				  change.style.display = "block";
+			  }
+		}
+		function new_get(){
+			fetch('/getData')
+			   .then(response => response.json())
+			   .then(data => {
+			       // ここでdataを使用します
+			       console.log(data);
+			   });
+		}
+	</script>
+</body>
+
+</html>

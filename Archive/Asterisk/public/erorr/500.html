@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<link rel="manifest" href="/manifest.json">
+	<link id="icon" rel="icon" href="img/basic/logo.png">
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+	<title>エラー500</title>
+	<meta property="analytics-track" content="Asterisk - Index/Tab" />
+	<meta property="analytics-s-channel" content="homepage" />
+	<meta property="analytics-s-bucket-0" content="Asterisk" />
+	<meta property="analytics-s-bucket-1" content="Asterisk" />
+	<meta property="analytics-s-bucket-2" content="Asterisk" />
+	<meta name="Description" content="Asterisk"/>
+	<meta property="og:title" content="Asterisk" />
+	<meta property="og:description" content="Asterisk" />
+	<meta property="og:url" content="https://asterisk.jsjs8.repl.co/" />
+	<meta property="og:locale" content="ja" />
+	<meta property="og:type" content="website" />
+	<meta property="og:site_name" content="Asterisk" />
+	<link rel="stylesheet" type="text/css" href="astrerisk_ja.css" />
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script src="js/jscookie.js"　type="module"></script>
+	<script src="js/shortcut.js"　type="module"></script>
+</head>
+
+<body>
+	<div id="hamburger">
+		<input type="checkbox" id="checkbox" />
+		<label class="burger" for="checkbox" onclick="var nav = document.getElementById('nav');
+			 if (nav.classList.contains('show')) {
+			   nav.classList.remove('show');
+			 } else {
+			   nav.classList.add('show');
+			 }">
+		  <button>
+		    <div class="container top">
+		      <div id="line" class="line top"></div>
+		    </div>
+		    <div class="container bottom">
+		      <div id="line" class="line bottom"></div>
+		    </div>
+		  </button>
+		</label>
+	</div>
+
+	<nav id="nav">
+	   <ul>
+		<li><a href="#">新しい投稿を作る</a></li>
+	       <li><a href="#">勉強相談室を見る</a></li>
+	       <li><a href="#">Pladsを見る</a></li>
+	       <li><a href="#">設定</a></li>
+		<li><a href="#">Asteriskについて</a></li>
+	   </ul>
+	</nav>
+
+	<div id="welcome_main_screen">
+		<div class="welcome_msg">
+			500
+		</div>
+		<div class="welcome_msg_minimal">
+			サーバーでエラーが発生しました。
+		</div>
+	</div>
+</body>
+
+</html>

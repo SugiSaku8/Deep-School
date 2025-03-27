@@ -1,0 +1,216 @@
+@font-face {
+  font-family: "tanuki";
+  src: url("font/TanukiMagic.ttf") format("truetype");
+  font-display: swap;
+}
+@font-face {
+  font-family: "anka";
+  src: url("font/AnkaCoder-r.ttf") format("truetype");
+  font-display: swap;
+}
+
+/* General Styling */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #005f30;
+  color: #ffffff;
+}
+
+/* Container */
+.container_top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  position: relative;
+}
+.container {
+  width: 100px;
+  height: 100px;
+  background-color: #006837;
+  border-radius: 15px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+/* Title */
+.title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-top: -100px;
+}
+
+/* Login Form */
+.login-form {
+  display: none;
+  flex-direction: column;
+  background-color: #007bff;
+  padding: 30px;
+  border-radius: 12px;
+  gap: 15px;
+}
+
+.login-form label {
+  font-size: 1.5rem;
+  color: #ffffff;
+}
+
+.login-form input {
+  font-size: 1.5rem;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  outline: none;
+}
+
+.submit-button {
+  background-color: #033a74;
+  color: #ffffff;
+  font-size: 1.5rem;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+  background-color: #0e2640;
+}
+
+/* Initial Login Button */
+.login-button {
+  background-color: #007bff;
+  color: #ffffff;
+  font-size: 2rem;
+  padding: 20px 40px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #0056b3;
+}
+.contalex {
+  display: flex;
+  gap: 20px;
+}
+/* Date */
+.date {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  text-align: right;
+  font-size: 1.5rem;
+  line-height: 1.6;
+}
+
+/* Footer */
+body::after {
+  content: "";
+  display: block;
+  height: 40px;
+  background: linear-gradient(to right, #c47f00, #ffd700, #c47f00);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.text {
+  font-family: "tanuki";
+  font-size: 45px;
+  color: white;
+  line-height: 1;
+}
+.icon {
+  width: 100px;
+  height: 100px;
+}
+.study-timer-container {
+  width: 100px;
+  height: 100px;
+  background-color: #006837;
+  border-radius: 15px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "anka";
+}
+
+.study-timer-text-sti {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-size: 20px;
+  color: white;
+}
+
+.study-timer-line-diagonal {
+  position: absolute;
+  width: 50%;
+  height: 1px;
+  background-color: white;
+  top: 50%;
+  left: 25%;
+  transform: rotate(45deg);
+}
+
+.study-timer-line-vertical {
+  position: absolute;
+  width: 1px;
+  height: 50%;
+  background-color: white;
+  top: 25%;
+  left: 50%;
+}
+
+.study-timer-number {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  font-size: 26px;
+  color: white;
+  font-weight: bold;
+  font-family: "Arial";
+}
+
+.study-timer-pencil {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 20px;
+  height: 20px;
+}
+.gra {
+  font-size: 70px;
+  display: inline-block;
+  background: -webkit-linear-gradient(
+    45deg,
+    #ac7304,
+    #aca904 30%,
+    #96ac04 40%,
+    #36ac04 50%,
+    #02d45a 60%,
+    #35a75b 90%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: blue;
+}
+.menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  height: 100vh;
+  margin: 0;
+}

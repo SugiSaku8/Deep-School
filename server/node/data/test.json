@@ -1,0 +1,17 @@
+{
+    "metadata": {
+        "id": "example",
+        "title": "サンプルデータ",
+        "created": "2024-03-20T12:00:00Z",
+        "lastModified": "2024-03-20T12:00:00Z",
+        "version": "1.0"
+    },
+    "data": {
+        "item1": {
+            "content": "サンプルコンテンツ1",
+            "created": "2024-03-20T12:00:00Z",
+            "lastModified": "2024-03-20T12:00:00Z",
+            "author": "admin"
+        }
+    }
+}
