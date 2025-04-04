@@ -1,0 +1,3 @@
+[submodule "ToasterAI"]
+    path = ToasterAI
+    url = https://github.com/SugiSaku8/ToasterAI

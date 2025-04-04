@@ -1,10 +1,12 @@
 const express = require('express');
+const cors = require('cors'); // CORSをインポート
 const app = express();
 const fs = require('fs');
 const path = require('path');
 const bodyParser = require('body-parser');
 const andel = require('./andel');
-const cors = require('cors'); // CORSをインポート
+
+// CORSの設定
 app.use(cors()); // すべてのオリジンからのリクエストを許可
 
 // ID生成関数
@@ -17,8 +19,8 @@ function generateUniqueId(userId) {
 function AddAndel(name, andel, genre, user, reandel) {
     try {
         const folderPath = reandel ? 
-            `./n/p/data/${genre}/${reandel}` : 
-            `./n/p/data/${genre}`;
+            `./n/n_p/data/${genre}/${reandel}` : 
+            `./n/n_p/data/${genre}`;
 
         if (!fs.existsSync(folderPath)) {
             fs.mkdirSync(folderPath, { recursive: true });
@@ -55,7 +57,7 @@ function AddAndel(name, andel, genre, user, reandel) {
 // リプライの投稿
 function AddReply(parentId, replyContent, user, genre) {
     try {
-        const parentPath = `./n/p/data/${genre}/${parentId}`;
+        const parentPath = `./n/n_p/data/${genre}/${parentId}`;
         const repliesPath = path.join(parentPath, 'replies');
 
         if (!fs.existsSync(repliesPath)) {
@@ -87,17 +89,17 @@ function AddReply(parentId, replyContent, user, genre) {
     }
 }
 
-//ServerSide
+// ServerSide
 function start() {
-    //Andel追加処理
+    // Andel追加処理
     app.use(bodyParser.json());
     app.use('/', andel);
 
-    //Andel取得処理
+    // Andel取得処理
     app.use(express.json()); // JSONデータをパースするためのミドルウェア
     app.post('/get', (req, res) => {
         let filePath = req.body.name; // ファイル名を取得
-        fs.readFile(`./n/p/data/${filePath}`, 'utf8', (err, data) => { // ファイルを直接読み取る
+        fs.readFile(`./n/n_p/data/${filePath}`, 'utf8', (err, data) => { // ファイルを直接読み取る
             if (err) {
                 res.status(500).json({ status: 'エラーが発生しました。' });
                 return;
@@ -106,7 +108,7 @@ function start() {
         });
     });
 
-    //最新のものを取得する処理
+    // 最新のものを取得する処理
     function getFiles(dirPath) {
         let files = fs.readdirSync(dirPath);
         let filePaths = [];
@@ -122,7 +124,7 @@ function start() {
         return filePaths;
     }
 
-    let filePaths = getFiles('./n/p/data');
+    let filePaths = getFiles('./n/n_p/data');
     let jsonData = filePaths.map((file) => {
         let data = JSON.parse(fs.readFileSync(file, 'utf8'));
         let stats = fs.statSync(file);
@@ -136,8 +138,8 @@ function start() {
         res.json(latestJsonData);
     });
 
-    //勉強相談室の処理
-    let files = getFiles('./n/p/data/SCR');
+    // 勉強相談室の処理
+    let files = getFiles('./n/n_p/data/勉強相談室');
     let jsons = files.map((file) => {
         let data = JSON.parse(fs.readFileSync(file, 'utf8'));
         let stats = fs.statSync(file);
@@ -150,22 +152,22 @@ function start() {
     app.get('/scr', (req, res) => {
         res.json(latestJsons);
     });
-    //勉強相談室のコード終了
+    // 勉強相談室のコード終了
 
-    //publicを/にする
+    // publicを/にする
     app.use(express.static('public'));
 
-    //Webサーバーの領域
-    //404,500の処理
+    // Webサーバーの領域
+    // 404,500の処理
     app.use((req, res, next) => {
-        res.status(404).sendFile(__dirname + '/public/erorr/404.html');
+        res.status(404).sendFile(__dirname + '/public/error/404.html');
     });
 
     app.use((err, req, res, next) => {
-        res.status(500).sendFile(__dirname + '/public/erorr/500.html');
+        res.status(500).sendFile(__dirname + '/public/error/500.html');
     });
 
-    //webサイトのところ
+    // webサイトのところ
     app.get('/', (req, res) => {
         res.sendFile(__dirname + '/public/index.html');
     });
@@ -182,11 +184,11 @@ function start() {
         res.sendFile(__dirname + '/public/data/help/Cookie.html');
     });
 
-    //サーバを立てるところ
+    // サーバを立てるところ
     const PORT = 2539;
     app.listen(PORT, () => console.log(`Server is up on port ${PORT}!`));
 }
 
-//All Start
-console.log("All stating....")
+// All Start
+console.log("All stating....");
 start();
