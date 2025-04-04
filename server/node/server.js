@@ -4,6 +4,8 @@ const fs = require('fs');
 const path = require('path');
 const bodyParser = require('body-parser');
 const andel = require('./andel');
+const cors = require('cors'); // CORSをインポート
+app.use(cors()); // すべてのオリジンからのリクエストを許可
 
 // ID生成関数
 function generateUniqueId(userId) {

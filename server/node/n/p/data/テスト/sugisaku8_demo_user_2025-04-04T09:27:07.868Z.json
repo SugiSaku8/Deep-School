@@ -1,0 +1,14 @@
+{
+  "id": "sugisaku8_demo_user_2025-04-04T09:27:07.868Z",
+  "name": "投稿",
+  "andel": "これはテストです。",
+  "user": "sugisaku8_demo_user",
+  "genre": "テスト",
+  "time": 1743758827868,
+  "resolved": false,
+  "infon": {
+    "createdAt": 1743758827868,
+    "createdBy": "sugisaku8_demo_user",
+    "linkedPosts": []
+  }
+}

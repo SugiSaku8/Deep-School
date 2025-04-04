@@ -17,9 +17,10 @@
   "author": "Carnation Studio",
   "license": "MPL-2.0",
   "dependencies": {
-    "express": "^4.21.2",
-    "express-rate-limit": "^7.5.0",
-    "helmet": "^8.1.0",
-    "speakeasy": "^2.0.0"
+    "express": "latest",
+    "express-rate-limit": "latest",
+    "helmet": "latest",
+    "speakeasy": "latest",
+    "cors":"latest"
   }
 }
