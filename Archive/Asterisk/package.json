@@ -13,8 +13,6 @@
     "body-parser": "latest",
     "express": "latest",
     "express-react-views": "latest",
-    "promise-timers": "latest",
-    "react": "^latest",
-    "react-dom": "latest"
+    "promise-timers": "latest"
   }
 }
