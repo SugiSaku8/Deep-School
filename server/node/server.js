@@ -1,111 +1,190 @@
 const express = require('express');
-const fs = require('fs').promises;
-const path = require('path');
-const crypto = require('crypto');
-const speakeasy = require('speakeasy'); // 2要素認証用
-
 const app = express();
-const PORT = 3000;
-const DATA_DIR = path.join(__dirname, 'data');
+const fs = require('fs');
+const path = require('path');
+const bodyParser = require('body-parser');
+const andel = require('./andel');
 
-// ユーザー認証関数
-async function authenticateUser(user, pass, filename) {
+// ID生成関数
+function generateUniqueId(userId) {
+    const timestamp = new Date().toISOString();
+    return `${userId}_${timestamp}`;
+}
+
+// 投稿の追加
+function AddAndel(name, andel, genre, user, reandel) {
     try {
-        const authFile = await fs.readFile(path.join(DATA_DIR, `${filename}.ifon`), 'utf8');
-        const authData = JSON.parse(authFile);
-        
-        // 実際の実装ではパスワードはハッシュ化して比較する必要があります
-        return authData.user === user && authData.pass === pass;
-    } catch (err) {
+        const folderPath = reandel ? 
+            `./n/p/data/${genre}/${reandel}` : 
+            `./n/p/data/${genre}`;
+
+        if (!fs.existsSync(folderPath)) {
+            fs.mkdirSync(folderPath, { recursive: true });
+        }
+
+        const uniqueId = generateUniqueId(user);
+        const currentTime = new Date().getTime();
+        const fileName = `${uniqueId}.json`; // IDをファイル名に使用
+        const filePath = path.join(folderPath, fileName);
+
+        const andeldata = {
+            id: uniqueId,
+            name: name,
+            andel: andel,
+            user: user,
+            genre: genre,
+            time: currentTime,
+            resolved: false,
+            infon: {
+                createdAt: currentTime,
+                createdBy: user,
+                linkedPosts: [] // 投稿に紐づけられる情報
+            }
+        };
+
+        fs.writeFileSync(filePath, JSON.stringify(andeldata, null, 2));
+        return true;
+    } catch (error) {
+        console.error('AddAndel Error:', error);
         return false;
     }
 }
 
-// 2要素認証の検証
-function verify2FA(secret, token) {
-    return speakeasy.totp.verify({
-        secret: secret,
-        encoding: 'base32',
-        token: token
-    });
+// リプライの投稿
+function AddReply(parentId, replyContent, user, genre) {
+    try {
+        const parentPath = `./n/p/data/${genre}/${parentId}`;
+        const repliesPath = path.join(parentPath, 'replies');
+
+        if (!fs.existsSync(repliesPath)) {
+            fs.mkdirSync(repliesPath, { recursive: true });
+        }
+
+        const uniqueId = generateUniqueId(user);
+        const currentTime = new Date().getTime();
+        const replyFileName = `${uniqueId}.json`; // IDをファイル名に使用
+        const replyFilePath = path.join(repliesPath, replyFileName);
+
+        const replyData = {
+            id: uniqueId,
+            content: replyContent,
+            user: user,
+            time: currentTime,
+            parentId: parentId,
+            infon: {
+                createdAt: currentTime,
+                createdBy: user
+            }
+        };
+
+        fs.writeFileSync(replyFilePath, JSON.stringify(replyData, null, 2));
+        return true;
+    } catch (error) {
+        console.error('AddReply Error:', error);
+        return false;
+    }
 }
 
-// GETエンドポイント
-app.get('/get', async (req, res) => {
-    const { query, user, pass, m } = req.query;
-    
-    try {
-        // データファイル一覧を取得
-        const files = await fs.readdir(DATA_DIR);
-        const jsonFiles = files.filter(f => f.endsWith('.json'));
-        
-        // 認証チェック
-        const results = [];
-        
-        for (const file of jsonFiles) {
-            const filename = file.replace('.json', '');
-            if (await authenticateUser(user, pass, filename)) {
-                const data = JSON.parse(
-                    await fs.readFile(path.join(DATA_DIR, file), 'utf8')
-                );
-                
-                // 検索クエリに基づいてフィルタリング
-                if (JSON.stringify(data).toLowerCase().includes(query.toLowerCase())) {
-                    results.push({
-                        filename: filename,
-                        data: m === 'detail' ? data : { metadata: data.metadata }
-                    });
-                }
+//ServerSide
+function start() {
+    //Andel追加処理
+    app.use(bodyParser.json());
+    app.use('/', andel);
+
+    //Andel取得処理
+    app.use(express.json()); // JSONデータをパースするためのミドルウェア
+    app.post('/get', (req, res) => {
+        let filePath = req.body.name; // ファイル名を取得
+        fs.readFile(`./n/p/data/${filePath}`, 'utf8', (err, data) => { // ファイルを直接読み取る
+            if (err) {
+                res.status(500).json({ status: 'エラーが発生しました。' });
+                return;
             }
-        }
-        
-        res.json({ success: true, results });
-    } catch (err) {
-        res.status(500).json({ success: false, error: err.message });
-    }
-});
+            res.json({ data: data });
+        });
+    });
 
-// EDITエンドポイント
-app.post('/edit', async (req, res) => {
-    const { quser, pass, id, did, tfc, data } = req.query;
-    
-    try {
-        // 認証チェック
-        if (!await authenticateUser(quser, pass, id)) {
-            return res.status(401).json({ success: false, error: '認証エラー' });
-        }
-        
-        // 2要素認証チェック
-        const authData = JSON.parse(
-            await fs.readFile(path.join(DATA_DIR, `${id}.ifon`), 'utf8')
-        );
-        
-        if (!verify2FA(authData.twoFactorSecret, tfc)) {
-            return res.status(401).json({ success: false, error: '2要素認証エラー' });
-        }
-        
-        // データ更新
-        const jsonPath = path.join(DATA_DIR, `${id}.json`);
-        const fileData = JSON.parse(await fs.readFile(jsonPath, 'utf8'));
-        
-        if (did) {
-            // 特定のデータIDを更新
-            fileData.data[did] = JSON.parse(data);
-        } else {
-            // メタデータを更新
-            Object.assign(fileData.metadata, JSON.parse(data));
-        }
-        
-        fileData.metadata.lastModified = new Date().toISOString();
-        
-        await fs.writeFile(jsonPath, JSON.stringify(fileData, null, 4));
-        
-        res.json({ success: true });
-    } catch (err) {
-        res.status(500).json({ success: false, error: err.message });
+    //最新のものを取得する処理
+    function getFiles(dirPath) {
+        let files = fs.readdirSync(dirPath);
+        let filePaths = [];
+        files.forEach((file) => {
+            let filePath = path.join(dirPath, file);
+            let stats = fs.statSync(filePath);
+            if (stats.isDirectory()) {
+                filePaths = filePaths.concat(getFiles(filePath));
+            } else if (path.extname(filePath) === '.json') {
+                filePaths.push(filePath);
+            }
+        });
+        return filePaths;
     }
-});
 
-app.listen(PORT, () => {
-    console.log(`サーバーが起動しました: http://localhost:${PORT}`);
-});
+    let filePaths = getFiles('./n/p/data');
+    let jsonData = filePaths.map((file) => {
+        let data = JSON.parse(fs.readFileSync(file, 'utf8'));
+        let stats = fs.statSync(file);
+        return { data, updatedAt: stats.mtime };
+    });
+
+    jsonData.sort((a, b) => b.updatedAt - a.updatedAt);
+    let latestJsonData = jsonData.slice(0, 10).map(json => json.data);
+
+    app.get('/top', (req, res) => {
+        res.json(latestJsonData);
+    });
+
+    //勉強相談室の処理
+    let files = getFiles('./n/p/data/SCR');
+    let jsons = files.map((file) => {
+        let data = JSON.parse(fs.readFileSync(file, 'utf8'));
+        let stats = fs.statSync(file);
+        return { data, updatedAt: stats.mtime };
+    });
+
+    jsons.sort((a, b) => b.updatedAt - a.updatedAt);
+    let latestJsons = jsons.slice(0, 10).map(json => json.data);
+
+    app.get('/scr', (req, res) => {
+        res.json(latestJsons);
+    });
+    //勉強相談室のコード終了
+
+    //publicを/にする
+    app.use(express.static('public'));
+
+    //Webサーバーの領域
+    //404,500の処理
+    app.use((req, res, next) => {
+        res.status(404).sendFile(__dirname + '/public/erorr/404.html');
+    });
+
+    app.use((err, req, res, next) => {
+        res.status(500).sendFile(__dirname + '/public/erorr/500.html');
+    });
+
+    //webサイトのところ
+    app.get('/', (req, res) => {
+        res.sendFile(__dirname + '/public/index.html');
+    });
+
+    app.get('/en', (req, res) => {
+        res.sendFile(__dirname + '/public/en.html');
+    });
+
+    app.get('/help/cookie/ja', (req, res) => {
+        res.sendFile(__dirname + '/public/data/help/Cookieja.html');
+    });
+
+    app.get('/help/cookie', (req, res) => {
+        res.sendFile(__dirname + '/public/data/help/Cookie.html');
+    });
+
+    //サーバを立てるところ
+    const PORT = 2539;
+    app.listen(PORT, () => console.log(`Server is up on port ${PORT}!`));
+}
+
+//All Start
+console.log("All stating....")
+start();

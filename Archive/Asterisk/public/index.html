@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
-  <link rel="manifest" href="/manifest.json">
-  <link id="icon" rel="icon" href="/logo/Aterisk.ico">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Åsterisk</title>
+    <link rel="manifest" href="/manifest.json" />
+    <link id="icon" rel="icon" href="/logo/Aterisk.ico" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Åsterisk</title>
   <meta property="analytics-track" content="Asterisk - Index/Tab" />
   <meta property="analytics-s-channel" content="homepage" />
   <meta property="analytics-s-bucket-0" content="Asterisk" />
@@ -20,26 +22,12 @@
   <meta property="og:site_name" content="Asterisk" />
   <link rel="stylesheet" type="text/css" href="/astrerisk_ja.css" />
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-  <script src="js/jscookie.js" type="module"></script>
-  <script src="js/shortcut.js" type="module"></script>
 </head>
 
 <body>
-
-  <!---<div id="loading">
-		<div class="video-container">
-		 <video src="data/video/Aterisk起動画面.mp4" autoplay muted loop></video>
-		</div>
-	</div>
-	--->
   <div id="hamburger">
     <input type="checkbox" id="checkbox" />
-    <label class="burger" for="checkbox" onclick="var nav = document.getElementById('nav');
-			 if (nav.classList.contains('show')) {
-			   nav.classList.remove('show');
-			 } else {
-			   nav.classList.add('show');
-			 }">
+      <label class="burger" for="checkbox" onclick="toggleNav()">
       <button>
         <div class="container top">
           <div id="line" class="line top"></div>
@@ -54,268 +42,578 @@
   <nav id="nav">
     <ul>
       <li><a onclick="openandel()">新しい投稿を作る</a></li>
-      <li><a href="#">勉強相談室を見る</a></li>
-      <li><a href="#">Pladsを見る</a></li>
+        <li><a onclick="loadStudyRoom()">勉強相談室を見る</a></li>
+        <li><a onclick="loadPlads()">未解決の投稿を見る</a></li>
       <li><a href="#">設定</a></li>
       <li><a href="about.html">Asteriskについて</a></li>
     </ul>
   </nav>
 
-  <div id="welcome_main_screen">
-    <div class="welcome_msg">
-      さあ、始めよう。
+    <div class="search-container">
+      <div class="search-box">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="検索キーワードを入力..."
+        />
+        <select id="genre-filter">
+          <option value="">すべてのジャンル</option>
+        </select>
+        <button onclick="performSearch()" class="search-button">検索</button>
+      </div>
     </div>
-    <div class="welcome_msg_minimal" style="text-align: center;">
-      <p style="width:27%"></p>はじめまして。Åsterisk
+
+    <div class="genre-tabs" id="genre-tabs"></div>
+
+    <div id="welcome_main_screen">
+      <div class="welcome_msg">さあ、始めよう。</div>
+      <div class="welcome_msg_minimal" style="text-align: center">
+        <p style="width: 27%"></p>
+        はじめまして。Åsterisk
+      </div>
+      <div style="display: flex">
+        <br />
+        <button class="singin_big">さぁ、サインインして<br />始めよう。</button>
     </div>
-    <div style="display:flex;">
-      <br>
-      <button class="singin_big">さぁ、サインインして<br>始めよう。</button>
     </div>
-  </div>
+
   <div class="cookie" id="cookie">
-    <p>          </p>
+      <p></p>
     <p class="Cookie_setting_msg">まず、Cookie🍪の設定をしてください。</p>
-    <div style="display:flex;">
-      <button class="cookieonof" onclick="usecookie();">Cookiesの使用を<br>許可します。</button>
-      <button class="cookieonof" onclick="usecookie();">Cookiesの使用を<br>拒否します。</button>
+      <div style="display: flex">
+        <button class="cookieonof" onclick="usecookie();">
+          Cookiesの使用を<br />許可します。
+        </button>
+        <button class="cookieonof" onclick="usecookie();">
+          Cookiesの使用を<br />拒否します。
+        </button>
+      </div>
+      <p onclick="window.open('/help/cookie/ja')" class="">
+        何にCookieを使用しますか？
+      </p>
     </div>
-    <p onclick="window.open('https://ba425a15-614c-41e5-84c7-a956b8036f1c-00-djb2x7uiecgk.sisko.replit.dev/data/help/Cookieja.html')" class="">何にCookieを使用しますか？</p>
-  </div>
+
   <div class="newandel" id="newandel">
+      <div class="form-header">新しい投稿を作成</div>
     <p>タイトル:</p>
     <label>
-      <textarea id="title" class="textbox-001" placeholder="投稿のタイトル"></textarea>
+        <textarea
+          id="title"
+          class="textbox-001"
+          placeholder="投稿のタイトル"
+        ></textarea>
     </label>
     <p>あなたのユーザー名:</p>
     <label>
-      <textarea id="user" class="textbox-001" placeholder="ユーザー名"></textarea>
+        <textarea
+          id="user"
+          class="textbox-001"
+          placeholder="ユーザー名"
+        ></textarea>
     </label>
     <p>ジャンル:</p>
-    <textarea class="textbox-003" placeholder="ジャンル" id="genre"></textarea>
-    </label>
+      <textarea
+        id="genre"
+        class="textbox-003"
+        placeholder="ジャンル"
+      ></textarea>
     <p>内容:</p>
     <label>
-      <textarea id="naiyou" class="textbox-003" placeholder="投稿の内容"></textarea>
+        <textarea
+          id="naiyou"
+          class="textbox-003"
+          placeholder="投稿の内容"
+        ></textarea>
     </label>
-    <button id="go" onclick="RUN()">送信する　</button>
+      <div class="button-container">
+        <button id="submit-button" onclick="submitPost()">送信する</button>
+        <button id="cancel-button" onclick="closeAndel()">キャンセル</button>
+      </div>
+    </div>
+
+    <div id="loading" style="display: none">
+      <div class="loader">読み込み中...</div>
   </div>
-  <div id="andel-container"></div> 
-  <script>
-    /*
-  let data = {
-  "andel": "テスト",
-  "title": "テスト",
-  "user": "さくや",
-  "body": "これはテストで有り続ける限りテストです。",
-  "genre": "テスト"
-}
-*/
-    /*window.onload = function() {
-		  const spinner = document.getElementById('loading');
-		  spinner.classList.add('loaded');
-		}*/
-    let classs_name_idx = 0;
 
-    function print(content, className, id) {
-      var newElement = document.createElement("div");
-      newElement.textContent = content;
-      newElement.className = className;
-      newElement.id = id;
-      document.body.appendChild(newElement);
-    }
+    <div id="andel-container" class="andel-container"></div>
+    <div
+      id="plads-container"
+      class="plads-container"
+      style="display: none"
+    ></div>
 
-    let data = {
-      "andel": null,
-      "title": null,
-      "user": null,
-      "body": null,
-      "genre": null
-    }
+    <div id="error-message" class="error-message" style="display: none"></div>
 
-    function output_andel(data) {
-      let output_andel = data.andel;
-      let output_title = data.title;
-      let output_user = data.user;
-      let output_body = data.body;
-      let output_genre = data.genre;
-      print(output_andel, classs_name_idx, "andel")
-      print(output_title, classs_name_idx, "title")
-      print(output_user, classs_name_idx, "user")
-      print(output_body, classs_name_idx, "body")
-      print(output_genre, classs_name_idx, "body")
-    }
-
-    document.getElementById("newandel").style.display = "none";
-
-    function RUN(data) {
-      console.log(data)
-      let title = document.getElementById("title").value
-      let user = document.getElementById("user").value
-      let genre = document.getElementById("genre").value
-      let naiyou = document.getElementById("naiyou").value
-      data = {
-        "andel": title,
-        "title": title,
-        "user": user,
-        "body": naiyou,
-        "genre": genre
-        /* "andel": "テスト",
-				  "title": "分数の計算について",
-				  "user": "杉山",
-				  "body": "分数の掛け算の方法を教えてください。\nお願いします。",
-				  "genre": "勉強相談室"
-      */
+    <style>
+      .loader {
+        text-align: center;
+        padding: 20px;
+        font-weight: bold;
       }
-      andel(data)
+
+      .error-message {
+        background: #ff5252;
+        color: white;
+        padding: 10px;
+        text-align: center;
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 4px;
+        z-index: 1000;
+      }
+
+      .search-container {
+        padding: 20px;
+        background: #f5f5f5;
+        margin-bottom: 20px;
+      }
+
+      .search-box {
+        display: flex;
+        gap: 10px;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .search-box input {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+
+      .search-box select {
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        min-width: 150px;
+      }
+
+      .search-button {
+        background: #2196f3;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .search-button:hover {
+        background: #1976d2;
+      }
+
+      .genre-tabs {
+        display: flex;
+        gap: 10px;
+        padding: 10px 20px;
+        overflow-x: auto;
+        background: #fff;
+        border-bottom: 1px solid #ddd;
+      }
+
+      .genre-tab {
+        padding: 8px 16px;
+        border-radius: 20px;
+        cursor: pointer;
+        white-space: nowrap;
+        background: #f0f0f0;
+        transition: background-color 0.3s;
+      }
+
+      .genre-tab:hover {
+        background: #e0e0e0;
+      }
+
+      .genre-tab.active {
+        background: #2196f3;
+        color: white;
+      }
+
+      .plads-container {
+        padding: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .plads-card {
+        background: #fff;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .post-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .post-content {
+        margin: 15px 0;
+        white-space: pre-wrap;
+      }
+
+      .post-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid #eee;
+      }
+
+      .resolve-button {
+        background: #4caf50;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      .resolve-button:hover {
+        background: #45a049;
+      }
+
+      .reply-section {
+        margin-left: 20px;
+        padding-left: 15px;
+        border-left: 3px solid #e0e0e0;
+      }
+
+      .reply-form {
+        margin: 10px 0;
+        padding: 15px;
+        background: #f5f5f5;
+        border-radius: 8px;
+      }
+
+      .reply-form textarea {
+        width: 100%;
+        min-height: 60px;
+        margin-bottom: 10px;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        resize: vertical;
+      }
+
+      .reply-card {
+        margin: 10px 0;
+        padding: 10px;
+        background: #f9f9f9;
+        border-radius: 4px;
+        border-left: 3px solid #2196f3;
+      }
+
+      .search-highlight {
+        background: yellow;
+        padding: 2px;
+      }
+    </style>
+
+  <script>
+      // ナビゲーションの表示/非表示を切り替える
+      function toggleNav() {
+        const nav = document.getElementById("nav");
+        nav.classList.toggle("show");
+      }
+
+      // エラーメッセージを表示する
+      function showError(message) {
+        const errorDiv = document.getElementById("error");
+        errorDiv.textContent = message;
+        errorDiv.style.display = "block";
+      }
+
+      // 成功メッセージを表示する
+      function showSuccess(message) {
+        const successDiv = document.getElementById("success");
+        successDiv.textContent = message;
+        successDiv.style.display = "block";
+      }
+
+      // ローディングインジケータの表示/非表示を切り替える
+      function toggleLoading(show) {
+        const loading = document.getElementById("loading");
+        loading.style.display = show ? "block" : "none";
+      }
+
+      // 投稿フォームを開く
+      function openandel() {
+        document.getElementById("newandel").style.display = "block";
+      }
+
+      // 投稿フォームを閉じる
+      function closeAndel() {
       document.getElementById("newandel").style.display = "none";
     }
 
-    function secu() {
-      let set = Cookies.get('odls')
-      if (set === undefined) {
-        let s1 = Cookies.get('sec_1');
-        let s2 = Cookies.get('sec_2');
-        let s3 = Cookies.get('sec_3');
-        let s4 = Cookies.get('sec_4');
-        let sh1 = ((s1 && s2) === undefined)
-        let sh2 = ((s3 && s4) === undefined)
-        let she = (sh1 && sh2)
-        if (she === true) {
-          Cookies.set('odls', 'true', { expires: 28 });
-          //28日で有効期限切れになるCookie。
-          console.warn("The security protection cookie expires after 28 days.")
+      // 投稿フォームをクリアする
+      function clearForm() {
+        document.getElementById("title").value = "";
+        document.getElementById("username").value = "";
+        document.getElementById("genre").value = "";
+        document.getElementById("content").value = "";
+      }
+
+      // 投稿を送信する
+      async function submitPost() {
+        const title = document.getElementById("title").value;
+        const username = document.getElementById("username").value;
+        const genre = document.getElementById("genre").value;
+        const content = document.getElementById("content").value;
+
+        if (!title || !username || !genre || !content) {
+          showError("全てのフィールドを入力してください。");
+          return;
+        }
+
+        toggleLoading(true);
+
+        try {
+          const response = await fetch("/send", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              title,
+              username,
+              genre,
+              content,
+            }),
+          });
+
+          const result = await response.json();
+          if (result.status === "success") {
+            showSuccess(result.message);
+            closeAndel();
+            clearForm();
+            await loadGenrePosts(genre);
+          } else {
+            showError(result.message);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          showError("投稿に失敗しました。");
+        } finally {
+          toggleLoading(false);
         }
       }
-    }
 
-    function update() {
-      console.log("helloworld")
-    }
+      // 返信フォームを切り替える
+      function toggleReplyForm(postId) {
+        const replyForm = document.getElementById("reply-form-" + postId);
+        replyForm.style.display =
+          replyForm.style.display === "none" ? "block" : "none";
+      }
 
-    //Serviceworkerの登録
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js')
-        .then((registration) => {
-          console.log('Service Worker registered with scope: ', registration.scope);
-        })
-        .catch((err) => {
-          console.log('Service Worker registration failed: ', err);
+      // 返信を送信する
+      async function submitReply(parentId, genre) {
+        const username = document.getElementById(
+          "reply-username-" + parentId
+        ).value;
+        const content = document.getElementById(
+          "reply-content-" + parentId
+        ).value;
+
+        if (!username || !content) {
+          showError("全てのフィールドを入力してください。");
+          return;
+        }
+
+        toggleLoading(true);
+
+        try {
+          const response = await fetch("/send", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username,
+              content,
+              parentId,
+              genre,
+            }),
+          });
+
+          const result = await response.json();
+          if (result.status === "success") {
+            showSuccess(result.message);
+            toggleReplyForm(parentId);
+            document.getElementById("reply-username-" + parentId).value = "";
+            document.getElementById("reply-content-" + parentId).value = "";
+            await loadReplies(parentId, genre);
+          } else {
+            showError(result.message);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          showError("投稿に失敗しました。");
+        } finally {
+          toggleLoading(false);
+        }
+      }
+
+      // ジャンルを読み込む
+      async function loadGenres() {
+        try {
+          const response = await fetch("/genres");
+          const result = await response.json();
+
+          if (result.status === "success") {
+            const genreDropdown = document.getElementById("genre");
+            result.data.forEach((genre) => {
+              const option = document.createElement("option");
+              option.value = genre;
+              option.textContent = genre;
+              genreDropdown.appendChild(option);
+            });
+          } else {
+            showError("ジャンルの取得に失敗しました。");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          showError("サーバーとの通信に失敗しました。");
+        }
+      }
+
+      // ジャンルを選択する
+      async function selectGenre(genre) {
+        document.querySelectorAll(".genre-tab").forEach((tab) => {
+          tab.classList.remove("active");
         });
-    }
+        document.getElementById("search-input").value = "";
+        document
+          .getElementById("search-input")
+          .dispatchEvent(new Event("input"));
 
-    function andel(data) {
-      fetch('https://ba425a15-614c-41e5-84c7-a956b8036f1c-00-djb2x7uiecgk.sisko.replit.dev/send', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch((error) => console.error('Error:', error));
-    }
+        // ジャンルタブの選択状態を更新
+        if (genre === "") {
+          document
+            .querySelector(".genre-tab:first-child")
+            .classList.add("active");
+        } else {
+          const tabs = document.querySelectorAll(".genre-tab");
+          for (let tab of tabs) {
+            if (tab.textContent.trim() === genre) {
+              tab.classList.add("active");
+              break;
+            }
+          }
+        }
 
-    function get(andel) {
-      fetch('https://ba425a15-614c-41e5-84c7-a956b8036f1c-00-djb2x7uiecgk.sisko.replit.dev/get', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ "andel": andel }) // Pass the random number
-      })
-        .then(response => response.json()) // Parse the response as JSON
-        .then(data => {
-          console.log(data); // Log the data
-          let content = data;
-          console.log(content); // Log the content
-
-          // Andel-container要素を取得
-          const andelContainer = document.getElementById("andel-container");
-
-          // 取得したデータをAndel-container要素に書き込む
-          andelContainer.innerHTML = `
-            <div class="andel">${content.andel}</div>
-            <div class="title">${content.title}</div>
-            <div class="user">${content.user}</div>
-            <div class="body">${content.body}</div>
-            <div class="genre">${content.genre}</div>
-          `;
-          
-          // output_andel(content);
-          // Open a new window with the content
-          // window.open('', '_blank', 'width=800,height=600');
-        })
-        .catch((error) => console.error('Error:', error));
-    }
-
-    function Hex() {
-      let hex = '';
-      for (let i = 0; i < 15; i++) {
-        hex += Math.floor(Math.random() * 16).toString(16);
+        await loadGenrePosts(genre);
       }
-      return hex;
-    }
 
-    let id = Hex();
+      // ジャンルの投稿を読み込む
+      async function loadGenrePosts(genre) {
+        toggleLoading(true);
+        try {
+          const response = await fetch("/posts/" + genre);
+          const result = await response.json();
 
-    function openandel() {
-      var change = document.getElementById("newandel")
+          if (result.status === "success") {
+            const container = document.getElementById("andel-container");
+            document.getElementById("plads-container").style.display = "none";
+            container.style.display = "block";
+            container.innerHTML = "<h2>" + genre + "の投稿</h2>";
 
-      if (change.style.display == "block") {
-        change.style.display = "none";
+            if (result.data.length === 0) {
+              container.innerHTML +=
+                '<div class="no-results">投稿がありません。</div>';
+            } else {
+              result.data.forEach((post) => createPostElement(post, container));
+            }
       } else {
-        change.style.display = "block";
+            showError("投稿の取得に失敗しました。");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          showError("サーバーとの通信に失敗しました。");
+        } finally {
+          toggleLoading(false);
+        }
       }
-    }
 
-    function usecookie() {
-      var change = document.getElementById("cookie")
+      // 検索を実行する
+      async function performSearch() {
+        const query = document.getElementById("search-input").value;
+        if (!query) {
+          showError("検索クエリを入力してください。");
+          return;
+        }
 
-      if (change.style.display == "block") {
-        change.style.display = "none";
+        toggleLoading(true);
+        try {
+          const response = await fetch("/search/" + query);
+          const result = await response.json();
+
+          if (result.status === "success") {
+            const container = document.getElementById("andel-container");
+            document.getElementById("plads-container").style.display = "none";
+            container.style.display = "block";
+            container.innerHTML = "<h2>検索結果</h2>";
+
+            if (result.data.length === 0) {
+              container.innerHTML +=
+                '<div class="no-results">該当する投稿がありません。</div>';
+            } else {
+              result.data.forEach((post) => createPostElement(post, container));
+            }
       } else {
-        change.style.display = "block";
+            showError("検索に失敗しました。");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          showError("サーバーとの通信に失敗しました。");
+        } finally {
+          toggleLoading(false);
+        }
       }
-    }
-  </script>
-  <script id="get">
-	  function get(andel) {
-	    fetch('https://ba425a15-614c-41e5-84c7-a956b8036f1c-00-djb2x7uiecgk.sisko.replit.dev/get', {
-	      method: 'POST',
-	      headers: {
-		'Content-Type': 'application/json'
-	      },
-	      body: JSON.stringify({ "andel": andel }) // Pass the andel value
-	    })
-	      .then(response => response.json()) // Parse the response as JSON
-	      .then(data => {
-		console.log(data); // Log the data
-		let content = data;
-		console.log(content); // Log the content
 
-		// Andel-container要素を取得
-		const andelContainer = document.getElementById("andel-container");
+      // クッキーの使用を許可する
+      function usecookie() {
+        document.getElementById("cookie").style.display = "none";
+        document.cookie = "cookieconsent=1; max-age=31536000; path=/";
+      }
 
-		// 取得したデータをAndel-container要素に書き込む
-		andelContainer.innerHTML = `
-		  <div class="andel">${content.andel}</div>
-		  <div class="title">${content.title}</div>
-		  <div class="user">${content.user}</div>
-		  <div class="body">${content.body}</div>
-		  <div class="genre">${content.genre}</div>
-		`;
+      // サービスワーカーを登録する
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("/sw.js").then(
+            function (registration) {
+              console.log(
+                "Service Worker registered with scope:",
+                registration.scope
+              );
+            },
+            function (err) {
+              console.log("Service Worker registration failed:", err);
+            }
+          );
+        });
+      }
 
-		// output_andel(content);
-		// Open a new window with the content
-		// window.open('', '_blank', 'width=800,height=600');
-	      })
-	      .catch((error) => console.error('Error:', error));
-	  }
-	  let andelValue = "Sakuya Sugiyama_Welcome to the Åsterisk..json"; 
-	  get(andelValue);
+      // ページ読み込み時の初期化
+      document.addEventListener("DOMContentLoaded", async () => {
+        document.getElementById("newandel").style.display = "none";
+        await loadGenres();
+        await loadGenrePosts("");
+        document
+          .getElementById("search-input")
+          .addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+              performSearch();
+            }
+          });
+      });
   </script>
 </body>
-
 </html>

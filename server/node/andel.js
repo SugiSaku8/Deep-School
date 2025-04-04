@@ -3,41 +3,41 @@ const router = express.Router();
 const fs = require('fs');
 const path = require('path');
 
-const andel = {
-    info: function() {
-        console.log("info:\nAsterisk v1.0\nbyCarnation")
-    },
-    ver: function() {
-        console.log("Asterisk Version:v1.0\nandel.sys.js Version:v1.0")
-    },
-    model: function(x, xs) {
-        if (x = "model") {
-            console.log(`model:${xs}`)
-        }
-    }
-};
+// ID生成関数
+function generateUniqueId(userId) {
+    const timestamp = new Date().toISOString();
+    return `${userId}_${timestamp}`;
+}
 
+// 投稿の追加
 function AddAndel(name, andel, genre, user, reandel) {
     try {
         const folderPath = reandel ? 
-            `./n/n_p/data/${genre}/${reandel}` : 
-            `./n/n_p/data/${genre}`;
+            `./n/p/data/${genre}/${reandel}` : 
+            `./n/p/data/${genre}`;
 
         if (!fs.existsSync(folderPath)) {
             fs.mkdirSync(folderPath, { recursive: true });
         }
 
+        const uniqueId = generateUniqueId(user);
         const currentTime = new Date().getTime();
-        const fileName = `${user}_${name}.json`;
+        const fileName = `${uniqueId}.json`; // IDをファイル名に使用
         const filePath = path.join(folderPath, fileName);
 
         const andeldata = {
+            id: uniqueId,
             name: name,
             andel: andel,
             user: user,
             genre: genre,
             time: currentTime,
-            resolved: false
+            resolved: false,
+            infon: {
+                createdAt: currentTime,
+                createdBy: user,
+                linkedPosts: [] // 投稿に紐づけられる情報
+            }
         };
 
         fs.writeFileSync(filePath, JSON.stringify(andeldata, null, 2));
@@ -48,24 +48,31 @@ function AddAndel(name, andel, genre, user, reandel) {
     }
 }
 
+// リプライの投稿
 function AddReply(parentId, replyContent, user, genre) {
     try {
-        const parentPath = `./n/n_p/data/${genre}/${parentId}`;
+        const parentPath = `./n/p/data/${genre}/${parentId}`;
         const repliesPath = path.join(parentPath, 'replies');
 
         if (!fs.existsSync(repliesPath)) {
             fs.mkdirSync(repliesPath, { recursive: true });
         }
 
+        const uniqueId = generateUniqueId(user);
         const currentTime = new Date().getTime();
-        const replyFileName = `${currentTime}_${user}.json`;
+        const replyFileName = `${uniqueId}.json`; // IDをファイル名に使用
         const replyFilePath = path.join(repliesPath, replyFileName);
 
         const replyData = {
+            id: uniqueId,
             content: replyContent,
             user: user,
             time: currentTime,
-            parentId: parentId
+            parentId: parentId,
+            infon: {
+                createdAt: currentTime,
+                createdBy: user
+            }
         };
 
         fs.writeFileSync(replyFilePath, JSON.stringify(replyData, null, 2));
@@ -156,7 +163,7 @@ router.post('/reply', (req, res) => {
 router.get('/replies/:genre/:parentId', (req, res) => {
     try {
         const { genre, parentId } = req.params;
-        const repliesPath = path.join('./n/n_p/data', genre, parentId, 'replies');
+        const repliesPath = path.join('./n/p/data', genre, parentId, 'replies');
 
         if (!fs.existsSync(repliesPath)) {
             return res.json({
@@ -195,7 +202,7 @@ router.get('/replies/:genre/:parentId', (req, res) => {
 router.post('/resolve', (req, res) => {
     try {
         const { genre, fileName, resolved } = req.body;
-        const filePath = path.join('./n/n_p/data', genre, fileName);
+        const filePath = path.join('./n/p/data', genre, fileName);
 
         if (!fs.existsSync(filePath)) {
             return res.json({
@@ -224,7 +231,7 @@ router.post('/resolve', (req, res) => {
 // ジャンル一覧の取得
 router.get('/genres', (req, res) => {
     try {
-        const dataPath = './n/n_p/data';
+        const dataPath = './n/p/data';
         const genres = fs.readdirSync(dataPath)
             .filter(item => fs.statSync(path.join(dataPath, item)).isDirectory());
 
@@ -245,7 +252,7 @@ router.get('/genres', (req, res) => {
 router.get('/genre/:genreName', (req, res) => {
     try {
         const { genreName } = req.params;
-        const genrePath = path.join('./n/n_p/data', genreName);
+        const genrePath = path.join('./n/p/data', genreName);
 
         if (!fs.existsSync(genrePath)) {
             return res.json({
@@ -285,7 +292,7 @@ router.get('/genre/:genreName', (req, res) => {
 router.get('/search', (req, res) => {
     try {
         const { query, genre } = req.query;
-        const dataPath = './n/n_p/data';
+        const dataPath = './n/p/data';
         let searchResults = [];
 
         const searchInDirectory = (dirPath) => {
