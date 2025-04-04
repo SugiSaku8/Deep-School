@@ -31,7 +31,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm i & npm ci
+      - run: npm i 
+      - run: npm ci
       - run: npm run build
       - name: Jscrambler Code Integrity
         id: jscrambler
