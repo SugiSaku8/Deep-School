@@ -139,7 +139,7 @@ function start() {
     });
 
     // 勉強相談室の処理
-    let files = getFiles('./n/n_p/data/勉強相談室');
+    let files = getFiles('./n/n_p/data/SCR');
     let jsons = files.map((file) => {
         let data = JSON.parse(fs.readFileSync(file, 'utf8'));
         let stats = fs.statSync(file);
