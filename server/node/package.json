@@ -16,11 +16,12 @@
   ],
   "author": "Carnation Studio",
   "license": "MPL-2.0",
+  "type": "module",
   "dependencies": {
     "express": "latest",
     "express-rate-limit": "latest",
     "helmet": "latest",
     "speakeasy": "latest",
-    "cors":"latest"
+    "cors": "latest"
   }
 }
