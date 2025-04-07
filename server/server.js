@@ -26,7 +26,8 @@ app.post("/post", (req, res) => {
     _new_post_.add(3, req.body.PostName);
     _new_post_.add(5, req.body.PostTime);
     _new_post_.add(6, req.body.PostData);
-    _new_post_.add(7, req.body.LinkerData);
+    _new_post_.add(7, req.body.Genre);
+    _new_post_.add(8, req.body.LinkerData);
 
     _new_post_.add(
       4,
@@ -64,13 +65,9 @@ class _index {
     this.loadFiles();
     this.watchFiles();
     this.setupServer();
-    process.on("exit", () => {
-      this.saveIndexData();
-    });
-    process.on("SIGINT", () => {
+ process.on("SIGINT", () => {
       console.log("Ctrl+Cが検知されました。");
       this.saveIndexData();
-      process.exit();
     });
   }
 
@@ -91,7 +88,7 @@ class _index {
             return;
           }
           console.log(`ファイル ${file} を読み込みました。`);
-          this.index.add(this.count_index, file);
+          this.index.add(this.count_index, data);
           this.count_index += 1;
         });
       });
@@ -146,6 +143,7 @@ class _index {
       res.json(this.index.data);
     });
   }
+
   saveIndexData() {
     const timestamp = new Date().toISOString().replace(/:/g, "-"); // タイムスタンプを整形
     const archivePath = path.join(__dirname, "archive", `${timestamp}.archive`);
@@ -154,6 +152,7 @@ class _index {
         console.error("インデックスデータの保存に失敗しました:", err);
       } else {
         console.log(`インデックスデータが ${archivePath} に保存されました。`);
+        process.exit();
       }
     });
   }
