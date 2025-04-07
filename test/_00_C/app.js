@@ -130,7 +130,7 @@ class DeepSchoolerClient {
                     PostTime: new Date().toISOString(),
                     PostData: content,
                     Genre: '',
-                    LinkerData: ''
+                    LinkerData: '@empty'
                 })
             });
 
@@ -162,7 +162,7 @@ class DeepSchoolerClient {
                 body: JSON.stringify({
                     UserName: document.getElementById('username').value,
                     UserId: this.currentUserId,
-                    PostName: `reply_${Date.now()}`,
+                    PostName: `reply_${this.currentUserId}_${Date.now()}`,
                     PostTime: new Date().toISOString(),
                     PostData: replyContent,
                     Genre: 'reply',
