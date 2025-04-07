@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Deep-Schooler</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 投稿フォーム -->
+        <div class="post-form">
+            <input type="text" id="username" placeholder="ユーザー名">
+            <textarea id="post-content" placeholder="投稿内容"></textarea>
+            <button onclick="postMessage()">投稿</button>
+        </div>
+
+        <!-- メインフィード -->
+        <div id="feed-container">
+            <!-- 投稿がここに表示されます -->
+        </div>
+
+        <!-- リプライモーダル -->
+        <div id="reply-modal" class="modal">
+            <div class="modal-content">
+                <textarea id="reply-content"></textarea>
+                <button onclick="sendReply()">リプライ</button>
+                <button onclick="closeModal()">キャンセル</button>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
