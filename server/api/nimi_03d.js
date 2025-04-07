@@ -19,8 +19,17 @@ export default class nimi {
     if (index < 0 || index >= this.data.length) {
       throw new Error("インデックスが範囲外です");
     }
-    this.data[index] += value; // データを追加
-    // 履歴データを更新
+    if (this.data[index] === 0) {
+      this.data[index] = value;
+    } else if (
+      typeof this.data[index] === "string" ||
+      typeof value === "string"
+    ) {
+      this.data[index] = String(this.data[index]) + String(value);
+    } else {
+      this.data[index] += value;
+    }
+
     const timestamp = new Date().toISOString();
     this.history[index].adedime = this.history[index].adedime || [];
     this.history[index].adedime.push({ add: value, time: timestamp });

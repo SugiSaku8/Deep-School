@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ポストフォーム</title>
+</head>
+<body>
+    <h1>ポストを作成</h1>
+    <form id="postForm">
+        <label for="userName">ユーザー名:</label>
+        <input type="text" id="userName" name="UserName" required><br><br>
+
+        <label for="userId">ユーザーID:</label>
+        <input type="text" id="userId" name="UserId" required><br><br>
+
+        <label for="postName">ポスト名:</label>
+        <input type="text" id="postName" name="PostName" required><br><br>
+
+        <label for="postTime">ポスト時間:</label>
+        <input type="text" id="postTime" name="PostTime" required><br><br>
+
+        <label for="postData">ポストデータ:</label>
+        <textarea id="postData" name="PostData" required></textarea><br><br>
+
+        <label for="linkerData">リンクデータ:</label>
+        <input type="text" id="linkerData" name="LinkerData" required><br><br>
+
+        <button type="submit">ポストする</button>
+    </form>
+
+    <script>
+        document.getElementById('postForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // フォームのデフォルトの送信を防ぐ
+
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            console.log(data);
+            fetch('http://localhost:3776/post', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('成功:', data);
+                alert('ポストが成功しました！');
+            })
+            .catch((error) => {
+                console.error('エラー:', error);
+                alert('ポストに失敗しました。');
+            });
+        });
+    </script>
+</body>
+</html>
