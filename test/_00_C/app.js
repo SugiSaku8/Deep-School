@@ -61,7 +61,6 @@ function getValue(data, path) {
 async function getPost(file) {
   const response = await fetch("http://localhost:3776/get?text=" + file);
   const data = await response.json();
-  console.log("取得したデータ:" + data);
   return data;
 }
 async function loadFeed() {
@@ -71,20 +70,17 @@ async function loadFeed() {
     // ランダムな投稿を選択して表示
     const randomIndex = Math.floor(Math.random() * data.length);
     const selectedPost = data[randomIndex];
-    console.log(selectedPost)
-    const feedContenter = await getPost(selectedPost);
-    if (feedContenter?.value) {
-      const postValue = feedContenter.value;
-      const div = document.createElement("div");
-      div.className = "feed-item";
-      div.innerHTML = `
+    let feedContenter = await getPost(selectedPost);
+    const postValue = feedContenter.value;
+    const div = document.createElement("div");
+    div.className = "feed-item";
+    div.innerHTML = `
               <strong>${postValue.UserName.value} (${postValue.UserId.value})</strong>
               <p>${postValue.PostName.value}</p>
               <p>${postValue.PostData.value}</p>
               <small>${postValue.PostTime.value}</small>
           `;
-      feedContent.appendChild(div);
-    }
+    feedContent.appendChild(div);
   } catch (error) {
     console.error("フィードの読み込みに失敗しました:", error);
   }

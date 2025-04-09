@@ -28,7 +28,6 @@ app.post("/post", (req, res) => {
     _new_post_.add(6, req.body.PostData);
     _new_post_.add(7, req.body.Genre);
     _new_post_.add(8, req.body.LinkerData);
-
     _new_post_.add(
       4,
       poid(_new_post_.Value(2).value, _new_post_.Value(5).value)
@@ -165,22 +164,29 @@ class _index {
     });
   }
   async GetFiles(file) {
-    const filePath = path.join("./data", file);
-    fs.readFile(filePath, "utf8", (err, datas) => {
+    fs.readFile("./data/" + file, "utf8", (err, datas) => {
       if (err) {
-        console.error(`${filePath} の読み込みに失敗しました:`, err);
+        console.error(`${file} の読み込みに失敗しました:`, err);
         return;
       }
+      console.log(datas);
       return datas;
     });
   }
+
   async setupServer() {
     app.get("/get", (req, res) => {
       const query = req.query.text;
       if (!query || query === null) {
         res.json(this.NameRam);
       } else {
-        res.json(this.GetFiles());
+        fs.readFile("./data/" + query, "utf8", (err, datas) => {
+          if (err) {
+            console.error(`${query} の読み込みに失敗しました:`, err);
+            return;
+          }
+          res.json(JSON.parse(datas));
+        });
       }
     });
   }
