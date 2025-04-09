@@ -2,30 +2,23 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>Deep-Schooler</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep-Schooler App</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <!-- 投稿フォーム -->
-        <div class="post-form">
-            <input type="text" id="username" placeholder="ユーザー名">
-            <textarea id="post-content" placeholder="投稿内容"></textarea>
-            <button onclick="postMessage()">投稿</button>
+    <div id="app">
+        <h1>Deep-Schooler</h1>
+        <div id="post-form">
+            <input type="text" id="username" placeholder="ユーザー名" required>
+            <input type="text" id="userid" placeholder="ユーザーID" required>
+            <input type="text" id="postname" placeholder="ポスト名" required>
+            <textarea id="postdata" placeholder="ポスト内容" required></textarea>
+            <button id="post-button">ポストする</button>
         </div>
-
-        <!-- メインフィード -->
-        <div id="feed-container">
-            <!-- 投稿がここに表示されます -->
-        </div>
-
-        <!-- リプライモーダル -->
-        <div id="reply-modal" class="modal">
-            <div class="modal-content">
-                <textarea id="reply-content"></textarea>
-                <button onclick="sendReply()">リプライ</button>
-                <button onclick="closeModal()">キャンセル</button>
-            </div>
+        <div id="feed">
+            <h2>フィード</h2>
+            <div id="feed-content"></div>
         </div>
     </div>
     <script src="app.js"></script>

@@ -82,13 +82,14 @@ class _index {
       }
       files.forEach((file) => {
         const filePath = path.join("./data", file);
-        fs.readFile(filePath, "utf8", (err, data) => {
+        fs.readFile(filePath, "utf8", (err, datas) => {
           if (err) {
             console.error(`${filePath} の読み込みに失敗しました:`, err);
             return;
           }
           console.log(`ファイル ${file} を読み込みました。`);
-          this.index.add(this.count_index, data);
+          console.log(`ファイル${file}の内容は、\n${datas}\nです`)
+          this.index.add(this.count_index, datas);
           this.count_index += 1;
         });
       });
