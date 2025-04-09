@@ -65,7 +65,8 @@ class _index {
     this.loadFiles();
     this.watchFiles();
     this.setupServer();
- process.on("SIGINT", () => {
+    this.Nameram;
+    process.on("SIGINT", () => {
       console.log("Ctrl+Cが検知されました。");
       this.saveIndexData();
     });
@@ -88,8 +89,9 @@ class _index {
             return;
           }
           console.log(`ファイル ${file} を読み込みました。`);
-          console.log(`ファイル${file}の内容は、\n${datas}\nです`)
+          console.log(`ファイル${file}の内容は、\n${datas}\nです`);
           this.index.add(this.count_index, datas);
+          this.Nameram.push(file);
           this.count_index += 1;
         });
       });
@@ -142,6 +144,9 @@ class _index {
   setupServer() {
     app.get("/get", (req, res) => {
       res.json(this.index.data);
+    });
+    app.get("/Name", (req, res) => {
+      res.json(this.Nameram);
     });
   }
 
