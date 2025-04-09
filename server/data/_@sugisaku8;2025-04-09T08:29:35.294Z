@@ -1,0 +1,167 @@
+{
+  "value": {
+    "PostId": {
+      "value": "@sugisaku8;2025-04-09T08:29:35.294Z",
+      "sub": {
+        "adedime": [
+          {
+            "add": "@sugisaku8;2025-04-09T08:29:35.294Z",
+            "time": "2025-04-09T08:29:35.339Z"
+          }
+        ]
+      }
+    },
+    "PostName": {
+      "value": "Sugisaku8によるテスト投稿",
+      "sub": {
+        "adedime": [
+          {
+            "add": "Sugisaku8によるテスト投稿",
+            "time": "2025-04-09T08:29:35.339Z"
+          }
+        ]
+      }
+    },
+    "PostTime": {
+      "value": "2025-04-09T08:29:35.294Z",
+      "sub": {
+        "adedime": [
+          {
+            "add": "2025-04-09T08:29:35.294Z",
+            "time": "2025-04-09T08:29:35.339Z"
+          }
+        ]
+      }
+    },
+    "UserName": {
+      "value": "Sugisaku8",
+      "sub": {
+        "adedime": [
+          {
+            "add": "Sugisaku8",
+            "time": "2025-04-09T08:29:35.339Z"
+          }
+        ]
+      }
+    },
+    "UserId": {
+      "value": "@sugisaku8",
+      "sub": {
+        "adedime": [
+          {
+            "add": "@sugisaku8",
+            "time": "2025-04-09T08:29:35.339Z"
+          }
+        ]
+      }
+    },
+    "PostData": {
+      "value": "この投稿は4月9日に行われ、Deep-Schooler Client testによって投稿されました。",
+      "sub": {
+        "adedime": [
+          {
+            "add": "この投稿は4月9日に行われ、Deep-Schooler Client testによって投稿されました。",
+            "time": "2025-04-09T08:29:35.339Z"
+          }
+        ]
+      }
+    },
+    "LikerData": {
+      "value": "general",
+      "sub": {
+        "adedime": [
+          {
+            "add": "general",
+            "time": "2025-04-09T08:29:35.339Z"
+          }
+        ]
+      }
+    }
+  },
+  "sub": {
+    "adedime": [
+      {
+        "add": {
+          "PostId": {
+            "value": "@sugisaku8;2025-04-09T08:29:35.294Z",
+            "sub": {
+              "adedime": [
+                {
+                  "add": "@sugisaku8;2025-04-09T08:29:35.294Z",
+                  "time": "2025-04-09T08:29:35.339Z"
+                }
+              ]
+            }
+          },
+          "PostName": {
+            "value": "Sugisaku8によるテスト投稿",
+            "sub": {
+              "adedime": [
+                {
+                  "add": "Sugisaku8によるテスト投稿",
+                  "time": "2025-04-09T08:29:35.339Z"
+                }
+              ]
+            }
+          },
+          "PostTime": {
+            "value": "2025-04-09T08:29:35.294Z",
+            "sub": {
+              "adedime": [
+                {
+                  "add": "2025-04-09T08:29:35.294Z",
+                  "time": "2025-04-09T08:29:35.339Z"
+                }
+              ]
+            }
+          },
+          "UserName": {
+            "value": "Sugisaku8",
+            "sub": {
+              "adedime": [
+                {
+                  "add": "Sugisaku8",
+                  "time": "2025-04-09T08:29:35.339Z"
+                }
+              ]
+            }
+          },
+          "UserId": {
+            "value": "@sugisaku8",
+            "sub": {
+              "adedime": [
+                {
+                  "add": "@sugisaku8",
+                  "time": "2025-04-09T08:29:35.339Z"
+                }
+              ]
+            }
+          },
+          "PostData": {
+            "value": "この投稿は4月9日に行われ、Deep-Schooler Client testによって投稿されました。",
+            "sub": {
+              "adedime": [
+                {
+                  "add": "この投稿は4月9日に行われ、Deep-Schooler Client testによって投稿されました。",
+                  "time": "2025-04-09T08:29:35.339Z"
+                }
+              ]
+            }
+          },
+          "LikerData": {
+            "value": "general",
+            "sub": {
+              "adedime": [
+                {
+                  "add": "general",
+                  "time": "2025-04-09T08:29:35.339Z"
+                }
+              ]
+            }
+          }
+        },
+        "time": "2025-04-09T08:29:35.339Z"
+      }
+    ]
+  }
+}

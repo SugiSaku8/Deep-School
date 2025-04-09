@@ -65,7 +65,7 @@ class _index {
     this.loadFiles();
     this.watchFiles();
     this.setupServer();
-    this.Nameram;
+    this.NameRam = [];
     process.on("SIGINT", () => {
       console.log("Ctrl+Cが検知されました。");
       this.saveIndexData();
@@ -90,15 +90,37 @@ class _index {
           }
           console.log(`ファイル ${file} を読み込みました。`);
           console.log(`ファイル${file}の内容は、\n${datas}\nです`);
-          this.index.add(this.count_index, datas);
-          this.Nameram.push(file);
+          this.index.add(this.count_index, file);
           this.count_index += 1;
+          this.NameRam.push(file);
         });
       });
     });
     console.log("Initialization has been completed.");
   }
 
+  Reload() {
+    fs.readdir("./data", (err, files) => {
+      if (err) {
+        console.error("データディレクトリの読み込みに失敗しました:", err);
+        return;
+      } else if (files === null) {
+        console.log("Data File is Empty");
+        return;
+      }
+      files.forEach((file) => {
+        const filePath = path.join("./data", file);
+        fs.readFile(filePath, "utf8", (err, datas) => {
+          if (err) {
+            console.error(`${filePath} の読み込みに失敗しました:`, err);
+            return;
+          }
+          this.count_index += 1;
+          this.NameRam.push(file);
+        });
+      });
+    });
+  }
   watchFiles() {
     fs.watch("./data", { persistent: true }, (eventType, filename) => {
       if (filename) {
@@ -110,6 +132,7 @@ class _index {
               return;
             }
             console.log(`ファイル ${filename} が変更されました。`);
+            this.Reload();
             // 変更されたファイルのインデックスを更新
             const indexToUpdate = this.index.data.findIndex(
               (_, index) => index === this.count_index
@@ -141,12 +164,24 @@ class _index {
       }
     });
   }
-  setupServer() {
-    app.get("/get", (req, res) => {
-      res.json(this.index.data);
+  async GetFiles(file) {
+    const filePath = path.join("./data", file);
+    fs.readFile(filePath, "utf8", (err, datas) => {
+      if (err) {
+        console.error(`${filePath} の読み込みに失敗しました:`, err);
+        return;
+      }
+      return datas;
     });
-    app.get("/Name", (req, res) => {
-      res.json(this.Nameram);
+  }
+  async setupServer() {
+    app.get("/get", (req, res) => {
+      const query = req.query.text;
+      if (!query || query === null) {
+        res.json(this.NameRam);
+      } else {
+        res.json(this.GetFiles());
+      }
     });
   }
 

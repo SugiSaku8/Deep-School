@@ -43,50 +43,50 @@ function removeZeros(obj) {
 
   return newObj;
 }
-function getValue(d, path) {
+function getValue(data, path) {
+  if (!data || typeof data !== "object") return null;
+
   const parts = path.split(".");
-  let current = d;
+  let current = data;
 
   for (let part of parts) {
-    if (!current || typeof current !== "object") {
-      return null;
-    }
-    current = current[part];
+    if (!current?.value && !current?.[part]) return null;
+    current = current.value ? current.value : current[part];
+
+    if (typeof current !== "object" || !current) return null;
   }
 
   return current;
 }
+async function getPost(file) {
+  const response = await fetch("http://localhost:3776/get?text=" + file);
+  const data = await response.json();
+  console.log("取得したデータ:" + data);
+  return data;
+}
 async function loadFeed() {
-  const response = await fetch("http://localhost:3776/get");
-  let data = await response.json();
-  console.log(data)
-  data = data.filter(item => item !== 0);
-  data = JSON.stringify(data);
-  feedContent.innerHTML = "";
-  const randomIndex = Math.floor(Math.random() * data.length);
-  const feedItem = data[randomIndex];
-  console.log(feedItem);
-  console.log(getValue(feedItem, "value.PostName.value")); // "Sugisaku8によるテスト投稿"
-  console.log(getValue(feedItem, "value.PostId.value")); // "@sugisaku8;2025-04-09T08:29:35.294Z"
-  console.log(getValue(feedItem, "value.PostName.value")); // "Sugisaku8によるテスト投稿"
-  console.log(getValue(feedItem, "value.PostTime.value")); // "2025-04-09T08:29:35.294Z"
-  console.log(getValue(feedItem, "value.UserId.value")); // "@sugisaku8"
-  console.log(getValue(feedItem, "value.UserName")); // "Sugisaku8"
-  console.log(getValue(feedItem, "value.LikerData.value"));
-  if (!(feedItem === 0)) {
-    if (feedItem) {
+  try {
+    const response = await fetch("http://localhost:3776/get");
+    const data = await response.json();
+    // ランダムな投稿を選択して表示
+    const randomIndex = Math.floor(Math.random() * data.length);
+    const selectedPost = data[randomIndex];
+    console.log(selectedPost)
+    const feedContenter = await getPost(selectedPost);
+    if (feedContenter?.value) {
+      const postValue = feedContenter.value;
       const div = document.createElement("div");
       div.className = "feed-item";
       div.innerHTML = `
-              <strong>${feedItem.UserName} (${feedItem.UserId})</strong>
-              <p>${feedItem.PostName}</p>
-              <p>${feedItem.PostData}</p>
-              <small>${feedItem.PostTime}</small>
+              <strong>${postValue.UserName.value} (${postValue.UserId.value})</strong>
+              <p>${postValue.PostName.value}</p>
+              <p>${postValue.PostData.value}</p>
+              <small>${postValue.PostTime.value}</small>
           `;
       feedContent.appendChild(div);
     }
-  } else {
-    await RechankFeed(data);
+  } catch (error) {
+    console.error("フィードの読み込みに失敗しました:", error);
   }
 }
 
