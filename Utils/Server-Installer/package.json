@@ -1,0 +1,21 @@
+{
+  "name": "deep-schooler-server-installer",
+  "version": "1.0.0",
+  "description": "Deep-Schooler server installer.",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [
+    "Deep-School",
+    "Deep-Schooler",
+    "Installer",
+    "Deep-Schooler-Installer",
+    "Deep-Schooler-Server"
+  ],
+  "author": "Carnation Studio",
+  "license": "MPL-2.0",
+  "devDependencies": {
+    "electron": "^35.1.5"
+  }
+}

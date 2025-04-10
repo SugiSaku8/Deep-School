@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Deep-Schooler 公式サーバー　インストーラー</title>
+  </head>
+  <body>
+    <h1>Deep-Schooler 公式サーバー　インストーラー</h1>
+    <p>Deep-Schooler　公式サーバーをインストールします。</p>
+    <button onclick="executeCode()">インストール</button>
+    <script>
+      async function executeCode() {
+        const code = {};
+        const result = await window.api.executeNodeCode(code);
+        document.getElementById("result").innerText = JSON.stringify(result);
+      }
+    </script>
+  </body>
+</html>
