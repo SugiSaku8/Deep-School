@@ -28,6 +28,7 @@ postButton.addEventListener("click", async () => {
   console.log(result.message);
   loadFeed();
 });
+
 // 入力例
 const json = { データ: 0, キー1: 0, キー2: 0 };
 
@@ -43,6 +44,7 @@ function removeZeros(obj) {
 
   return newObj;
 }
+
 function getValue(data, path) {
   if (!data || typeof data !== "object") return null;
 
@@ -58,21 +60,39 @@ function getValue(data, path) {
 
   return current;
 }
+
 async function getPost(file) {
   const response = await fetch("http://localhost:3776/get?text=" + file);
   const data = await response.json();
   return data;
 }
+
+function addfeed(postValue){
+  let div = document.createElement("div");
+  div.className = "feed-item";
+  div.innerHTML = `
+            <strong>${postValue.UserName.value} (${postValue.UserId.value})</strong>
+            <p>${postValue.PostName.value}</p>
+            <p>${postValue.PostData.value}</p>
+            <small>${postValue.PostTime.value}</small>
+        `;
+  feedContent.appendChild(div);
+}
+
 async function loadFeed() {
   try {
     const response = await fetch("http://localhost:3776/get");
     const data = await response.json();
-    // ランダムな投稿を選択して表示
-    const randomIndex = Math.floor(Math.random() * data.length);
-    const selectedPost = data[randomIndex];
+    let randomIndex = Math.floor(Math.random() * data.length);
+    let randomIndexplusone = Math.floor(Math.random() * data.length) +1;
+    let selectedPost = data[randomIndex];
+    let selectedPostplusone = data[randomIndexplusone];
     let feedContenter = await getPost(selectedPost);
-    const postValue = feedContenter.value;
-    const div = document.createElement("div");
+    let feedContenterplusone = await getPost(selectedPostplusone);
+    let postValue = feedContenter.value;
+    let postValueone = feedContenter.value;
+
+    let div = document.createElement("div");
     div.className = "feed-item";
     div.innerHTML = `
               <strong>${postValue.UserName.value} (${postValue.UserId.value})</strong>
