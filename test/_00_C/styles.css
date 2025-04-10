@@ -1,49 +1,83 @@
 /* styles.css */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
-    background-color: #f4f4f4;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f4f4f4;
 }
 
 #app {
-    max-width: 600px;
-    margin: auto;
-    background: white;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 #post-form {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
-input, textarea {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+input,
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 button {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
 }
 
 button:hover {
-    background-color: #218838;
+  background-color: #218838;
 }
 
 #feed {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .feed-item {
-    border-bottom: 1px solid #ccc;
-    padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+}
+
+.reply {
+  margin-left: 20px; /* リプライをインデント */
+  padding: 10px;
+  border-left: 2px solid #ccc; /* 左側に線を追加 */
+  background-color: #f9f9f9; /* 背景色を変更 */
+  margin-bottom: 5px;
+}
+
+.reply strong {
+  font-size: 0.9em; /* リプライのユーザー名を小さく */
+}
+
+.reply p {
+  margin: 5px 0; /* リプライのテキストのマージン */
+}
+
+.reply small {
+  color: #888; /* リプライのタイムスタンプの色 */
+}
+
+.feed-item[data-post-id] {
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.feed-item[data-post-id] .replies {
+  margin-top: 10px;
+  padding-left: 20px;
+  border-left: 1px solid #eee;
 }

@@ -18,6 +18,7 @@ const auto = {
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
+
 app.post("/post", (req, res) => {
   try {
     let _new_post_ = new nimi(auto.size);
@@ -40,6 +41,7 @@ app.post("/post", (req, res) => {
       UserId: _new_post_.Value(2),
       PostData: _new_post_.Value(6),
       LikerData: _new_post_.Value(7),
+      LinkerData: _new_post_.Value(8), // LinkerData を追加
     });
     _0ds.createFile(
       "./data/" + "_" + _new_post_.Value(4).value,
@@ -174,21 +176,6 @@ class _index {
     });
   }
 
-  createReplyHTML(replies) {
-    let html = '<div class="replies">';
-    replies.forEach((reply) => {
-      html += `
-      <div class="reply">
-        <strong>${reply.UserName} (${reply.UserId})</strong>
-        <p>${reply.ReplyData}</p>
-        <small>${reply.ReplyTime}</small>
-        ${reply.replies ? createReplyHTML(reply.replies) : ""}
-      </div>
-    `;
-    });
-    html += "</div>";
-    return html;
-  }
   async getFileNames() {
     this.NameRam = [];
     let directoryPath = "./data";
