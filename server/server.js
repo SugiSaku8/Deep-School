@@ -174,6 +174,40 @@ class _index {
     });
   }
 
+  createReplyHTML(replies) {
+    let html = '<div class="replies">';
+    replies.forEach((reply) => {
+      html += `
+      <div class="reply">
+        <strong>${reply.UserName} (${reply.UserId})</strong>
+        <p>${reply.ReplyData}</p>
+        <small>${reply.ReplyTime}</small>
+        ${reply.replies ? createReplyHTML(reply.replies) : ""}
+      </div>
+    `;
+    });
+    html += "</div>";
+    return html;
+  }
+  async getFileNames() {
+    this.NameRam = [];
+    let directoryPath = "./data";
+    return new Promise((resolve, reject) => {
+      fs.readdir(directoryPath, (err, files) => {
+        if (err) {
+          console.error("ディレクトリの読み込みに失敗しました:", err);
+          reject(err);
+          return;
+        }
+
+        const fileNames = files.filter((file) => {
+          const filePath = path.join(directoryPath, file);
+          this.NameRam.push(fs.statSync(filePath).isFile()); // ファイルのみを抽出
+        });
+        resolve(fileNames);
+      });
+    });
+  }
   async setupServer() {
     app.get("/get", (req, res) => {
       const query = req.query.text;
