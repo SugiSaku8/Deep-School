@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Deep-Work-Maker Version 1.0</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      body {
+        background: url("back.png") no-repeat center center fixed;
+        background-size: cover;
+        font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+          "Segoe UI", sans-serif;
+        color: #333;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .creator-section,
+      .preview-section {
+        margin-bottom: 20px;
+        padding: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        background-color: rgba(255, 255, 255, 0.4);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+      }
+
+      .creator-section:hover,
+      .preview-section:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      select,
+      input[type="text"],
+      input[type="number"],
+      input[type="color"],
+      textarea {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.7);
+        color: #333;
+        transition: border-color 0.3s ease;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      input[type="text"]:focus,
+      textarea:focus,
+      select:focus {
+        border-color: rgba(0, 123, 255, 0.7);
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+      }
+
+      .options-container {
+        margin-top: 10px;
+      }
+
+      .option-item {
+        margin-bottom: 10px;
+        display: flex;
+        gap: 10px;
+      }
+
+      .add-option-btn {
+        margin-top: 10px;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 20px;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        background: linear-gradient(to bottom, #007bff, #0056b3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      }
+
+      .add-option-btn:hover {
+        background: linear-gradient(to bottom, #0069d9, #004289);
+      }
+
+      .preview {
+        padding: 15px;
+        border-radius: 4px;
+      }
+
+      .preview-options {
+        margin-top: 10px;
+      }
+
+      .preview-option {
+        margin-bottom: 10px;
+        padding: 8px;
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+
+      .error {
+        color: red;
+        font-size: 14px;
+        margin-top: 5px;
+      }
+
+      .custom-settings {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: rgba(255, 255, 255, 0.3);
+        border-radius: 4px;
+        backdrop-filter: blur(10px);
+      }
+
+      .custom-setting-item {
+        margin-bottom: 15px;
+      }
+
+      .custom-setting-item label {
+        display: inline-block;
+        width: 200px;
+      }
+
+      .color-picker {
+        width: 100px;
+        height: 30px;
+        padding: 2px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+
+      .save-section {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: rgba(255, 255, 255, 0.3);
+        border-radius: 4px;
+        backdrop-filter: blur(10px);
+      }
+
+      .save-section button {
+        margin-right: 10px;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 20px;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        background: linear-gradient(to bottom, #007bff, #0056b3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      }
+
+      .save-section button:hover {
+        background: linear-gradient(to bottom, #0069d9, #004289);
+      }
+
+      .answer-section {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: rgba(255, 255, 255, 0.3);
+        border-radius: 4px;
+        backdrop-filter: blur(10px);
+      }
+
+      .answer-section textarea {
+        width: 100%;
+        min-height: 100px;
+        margin-bottom: 10px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+
+      /* チェックボックスとラジオボタンのカスタマイズ */
+      input[type="checkbox"],
+      input[type="radio"] {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 3px;
+        background-color: rgba(255, 255, 255, 0.3);
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      }
+
+      input[type="checkbox"]:checked,
+      input[type="radio"]:checked {
+        background-color: rgba(0, 123, 255, 0.7);
+        border-color: rgba(0, 123, 255, 0.7);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="creator-section">
+        <h2>問題作成</h2>
+        <div class="form-group">
+          <label for="question-id">問題ID:</label>
+          <input type="text" id="question-id" placeholder="ワークのID" />
+        </div>
+        <div class="form-group">
+          <label for="question-type">問題タイプ:</label>
+          <select id="question-type">
+            <option value="選択式">選択式</option>
+            <option value="複数選択式">複数選択式</option>
+            <option value="短文記述式">短文記述式</option>
+            <option value="長文記述式">長文記述式</option>
+            <option value="記述式">記述式</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="question-title">タイトル:</label>
+          <input
+            type="text"
+            id="question-title"
+            placeholder="カスタムタイトル"
+          />
+        </div>
+        <div class="form-group">
+          <label for="question-text">問題文:</label>
+          <textarea
+            id="question-text"
+            rows="4"
+            placeholder="問題文を入力してください"
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label>オプション:</label>
+          <div id="options-container" class="options-container"></div>
+          <button id="add-option" class="add-option-btn">
+            オプションを追加
+          </button>
+        </div>
+        <div class="form-group">
+          <label for="correct-answer">正解:</label>
+          <input
+            type="text"
+            id="correct-answer"
+            placeholder="正解のIDを入力してください"
+          />
+        </div>
+      </div>
+      <div class="answer-section">
+        <h3>模範解答</h3>
+        <div class="form-group">
+          <label for="example-answer">模範解答:</label>
+          <textarea
+            id="example-answer"
+            rows="4"
+            placeholder="模範解答を入力してください"
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="explanation">解答解説:</label>
+          <textarea
+            id="explanation"
+            rows="4"
+            placeholder="解答の解説を入力してください"
+          ></textarea>
+        </div>
+      </div>
+      <div class="custom-settings">
+        <h3>カスタム設定</h3>
+        <div class="custom-setting-item">
+          <label>フォント:</label>
+          <select id="font-family">
+            <option value="Arial">Arial</option>
+            <option value="Helvetica">Helvetica</option>
+            <option value="Meiryo">メイリオ</option>
+            <option value="MS Gothic">MS ゴシック</option>
+          </select>
+        </div>
+        <div class="custom-setting-item">
+          <label>フォントサイズ:</label>
+          <input type="number" id="font-size" value="16" min="12" max="24" />
+        </div>
+        <div class="custom-setting-item">
+          <label>テキストカラー:</label>
+          <input
+            type="color"
+            id="text-color"
+            class="color-picker"
+            value="#000000"
+          />
+        </div>
+        <div class="custom-setting-item">
+          <label>背景色:</label>
+          <input
+            type="color"
+            id="background-color"
+            class="color-picker"
+            value="#ffffff"
+          />
+        </div>
+        <div class="custom-setting-item">
+          <label>ボタン色:</label>
+          <input
+            type="color"
+            id="button-color"
+            class="color-picker"
+            value="#007bff"
+          />
+        </div>
+        <div class="custom-setting-item">
+          <label>ボタンテキスト色:</label>
+          <input
+            type="color"
+            id="button-text-color"
+            class="color-picker"
+            value="#ffffff"
+          />
+        </div>
+      </div>
+      <div class="save-section">
+        <button id="save-question">
+          <i class="fas fa-save"></i> 問題を保存
+        </button>
+        <button id="load-question">
+          <i class="fas fa-folder-open"></i> 問題を読み込む
+        </button>
+        <button id="export-json">
+          <i class="fas fa-file-export"></i> JSONでエクスポート
+        </button>
+      </div>
+      <div class="preview-section">
+        <h2>プレビュー</h2>
+        <div id="preview" class="preview"></div>
+      </div>
+    </div>
+
+    <script>
+      class QuestionCreator {
+        constructor() {
+          this.options = [];
+          this.initializeEventListeners();
+          this.loadSavedQuestions();
+        }
+
+        initializeEventListeners() {
+          document
+            .getElementById("add-option")
+            .addEventListener("click", () => this.addOption());
+          document
+            .querySelectorAll("input, select, textarea")
+            .forEach((element) => {
+              element.addEventListener("input", () => this.updatePreview());
+            });
+          document
+            .getElementById("save-question")
+            .addEventListener("click", () => this.saveQuestion());
+          document
+            .getElementById("load-question")
+            .addEventListener("click", () => this.loadQuestion());
+          document
+            .getElementById("export-json")
+            .addEventListener("click", () => this.exportJSON());
+        }
+
+        generateOptionId() {
+          const prefix = "option_";
+          const existingIds = this.options.map((option) =>
+            parseInt(option.id.replace(prefix, ""))
+          );
+          const nextId = Math.max(...existingIds, 0) + 1;
+          return `${prefix}${nextId}`;
+        }
+
+        addOption() {
+          const id = this.generateOptionId();
+          this.options.push({
+            id,
+            text: `選択肢${this.options.length + 1}`,
+          });
+          this.renderOptions();
+          this.updatePreview();
+        }
+
+        renderOptions() {
+          const container = document.getElementById("options-container");
+          container.innerHTML = "";
+
+          this.options.forEach((option, index) => {
+            const div = document.createElement("div");
+            div.className = "option-item";
+            div.innerHTML = `
+                        <input type="text" 
+                               placeholder="選択肢のテキスト" 
+                               value="${option.text}"
+                               onchange="questionCreator.updateOption(${index}, this.value)">
+                        <input type="text" 
+                               placeholder="ID" 
+                               value="${option.id}"
+                               onchange="questionCreator.updateOptionId(${index}, this.value)">
+                        <button onclick="questionCreator.removeOption(${index})">削除</button>
+                    `;
+            container.appendChild(div);
+          });
+        }
+
+        updateOption(index, text) {
+          this.options[index].text = text;
+          this.updatePreview();
+        }
+
+        updateOptionId(index, id) {
+          if (this.validateOptionId(id)) {
+            this.options[index].id = id;
+            this.updatePreview();
+          } else {
+            alert("無効なIDです。別のIDを指定してください。");
+          }
+        }
+
+        validateOptionId(id) {
+          if (!id) return false;
+          const existingIds = this.options
+            .filter((_, idx) => idx !== index)
+            .map((option) => option.id);
+          return !existingIds.includes(id);
+        }
+
+        removeOption(index) {
+          this.options.splice(index, 1);
+          this.renderOptions();
+          this.updatePreview();
+        }
+
+        updatePreview() {
+          const preview = document.getElementById("preview");
+          const questionType = document.getElementById("question-type").value;
+          const questionText = document.getElementById("question-text").value;
+
+          preview.innerHTML = `
+                    <div class="preview-question">
+                        <h3>${questionText}</h3>
+                        <div class="preview-options">
+                            ${this.getPreviewOptions(questionType)}
+                        </div>
+                    </div>
+                `;
+
+          this.applyCustomSettings();
+        }
+
+        getPreviewOptions(questionType) {
+          switch (questionType) {
+            case "選択式":
+              return this.options
+                .map(
+                  (option) => `
+                            <div class="preview-option">
+                                <input type="radio" name="answer" id="${option.id}">
+                                <label for="${option.id}">${option.text}</label>
+                            </div>
+                        `
+                )
+                .join("");
+            case "複数選択式":
+              return this.options
+                .map(
+                  (option) => `
+                            <div class="preview-option">
+                                <input type="checkbox" id="${option.id}">
+                                <label for="${option.id}">${option.text}</label>
+                            </div>
+                        `
+                )
+                .join("");
+            case "短文記述式":
+              return '<textarea rows="2" placeholder="答えを入力してください"></textarea>';
+            case "長文記述式":
+              return '<textarea rows="4" placeholder="答えを入力してください"></textarea>';
+            case "記述式":
+              return '<textarea rows="6" placeholder="詳細な答えを入力してください"></textarea>';
+            default:
+              return "";
+          }
+        }
+
+        applyCustomSettings() {
+          const preview = document.querySelector(".preview-question");
+          if (!preview) return;
+
+          const settings = {
+            fontFamily: document.getElementById("font-family").value,
+            fontSize: `${document.getElementById("font-size").value}px`,
+            textColor: document.getElementById("text-color").value,
+            backgroundColor: document.getElementById("background-color").value,
+            buttonColor: document.getElementById("button-color").value,
+            buttonText: document.getElementById("button-text-color").value,
+          };
+
+          preview.style.fontFamily = settings.fontFamily;
+          preview.style.fontSize = settings.fontSize;
+          preview.style.color = settings.textColor;
+          preview.style.backgroundColor = settings.backgroundColor;
+        }
+
+        saveQuestion() {
+          const question = this.exportQuestion();
+          const questions = this.getSavedQuestions();
+          questions.push(question);
+          localStorage.setItem("savedQuestions", JSON.stringify(questions));
+          alert("問題が保存されました。");
+        }
+
+        loadQuestion() {
+          const questions = this.getSavedQuestions();
+          if (questions.length === 0) {
+            alert("保存された問題はありません。");
+            return;
+          }
+
+          const index = prompt(
+            "読み込む問題の番号を入力してください（1-" +
+              questions.length +
+              "）："
+          );
+          if (index && index >= 1 && index <= questions.length) {
+            this.importQuestion(questions[index - 1]);
+          }
+        }
+
+        exportJSON() {
+          const question = this.exportQuestion();
+          const blob = new Blob([JSON.stringify(question, null, 2)], {
+            type: "application/json",
+          });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "question.json";
+          a.click();
+          URL.revokeObjectURL(url);
+        }
+
+        getSavedQuestions() {
+          return JSON.parse(localStorage.getItem("savedQuestions") || "[]");
+        }
+
+        exportQuestion() {
+          return {
+            questionId: document.getElementById("question-id").value,
+            title: {
+              mode: "custom",
+              config: {
+                title: document.getElementById("question-title").value,
+                font: document.getElementById("font-family").value,
+                "font-size": document.getElementById("font-size").value,
+                "font-color": document.getElementById("text-color").value,
+              },
+            },
+            qMode: {
+              config: {
+                mode: document.getElementById("question-type").value,
+                thema: {
+                  "background-color":
+                    document.getElementById("background-color").value,
+                  "background-color_permit_gradation": false,
+                  "background-color_label":
+                    document.getElementById("background-color").value,
+                  "text-color": document.getElementById("text-color").value,
+                  "button-background-color":
+                    document.getElementById("button-color").value,
+                  "button-label-color":
+                    document.getElementById("button-text-color").value,
+                },
+              },
+            },
+            qData: {
+              label: document.getElementById("question-text").value,
+              options: this.options.reduce((acc, option) => {
+                acc[option.id] = {
+                  id: option.id,
+                  label: option.text,
+                  IsCorrect:
+                    option.id ===
+                    document.getElementById("correct-answer").value,
+                };
+                return acc;
+              }, {}),
+              answer: {
+                id: document.getElementById("correct-answer").value,
+                exampleAnswer: document.getElementById("example-answer").value,
+                explanation: document.getElementById("explanation").value,
+              },
+            },
+          };
+        }
+
+        importQuestion(questionData) {
+          document.getElementById("question-id").value =
+            questionData.questionId;
+          document.getElementById("question-type").value =
+            questionData.qMode.config.mode;
+          document.getElementById("question-title").value =
+            questionData.title.config.title;
+          document.getElementById("question-text").value =
+            questionData.qData.label;
+          document.getElementById("correct-answer").value =
+            questionData.qData.answer.id;
+          document.getElementById("example-answer").value =
+            questionData.qData.answer.exampleAnswer || "";
+          document.getElementById("explanation").value =
+            questionData.qData.answer.explanation || "";
+
+          this.options = Object.entries(questionData.qData.options).map(
+            ([id, option]) => ({
+              id,
+              text: option.label,
+            })
+          );
+
+          this.renderOptions();
+          this.updatePreview();
+        }
+
+        loadSavedQuestions() {
+          // ローカルストレージから保存された質問を読み込むロジックをここに実装します。
+          const savedQuestions = localStorage.getItem("savedQuestions");
+          if (savedQuestions) {
+            try {
+              const questions = JSON.parse(savedQuestions);
+              // 読み込んだ質問を処理する
+              // 例：最初の質問を読み込む
+              if (questions.length > 0) {
+                this.importQuestion(questions[0]);
+              }
+            } catch (error) {
+              console.error("保存された質問の読み込みに失敗しました:", error);
+              alert("保存された質問の読み込みに失敗しました。");
+            }
+          }
+        }
+      }
+
+      const questionCreator = new QuestionCreator();
+      window.questionCreator = questionCreator;
+    </script>
+  </body>
+</html>

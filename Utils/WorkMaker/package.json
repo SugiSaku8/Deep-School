@@ -1,0 +1,65 @@
+{
+  "name": "deep-school-work-maker",
+  "version": "1.0",
+  "description": "Deep-School's Offical WorkMaker",
+  "main": "app.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir -mwl",
+    "build": "electron-builder -mwl",
+    "mac": "electron-builder -m",
+    "linux": "electron-builder -l",
+    "win": "electron-builder -w",
+    "winx64": "electron-builder --win --x64"
+  },
+  "author": "Carnation Studio",
+  "license": "MPL-2.0",
+  "build": {
+    "appId": "com.deepschool.workmaker",
+    "productName": "WorkMaker",
+    "copyright": "Copyright © 2022-2025 Carnation Studio",
+    "publish": null,
+    "files": [
+      "**/r/**",
+      "*.*"
+    ],
+    "win": {
+      "target": [
+        "msi"
+      ],
+      "icon": "BR/a.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowElevation": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "installerIcon": "BR/a.png",
+      "uninstallerIcon": "BR/a.png",
+      "installerHeaderIcon": "BR/a.png",
+      "language": 1041
+    },
+    "msi": {},
+    "mac": {
+      "icon": "BR/a.png",
+      "category": "public.app-category.study"
+    },
+    "linux": {
+      "icon": "BR/a.png"
+    }
+  },
+  "devDependencies": {
+    "electron": "latest",
+    "electron-build": "latest",
+    "electron-builder": "latest"
+  },
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "express": "^4.21.2",
+    "hoek": "latest",
+    "jszip": "latest",
+    "muru": "latest",
+    "seut": "latest",
+    "web-audio-api": "^0.2.2"
+  }
+}
