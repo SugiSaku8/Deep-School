@@ -51,19 +51,9 @@
   "devDependencies": {
     "electron": "latest",
     "electron-build": "latest",
-    "electron-builder": "latest",
-    "underscore": "latest",
-    "fsa":"latest",
-    "hoek":"latest"
+    "electron-builder": "latest"
   },
   "dependencies": {
-    "child_process": "latest",
-    "express": "^4.21.2",
-    "hoek": "latest",
-    "jszip": "latest",
-    "muru": "latest",
-    "seut": "latest",
-    "qs": "latest"
-
+    
   }
 }
