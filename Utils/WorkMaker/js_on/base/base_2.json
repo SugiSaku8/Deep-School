@@ -1,0 +1,150 @@
+{
+  "type": "work",
+  "version": "0.1.0",
+  "workId": "ワークのID",
+  "added": "作成日",
+  "L_changed": "変更日",
+  "data": {
+    "1": {
+      "questionId": "クエスチョンID",
+      "title": {
+        "mode": "custom",
+        "config": {
+          "title": "カスタムタイトル",
+          "font": "フォント",
+          "font-size": "フォントサイズ",
+          "font-color": "フォントカラー",
+          "a11y": {
+            "mode": "ignore"
+          }
+        }
+      },
+      "qMode": {
+        "config": {
+          "mode": "問題のモード",
+          "thema": {
+            "background-color": "背景色",
+            "background-color_permit_gradation": false,
+            "background-color_label": "ラベル部分の背景色",
+            "text-color": "テキストの基本カラー",
+            "button-background-color": "ボタンの色",
+            "button-label-color": "ボタンテキストの色"
+          }
+        }
+      },
+      "qData": {
+        "label": "問題文",
+        "label_edit_lang": "ラベルの記述モード",
+        "options": {
+          "選択肢A": {
+            "id": "options_A",
+            "label": "選択肢Aのラベル",
+            "IsCorrect": false
+          },
+          "選択肢B": {
+            "id": "options_B",
+            "label": "選択肢Bのラベル",
+            "IsCorrect": true
+          }
+        },
+        "answer": {
+          "id": "options_B"
+        }
+      }
+    },
+    "2": {
+      "questionId": "クエスチョンID",
+      "title": {
+        "mode": "custom",
+        "config": {
+          "title": "カスタムタイトル",
+          "font": "フォント",
+          "font-size": "フォントサイズ",
+          "font-color": "フォントカラー",
+          "a11y": {
+            "mode": "ignore"
+          }
+        }
+      },
+      "qMode": {
+        "config": {
+          "mode": "問題のモード",
+          "thema": {
+            "background-color": "背景色",
+            "background-color_permit_gradation": false,
+            "background-color_label": "ラベル部分の背景色",
+            "text-color": "テキストの基本カラー",
+            "button-background-color": "ボタンの色",
+            "button-label-color": "ボタンテキストの色"
+          }
+        }
+      },
+      "qData": {
+        "label": "問題文",
+        "label_edit_lang": "ラベルの記述モード",
+        "options": {
+          "選択肢A": {
+            "id": "options_A",
+            "label": "選択肢Aのラベル",
+            "IsCorrect": false
+          },
+          "選択肢B": {
+            "id": "options_B",
+            "label": "選択肢Bのラベル",
+            "IsCorrect": true
+          }
+        },
+        "answer": {
+          "id": "options_B"
+        }
+      }
+    },
+    "3": {
+      "questionId": "クエスチョンID",
+      "title": {
+        "mode": "custom",
+        "config": {
+          "title": "カスタムタイトル",
+          "font": "フォント",
+          "font-size": "フォントサイズ",
+          "font-color": "フォントカラー",
+          "a11y": {
+            "mode": "ignore"
+          }
+        }
+      },
+      "qMode": {
+        "config": {
+          "mode": "問題のモード",
+          "thema": {
+            "background-color": "背景色",
+            "background-color_permit_gradation": false,
+            "background-color_label": "ラベル部分の背景色",
+            "text-color": "テキストの基本カラー",
+            "button-background-color": "ボタンの色",
+            "button-label-color": "ボタンテキストの色"
+          }
+        }
+      },
+      "qData": {
+        "label": "問題文",
+        "label_edit_lang": "ラベルの記述モード",
+        "options": {
+          "選択肢A": {
+            "id": "options_A",
+            "label": "選択肢Aのラベル",
+            "IsCorrect": false
+          },
+          "選択肢B": {
+            "id": "options_B",
+            "label": "選択肢Bのラベル",
+            "IsCorrect": true
+          }
+        },
+        "answer": {
+          "id": "options_B"
+        }
+      }
+    }
+  }
+}

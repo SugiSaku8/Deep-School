@@ -47,7 +47,9 @@
         }
       },
       "answer": {
-        "id": "options_B"
+        "id": "options_B",
+        "exampleAnswer":"模範解答",
+        "explanation":"解答解説"
       }
     }
   }
