@@ -1,12 +1,12 @@
 {
   "name": "deep-school-work-maker",
-  "version": "1.0",
+  "version": "1.0.0",
   "description": "Deep-School's Offical WorkMaker",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "start": "electron .",
-    "pack": "electron-builder --dir -mwl",
-    "build": "electron-builder -mwl",
+    "pack": "electron-builder --dir -ml",
+    "build": "electron-builder -ml",
     "mac": "electron-builder -m",
     "linux": "electron-builder -l",
     "win": "electron-builder -w",
