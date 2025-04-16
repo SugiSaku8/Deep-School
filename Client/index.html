@@ -4,8 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Deep-School</title>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <script src="https://apis.google.com/js/api:client.js" async defer></script>
+    <script src="https://accounts.google.com/gsi/client"></script>
     <meta
       name="google-signin-client_id"
       content="54111871338-nv4bn99r48cohhverg3l9oicirthmtpp.apps.googleusercontent.com"
@@ -14,27 +13,23 @@
   </head>
   <body>
     <script id="Deep-School-Login">
-      var googleUser = {};
-      var startApp = function() {
-        gapi.load('auth2', function(){
-          auth2 = gapi.auth2.init({
-            client_id: '54111871338-nv4bn99r48cohhverg3l9oicirthmtpp.apps.googleusercontent.com',
-            cookiepolicy: 'single_host_origin',
-          });
-          attachSignin(document.getElementById('openLoginButton'));
+      var startApp = function () {
+        google.accounts.id.initialize({
+          client_id:
+            "54111871338-nv4bn99r48cohhverg3l9oicirthmtpp.apps.googleusercontent.com", // クライアントIDをここに入力
+          callback: handleCredentialResponse,
         });
+        google.accounts.id.renderButton(
+          document.getElementById("openLoginButton"),
+          { theme: "outline", size: "large" } // customization attributes
+        );
+        google.accounts.id.prompt(); // also display the One Tap sign-in prompt
       };
-    
-      function attachSignin(element) {
-        console.log(element.id);
-        auth2.attachClickHandler(element, {},
-            function(googleUser) {
-                  googleUser.getBasicProfile().getName();
-            }, function(error) {
-              alert(JSON.stringify(error, undefined, 2));
-            });
+
+      function handleCredentialResponse(response) {
+        console.log("Encoded JWT ID token: " + response.credential);
       }
-      </script>
+    </script>
     <div class="container_top">
       <h1 class="title">Deep-School</h1>
       <div class="login-form" id="loginForm">
@@ -55,14 +50,13 @@
           位置情報を利用してログインする
         </button>
       </div>
-      <button class="login-button"  id="openLoginButton">ログイン</button>
+      <button class="login-button" id="openLoginButton">ログイン</button>
 
       <div class="date">
         <p>2025</p>
         <p>10月</p>
         <p>3日</p>
       </div>
-     
     </div>
     <div class="container_top menu" id="menu">
       <div class="container">
@@ -132,6 +126,8 @@
         document.getElementById("menu").style.display = "none";
       });
     </script>
-      <script>startApp();</script>
+    <script>
+      startApp();
+    </script>
   </body>
 </html>
