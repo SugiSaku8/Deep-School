@@ -19,10 +19,7 @@
             "54111871338-nv4bn99r48cohhverg3l9oicirthmtpp.apps.googleusercontent.com", // クライアントIDをここに入力
           callback: handleCredentialResponse,
         });
-        // google.accounts.id.renderButton(  // この行を削除
-        //   document.getElementById("openLoginButton"),
-        //   { theme: "outline", size: "large" }  // customization attributes
-        // );
+        console.log("Initlaized  Start App");
       };
 
       function handleCredentialResponse(response) {
@@ -45,8 +42,12 @@
           <input type="text" id="schoolId" placeholder="学校ID" />
 
           <label for="password">パスワード</label>
-          <input type="password" id="password" placeholder="パスワード" />
-
+          <input
+            type="password"
+            id="password"
+            placeholder="パスワード"
+            autocomplete="current-password"
+          />
           <button class="submit-button" id="school_login_btn">ログイン</button>
         </form>
       </div>
