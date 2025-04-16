@@ -19,20 +19,17 @@
             "54111871338-nv4bn99r48cohhverg3l9oicirthmtpp.apps.googleusercontent.com", // クライアントIDをここに入力
           callback: handleCredentialResponse,
         });
+        document
+          .getElementById("openLoginButton")
+          .addEventListener("click", function () {
+            google.accounts.id.prompt();
+          });
         console.log("Initlaized  Start App");
       };
 
       function handleCredentialResponse(response) {
         console.log("Encoded JWT ID token: " + response.credential);
       }
-
-      document.addEventListener("DOMContentLoaded", function () {
-        document
-          .getElementById("openLoginButton")
-          .addEventListener("click", function () {
-            google.accounts.id.prompt();
-          });
-      });
     </script>
     <div class="container_top">
       <h1 class="title">Deep-School</h1>
