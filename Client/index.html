@@ -19,16 +19,23 @@
             "54111871338-nv4bn99r48cohhverg3l9oicirthmtpp.apps.googleusercontent.com", // クライアントIDをここに入力
           callback: handleCredentialResponse,
         });
-        google.accounts.id.renderButton(
-          document.getElementById("openLoginButton"),
-          { theme: "outline", size: "large" } // customization attributes
-        );
-        google.accounts.id.prompt(); // also display the One Tap sign-in prompt
+        // google.accounts.id.renderButton(  // この行を削除
+        //   document.getElementById("openLoginButton"),
+        //   { theme: "outline", size: "large" }  // customization attributes
+        // );
       };
 
       function handleCredentialResponse(response) {
         console.log("Encoded JWT ID token: " + response.credential);
       }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        document
+          .getElementById("openLoginButton")
+          .addEventListener("click", function () {
+            google.accounts.id.prompt();
+          });
+      });
     </script>
     <div class="container_top">
       <h1 class="title">Deep-School</h1>
