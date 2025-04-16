@@ -23,17 +23,25 @@
           client_id:
             "54111871338-nv4bn99r48cohhverg3l9oicirthmtpp.apps.googleusercontent.com",
           callback: handleCredentialResponse,
-          auto_select: false
+          auto_select: false,
+          use_fedcm_for_prompt: true
         });
 
-        // ログインボタンのクリックイベント
-        document.getElementById("openLoginButton").onclick = function() {
-          google.accounts.id.prompt((notification) => {
-            if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-              console.log('ログインプロンプトの表示に失敗しました:', notification);
-            }
-          });
-        };
+        // カスタムボタンの設定
+        google.accounts.id.renderButton(
+          document.getElementById("openLoginButton"),
+          {
+            type: "standard",
+            theme: "outline",
+            size: "large",
+            text: "signin_with_google",
+            shape: "rectangular",
+            locale: "ja"
+          }
+        );
+
+        // ワンタップログイン
+        google.accounts.id.prompt();
       };
     </script>
     <div class="container_top">
