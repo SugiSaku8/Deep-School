@@ -1,9 +1,10 @@
 // Google APIのクライアントID
-const CLIENT_ID = '54111871338-nv4bn99r48cohhverg3l9oicirthmtpp.apps.googleusercontent.com';
+const CLIENT_ID =
+  "54111871338-nv4bn99r48cohhverg3l9oicirthmtpp.apps.googleusercontent.com";
 // Google Drive APIのスコープ
 const SCOPES = [
-  'https://www.googleapis.com/auth/drive.file',
-  'https://www.googleapis.com/auth/drive.appdata'
+  "https://www.googleapis.com/auth/drive.file",
+  "https://www.googleapis.com/auth/drive.appdata",
 ];
 
 class GoogleAuthManager {
@@ -18,7 +19,7 @@ class GoogleAuthManager {
       client_id: CLIENT_ID,
       callback: this.handleCredentialResponse.bind(this),
       auto_select: false,
-      use_fedcm_for_prompt: true
+      use_fedcm_for_prompt: true,
     });
 
     // ログインボタンのレンダリング
@@ -30,7 +31,7 @@ class GoogleAuthManager {
         size: "large",
         text: "signin_with_google",
         shape: "rectangular",
-        locale: "ja"
+        locale: "ja",
       }
     );
 
@@ -41,12 +42,12 @@ class GoogleAuthManager {
   // 認証レスポンスのハンドリング
   async handleCredentialResponse(response) {
     console.log("認証トークンを受信:", response.credential);
-    
+
     try {
       // Google Drive APIの認証を実行
       await this.initializeGoogleDriveAuth();
     } catch (error) {
-      console.error('Google Drive認証エラー:', error);
+      console.error("Google Drive認証エラー:", error);
     }
   }
 
@@ -54,13 +55,13 @@ class GoogleAuthManager {
   async initializeGoogleDriveAuth() {
     this.tokenClient = google.accounts.oauth2.initTokenClient({
       client_id: CLIENT_ID,
-      scope: SCOPES.join(' '),
+      scope: SCOPES.join(" "),
       callback: (tokenResponse) => {
         if (tokenResponse.error !== undefined) {
           throw tokenResponse;
         }
         this.accessToken = tokenResponse.access_token;
-        console.log('Google Drive APIのアクセストークンを取得しました');
+        console.log("Google Drive APIのアクセストークンを取得しました");
       },
     });
 
@@ -77,32 +78,43 @@ class GoogleDriveManager {
   // アプリケーションデータの保存
   async saveAppData(fileName, data) {
     if (!this.authManager.accessToken) {
-      throw new Error('アクセストークンがありません。先にログインしてください。');
+      throw new Error(
+        "アクセストークンがありません。先にログインしてください。"
+      );
     }
 
     const metadata = {
       name: fileName,
-      parents: ['appDataFolder']
+      parents: ["appDataFolder"],
     };
 
     const form = new FormData();
-    form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
-    form.append('file', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+    form.append(
+      "metadata",
+      new Blob([JSON.stringify(metadata)], { type: "application/json" })
+    );
+    form.append(
+      "file",
+      new Blob([JSON.stringify(data)], { type: "application/json" })
+    );
 
     try {
-      const response = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${this.authManager.accessToken}`,
-        },
-        body: form
-      });
+      const response = await fetch(
+        "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${this.authManager.accessToken}`,
+          },
+          body: form,
+        }
+      );
 
       const result = await response.json();
-      console.log('ファイルを保存しました:', result);
+      console.log("ファイルを保存しました:", result);
       return result;
     } catch (error) {
-      console.error('ファイルの保存に失敗しました:', error);
+      console.error("ファイルの保存に失敗しました:", error);
       throw error;
     }
   }
@@ -110,7 +122,9 @@ class GoogleDriveManager {
   // アプリケーションデータの読み込み
   async loadAppData(fileName) {
     if (!this.authManager.accessToken) {
-      throw new Error('アクセストークンがありません。先にログインしてください。');
+      throw new Error(
+        "アクセストークンがありません。先にログインしてください。"
+      );
     }
 
     try {
@@ -126,7 +140,7 @@ class GoogleDriveManager {
 
       const searchResult = await searchResponse.json();
       if (!searchResult.files || searchResult.files.length === 0) {
-        throw new Error('ファイルが見つかりません');
+        throw new Error("ファイルが見つかりません");
       }
 
       // ファイルの内容を取得
@@ -141,10 +155,10 @@ class GoogleDriveManager {
       );
 
       const data = await downloadResponse.json();
-      console.log('ファイルを読み込みました:', data);
+      console.log("ファイルを読み込みました:", data);
       return data;
     } catch (error) {
-      console.error('ファイルの読み込みに失敗しました:', error);
+      console.error("ファイルの読み込みに失敗しました:", error);
       throw error;
     }
   }
@@ -158,28 +172,20 @@ class UIManager {
 
   initializeEventListeners() {
     document.getElementById("menu").style.display = "none";
-    
-    document.getElementById("school_login_btn").addEventListener("click", () => {
-      document.getElementById("kakuninForm").style.display = "flex";
-      document.getElementById("loginForm").style.display = "none";
-      document.getElementById("kakuninForm").style.display = "block";
-    });
-
-    document.getElementById("basyo_login").addEventListener("click", () => {
-      document.getElementById("kakuninForm").style.display = "none";
-      document.getElementById("menu").style.display = "none";
-    });
+    document.getElementById("kakuninForm").style.display = "flex";
+    document.getElementById("loginForm").style.display = "none";
+    document.getElementById("kakuninForm").style.display = "block";
   }
 }
 
 // アプリケーションの初期化
-window.onload = async function() {
+window.onload = async function () {
   const authManager = new GoogleAuthManager();
   const driveManager = new GoogleDriveManager(authManager);
   const uiManager = new UIManager();
 
   await authManager.initialize();
-/*
+  /*
   // 使用例
   window.saveData = async function(data) {
     try {
