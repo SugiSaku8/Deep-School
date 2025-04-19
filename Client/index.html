@@ -14,7 +14,7 @@
     <script src="./js/auth.js"></script>
   </head>
   <body>
-    <div class="container_top">
+    <div class="container_top" id="login">
       <h1 class="title">Deep-School</h1>
       <div class="login-form" id="loginForm">
         <form>
@@ -58,9 +58,8 @@
         <div class="text">学年</div>
       </div>
       <div class="container">
-        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        <img class="icon" src="./re/ico/Setting.png" />
       </div>
-      <img class="icon" src="./re/ico/Setting.png" />
       <div class="study-timer-container">
         <div class="study-timer-text-sti">Sti</div>
         <div class="study-timer-line-diagonal"></div>
@@ -101,6 +100,7 @@
         </div>
       </div>
     </div>
+    <div id="toaster_chat"></div>
     <script>
       document.getElementById("menu").style.display = "none";
       document

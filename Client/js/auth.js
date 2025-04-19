@@ -171,10 +171,10 @@ class UIManager {
   }
 
   initializeEventListeners() {
-    document.getElementById("menu").style.display = "none";
+    /* document.getElementById("menu").style.display = "none";
     document.getElementById("kakuninForm").style.display = "flex";
     document.getElementById("loginForm").style.display = "none";
-    document.getElementById("kakuninForm").style.display = "block";
+    */
   }
 }
 
