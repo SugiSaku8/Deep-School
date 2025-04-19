@@ -5,45 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Deep-School</title>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://apis.google.com/js/api.js"></script>
     <meta
       name="google-signin-client_id"
       content="54111871338-nv4bn99r48cohhverg3l9oicirthmtpp.apps.googleusercontent.com"
     />
     <link rel="stylesheet" href="./re/style.css" />
+    <script src="./js/auth.js"></script>
   </head>
   <body>
-    <script id="Deep-School-Login">
-      function handleCredentialResponse(response) {
-        console.log("Encoded JWT ID token: " + response.credential);
-        // ここでトークンを使用した認証処理を実装
-      }
-
-      window.onload = function () {
-        google.accounts.id.initialize({
-          client_id:
-            "54111871338-nv4bn99r48cohhverg3l9oicirthmtpp.apps.googleusercontent.com",
-          callback: handleCredentialResponse,
-          auto_select: false,
-          use_fedcm_for_prompt: true
-        });
-
-        // カスタムボタンの設定
-        google.accounts.id.renderButton(
-          document.getElementById("openLoginButton"),
-          {
-            type: "standard",
-            theme: "outline",
-            size: "large",
-            text: "signin_with_google",
-            shape: "rectangular",
-            locale: "ja"
-          }
-        );
-
-        // ワンタップログイン
-        google.accounts.id.prompt();
-      };
-    </script>
     <div class="container_top">
       <h1 class="title">Deep-School</h1>
       <div class="login-form" id="loginForm">
