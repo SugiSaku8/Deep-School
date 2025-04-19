@@ -37,4 +37,4 @@ class UIManager {
     }
 }
 
-window.UIManager = UIManager; 
+window.UIManager = UIManager;
