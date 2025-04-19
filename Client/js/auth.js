@@ -165,7 +165,7 @@ class GoogleDriveManager {
 }
 
 // UIの操作を管理するクラス
-class UIManager {
+class KOREGAUIManagerDAZE {
   constructor() {
     this.initializeEventListeners();
   }
@@ -182,7 +182,7 @@ class UIManager {
 window.onload = async function () {
   const authManager = new GoogleAuthManager();
   const driveManager = new GoogleDriveManager(authManager);
-  const uiManager = new UIManager();
+  const uiManager = new KOREGAUIManagerDAZE();
 
   await authManager.initialize();
   /*
