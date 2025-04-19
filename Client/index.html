@@ -66,7 +66,13 @@
             alt="ToasterMachineアイコン"
             class="menu-icon"
           />
-          <div class="menu-label" onclick="">ToasterMachine</div>
+          <div
+            class="menu-label"
+            style="cursor: pointer"
+            onclick="InitToasterChat();"
+          >
+            ToasterMachine
+          </div>
         </div>
         <div class="menu-item">
           <img
@@ -84,11 +90,11 @@
       </div>
     </div>
 
-    <div id="toaster_chat" style="display: none">
+    <div id="toaster_chat" id="toaster_chat" style="display: none">
       <div class="splash-container" id="splash">
         <div class="card">
           <div class="title_t">ToasterMachine</div>
-          <img src="/data/img/icon.png" alt="ロゴ" class="logo-img" />
+          <img src="/re/ico/tm.cb.png" alt="ロゴ" class="logo-img" />
           <div class="version">v0.0.1-Demo</div>
           <div class="input-group">
             <input id="user-input" type="text" placeholder="ここに質問を入力" />
@@ -153,6 +159,7 @@
     </div>
     <script>
       function InitToasterChat() {
+        document.getElementById("toaster_chat").style.display = "block";
         document.getElementById("splash").style.display = "block";
         document.getElementById("menu").style.display = "none";
       }
