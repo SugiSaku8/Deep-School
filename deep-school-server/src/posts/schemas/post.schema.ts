@@ -26,8 +26,8 @@ export class Post {
   @Prop()
   LikerData: string;
 
-  @Prop()
-  LinkerData: string;
+  @Prop({ type: Array, default: [] })
+  LinkerData: any[];
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);

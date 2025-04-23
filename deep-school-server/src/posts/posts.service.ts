@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Post, PostDocument } from './schemas/post.schema';
@@ -16,7 +16,7 @@ export class PostsService {
     console.log('_________init..________');
   }
 
-  private transformToLegacyFormat(post: Post) {
+  private transformToLegacyFormat(post: any) {
     return {
       value: {
         PostId: { value: post.PostId },
@@ -26,53 +26,98 @@ export class PostsService {
         UserId: { value: post.UserId },
         PostData: { value: post.PostData },
         LikerData: { value: post.LikerData },
-        LinkerData: post.LinkerData,
+        LinkerData: post.LinkerData || [],
       }
     };
   }
 
-  async createPost(createPostDto: CreatePostDto): Promise<Post> {
-    const postId = Poid(createPostDto.UserId, createPostDto.PostTime);
+  async createPost(createPostDto: CreatePostDto): Promise<any> {
+    try {
+      const postId = Poid(createPostDto.UserId, createPostDto.PostTime);
 
-    const createdPost = new this.postModel({
-      PostId: postId,
-      PostName: createPostDto.PostName,
-      PostTime: createPostDto.PostTime,
-      UserName: createPostDto.UserName,
-      UserId: createPostDto.UserId,
-      PostData: createPostDto.PostData,
-      LikerData: createPostDto.Genre,
-      LinkerData: createPostDto.LinkerData,
-    });
+      const postData = {
+        PostId: postId,
+        PostName: createPostDto.PostName,
+        PostTime: createPostDto.PostTime,
+        UserName: createPostDto.UserName,
+        UserId: createPostDto.UserId,
+        PostData: createPostDto.PostData,
+        LikerData: createPostDto.Genre,
+        LinkerData: createPostDto.LinkerData || [],
+      };
 
-    return createdPost.save();
+      const createdPost = new this.postModel(postData);
+      await createdPost.save();
+      console.log('Post created successfully:', postId);
+      return { message: 'The post was successful!' };
+    } catch (error) {
+      console.error('Create post error:', error);
+      throw error;
+    }
   }
 
   async getAllPosts(): Promise<string[]> {
-    const posts = await this.postModel.find().exec();
-    return posts.map(post => `_${post.PostId}`);
+    try {
+      const posts = await this.postModel.find().exec();
+      console.log(`Found ${posts.length} posts`);
+      return posts.map(post => `_${post.PostId}`);
+    } catch (error) {
+      console.error('Get all posts error:', error);
+      return [];
+    }
   }
 
   async getPostByQuery(query: string) {
-    const postId = query.startsWith('_') ? query.slice(1) : query;
-    const post = await this.postModel.findOne({ PostId: postId }).exec();
-    if (!post) {
-      throw new Error('Post not found');
+    try {
+      const postId = query.startsWith('_') ? query.slice(1) : query;
+      console.log('Searching for post with ID:', postId);
+      
+      const post = await this.postModel.findOne({ PostId: postId }).exec();
+      
+      if (!post) {
+        console.log('Post not found for ID:', postId);
+        // 投稿が見つからない場合は空のデータを返す
+        return {
+          value: {
+            PostId: { value: "" },
+            PostName: { value: "" },
+            PostTime: { value: "" },
+            UserName: { value: "" },
+            UserId: { value: "" },
+            PostData: { value: "" },
+            LikerData: { value: "" },
+            LinkerData: [],
+          }
+        };
+      }
+
+      console.log('Post found:', post.PostId);
+      return this.transformToLegacyFormat(post);
+    } catch (error) {
+      console.error('Post query error:', error);
+      // エラーが発生した場合も空のデータを返す
+      return {
+        value: {
+          PostId: { value: "" },
+          PostName: { value: "" },
+          PostTime: { value: "" },
+          UserName: { value: "" },
+          UserId: { value: "" },
+          PostData: { value: "" },
+          LikerData: { value: "" },
+          LinkerData: [],
+        }
+      };
     }
-    return this.transformToLegacyFormat(post);
   }
 
-  async getPostsByUserId(userId: string): Promise<Post[]> {
-    return this.postModel.find({ UserId: userId }).exec();
-  }
-
-  async updatePost(postId: string, updateData: Partial<Post>): Promise<Post> {
-    return this.postModel
-      .findOneAndUpdate({ PostId: postId }, updateData, { new: true })
-      .exec();
-  }
-
-  async deletePost(postId: string): Promise<Post> {
-    return this.postModel.findOneAndDelete({ PostId: postId }).exec();
+  async getPostsByUserId(userId: string): Promise<any[]> {
+    try {
+      const posts = await this.postModel.find({ UserId: userId }).exec();
+      return posts.map(post => this.transformToLegacyFormat(post));
+    } catch (error) {
+      console.error('Get posts by user ID error:', error);
+      return [];
+    }
   }
 }
