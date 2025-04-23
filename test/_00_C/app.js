@@ -162,19 +162,16 @@ async function loadFeed() {
 
       // リプライでない場合は、通常のフィードに投稿を表示
       div.innerHTML = `
-        <div class="feed-card">
-          <h3>${postValue.PostName?.value || ''}</h3>
-          <div class="meta">
-            <span>${postValue.Genre?.value || 'general'}</span>
-            <span>${postValue.UserId?.value || ''}</span>
-          </div>
-          <div class="content">
-            ${postValue.PostData?.value || ''}
-          </div>
-          <button class="reply-button" data-post-id="${postValue.PostId?.value || ''}">返信</button>
-          <div class="date">${new Date(postValue.PostTime?.value || new Date()).toLocaleDateString('ja-JP')}</div>
-          <div class="reply-thread"></div>
+        <strong>${postValue.UserName.value} (${postValue.UserId.value})</strong>
+        <p>${postValue.PostName.value}</p>
+        <p>${postValue.PostData.value}</p>
+        <small>${postValue.PostTime.value}</small>
+        <button class="reply-button" data-post-id="${postValue.PostId.value}">Reply</button>
+        <div class="reply-form" style="display:none;">
+          <textarea class="reply-text"></textarea>
+          <button class="submit-reply" data-post-id="${postValue.PostId.value}">Submit Reply</button>
         </div>
+        <div class="replies"></div>
       `;
       div.dataset.postId = postValue.PostId.value; // postId を data 属性として保存
       feedContent.appendChild(div);
@@ -188,22 +185,13 @@ document.addEventListener("click", async (event) => {
   if (event.target.classList.contains("reply-button")) {
     const postId = event.target.dataset.postId;
     const replyForm = event.target.parentNode.querySelector(".reply-form");
-    if (!replyForm) {
-      const form = document.createElement("div");
-      form.className = "reply-form";
-      form.innerHTML = `
-        <textarea class="reply-text" placeholder="返信を入力..."></textarea>
-        <button class="submit-reply" data-post-id="${postId}">送信</button>
-      `;
-      event.target.parentNode.insertBefore(form, event.target.parentNode.querySelector(".reply-thread"));
-    } else {
-      replyForm.style.display = replyForm.style.display === "none" ? "block" : "none";
-    }
+    replyForm.style.display = "block";
   }
 
   if (event.target.classList.contains("submit-reply")) {
     const postId = event.target.dataset.postId;
-    const replyText = event.target.parentNode.querySelector(".reply-text").value;
+    const replyText =
+      event.target.parentNode.querySelector(".reply-text").value;
     const username = "Reply";
     const userid = "@Reply";
 
@@ -229,7 +217,7 @@ document.addEventListener("click", async (event) => {
 
     const result = await response.json();
     console.log(result.message);
-    loadFeed();
+    loadFeed(); // フィードをリロードしてリプライを表示
   }
 });
 
@@ -237,111 +225,3 @@ document.addEventListener("click", async (event) => {
 window.onload = async function () {
   await loadFeed();
 };
-
-const style = document.createElement('style');
-style.textContent = `
-  .feed-card {
-    background: white;
-    border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 16px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  .feed-card h3 {
-    margin: 0 0 8px 0;
-    font-size: 1.2em;
-    color: #333;
-  }
-
-  .meta {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 8px;
-    color: #666;
-    font-size: 0.9em;
-  }
-
-  .content {
-    margin-bottom: 12px;
-    line-height: 1.5;
-  }
-
-  .reply-button {
-    background: #f0f0f0;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-bottom: 8px;
-  }
-
-  .reply-button:hover {
-    background: #e0e0e0;
-  }
-
-  .date {
-    color: #999;
-    font-size: 0.8em;
-  }
-
-  .reply-thread {
-    margin-top: 16px;
-    border-left: 3px solid #e0e0e0;
-    padding-left: 16px;
-  }
-
-  .reply-card {
-    background: #f8f8f8;
-    border-radius: 6px;
-    padding: 12px;
-    margin-bottom: 8px;
-  }
-
-  .reply-meta {
-    color: #666;
-    font-size: 0.9em;
-    margin-bottom: 4px;
-  }
-
-  .reply-content {
-    margin-bottom: 4px;
-    line-height: 1.4;
-  }
-
-  .reply-date {
-    color: #999;
-    font-size: 0.8em;
-  }
-
-  .reply-form {
-    margin: 12px 0;
-    padding: 12px;
-    background: #f8f8f8;
-    border-radius: 6px;
-  }
-
-  .reply-form textarea {
-    width: 100%;
-    min-height: 80px;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-bottom: 8px;
-    resize: vertical;
-  }
-
-  .reply-form button {
-    background: #4CAF50;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-
-  .reply-form button:hover {
-    background: #45a049;
-  }
-`;
-document.head.appendChild(style);

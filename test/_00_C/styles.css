@@ -1,211 +1,83 @@
-/* ベース設定 */
+/* styles.css */
 body {
+  font-family: Arial, sans-serif;
   margin: 0;
-  font-family: "Helvetica Neue", sans-serif;
-  background-color: #006837; /* 深い緑 */
-  color: black;
+  padding: 20px;
+  background-color: #f4f4f4;
 }
 
 #app {
-  padding: 20px;
-  max-width: 1200px;
+  max-width: 600px;
   margin: auto;
-}
-
-/* タイトルは非表示に */
-h1 {
-  display: none;
-}
-
-/* --- 検索ヘッダーっぽく投稿UI配置 --- */
-#post-form::before {
-  content: "";
-  display: inline-block;
-  background: url("REPLACE_WITH_SCR_ICON.png") no-repeat center center;
-  background-size: contain;
-  width: 60px;
-  height: 60px;
-  vertical-align: middle;
-  margin-right: 20px;
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 #post-form {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  background-color: white;
-  border-radius: 20px;
-  padding: 15px 20px;
-  margin-bottom: 40px;
-  gap: 10px;
-}
-
-#post-form input,
-#post-form textarea {
-  font-size: 16px;
-  padding: 10px;
-  border-radius: 12px;
-  border: none;
-  background-color: #f0f0f0;
-  flex: 1 1 200px;
-  min-width: 180px;
-}
-
-#post-form textarea {
-  flex: 1 1 100%;
-  resize: vertical;
-}
-
-#post-form button {
-  background-color: #0096ff;
-  color: white;
-  font-size: 16px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-}
-
-#post-form button:hover {
-  background-color: #007be5;
-}
-
-/* --- フィードセクション --- */
-#feed {
-  color: white;
-  padding: 10px;
-}
-
-#feed h2 {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-/* フィードのカード表示 */
-#feed-content {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-  gap: 30px;
-  padding: 0 10px;
-}
-
-/* 投稿カード */
-.feed-card {
-  background-color: #d9d9d9;
-  border-radius: 30px;
-  padding: 20px 25px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: 220px;
-  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-  position: relative;
-  color: black;
-}
-
-/* タイトル（太字） */
-.feed-card h3 {
-  font-size: 18px;
-  font-weight: bold;
-  margin: 0 0 10px 0;
-}
-
-/* サブ情報（教科/学年、ユーザー名） */
-.feed-card .meta {
-  font-size: 14px;
-  display: flex;
-  justify-content: space-between;
-  color: #333;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
-}
-
-/* 内容 */
-.feed-card .content {
-  font-size: 15px;
   margin-bottom: 20px;
 }
 
-/* 日付（右下） */
-.feed-card .date {
-  font-size: 13px;
-  color: #444;
-  position: absolute;
-  bottom: 15px;
-  right: 20px;
+input,
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
-/* 返信ボタン */
-.feed-card .reply-button {
-  background-color: white;
-  border-radius: 12px;
-  padding: 6px 20px;
-  font-size: 14px;
-  color: black;
-  border: none;
-  cursor: pointer;
-  align-self: flex-start;
-}
-
-/* 右上の日付表示 */
-body::after {
-  content: "2025\n10月\n3日";
-  position: fixed;
-  top: 20px;
-  right: 20px;
+button {
+  background-color: #28a745;
   color: white;
-  font-size: 18px;
-  text-align: right;
-  white-space: pre-line;
-}
-
-/* 検索矢印ボタン（デザイン用途） */
-#search-button {
-  background: url("REPLACE_WITH_ARROW_IMAGE.png") no-repeat center center;
-  background-size: contain;
-  width: 50px;
-  height: 50px;
   border: none;
-  margin-left: 10px;
+  padding: 10px;
+  cursor: pointer;
 }
-/* 返信スレッド全体 */
-.reply-thread {
+
+button:hover {
+  background-color: #218838;
+}
+
+#feed {
   margin-top: 20px;
+}
+
+.feed-item {
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+}
+
+.reply {
+  margin-left: 20px; /* リプライをインデント */
+  padding: 10px;
+  border-left: 2px solid #ccc; /* 左側に線を追加 */
+  background-color: #f9f9f9; /* 背景色を変更 */
+  margin-bottom: 5px;
+}
+
+.reply strong {
+  font-size: 0.9em; /* リプライのユーザー名を小さく */
+}
+
+.reply p {
+  margin: 5px 0; /* リプライのテキストのマージン */
+}
+
+.reply small {
+  color: #888; /* リプライのタイムスタンプの色 */
+}
+
+.feed-item[data-post-id] {
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.feed-item[data-post-id] .replies {
+  margin-top: 10px;
   padding-left: 20px;
-  border-left: 3px solid #ccc;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-/* 個別返信 */
-.reply-card {
-  background-color: #f5f5f5;
-  border-radius: 15px;
-  padding: 12px 16px;
-  border: 1px solid #bbb;
-  font-size: 14px;
-  color: #333;
-  position: relative;
-}
-
-/* 返信内の投稿者名 */
-.reply-meta {
-  font-weight: bold;
-  margin-bottom: 5px;
-  font-size: 13px;
-  color: #222;
-}
-
-/* 返信本文 */
-.reply-content {
-  margin-bottom: 5px;
-}
-
-/* 返信日付 */
-.reply-date {
-  font-size: 12px;
-  color: #666;
-  text-align: right;
+  border-left: 1px solid #eee;
 }

@@ -70,36 +70,30 @@ function addfeed(postValue) {
   let div = document.createElement("div");
   div.className = "feed-item";
   div.innerHTML = `
-            <strong>${postValue.UserName.value} (${postValue.UserId.value})</strong>
-            <p>${postValue.PostName.value}</p>
-            <p>${postValue.PostData.value}</p>
-            <small>${postValue.PostTime.value}</small>
-        `;
+        <div class="feed-card">
+          <h3>${postValue.PostName?.value || ""}</h3>
+          <div class="meta">
+            <span>${postValue.Genre?.value || "general"}</span>
+            <span>${postValue.UserId?.value || ""}</span>
+          </div>
+          <div class="content">
+            ${postValue.PostData?.value || ""}
+          </div>
+          <button class="reply-button" data-post-id="${
+            postValue.PostId?.value || ""
+          }">返信</button>
+          <div class="date">${new Date(
+            postValue.PostTime?.value || new Date()
+          ).toLocaleDateString("ja-JP")}</div>
+          <div class="reply-thread"></div>
+        </div>
+      `;
   feedContent.appendChild(div);
-}
-
-function createReplyHTML(postValue) {
-  // LinkerDataからreplyedのpostIdを取得
-  const replyedPostId = postValue.LinkerData.find(
-    (item) => typeof item === "object" && item !== null && item.replyed
-  )?.replyed;
-
-  let html = '<div class="replies">';
-  html += `
-    <div class="reply">
-      <strong>${postValue.UserName.value} (${postValue.UserId.value})</strong>
-      <p>${postValue.PostData.value}</p>
-      <small>${postValue.PostTime.value}</small>
-      <p>返信先: ${replyedPostId}</p>
-    </div>
-  `;
-  html += "</div>";
-  return html;
 }
 
 async function loadFeed() {
   try {
-    const response = await fetch(scr_url + "/get");
+    const response = await fetch("http://localhost:3776/get");
     const data = await response.json();
     const numberOfPostsToLoad = Math.min(50); // 最大 50 件、またはデータ数
     const loadedPosts = [];
@@ -129,56 +123,44 @@ async function loadFeed() {
       let div = document.createElement("div");
       div.className = "feed-item";
 
-      // リプライの場合、親投稿を探してその下に表示
-      if (
-        postValue.LinkerData &&
-        postValue.LinkerData.some(
-          (item) => typeof item === "object" && item !== null && item.replyed
-        )
-      ) {
-        const replyedPostId = postValue.LinkerData.find(
-          (item) => typeof item === "object" && item !== null && item.replyed
-        ).replyed;
-        const parentPost = postsMap.get(replyedPostId);
-
-        if (parentPost) {
-          // 親投稿が存在する場合、その下にリプライを表示
-          div.innerHTML = `
-            <div class="reply">
-              <strong>${postValue.UserName.value} (${postValue.UserId.value})</strong>
-              <p>${postValue.PostData.value}</p>
-              <small>${postValue.PostTime.value}</small>
-              <p>返信先: ${replyedPostId}</p>
-            </div>
-          `;
-          // 親投稿の要素を取得して、その下に追加
-          const parentDiv = document.querySelector(
-            `.feed-item[data-post-id="${replyedPostId}"]`
-          );
-          if (parentDiv) {
-            parentDiv.appendChild(div);
-            continue; // 通常のフィードへの追加をスキップ
-          }
-        }
-      }
-
-      // リプライでない場合は、通常のフィードに投稿を表示
+      // 投稿のHTMLを生成
       div.innerHTML = `
         <div class="feed-card">
-          <h3>${postValue.PostName?.value || ''}</h3>
+          <h3>${postValue.PostName?.value || ""}</h3>
           <div class="meta">
-            <span>${postValue.Genre?.value || 'general'}</span>
-            <span>${postValue.UserId?.value || ''}</span>
+            <span>${postValue.Genre?.value || "general"}</span>
+            <span>${postValue.UserId?.value || ""}</span>
           </div>
           <div class="content">
-            ${postValue.PostData?.value || ''}
+            ${postValue.PostData?.value || ""}
           </div>
-          <button class="reply-button" data-post-id="${postValue.PostId?.value || ''}">返信</button>
-          <div class="date">${new Date(postValue.PostTime?.value || new Date()).toLocaleDateString('ja-JP')}</div>
+          <button class="reply-button" data-post-id="${
+            postValue.PostId?.value || ""
+          }">返信</button>
+          <div class="date">${new Date(
+            postValue.PostTime?.value || new Date()
+          ).toLocaleDateString("ja-JP")}</div>
           <div class="reply-thread"></div>
         </div>
       `;
-      div.dataset.postId = postValue.PostId.value; // postId を data 属性として保存
+
+      // リプライがある場合、返信を表示
+      if (postValue.LinkerData && postValue.LinkerData.length > 0) {
+        const replyThread = div.querySelector(".reply-thread");
+        postValue.LinkerData.forEach((reply) => {
+          const replyCard = document.createElement("div");
+          replyCard.className = "reply-card";
+          replyCard.innerHTML = `
+            <div class="reply-meta">${reply.UserId || "@Unknown"}</div>
+            <div class="reply-content">${reply.PostData || ""}</div>
+            <div class="reply-date">${new Date(
+              reply.PostTime || new Date()
+            ).toLocaleDateString("ja-JP")}</div>
+          `;
+          replyThread.appendChild(replyCard);
+        });
+      }
+
       feedContent.appendChild(div);
     }
   } catch (error) {
@@ -197,15 +179,20 @@ document.addEventListener("click", async (event) => {
         <textarea class="reply-text" placeholder="返信を入力..."></textarea>
         <button class="submit-reply" data-post-id="${postId}">送信</button>
       `;
-      event.target.parentNode.insertBefore(form, event.target.parentNode.querySelector(".reply-thread"));
+      event.target.parentNode.insertBefore(
+        form,
+        event.target.parentNode.querySelector(".reply-thread")
+      );
     } else {
-      replyForm.style.display = replyForm.style.display === "none" ? "block" : "none";
+      replyForm.style.display =
+        replyForm.style.display === "none" ? "block" : "none";
     }
   }
 
   if (event.target.classList.contains("submit-reply")) {
     const postId = event.target.dataset.postId;
-    const replyText = event.target.parentNode.querySelector(".reply-text").value;
+    const replyText =
+      event.target.parentNode.querySelector(".reply-text").value;
     const username = "Reply";
     const userid = "@Reply";
 
@@ -224,6 +211,9 @@ document.addEventListener("click", async (event) => {
         LinkerData: [
           {
             replyed: postId,
+            UserId: userid,
+            PostData: replyText,
+            PostTime: new Date().toISOString(),
           },
         ],
       }),
@@ -231,6 +221,20 @@ document.addEventListener("click", async (event) => {
 
     const result = await response.json();
     console.log(result.message);
+
+    // 返信を表示する処理を追加
+    const replyCard = document.createElement("div");
+    replyCard.className = "reply-card";
+    replyCard.innerHTML = `
+      <div class="reply-meta">${userid}</div>
+      <div class="reply-content">${replyText}</div>
+      <div class="reply-date">${new Date().toLocaleDateString("ja-JP")}</div>
+    `;
+    const replyThread = document.querySelector(
+      `.feed-item[data-post-id="${postId}"] .reply-thread`
+    );
+    replyThread.appendChild(replyCard);
+
     loadFeed();
   }
 });
@@ -238,111 +242,3 @@ document.addEventListener("click", async (event) => {
 window.onload = async function () {
   await loadFeed();
 };
-
-const style = document.createElement('style');
-style.textContent = `
-  .feed-card {
-    background: white;
-    border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 16px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  .feed-card h3 {
-    margin: 0 0 8px 0;
-    font-size: 1.2em;
-    color: #333;
-  }
-
-  .meta {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 8px;
-    color: #666;
-    font-size: 0.9em;
-  }
-
-  .content {
-    margin-bottom: 12px;
-    line-height: 1.5;
-  }
-
-  .reply-button {
-    background: #f0f0f0;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-bottom: 8px;
-  }
-
-  .reply-button:hover {
-    background: #e0e0e0;
-  }
-
-  .date {
-    color: #999;
-    font-size: 0.8em;
-  }
-
-  .reply-thread {
-    margin-top: 16px;
-    border-left: 3px solid #e0e0e0;
-    padding-left: 16px;
-  }
-
-  .reply-card {
-    background: #f8f8f8;
-    border-radius: 6px;
-    padding: 12px;
-    margin-bottom: 8px;
-  }
-
-  .reply-meta {
-    color: #666;
-    font-size: 0.9em;
-    margin-bottom: 4px;
-  }
-
-  .reply-content {
-    margin-bottom: 4px;
-    line-height: 1.4;
-  }
-
-  .reply-date {
-    color: #999;
-    font-size: 0.8em;
-  }
-
-  .reply-form {
-    margin: 12px 0;
-    padding: 12px;
-    background: #f8f8f8;
-    border-radius: 6px;
-  }
-
-  .reply-form textarea {
-    width: 100%;
-    min-height: 80px;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-bottom: 8px;
-    resize: vertical;
-  }
-
-  .reply-form button {
-    background: #4CAF50;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-
-  .reply-form button:hover {
-    background: #45a049;
-  }
-`;
-document.head.appendChild(style);
