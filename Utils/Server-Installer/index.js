@@ -1,6 +1,8 @@
-// ... existing code ...
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
+const { exec } = require('child_process')
+
+
 
 let mainWindow;
 
@@ -23,7 +25,6 @@ function createWindow() {
   mainWindow.loadFile(path.join(__dirname, "index.html"));
 }
 
-// app.whenReady()を使用して、appオブジェクトが初期化されてからBrowserWindowを作成
 app.whenReady().then(() => {
   createWindow();
 
@@ -42,13 +43,18 @@ app.on("window-all-closed", () => {
   }
 });
 
-// ipcMainを使用して、HTML側からのメッセージを受け取り、コードを実行
 ipcMain.handle('execute-node-code', async (event, code) => {
   try {
-    // eval()の使用はセキュリティリスクがあるため、可能であれば別の方法を検討してください。
-    // Functionコンストラクタを使用する方法も検討できます。
-    const result = new Function(code)();
-    return result;
+
+    exec(code, (err, stdout, stderr) => {
+      if(code === )
+      if (err) {
+        console.log(`stderr: ${stderr}`)
+        return stderr;
+      }
+      console.log(`stdout: ${stdout}`)
+    }
+  )    
   } catch (error) {
     console.error('コード実行エラー:', error);
     return { error: error.message };

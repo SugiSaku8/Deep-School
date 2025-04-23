@@ -1,4 +1,4 @@
-// script.js
+import scr_url from "./con.js";
 const postButton = document.getElementById("post-button");
 const feedContent = document.getElementById("feed-content");
 
@@ -8,7 +8,7 @@ postButton.addEventListener("click", async () => {
   const postname = document.getElementById("postname").value;
   const postdata = document.getElementById("postdata").value;
 
-  const response = await fetch("http://localhost:3776/post", {
+  const response = await fetch(scr_url + "/post", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -59,7 +59,9 @@ function getValue(data, path) {
 }
 
 async function getPost(file) {
-  const response = await fetch("http://localhost:3776/get?text=" + file);
+  const response = await fetch(
+    scr_url + "http://localhost:3776/get?text=" + file
+  );
   const data = await response.json();
   return data;
 }
@@ -97,7 +99,7 @@ function createReplyHTML(postValue) {
 
 async function loadFeed() {
   try {
-    const response = await fetch("http://localhost:3776/get");
+    const response = await fetch(scr_url + "/get");
     const data = await response.json();
     const numberOfPostsToLoad = Math.min(50); // 最大 50 件、またはデータ数
     const loadedPosts = [];
@@ -207,7 +209,7 @@ document.addEventListener("click", async (event) => {
     const username = "Reply";
     const userid = "@Reply";
 
-    const response = await fetch("http://localhost:3776/post", {
+    const response = await fetch(scr_url + "/post", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -233,7 +235,6 @@ document.addEventListener("click", async (event) => {
   }
 });
 
-// ... existing code ...
 window.onload = async function () {
   await loadFeed();
 };
