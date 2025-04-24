@@ -27,25 +27,25 @@
       "target": [
         "msi"
       ],
-      "icon": "BR/a.png"
+      "icon": "icon.ico"
     },
     "nsis": {
       "oneClick": false,
       "allowElevation": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "installerIcon": "BR/a.png",
-      "uninstallerIcon": "BR/a.png",
-      "installerHeaderIcon": "BR/a.png",
+      "installerIcon": "a.png",
+      "uninstallerIcon": "a.png",
+      "installerHeaderIcon": "a.png",
       "language": 1041
     },
     "msi": {},
     "mac": {
-      "icon": "BR/a.png",
+      "icon": "a.png",
       "category": "public.app-category.study"
     },
     "linux": {
-      "icon": "BR/a.png"
+      "icon": "a.png"
     }
   },
   "devDependencies": {
