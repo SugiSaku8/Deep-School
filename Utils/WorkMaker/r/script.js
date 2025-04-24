@@ -1,8 +1,10 @@
 class QuestionCreator {
   constructor() {
     this.options = [];
+    this.examples = []; // 例題を保存する配列
     this.initializeEventListeners();
     this.loadSavedQuestions();
+    this.loadSavedExamples(); // 保存された例題を読み込む
   }
 
   initializeEventListeners() {
@@ -23,6 +25,70 @@ class QuestionCreator {
     document
       .getElementById("export-json")
       .addEventListener("click", () => this.exportJSON());
+    document
+      .getElementById("add-example") // 例題追加ボタンのイベントリスナー
+      .addEventListener("click", () => this.addExample());
+  }
+
+  // 例題を追加する関数
+  addExample() {
+    const exampleText = document.getElementById("example-text").value;
+    if (exampleText) {
+      this.examples.push(exampleText);
+      this.renderExamples();
+      document.getElementById("example-text").value = ""; // 入力フィールドをクリア
+    } else {
+      alert("例題を入力してください。");
+    }
+  }
+
+  // 例題を表示する関数
+  renderExamples() {
+    const examplesContainer = document.getElementById("examples-container");
+    examplesContainer.innerHTML = ""; // 既存の内容をクリア
+
+    this.examples.forEach((example, index) => {
+      const div = document.createElement("div");
+      div.className = "example-item";
+      div.innerHTML = `
+                <p>${example}</p>
+                <button onclick="questionCreator.removeExample(${index})">削除</button>
+            `;
+      examplesContainer.appendChild(div);
+    });
+  }
+
+  // 例題を削除する関数
+  removeExample(index) {
+    this.examples.splice(index, 1);
+    this.renderExamples();
+  }
+
+  // 保存された例題を読み込む関数
+  loadSavedExamples() {
+    const savedExamples = localStorage.getItem("savedExamples");
+    if (savedExamples) {
+      try {
+        this.examples = JSON.parse(savedExamples);
+        this.renderExamples();
+      } catch (error) {
+        console.error("保存された例題の読み込みに失敗しました:", error);
+        alert("保存された例題の読み込みに失敗しました。");
+      }
+    }
+  }
+
+  // 例題を保存する関数
+  saveExamples() {
+    localStorage.setItem("savedExamples", JSON.stringify(this.examples));
+    alert("例題が保存されました。");
+  }
+
+  // 例題を保存するボタンのイベントリスナーを追加
+  initializeExampleSaveListener() {
+    document
+      .getElementById("save-examples")
+      .addEventListener("click", () => this.saveExamples());
   }
 
   generateOptionId() {
