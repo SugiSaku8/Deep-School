@@ -106,6 +106,7 @@ class ChatManager {
 
   clearChat() {
     this.conversationHistory = [];
+    GeminiAPI.remove();
     document.getElementById("messages-container").innerHTML = "";
     this.saveChat();
   }
