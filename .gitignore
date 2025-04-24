@@ -2,4 +2,7 @@ node_modules
 node_modules/*
 dist 
 dist/*
-markitdown
+hide
+hide/*
+hide/markitdown
+hide/markitdown/*
