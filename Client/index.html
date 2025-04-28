@@ -164,18 +164,26 @@
         document.getElementById("splash").style.display = "block";
         document.getElementById("menu").style.display = "none";
       }
-      document.getElementById("menu").style.display = "none";
-      document
-        .getElementById("school_login_btn")
-        .addEventListener("click", () => {
-          document.getElementById("kakuninForm").style.display = "flex";
-          document.getElementById("loginForm").style.display = "none";
-          document.getElementById("kakuninForm").style.display = "block";
-        });
-      document.getElementById("basyo_login").addEventListener("click", () => {
-        document.getElementById("kakuninForm").style.display = "none";
+      function IninterDom() {
         document.getElementById("menu").style.display = "none";
-      });
+        document
+          .getElementById("school_login_btn")
+          .addEventListener("click", () => {
+            document.getElementById("kakuninForm").style.display = "flex";
+            document.getElementById("loginForm").style.display = "none";
+            document.getElementById("kakuninForm").style.display = "block";
+          });
+        document.getElementById("basyo_login").addEventListener("click", () => {
+          document.getElementById("kakuninForm").style.display = "none";
+          document.getElementById("menu").style.display = "none";
+        });
+      }
+      function init_geo() {
+        const now_geo = new geo_auth();
+        return now_geo;
+      }
+      IninterDom();
+      init_geo();
     </script>
   </body>
 </html>
