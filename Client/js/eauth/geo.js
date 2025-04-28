@@ -154,3 +154,4 @@ class geo_auth {
     }
   }
 }
+export default geo_auth;
