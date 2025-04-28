@@ -109,7 +109,7 @@ class geo_auth {
             "%c 位置情報は利用できないか、許可されていません。",
             consta.binf
           );
-          console.error("%c 位置信息不可用或不允许使用。"), consta.binf;
+          console.error("%c 位置信息不可用或不允许使用。", consta.binf);
           console.error(
             "%c 위치 정보를 사용할 수 없거나 허용되지 않습니다.",
             consta.binf
@@ -126,16 +126,53 @@ class geo_auth {
         }
       }
     }
-    navigator.geolocation.getCurrentPosition((position) => {
-      this.latitude = position.coords.latitude;
-      this.latitude = orgFloor(10, this.latitude);
-      this.longitude = position.coords.longitude;
-      this.longitude = orgFloor(10, this.longitude);
-      console.info(
-        "%c 위치 정보를 업데이트하려면 약간의 운동이 필요합니다.",
-        consta.small
-      );
-    });
+    navigator.geolocation.getCurrentPosition(this.setup, this.geo_error);
+  }
+  setup(position) {
+    this.latitude = position.coords.latitude;
+    this.latitude = orgFloor(10, this.latitude);
+    this.longitude = position.coords.longitude;
+    this.longitude = orgFloor(10, this.longitude);
+    console.info(
+      "%c 위치 정보를 업데이트하려면 약간의 운동이 필요합니다.",
+      consta.small
+    );
+  }
+  geo_error() {
+    console.info(
+      "%c Location information is not available or not allowed.",
+      consta.binf
+    );
+    console.log(
+      "%c Location-based authentication is not available.",
+      consta.err
+    );
+    console.log("An error report is issued.");
+    console.groupEnd("Logs related to navigator.geolocation");
+    //↓ is error report
+    console.group("ERROR_REPORT");
+    console.error("An error has occurred.");
+    console.info("Error occurred in geo_auth.");
+    console.error("Failed to acquire location information.");
+    console.error(
+      "%c Location information is either unavailable or not allowed.",
+      consta.binf
+    );
+    console.error(
+      "%c 位置情報は利用できないか、許可されていません。",
+      consta.binf
+    );
+    console.error("%c 位置信息不可用或不允许使用。", consta.binf);
+    console.error(
+      "%c 위치 정보를 사용할 수 없거나 허용되지 않습니다.",
+      consta.binf
+    );
+    console.info("%c This error is not a Deep-School ISSUE.", consta.binf);
+    console.info(
+      "There is either a problem with the user's settings or the environment in which the user is using the system."
+    );
+    console.info("Error Report End");
+    console.groupEnd("ERROR_REPORT");
   }
   auth(lattitude, longitude) {
     let a_latti = orgFloor(10, lattitude);
@@ -154,4 +191,9 @@ class geo_auth {
     }
   }
 }
+function init_geo() {
+  const now_geo = new geo_auth();
+  return now_geo;
+}
+init_geo();
 export default geo_auth;
