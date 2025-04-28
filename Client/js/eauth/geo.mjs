@@ -1,4 +1,4 @@
-import { consta } from "../console.js";
+import { consta } from "../console.mjs";
 function checkBrowser() {
   var result = "un";
 
