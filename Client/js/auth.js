@@ -171,10 +171,10 @@ class KOREGAUIManagerDAZE {
   }
 
   initializeEventListeners() {
-    /* document.getElementById("menu").style.display = "none";
+     document.getElementById("menu").style.display = "none";
     document.getElementById("kakuninForm").style.display = "flex";
     document.getElementById("loginForm").style.display = "none";
-    */
+    
   }
 }
 
@@ -182,10 +182,18 @@ class AuthServer {
   /**
    * AuthServerの初期化
    *@param {string} serverUrl 教師などから提供され、ユーザーによって入力された変換ずみサーバーのURL
-   *@param {Boolean} ctype 変換するか、複合するかのパラメーター。 trueで変換、falseで複合。
+   *@param {boolean} ctype 変換するか、複合するかのパラメーター。 trueで変換、falseで複合。
+   *@param {boolean} AuthServer.ServerStatus サーバーのステータス。これは、`this.TestFetch`によって入力される。
+   *@param {string} AuthServer.url 変換されたURL
    */
   constructor(serverUrl) {
-    this.URL = this.convert(serverUrl, false);
+    this.url = this.convert(serverUrl, false);
+    this.ServerStatus = this.TestFetch(url, false);
+    if (this.ServerStatus) {
+      return;
+    } else {
+      console.log("ana šumšu ḫašāḳu, šumšu ša ḫāzīrū ḫašāḳu lā šumšu.");
+    }
   }
   /**
    * 初期化時に呼び出される変換システムの呼び出しポイント
@@ -335,4 +343,10 @@ window.onload = async function () {
     }
   };
   */
+  document
+    .getElementById("school_login_btn")
+    .addEventListener("click", async () => {
+      let geoauth = new AuthServer(document.getElementById("schoolId").value);
+      window.scr_url = geoauth.url;
+    });
 };

@@ -1,4 +1,9 @@
 import { consta } from "../console.mjs";
+
+/**
+ * ブラウザの種類を判定する関数
+ * @returns {string} ブラウザ名または"un"
+ */
 function checkBrowser() {
   var result = "un";
 
@@ -34,22 +39,43 @@ function checkBrowser() {
   }
   return result;
 }
+
+/**
+ * 指定した値を基準で切り捨てる
+ * @param {number} value 元の値
+ * @param {number} base 基準値
+ * @returns {number} 切り捨て後の値
+ */
 function orgFloor(value, base) {
   return Math.floor(value * base) / base;
 }
+
+/**
+ * 位置情報認証を行うクラス
+ * - ブラウザのgeolocation APIを利用
+ * - 位置情報の取得・認証・エラーハンドリング
+ */
 class geo_auth {
+  /**
+   * コンストラクタ
+   * - geolocationの有無をチェックし、なければエラーレポート
+   * - 位置情報取得を開始
+   */
   constructor() {
     if ("geolocation" in navigator) {
+      // geolocationが利用可能
     } else {
       let nowtime = new Date();
       console.group("Logs related to navigator.geolocation");
       console.info("%c navigator.geolocation may not be.", consta.binf);
       console.log("Retrying...");
       if ("geolocation" in navigator) {
+        // 再チェック
       } else {
         console.log("%c navigator.geolocation does not exist.", consta.binf);
         let bname = checkBrowser;
         if (bname === "un" || bname === "IE") {
+          // サポート外ブラウザ
           console.log(
             "%c It appears to be an unsupported browser.",
             consta.binf
@@ -69,13 +95,11 @@ class geo_auth {
             "%c 位置情報認証システムは、サポートされていないブラウザでは利用できません。",
             consta.binf
           );
-
           console.error("%c 不支援的瀏覽器無法使用位置驗證系統。", consta.binf);
           console.error(
             "%c 위치 인증 시스템은 지원되지 않는 브라우저에서는 사용할 수 없습니다.",
             consta.binf
           );
-
           console.info(
             "%c This error is not a Deep-School ISSUE.",
             consta.binf
@@ -86,6 +110,7 @@ class geo_auth {
           console.info("Error Report End");
           console.groupEnd("ERROR_REPORT");
         } else {
+          // geolocationが利用不可または許可されていない
           console.info(
             "%c Location information is not available or not allowed.",
             consta.binf
@@ -111,7 +136,7 @@ class geo_auth {
           );
           console.error("%c 位置信息不可用或不允许使用。", consta.binf);
           console.error(
-            "%c 위치 정보를 사용할 수 없거나 허용되지 않습니다.",
+            "%c 위치 정보를 사용할 수 없거나 허용되지 않습니다。",
             consta.binf
           );
           console.info(
@@ -128,6 +153,11 @@ class geo_auth {
     }
     navigator.geolocation.getCurrentPosition(this.setup, this.geo_error);
   }
+
+  /**
+   * 位置情報取得成功時の処理
+   * @param {GeolocationPosition} position 取得した位置情報
+   */
   setup(position) {
     this.latitude = position.coords.latitude;
     this.latitude = orgFloor(10, this.latitude);
@@ -138,6 +168,10 @@ class geo_auth {
       consta.small
     );
   }
+
+  /**
+   * 位置情報取得失敗時の処理
+   */
   geo_error() {
     console.info(
       "%c Location information is not available or not allowed.",
@@ -164,7 +198,7 @@ class geo_auth {
     );
     console.error("%c 位置信息不可用或不允许使用。", consta.binf);
     console.error(
-      "%c 위치 정보를 사용할 수 없거나 허용되지 않습니다.",
+      "%c 위치 정보를 사용할 수 없거나 허용되지 않습니다。",
       consta.binf
     );
     console.info("%c This error is not a Deep-School ISSUE.", consta.binf);
@@ -174,6 +208,13 @@ class geo_auth {
     console.info("Error Report End");
     console.groupEnd("ERROR_REPORT");
   }
+
+  /**
+   * 位置情報による認証を行う
+   * @param {number} lattitude 緯度
+   * @param {number} longitude 経度
+   * @returns {boolean} 認証成功ならtrue
+   */
   auth(lattitude, longitude) {
     let a_latti = orgFloor(10, lattitude);
     let a_longi = orgFloor(10, longitude);
@@ -191,9 +232,16 @@ class geo_auth {
     }
   }
 }
+
+/**
+ * geo_authインスタンスを初期化する関数
+ * @returns {geo_auth} geo_authインスタンス
+ */
 function init_geo() {
   const now_geo = new geo_auth();
   return now_geo;
 }
+
 init_geo();
+
 export default geo_auth;
