@@ -151,7 +151,10 @@ class geo_auth {
         }
       }
     }
-    navigator.geolocation.getCurrentPosition(this.setup, this.geo_error);
+    navigator.geolocation.getCurrentPosition(
+      this.setup.bind(this),
+      this.geo_error.bind(this)
+    );
   }
 
   /**
