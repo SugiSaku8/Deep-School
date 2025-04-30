@@ -178,6 +178,134 @@ class KOREGAUIManagerDAZE {
   }
 }
 
+class AuthServer {
+  /**
+   * AuthServerの初期化
+   *@param {string} serverUrl 教師などから提供され、ユーザーによって入力された変換ずみサーバーのURL
+   *@param {Boolean} ctype 変換するか、複合するかのパラメーター。 trueで変換、falseで複合。
+   */
+  constructor(serverUrl) {
+    this.URL = this.convert(serverUrl, false);
+  }
+  /**
+   * 初期化時に呼び出される変換システムの呼び出しポイント
+   *@param {string} serverUrl 教師などから提供され、ユーザーによって入力された変換ずみサーバーのURL
+   *@param {Boolean} ctype 変換するか、複合するかのパラメーター。 trueで変換、falseで複合。
+   */
+  convert(serverUrl, ctype) {
+    if (ctype) {
+      this.encodeURL(serverUrl);
+    } else if (!ctype) {
+      this.decodeURL(serverUrl);
+    }
+  }
+  /**
+   * 素因数分解（指数表記）を返す
+   * @param {number|string} n 分解したい整数
+   * @returns {string} 指数表記の素因数分解（例: "2^4,5,101"）
+   */
+  primeFactorize(n) {
+    let num = Number(n);
+    let factors = {};
+    for (let i = 2; i * i <= num; i++) {
+      while (num % i === 0) {
+        factors[i] = (factors[i] || 0) + 1;
+        num /= i;
+      }
+    }
+    if (num > 1) factors[num] = (factors[num] || 0) + 1;
+    return Object.entries(factors)
+      .map(([prime, exp]) => (exp > 1 ? `${prime}^${exp}` : prime))
+      .join(",");
+  }
+  /**
+   * 素因数分解の指数表記から元の数値に戻す
+   * @param {string} factorStr 指数表記の素因数分解（例: "2^4,5,101"）
+   * @returns {number} 元の数値
+   */
+  primeFactorsToNumber(factorStr) {
+    return factorStr.split(",").reduce((acc, part) => {
+      if (part.includes("^")) {
+        const [base, exp] = part.split("^").map(Number);
+        return acc * Math.pow(base, exp);
+      } else {
+        return acc * Number(part);
+      }
+    }, 1);
+  }
+  /**
+   * 変換済みのテキストから元のURLに戻す
+   * @param {string} text 変換済みのテキスト
+   * @returns {string} 元のURLに戻したテキスト
+   */
+  decodeURL(text) {
+    return text.replace(
+      /([ps])([a-zA-Z0-9\.\-]+|L)(:([0-9\^,]+))?/g,
+      (match, proto, host, _, portFactors) => {
+        let protocol = proto === "s" ? "https://" : "http://";
+        let hostPart = host === "L" ? "localhost" : host;
+        let portPart = "";
+        if (portFactors) {
+          let portNum = primeFactorsToNumber(portFactors);
+          portPart = ":" + portNum;
+        }
+        return protocol + hostPart + portPart;
+      }
+    );
+  }
+  /**
+   * テキスト中のURLを指定ルールで変換する
+   * @param {string} text 変換したいテキスト
+   * @returns {string} 変換後のテキスト
+   */
+  encodeURL(text) {
+    return text.replace(
+      /https?:\/\/([a-zA-Z0-9\.\-]+)(:\d+)?/g,
+      (match, host, port) => {
+        let prefix = match.startsWith("https://") ? "s" : "p";
+        let hostPart = host === "localhost" ? "L" : host;
+        let portPart = "";
+        if (port) {
+          let portNum = port.slice(1);
+          portPart = ":" + primeFactorize(portNum);
+        }
+        return prefix + hostPart + portPart;
+      }
+    );
+  }
+
+  // --- 使用例 ---
+  // const original = "http://localhost:8080 と https://example.com:3000 を変換";
+  // const encoded = encodeURL(original);
+  // console.log(encoded); // pL:2^4,5,101 と sexample.com:2^2,3,5^3 を変換
+  // const decoded = decodeURL(encoded);
+  // console.log(decoded); // http://localhost:8080 と https://example.com:3000 を変換
+  /**
+   * 変換されたサーバーのURLが存在するかどうか試す関数。
+   *@param {string} url 元の形態に`this.convert(:string:,false)`によって変換されたURL
+   *@param {boolean} sumsu 詳細な情報を要求するかの引数。trueで必要として、falseで不要とする。
+   */
+  async TestFetch(url, sumsu) {
+    try {
+      const response = await fetch(url);
+      const statuscode = response.status;
+      if (!response.ok) {
+        if (statuscode === 404) {
+          if (sumsu) {
+            console.log(response);
+          }
+          return false;
+        } else {
+          return false;
+        }
+      } else {
+        return true;
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+}
 // アプリケーションの初期化
 window.onload = async function () {
   const authManager = new GoogleAuthManager();

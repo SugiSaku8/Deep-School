@@ -2,6 +2,16 @@ import scr_url from "./con.js";
 const postButton = document.getElementById("post-button");
 const feedContent = document.getElementById("feed-content");
 
+/**
+ * 投稿ボタンのクリックイベント
+ * @param {string} username 投稿者の名前
+ * @param {string} userid 投稿者のID
+ * @param {string} postname 投稿タイトル
+ * @param {string} postdata 投稿内容
+ * @param {string} PostTime 投稿日時（ISO8601形式）
+ * @param {string} Genre 投稿ジャンル（通常は"general"、リプライ時は"Reply"）
+ * @param {Array} LinkerData リプライ情報配列（通常投稿時は空配列、リプライ時は返信情報を格納）
+ */
 postButton.addEventListener("click", async () => {
   const username = document.getElementById("username").value;
   const userid = document.getElementById("userid").value;
@@ -29,7 +39,11 @@ postButton.addEventListener("click", async () => {
   loadFeed();
 });
 
-// 0を除去する関数
+/**
+ * 0を除去する関数
+ * @param {Object} obj 任意のオブジェクト
+ * @returns {Object} 0以外の値のみを持つ新しいオブジェクト
+ */
 function removeZeros(obj) {
   const newObj = {};
 
@@ -42,6 +56,12 @@ function removeZeros(obj) {
   return newObj;
 }
 
+/**
+ * オブジェクトからパスで値を取得
+ * @param {Object} data データオブジェクト
+ * @param {string} path ドット区切りのパス
+ * @returns {any} 指定パスの値
+ */
 function getValue(data, path) {
   if (!data || typeof data !== "object") return null;
 
@@ -58,6 +78,11 @@ function getValue(data, path) {
   return current;
 }
 
+/**
+ * 投稿データを取得
+ * @param {string} file 投稿IDまたはファイル名
+ * @returns {Promise<Object>} 投稿データ
+ */
 async function getPost(file) {
   const response = await fetch(
     scr_url + "http://localhost:3776/get?text=" + file
@@ -66,6 +91,10 @@ async function getPost(file) {
   return data;
 }
 
+/**
+ * フィードに投稿を追加
+ * @param {Object} postValue 投稿データ
+ */
 function addfeed(postValue) {
   let div = document.createElement("div");
   div.className = "feed-item";
@@ -91,6 +120,9 @@ function addfeed(postValue) {
   feedContent.appendChild(div);
 }
 
+/**
+ * フィードを読み込む
+ */
 async function loadFeed() {
   try {
     const response = await fetch("http://localhost:3776/get");
@@ -168,6 +200,10 @@ async function loadFeed() {
   }
 }
 
+/**
+ * 返信ボタン・返信送信ボタンのイベント
+ * @param {Event} event クリックイベント
+ */
 document.addEventListener("click", async (event) => {
   if (event.target.classList.contains("reply-button")) {
     const postId = event.target.dataset.postId;
@@ -196,6 +232,20 @@ document.addEventListener("click", async (event) => {
     const username = "Reply";
     const userid = "@Reply";
 
+    /**
+     * リプライ送信時のパラメータ
+     * @param {string} PostName 返信タイトル（例: "12345 's Reply"）
+     * @param {string} UserName 返信者名（デフォルト: "Reply"）
+     * @param {string} UserId 返信者ID（デフォルト: "@Reply"）
+     * @param {string} PostData 返信内容
+     * @param {string} PostTime 返信日時（ISO8601形式）
+     * @param {string} Genre 投稿ジャンル（"Reply" 固定）
+     * @param {Array} LinkerData 返信情報配列（1件のみ）
+     *   @param {string} replyed 返信先投稿ID
+     *   @param {string} UserId 返信者ID
+     *   @param {string} PostData 返信内容
+     *   @param {string} PostTime 返信日時
+     */
     const response = await fetch(scr_url + "/post", {
       method: "POST",
       headers: {
@@ -239,6 +289,9 @@ document.addEventListener("click", async (event) => {
   }
 });
 
+/**
+ * ページロード時にフィードを読み込む
+ */
 window.onload = async function () {
   await loadFeed();
 };

@@ -1,8 +1,11 @@
 export default class JsonServerAPI {
+    /**
+     * SCRサーバーに接続するクラスの初期化関数
+     * @param {string} baseUrl ベースとなるURL。SCRのURLのこと。
+     */
     constructor(baseUrl = 'http://localhost:3000') {
         this.baseUrl = baseUrl;
     }
-
     /**
      * データの検索
      * @param {string} query - 検索キーワード
