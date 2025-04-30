@@ -42,6 +42,8 @@ class GoogleAuthManager {
   // 認証レスポンスのハンドリング
   async handleCredentialResponse(response) {
     console.log("認証トークンを受信:", response.credential);
+    document.getElementById("loginForm").display.style = "block";
+    document.getElementById("openLoginButton").display.style = "block";
 
     try {
       // Google Drive APIの認証を実行
@@ -171,10 +173,9 @@ class KOREGAUIManagerDAZE {
   }
 
   initializeEventListeners() {
-     document.getElementById("menu").style.display = "none";
+    document.getElementById("menu").style.display = "none";
     document.getElementById("kakuninForm").style.display = "flex";
     document.getElementById("loginForm").style.display = "none";
-    
   }
 }
 
