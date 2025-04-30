@@ -1,12 +1,26 @@
+/**
+ * 問題作成・例題管理・プレビュー・保存/読込などを行うクラス
+ */
 class QuestionCreator {
+  /**
+   * コンストラクタ
+   * - 各種配列の初期化
+   * - イベントリスナーの登録
+   * - 保存済みデータの読込
+   */
   constructor() {
+    /** @type {Array<{id: string, text: string}>} 選択肢リスト */
     this.options = [];
+    /** @type {Array<string>} 例題リスト */
     this.examples = []; // 例題を保存する配列
     this.initializeEventListeners();
     this.loadSavedQuestions();
     this.loadSavedExamples(); // 保存された例題を読み込む
   }
 
+  /**
+   * 各種ボタン・入力欄のイベントリスナーを登録
+   */
   initializeEventListeners() {
     document
       .getElementById("add-option")
@@ -30,7 +44,9 @@ class QuestionCreator {
       .addEventListener("click", () => this.addExample());
   }
 
-  // 例題を追加する関数
+  /**
+   * 例題を追加する
+   */
   addExample() {
     const exampleText = document.getElementById("example-text").value;
     if (exampleText) {
@@ -42,7 +58,9 @@ class QuestionCreator {
     }
   }
 
-  // 例題を表示する関数
+  /**
+   * 例題リストを画面に表示
+   */
   renderExamples() {
     const examplesContainer = document.getElementById("examples-container");
     examplesContainer.innerHTML = ""; // 既存の内容をクリア
@@ -58,13 +76,18 @@ class QuestionCreator {
     });
   }
 
-  // 例題を削除する関数
+  /**
+   * 指定したインデックスの例題を削除
+   * @param {number} index 削除する例題のインデックス
+   */
   removeExample(index) {
     this.examples.splice(index, 1);
     this.renderExamples();
   }
 
-  // 保存された例題を読み込む関数
+  /**
+   * 保存された例題をlocalStorageから読み込む
+   */
   loadSavedExamples() {
     const savedExamples = localStorage.getItem("savedExamples");
     if (savedExamples) {
@@ -78,19 +101,27 @@ class QuestionCreator {
     }
   }
 
-  // 例題を保存する関数
+  /**
+   * 例題をlocalStorageに保存
+   */
   saveExamples() {
     localStorage.setItem("savedExamples", JSON.stringify(this.examples));
     alert("例題が保存されました。");
   }
 
-  // 例題を保存するボタンのイベントリスナーを追加
+  /**
+   * 例題保存ボタンのイベントリスナーを登録
+   */
   initializeExampleSaveListener() {
     document
       .getElementById("save-examples")
       .addEventListener("click", () => this.saveExamples());
   }
 
+  /**
+   * 新しい選択肢IDを生成
+   * @returns {string} 新しいID
+   */
   generateOptionId() {
     const prefix = "option_";
     const existingIds = this.options.map((option) =>
@@ -100,6 +131,9 @@ class QuestionCreator {
     return `${prefix}${nextId}`;
   }
 
+  /**
+   * 選択肢を追加
+   */
   addOption() {
     const id = this.generateOptionId();
     this.options.push({
@@ -110,6 +144,9 @@ class QuestionCreator {
     this.updatePreview();
   }
 
+  /**
+   * 選択肢リストを画面に表示
+   */
   renderOptions() {
     const container = document.getElementById("options-container");
     container.innerHTML = "";
@@ -132,11 +169,21 @@ class QuestionCreator {
     });
   }
 
+  /**
+   * 選択肢のテキストを更新
+   * @param {number} index 選択肢のインデックス
+   * @param {string} text 新しいテキスト
+   */
   updateOption(index, text) {
     this.options[index].text = text;
     this.updatePreview();
   }
 
+  /**
+   * 選択肢のIDを更新
+   * @param {number} index 選択肢のインデックス
+   * @param {string} id 新しいID
+   */
   updateOptionId(index, id) {
     if (this.validateOptionId(id)) {
       this.options[index].id = id;
@@ -146,6 +193,11 @@ class QuestionCreator {
     }
   }
 
+  /**
+   * 選択肢IDの重複チェック
+   * @param {string} id チェックするID
+   * @returns {boolean} 有効なIDならtrue
+   */
   validateOptionId(id) {
     if (!id) return false;
     const existingIds = this.options
@@ -154,12 +206,19 @@ class QuestionCreator {
     return !existingIds.includes(id);
   }
 
+  /**
+   * 選択肢を削除
+   * @param {number} index 削除する選択肢のインデックス
+   */
   removeOption(index) {
     this.options.splice(index, 1);
     this.renderOptions();
     this.updatePreview();
   }
 
+  /**
+   * プレビューを更新
+   */
   updatePreview() {
     const preview = document.getElementById("preview");
     const questionType = document.getElementById("question-type").value;
@@ -178,6 +237,11 @@ class QuestionCreator {
     this.loadWorkData(); // 例題と解説を読み込む
   }
 
+  /**
+   * プレビュー用の選択肢HTMLを生成
+   * @param {string} questionType 問題タイプ
+   * @returns {string} HTML文字列
+   */
   getPreviewOptions(questionType) {
     switch (questionType) {
       case "選択式":
@@ -213,6 +277,9 @@ class QuestionCreator {
     }
   }
 
+  /**
+   * プレビューにカスタム設定（フォント・色など）を適用
+   */
   applyCustomSettings() {
     const preview = document.querySelector(".preview-question");
     if (!preview) return;
@@ -232,6 +299,9 @@ class QuestionCreator {
     preview.style.backgroundColor = settings.backgroundColor;
   }
 
+  /**
+   * 問題を保存
+   */
   saveQuestion() {
     const question = this.exportQuestion();
     const questions = this.getSavedQuestions();
@@ -240,6 +310,9 @@ class QuestionCreator {
     alert("問題が保存されました。");
   }
 
+  /**
+   * 問題を読み込み
+   */
   loadQuestion() {
     const questions = this.getSavedQuestions();
     if (questions.length === 0) {
@@ -257,6 +330,9 @@ class QuestionCreator {
     }
   }
 
+  /**
+   * 問題をJSONファイルとしてエクスポート
+   */
   exportJSON() {
     const question = this.exportQuestion();
     const blob = new Blob([JSON.stringify(question, null, 2)], {
@@ -270,10 +346,18 @@ class QuestionCreator {
     URL.revokeObjectURL(url);
   }
 
+  /**
+   * 保存済みの問題リストを取得
+   * @returns {Array<Object>} 問題リスト
+   */
   getSavedQuestions() {
     return JSON.parse(localStorage.getItem("savedQuestions") || "[]");
   }
 
+  /**
+   * 現在のフォーム内容を問題データとしてエクスポート
+   * @returns {Object} 問題データ
+   */
   exportQuestion() {
     return {
       questionId: document.getElementById("question-id").value,
@@ -324,6 +408,10 @@ class QuestionCreator {
     };
   }
 
+  /**
+   * 問題データをフォームにインポート
+   * @param {Object} questionData インポートする問題データ
+   */
   importQuestion(questionData) {
     document.getElementById("question-id").value =
       questionData.questionId;
@@ -351,6 +439,9 @@ class QuestionCreator {
     this.updatePreview();
   }
 
+  /**
+   * 保存済みの問題をlocalStorageから読み込む
+   */
   loadSavedQuestions() {
     const savedQuestions = localStorage.getItem("savedQuestions");
     if (savedQuestions) {
@@ -366,7 +457,10 @@ class QuestionCreator {
     }
   }
 
-  // 例題と解説を読み込む関数
+  /**
+   * 例題と解説を外部JSONから読み込んで表示
+   * ※パスやデータ構造は用途に応じて修正してください
+   */
   async loadWorkData() {
     const response = await fetch('path/to/your/work-data.json'); // JSONファイルのパスを指定
     const workData = await response.json();
@@ -387,5 +481,6 @@ class QuestionCreator {
   }
 }
 
+// グローバルにインスタンスを公開
 const questionCreator = new QuestionCreator();
 window.questionCreator = questionCreator;
