@@ -639,7 +639,9 @@ body {
 .typing-indicator span:nth-child(3) {
   animation-delay: 0.4s;
 }
-
+#kakuninForm {
+  display: none;
+}
 @keyframes typing {
   0%,
   100% {

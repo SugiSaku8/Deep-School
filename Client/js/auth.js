@@ -42,9 +42,8 @@ class GoogleAuthManager {
   // 認証レスポンスのハンドリング
   async handleCredentialResponse(response) {
     console.log("認証トークンを受信:", response.credential);
-    document.getElementById("loginForm").display.style = "block";
-    document.getElementById("openLoginButton").display.style = "block";
-
+    document.getElementById("loginForm").style.display = "block";
+    document.getElementById("openLoginButton").style.display = "block";
     try {
       // Google Drive APIの認証を実行
       await this.initializeGoogleDriveAuth();
