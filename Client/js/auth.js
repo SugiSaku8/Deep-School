@@ -43,7 +43,9 @@ class GoogleAuthManager {
   async handleCredentialResponse(response) {
     console.log("認証トークンを受信:", response.credential);
     document.getElementById("loginForm").style.display = "block";
-    document.getElementById("openLoginButton").style.display = "block";
+    document.getElementById("openLoginButton").style.display = "none";
+    document.getElementById("kakuninForm").style.display = "none";
+
     try {
       // Google Drive APIの認証を実行
       await this.initializeGoogleDriveAuth();
@@ -316,6 +318,7 @@ class AuthServer {
 }
 // アプリケーションの初期化
 window.onload = async function () {
+  document.getElementById("kakuninForm").style.display = "none";
   const authManager = new GoogleAuthManager();
   const driveManager = new GoogleDriveManager(authManager);
   const uiManager = new KOREGAUIManagerDAZE();
