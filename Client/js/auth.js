@@ -325,7 +325,6 @@ window.onload = async function () {
 
   await authManager.initialize();
   /*
-  // 使用例
   window.saveData = async function(data) {
     try {
       await driveManager.saveAppData('app-data.json', data);
@@ -334,18 +333,19 @@ window.onload = async function () {
       alert('データの保存に失敗しました');
     }
   };
+  */
 
-  window.loadData = async function() {
+  window.loadData = async function () {
     try {
-      const data = await driveManager.loadAppData('app-data.json');
-      alert('データを読み込みました');
+      const data = await driveManager.loadAppData("deep-school-user-data.json");
+      console.log("データを読み込みました");
       return data;
     } catch (error) {
-      alert('データの読み込みに失敗しました');
+      console.log("データの読み込みに失敗しました");
       return null;
     }
   };
-  */
+
   document
     .getElementById("school_login_btn")
     .addEventListener("click", async () => {
