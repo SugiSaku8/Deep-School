@@ -189,6 +189,7 @@ class AuthServer {
    *@param {string} AuthServer.url 変換されたURL
    */
   constructor(serverUrl) {
+    console.log(serverUrl);
     this.url = this.convert(serverUrl, false);
     console.log("SCRのURL:" + this.url);
     this.ServerStatus = null;
