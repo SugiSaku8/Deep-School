@@ -2,82 +2,159 @@
 body {
   font-family: Arial, sans-serif;
   margin: 0;
-  padding: 20px;
-  background-color: #f4f4f4;
+  padding: 0;
+  background: #0b6b3a; /* 背景を深緑に */
+  min-height: 100vh;
 }
 
+/* アプリ全体の枠 */
 #app {
-  max-width: 600px;
+  max-width: 1200px;
   margin: auto;
+  background: none;
+  padding: 40px 0 0 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* 検索バーUI */
+#search-bar, .search-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: white;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 40px;
+  padding: 30px 60px;
+  margin: 30px auto 40px auto;
+  font-size: 3em;
+  font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  max-width: 600px;
+  border: none;
 }
 
+/* 検索ボタン（右矢印） */
+#search-btn, .search-btn {
+  background: white;
+  border: none;
+  border-radius: 20px;
+  margin-left: 30px;
+  padding: 10px 30px;
+  font-size: 2.5em;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#search-btn:hover, .search-btn:hover {
+  background: #e0e0e0;
+}
+
+/* 投稿フォーム */
 #post-form {
-  margin-bottom: 20px;
+  margin: 0 auto 40px auto;
+  background: #cfcfcf;
+  border-radius: 30px;
+  padding: 30px 40px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: none;
+  max-width: 700px;
 }
 
+/* 入力欄 */
 input,
 textarea {
   width: 100%;
-  padding: 10px;
-  margin: 5px 0;
+  padding: 15px;
+  margin: 10px 0;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 10px;
+  font-size: 1.1em;
+  background: #fff;
 }
 
-button {
-  background-color: #28a745;
-  color: white;
+/* 投稿・返信ボタン */
+button, .reply-btn {
+  background: white;
+  color: #222;
   border: none;
-  padding: 10px;
+  border-radius: 15px;
+  padding: 15px 40px;
+  font-size: 1.2em;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   cursor: pointer;
+  transition: background 0.2s;
+}
+button:hover, .reply-btn:hover {
+  background: #e0e0e0;
 }
 
-button:hover {
-  background-color: #218838;
-}
-
+/* フィード全体 */
 #feed {
   margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px 30px;
+  justify-content: center;
 }
 
-.feed-item {
-  border-bottom: 1px solid #ccc;
-  padding: 10px 0;
+/* 質問カード（feed-item） */
+.feed-item[data-post-id] {
+  margin-bottom: 0;
+  border: none;
+  padding: 30px 40px;
+  border-radius: 30px;
+  background: #cfcfcf;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  font-size: 1.2em;
+  min-width: 420px;
+  max-width: 520px;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
+/* 返信ボックス */
 .reply {
-  margin-left: 20px; /* リプライをインデント */
+  margin-left: 20px;
   padding: 10px;
-  border-left: 2px solid #ccc; /* 左側に線を追加 */
-  background-color: #f9f9f9; /* 背景色を変更 */
+  border-left: 2px solid #ccc;
+  background-color: #f9f9f9;
   margin-bottom: 5px;
+  border-radius: 10px;
 }
 
 .reply strong {
-  font-size: 0.9em; /* リプライのユーザー名を小さく */
+  font-size: 0.9em;
 }
 
 .reply p {
-  margin: 5px 0; /* リプライのテキストのマージン */
+  margin: 5px 0;
 }
 
 .reply small {
-  color: #888; /* リプライのタイムスタンプの色 */
+  color: #888;
 }
 
-.feed-item[data-post-id] {
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  padding: 10px;
-  border-radius: 5px;
-}
-
+/* feed-item内の返信リスト */
 .feed-item[data-post-id] .replies {
   margin-top: 10px;
   padding-left: 20px;
   border-left: 1px solid #eee;
+}
+
+/* 日付やユーザー名などのテキスト調整 */
+.feed-item[data-post-id] small,
+.feed-item[data-post-id] .date,
+.feed-item[data-post-id] .user {
+  color: #222;
+  font-size: 1em;
+  margin-left: 10px;
+}
+
+/* スクロールバー非表示（オプション） */
+body::-webkit-scrollbar {
+  display: none;
 }

@@ -153,6 +153,20 @@
         </div>
       </div>
     </div>
+    <div id="scr_app">
+      <h1>Deep-Schooler</h1>
+      <div id="post-form">
+          <input type="text" id="username" placeholder="ユーザー名" required>
+          <input type="text" id="userid" placeholder="ユーザーID" required>
+          <input type="text" id="postname" placeholder="ポスト名" required>
+          <textarea id="postdata" placeholder="ポスト内容" required></textarea>
+          <button id="post-button" class="auto_btn">ポストする</button>
+      </div>
+      <div id="feed">
+          <h2>フィード</h2>
+          <div id="feed-content"></div>
+      </div>
+  </div>
     <script>
       function InitToasterChat() {
         document.getElementById("toaster_chat").style.display = "block";
