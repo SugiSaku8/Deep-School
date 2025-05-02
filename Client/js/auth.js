@@ -318,7 +318,7 @@ class AuthServer {
 }
 // アプリケーションの初期化
 window.onload = async function () {
-  document.getElementById("kakuninForm").style.display = "none";
+  //document.getElementById("kakuninForm").style.display = "none";
   const authManager = new GoogleAuthManager();
   const driveManager = new GoogleDriveManager(authManager);
   const uiManager = new KOREGAUIManagerDAZE();
