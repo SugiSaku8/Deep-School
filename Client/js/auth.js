@@ -190,7 +190,7 @@ class AuthServer {
    */
   constructor(serverUrl) {
     this.url = this.convert(serverUrl, false);
-    this.ServerStatus = this.TestFetch(this.url, false);
+    this.ServerStatus = null;
     if (this.ServerStatus) {
       return;
     } else {
@@ -315,6 +315,18 @@ class AuthServer {
       console.error(error.message);
     }
   }
+  /*
+   *`TestFetch`を実行するための関数
+   *  `await`で実行。
+   */
+  async callTest() {
+    this.ServerStatus = await this.TestFetch(this.url, false);
+    if (this.ServerStatus) {
+      return;
+    } else {
+      console.log("ana šumšu ḫašāḳu, šumšu ša ḫāzīrū ḫašāḳu lā šumšu.");
+    }
+  }
 }
 // アプリケーションの初期化
 window.onload = async function () {
@@ -350,6 +362,7 @@ window.onload = async function () {
     .getElementById("school_login_btn")
     .addEventListener("click", async () => {
       let geoauth = new AuthServer(document.getElementById("schoolId").value);
+      await geoauth.callTest();
       window.scr_url = geoauth.url;
       console.log("SCRのURLを設定しました。");
     });
