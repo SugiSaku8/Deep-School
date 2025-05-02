@@ -44,7 +44,7 @@ class GoogleAuthManager {
     console.log("認証トークンを受信:", response.credential);
     document.getElementById("loginForm").style.display = "block";
     document.getElementById("openLoginButton").style.display = "none";
-    document.getElementById("kakuninForm").style.display = "none";
+    // document.getElementById("kakuninForm").style.display = "none";
 
     try {
       // Google Drive APIの認証を実行
@@ -175,7 +175,7 @@ class KOREGAUIManagerDAZE {
 
   initializeEventListeners() {
     document.getElementById("menu").style.display = "none";
-    document.getElementById("kakuninForm").style.display = "flex";
+    //document.getElementById("kakuninForm").style.display = "flex";
     document.getElementById("loginForm").style.display = "none";
   }
 }
@@ -290,7 +290,7 @@ class AuthServer {
   // console.log(encoded); // pL:2^4,5,101 と sexample.com:2^2,3,5^3 を変換
   // const decoded = decodeURL(encoded);
   // console.log(decoded); // http://localhost:8080 と https://example.com:3000 を変換
-  /**
+  /*
    * 変換されたサーバーのURLが存在するかどうか試す関数。
    *@param {string} url 元の形態に`this.convert(:string:,false)`によって変換されたURL
    *@param {boolean} sumsu 詳細な情報を要求するかの引数。trueで必要として、falseで不要とする。
