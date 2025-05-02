@@ -11,7 +11,7 @@ async function bootstrap() {
     credentials: true,
   });
   
-  await app.listen(3776);
-  console.log(`Deep-Schoolerサーバーがポート3776で起動しました`);
+  await app.listen(8080);
+  console.log(`Deep-Schoolerサーバーがポート8080で起動しました`);
 }
 bootstrap();
