@@ -245,6 +245,4 @@ function init_geo() {
   return now_geo;
 }
 
-init_geo();
-
 export default geo_auth;
