@@ -256,7 +256,7 @@ class AuthServer {
         let hostPart = host === "L" ? "localhost" : host;
         let portPart = "";
         if (portFactors) {
-          let portNum = primeFactorsToNumber(portFactors);
+          let portNum = this.primeFactorsToNumber(portFactors);
           portPart = ":" + portNum;
         }
         return protocol + hostPart + portPart;
@@ -277,7 +277,7 @@ class AuthServer {
         let portPart = "";
         if (port) {
           let portNum = port.slice(1);
-          portPart = ":" + primeFactorize(portNum);
+          portPart = ":" + this.primeFactorize(portNum);
         }
         return prefix + hostPart + portPart;
       }
