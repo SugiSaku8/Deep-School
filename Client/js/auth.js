@@ -190,7 +190,7 @@ class AuthServer {
    */
   constructor(serverUrl) {
     this.url = this.convert(serverUrl, false);
-    this.ServerStatus = this.TestFetch(url, false);
+    this.ServerStatus = this.TestFetch(this.url, false);
     if (this.ServerStatus) {
       return;
     } else {
