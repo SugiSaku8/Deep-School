@@ -190,12 +190,8 @@ class AuthServer {
    */
   constructor(serverUrl) {
     this.url = this.convert(serverUrl, false);
+    console.log("SCRのURL:" + this.url);
     this.ServerStatus = null;
-    if (this.ServerStatus) {
-      return;
-    } else {
-      console.log("ana šumšu ḫašāḳu, šumšu ša ḫāzīrū ḫašāḳu lā šumšu.");
-    }
   }
   /**
    * 初期化時に呼び出される変換システムの呼び出しポイント
