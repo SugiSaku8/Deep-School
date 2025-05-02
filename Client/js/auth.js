@@ -190,7 +190,7 @@ class AuthServer {
    */
   constructor(serverUrl) {
     console.log(serverUrl);
-    this.url = this.convert(serverUrl, false);
+    this.url = this.decodeURL(serverUrl);
     console.log("SCRのURL:" + this.url);
     this.ServerStatus = null;
   }
