@@ -193,6 +193,7 @@ class AuthServer {
     console.log(serverUrl);
     this.url = this.decodeURL(serverUrl);
     console.log("SCRのURL:" + this.url);
+    window.scr_url = this.url;
     this.ServerStatus = null;
   }
   /**
