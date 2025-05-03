@@ -161,4 +161,4 @@ class CoachingSession {
   }
 }
 
-export { GeminiProcessor, CoachingSession };
+export default { GeminiProcessor, CoachingSession };
