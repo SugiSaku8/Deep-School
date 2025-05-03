@@ -845,7 +845,7 @@ textarea {
   flex-wrap: wrap;
   gap: 40px 30px;
   justify-content: center;
-  height: 500px;
+  height: 220px;
   overflow-y: scroll;
 }
 
