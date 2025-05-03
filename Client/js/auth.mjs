@@ -12,10 +12,35 @@ class GoogleAuthManager {
   constructor() {
     this.tokenClient = null;
     this.accessToken = null;
+    this.tokenTimestamp = null;
+    this.TOKEN_VALIDITY_MS = 104 * 24 * 60 * 60 * 1000; // 104日
   }
 
   // 初期化処理
   async initialize() {
+    // 1. localStorageからトークンを取得
+    const savedToken = localStorage.getItem("google_access_token");
+    const savedTimestamp = localStorage.getItem("google_token_timestamp");
+
+    if (savedToken && savedTimestamp) {
+      const now = Date.now();
+      const tokenAge = now - Number(savedTimestamp);
+      if (tokenAge < this.TOKEN_VALIDITY_MS) {
+        // まだ有効
+        this.accessToken = savedToken;
+        this.tokenTimestamp = Number(savedTimestamp);
+        document.getElementById("loginForm").style.display = "block";
+        document.getElementById("openLoginButton").style.display = "none";
+        // ここでreturnすれば再認証不要
+        return;
+      } else {
+        // 期限切れ
+        localStorage.removeItem("google_access_token");
+        localStorage.removeItem("google_token_timestamp");
+      }
+    }
+
+    // Googleアカウントの初期化
     google.accounts.id.initialize({
       client_id: CLIENT_ID,
       callback: this.handleCredentialResponse.bind(this),
