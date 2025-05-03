@@ -1,23 +1,14 @@
+// script.js
 const postButton = document.getElementById("post-button");
 const feedContent = document.getElementById("feed-content");
 
-/**
- * 投稿ボタンのクリックイベント
- * @param {string} username 投稿者の名前
- * @param {string} userid 投稿者のID
- * @param {string} postname 投稿タイトル
- * @param {string} postdata 投稿内容
- * @param {string} PostTime 投稿日時（ISO8601形式）
- * @param {string} Genre 投稿ジャンル（通常は"general"、リプライ時は"Reply"）
- * @param {Array} LinkerData リプライ情報配列（通常投稿時は空配列、リプライ時は返信情報を格納）
- */
 postButton.addEventListener("click", async () => {
   const username = document.getElementById("username").value;
   const userid = document.getElementById("userid").value;
   const postname = document.getElementById("postname").value;
   const postdata = document.getElementById("postdata").value;
 
-  const response = await fetch(window.scr_url + "/post", {
+  const response = await fetch("http://localhost:8080/post", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -38,11 +29,7 @@ postButton.addEventListener("click", async () => {
   loadFeed();
 });
 
-/**
- * 0を除去する関数
- * @param {Object} obj 任意のオブジェクト
- * @returns {Object} 0以外の値のみを持つ新しいオブジェクト
- */
+// 0を除去する関数
 function removeZeros(obj) {
   const newObj = {};
 
@@ -55,12 +42,6 @@ function removeZeros(obj) {
   return newObj;
 }
 
-/**
- * オブジェクトからパスで値を取得
- * @param {Object} data データオブジェクト
- * @param {string} path ドット区切りのパス
- * @returns {any} 指定パスの値
- */
 function getValue(data, path) {
   if (!data || typeof data !== "object") return null;
 
@@ -77,54 +58,46 @@ function getValue(data, path) {
   return current;
 }
 
-/**
- * 投稿データを取得
- * @param {string} file 投稿IDまたはファイル名
- * @returns {Promise<Object>} 投稿データ
- */
 async function getPost(file) {
-  const response = await fetch(
-    window.scr_url + "/get?text=" + file
-  );
+  const response = await fetch("http://localhost:8080/get?text=" + file);
   const data = await response.json();
   return data;
 }
 
-/**
- * フィードに投稿を追加
- * @param {Object} postValue 投稿データ
- */
 function addfeed(postValue) {
   let div = document.createElement("div");
   div.className = "feed-item";
   div.innerHTML = `
-        <div class="feed-card">
-          <h3>${postValue.PostName?.value || ""}</h3>
-          <div class="meta">
-            <span>${postValue.Genre?.value || ""}</span>
-            <span>${postValue.UserId?.value || ""}</span>
-          </div>
-          <div class="content">
-            ${postValue.PostData?.value || ""}
-          </div>
-          <button class="reply-button" data-post-id="${
-            postValue.PostId?.value || ""
-          }">返信</button>
-          <div class="date">${new Date(
-            postValue.PostTime?.value || new Date()
-          ).toLocaleDateString("ja-JP")}</div>
-          <div class="reply-thread"></div>
-        </div>
-      `;
+            <strong>${postValue.UserName.value} (${postValue.UserId.value})</strong>
+            <p>${postValue.PostName.value}</p>
+            <p>${postValue.PostData.value}</p>
+            <small>${postValue.PostTime.value}</small>
+        `;
   feedContent.appendChild(div);
 }
 
-/**
- * フィードを読み込む
- */
-export async function loadFeed() {
+function createReplyHTML(postValue) {
+  // LinkerDataからreplyedのpostIdを取得
+  const replyedPostId = postValue.LinkerData.find(
+    (item) => typeof item === "object" && item !== null && item.replyed
+  )?.replyed;
+
+  let html = '<div class="replies">';
+  html += `
+    <div class="reply">
+      <strong>${postValue.UserName.value} (${postValue.UserId.value})</strong>
+      <p>${postValue.PostData.value}</p>
+      <small>${postValue.PostTime.value}</small>
+      <p>返信先: ${replyedPostId}</p>
+    </div>
+  `;
+  html += "</div>";
+  return html;
+}
+
+async function loadFeed() {
   try {
-    const response = await fetch(window.scr_url +"/get");
+    const response = await fetch("http://localhost:8080/get");
     const data = await response.json();
     const numberOfPostsToLoad = Math.min(50); // 最大 50 件、またはデータ数
     const loadedPosts = [];
@@ -154,44 +127,53 @@ export async function loadFeed() {
       let div = document.createElement("div");
       div.className = "feed-item";
 
-      // 投稿のHTMLを生成
-      div.innerHTML = `
-        <div class="feed-card">
-          <h3>${postValue.PostName?.value || ""}</h3>
-          <div class="meta">
-            <span>${postValue.Genre?.value || "general"}</span>
-            <span>${postValue.UserId?.value || ""}</span>
-          </div>
-          <div class="content">
-            ${postValue.PostData?.value || ""}
-          </div>
-          <button class="reply-button" data-post-id="${
-            postValue.PostId?.value || ""
-          }">返信</button>
-          <div class="date">${new Date(
-            postValue.PostTime?.value || new Date()
-          ).toLocaleDateString("ja-JP")}</div>
-          <div class="reply-thread"></div>
-        </div>
-      `;
+      // リプライの場合、親投稿を探してその下に表示
+      if (
+        postValue.LinkerData &&
+        postValue.LinkerData.some(
+          (item) => typeof item === "object" && item !== null && item.replyed
+        )
+      ) {
+        const replyedPostId = postValue.LinkerData.find(
+          (item) => typeof item === "object" && item !== null && item.replyed
+        ).replyed;
+        const parentPost = postsMap.get(replyedPostId);
 
-      // リプライがある場合、返信を表示
-      if (postValue.LinkerData && postValue.LinkerData.length > 0) {
-        const replyThread = div.querySelector(".reply-thread");
-        postValue.LinkerData.forEach((reply) => {
-          const replyCard = document.createElement("div");
-          replyCard.className = "reply-card";
-          replyCard.innerHTML = `
-            <div class="reply-meta">${reply.UserId || "@Unknown"}</div>
-            <div class="reply-content">${reply.PostData || ""}</div>
-            <div class="reply-date">${new Date(
-              reply.PostTime || new Date()
-            ).toLocaleDateString("ja-JP")}</div>
+        if (parentPost) {
+          // 親投稿が存在する場合、その下にリプライを表示
+          div.innerHTML = `
+            <div class="reply">
+              <strong>${postValue.UserName.value} (${postValue.UserId.value})</strong>
+              <p>${postValue.PostData.value}</p>
+              <small>${postValue.PostTime.value}</small>
+              <p>返信先: ${replyedPostId}</p>
+            </div>
           `;
-          replyThread.appendChild(replyCard);
-        });
+          // 親投稿の要素を取得して、その下に追加
+          const parentDiv = document.querySelector(
+            `.feed-item[data-post-id="${replyedPostId}"]`
+          );
+          if (parentDiv) {
+            parentDiv.appendChild(div);
+            continue; // 通常のフィードへの追加をスキップ
+          }
+        }
       }
 
+      // リプライでない場合は、通常のフィードに投稿を表示
+      div.innerHTML = `
+        <strong>${postValue.UserName.value} (${postValue.UserId.value})</strong>
+        <p>${postValue.PostName.value}</p>
+        <p>${postValue.PostData.value}</p>
+        <small>${postValue.PostTime.value}</small>
+        <button class="reply-button" data-post-id="${postValue.PostId.value}">Reply</button>
+        <div class="reply-form" style="display:none;">
+          <textarea class="reply-text"></textarea>
+          <button class="submit-reply" data-post-id="${postValue.PostId.value}">Submit Reply</button>
+        </div>
+        <div class="replies"></div>
+      `;
+      div.dataset.postId = postValue.PostId.value; // postId を data 属性として保存
       feedContent.appendChild(div);
     }
   } catch (error) {
@@ -199,29 +181,11 @@ export async function loadFeed() {
   }
 }
 
-/**
- * 返信ボタン・返信送信ボタンのイベント
- * @param {Event} event クリックイベント
- */
 document.addEventListener("click", async (event) => {
   if (event.target.classList.contains("reply-button")) {
     const postId = event.target.dataset.postId;
     const replyForm = event.target.parentNode.querySelector(".reply-form");
-    if (!replyForm) {
-      const form = document.createElement("div");
-      form.className = "reply-form";
-      form.innerHTML = `
-        <textarea class="reply-text" placeholder="返信を入力..."></textarea>
-        <button class="submit-reply" data-post-id="${postId}">送信</button>
-      `;
-      event.target.parentNode.insertBefore(
-        form,
-        event.target.parentNode.querySelector(".reply-thread")
-      );
-    } else {
-      replyForm.style.display =
-        replyForm.style.display === "none" ? "block" : "none";
-    }
+    replyForm.style.display = "block";
   }
 
   if (event.target.classList.contains("submit-reply")) {
@@ -231,20 +195,6 @@ document.addEventListener("click", async (event) => {
     const username = "Reply";
     const userid = "@Reply";
 
-    /**
-     * リプライ送信時のパラメータ
-     * @param {string} PostName 返信タイトル（例: "12345 's Reply"）
-     * @param {string} UserName 返信者名（デフォルト: "Reply"）
-     * @param {string} UserId 返信者ID（デフォルト: "@Reply"）
-     * @param {string} PostData 返信内容
-     * @param {string} PostTime 返信日時（ISO8601形式）
-     * @param {string} Genre 投稿ジャンル（"Reply" 固定）
-     * @param {Array} LinkerData 返信情報配列（1件のみ）
-     *   @param {string} replyed 返信先投稿ID
-     *   @param {string} UserId 返信者ID
-     *   @param {string} PostData 返信内容
-     *   @param {string} PostTime 返信日時
-     */
     const response = await fetch(window.scr_url + "/post", {
       method: "POST",
       headers: {
@@ -260,9 +210,6 @@ document.addEventListener("click", async (event) => {
         LinkerData: [
           {
             replyed: postId,
-            UserId: userid,
-            PostData: replyText,
-            PostTime: new Date().toISOString(),
           },
         ],
       }),
@@ -270,21 +217,7 @@ document.addEventListener("click", async (event) => {
 
     const result = await response.json();
     console.log(result.message);
-
-    // 返信を表示する処理を追加
-    const replyCard = document.createElement("div");
-    replyCard.className = "reply-card";
-    replyCard.innerHTML = `
-      <div class="reply-meta">${userid}</div>
-      <div class="reply-content">${replyText}</div>
-      <div class="reply-date">${new Date().toLocaleDateString("ja-JP")}</div>
-    `;
-    const replyThread = document.querySelector(
-      `.feed-item[data-post-id="${postId}"] .reply-thread`
-    );
-    replyThread.appendChild(replyCard);
-
-    loadFeed();
+    loadFeed(); // フィードをリロードしてリプライを表示
   }
 });
 
