@@ -389,7 +389,8 @@ class AuthServer {
         return true;
       }
     } catch (error) {
-      console.error(error.message);
+      console.error("SCRは利用できません。");
+      console.log("ログ:" + statuscode);
     }
   }
   /**

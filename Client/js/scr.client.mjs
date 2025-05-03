@@ -137,6 +137,9 @@ function createReplyHTML(postValue) {
  */
 export default async function loadFeed() {
   try {
+    if(typeof window.scr_url === undefined){
+      throw new Error("指定されたSCRサーバーは存在しません。")
+    }
     const response = await fetch(window.scr_url + "/get");
     const data = await response.json();
     //!undefinedかテスト
