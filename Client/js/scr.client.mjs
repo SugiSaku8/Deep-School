@@ -1,7 +1,19 @@
 // script.js
+
+/**
+ * 投稿ボタンの要素
+ * @type {HTMLButtonElement}
+ */
 const postButton = document.getElementById("post-button");
+/**
+ * フィード表示領域の要素
+ * @type {HTMLElement}
+ */
 const feedContent = document.getElementById("feed-content");
 
+/**
+ * 投稿ボタンクリック時のイベントリスナー
+ */
 postButton.addEventListener("click", async () => {
   const username = document.getElementById("username").value;
   const userid = document.getElementById("userid").value;
@@ -29,7 +41,11 @@ postButton.addEventListener("click", async () => {
   loadFeed();
 });
 
-// 0を除去する関数
+/**
+ * オブジェクトから値が0のプロパティを除去する
+ * @param {Object} obj 対象のオブジェクト
+ * @returns {Object} 0を除去した新しいオブジェクト
+ */
 function removeZeros(obj) {
   const newObj = {};
 
@@ -42,6 +58,12 @@ function removeZeros(obj) {
   return newObj;
 }
 
+/**
+ * ドット区切りのパスでオブジェクトから値を取得する
+ * @param {Object} data 対象データ
+ * @param {string} path パス（例: "foo.bar"）
+ * @returns {*} 取得した値、またはnull
+ */
 function getValue(data, path) {
   if (!data || typeof data !== "object") return null;
 
@@ -58,12 +80,21 @@ function getValue(data, path) {
   return current;
 }
 
+/**
+ * 投稿データを取得する
+ * @param {string} file 投稿IDまたはファイル名
+ * @returns {Promise<Object>} 投稿データ
+ */
 async function getPost(file) {
   const response = await fetch(scr_url + "/get?text=" + file);
   const data = await response.json();
   return data;
 }
 
+/**
+ * フィードに投稿を追加する
+ * @param {Object} postValue 投稿データ
+ */
 function addfeed(postValue) {
   let div = document.createElement("div");
   div.className = "feed-item";
@@ -76,6 +107,11 @@ function addfeed(postValue) {
   feedContent.appendChild(div);
 }
 
+/**
+ * リプライHTMLを生成する
+ * @param {Object} postValue 投稿データ
+ * @returns {string} リプライHTML
+ */
 function createReplyHTML(postValue) {
   // LinkerDataからreplyedのpostIdを取得
   const replyedPostId = postValue.LinkerData.find(
@@ -95,6 +131,10 @@ function createReplyHTML(postValue) {
   return html;
 }
 
+/**
+ * フィードを読み込んで表示する
+ * @returns {Promise<void>}
+ */
 export default async function loadFeed() {
   try {
     const response = await fetch(window.scr_url + "/get");
@@ -181,6 +221,9 @@ export default async function loadFeed() {
   }
 }
 
+/**
+ * リプライボタン・リプライ送信ボタンのイベントリスナー
+ */
 document.addEventListener("click", async (event) => {
   if (event.target.classList.contains("reply-button")) {
     const postId = event.target.dataset.postId;
