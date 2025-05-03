@@ -960,3 +960,6 @@ body::-webkit-scrollbar {
   text-align: left;
   line-height: 1.5;
 }
+#loginForm{
+  display:none;
+}
