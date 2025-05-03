@@ -141,8 +141,7 @@ export default async function loadFeed() {
     const data = await response.json();
     //!undefinedかテスト
     if (typeof data === undefined) {
-      console.error("SCRにデータが存在しません。");
-      throw new Error();
+      throw new Error("SCRにデータが存在しません。");
     }
     const numberOfPostsToLoad = Math.min(50); // 最大 50 件、またはデータ数
     const loadedPosts = [];
@@ -151,8 +150,7 @@ export default async function loadFeed() {
     // 1. すべての投稿をロードし、postsMap に保存
     //!undefinedかテスト
     if (typeof data[1] === undefined) {
-      console.error("SCRにデータが存在しません。");
-      throw new Error();
+      throw new Error("SCRにデータが存在しません。");
     }
     for (let i = 0; i < data.length; i++) {
       let selectedPost = data[i];
@@ -162,8 +160,7 @@ export default async function loadFeed() {
         selectedPost === null ||
         !selectedPost
       ) {
-        console.error("SCRにデータが存在しません。");
-        throw new Error();
+        throw new Error("SCRにデータが存在しません。");
       }
       let feedContenter = await getPost(selectedPost);
       let postValue = feedContenter.value;
