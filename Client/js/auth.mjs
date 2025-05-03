@@ -440,10 +440,24 @@ window.onload = async function () {
   document
     .getElementById("school_login_btn")
     .addEventListener("click", async () => {
-      let stuth = new AuthServer(document.getElementById("schoolId").value);
-      await stuth.callTest();
-      await loadFeed();
-      window.scr_url = stuth.url;
-      console.log("SCRのURLを設定しました。");
+      if (document.getElementById("schoolId").value === null) {
+        var result = window.confirm(
+          "学校IDを入力していません。\n学校に接続せず利用しますか？"
+        );
+
+        if (result) {
+          document.getElementById("login").style.display = "none";
+          document.getElementById("scr_menu_icon").style.display = "none";
+          document.getElementById("menu").style.display = "block";
+        } else {
+          return;
+        }
+      } else {
+        let stuth = new AuthServer(document.getElementById("schoolId").value);
+        await stuth.callTest();
+        await loadFeed();
+        window.scr_url = stuth.url;
+        console.log("SCRのURLを設定しました。");
+      }
     });
 };
