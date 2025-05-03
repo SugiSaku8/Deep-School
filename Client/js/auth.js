@@ -362,9 +362,9 @@ window.onload = async function () {
   document
     .getElementById("school_login_btn")
     .addEventListener("click", async () => {
-      let geoauth = new AuthServer(document.getElementById("schoolId").value);
-      await geoauth.callTest();
-      window.scr_url = geoauth.url;
+      let stuth = new AuthServer(document.getElementById("schoolId").value);
+      await stuth.callTest();
+      window.scr_url = stuth.url;
       console.log("SCRのURLを設定しました。");
     });
 };
