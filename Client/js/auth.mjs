@@ -8,7 +8,13 @@ const SCOPES = [
   "https://www.googleapis.com/auth/drive.appdata",
 ];
 
+/**
+ * Google認証を管理するクラス
+ */
 class GoogleAuthManager {
+  /**
+   * コンストラクタ
+   */
   constructor() {
     this.tokenClient = null;
     this.accessToken = null;
@@ -16,7 +22,10 @@ class GoogleAuthManager {
     this.TOKEN_VALIDITY_MS = 104 * 24 * 60 * 60 * 1000; // 104日
   }
 
-  // 初期化処理
+  /**
+   * 認証の初期化処理を行う
+   * @returns {Promise<void>}
+   */
   async initialize() {
     // 1. localStorageからトークンを取得
     const savedToken = localStorage.getItem("google_access_token");
@@ -65,7 +74,11 @@ class GoogleAuthManager {
     google.accounts.id.prompt();
   }
 
-  // 認証レスポンスのハンドリング
+  /**
+   * Google認証レスポンスのハンドリング
+   * @param {Object} response Google認証レスポンス
+   * @returns {Promise<void>}
+   */
   async handleCredentialResponse(response) {
     console.log("認証トークンを受信:", response.credential);
     document.getElementById("loginForm").style.display = "block";
@@ -80,7 +93,10 @@ class GoogleAuthManager {
     }
   }
 
-  // Google Drive API用の認証初期化
+  /**
+   * Google Drive API用の認証初期化
+   * @returns {Promise<void>}
+   */
   async initializeGoogleDriveAuth() {
     this.tokenClient = google.accounts.oauth2.initTokenClient({
       client_id: CLIENT_ID,
@@ -105,13 +121,24 @@ class GoogleAuthManager {
   }
 }
 
-// Google Driveの操作を管理するクラス
+/**
+ * Google Driveの操作を管理するクラス
+ */
 class GoogleDriveManager {
+  /**
+   * @param {GoogleAuthManager} authManager Google認証マネージャー
+   */
   constructor(authManager) {
     this.authManager = authManager;
   }
 
-  // アプリケーションデータの保存
+  /**
+   * アプリケーションデータをGoogle Driveに保存する
+   * @param {string} fileName ファイル名
+   * @param {Object} data 保存するデータ
+   * @returns {Promise<Object>} 保存結果
+   * @throws {Error} アクセストークンがない場合や保存失敗時
+   */
   async saveAppData(fileName, data) {
     if (!this.authManager.accessToken) {
       throw new Error(
@@ -155,7 +182,12 @@ class GoogleDriveManager {
     }
   }
 
-  // アプリケーションデータの読み込み
+  /**
+   * Google Driveからアプリケーションデータを読み込む
+   * @param {string} fileName ファイル名
+   * @returns {Promise<Object>} 読み込んだデータ
+   * @throws {Error} アクセストークンがない場合や読み込み失敗時
+   */
   async loadAppData(fileName) {
     if (!this.authManager.accessToken) {
       throw new Error(
@@ -200,12 +232,20 @@ class GoogleDriveManager {
   }
 }
 
-// UIの操作を管理するクラス
+/**
+ * UIの操作を管理するクラス
+ */
 class KOREGAUIManagerDAZE {
+  /**
+   * コンストラクタ
+   */
   constructor() {
     this.initializeEventListeners();
   }
 
+  /**
+   * UIイベントリスナーの初期化
+   */
   initializeEventListeners() {
     document.getElementById("menu").style.display = "none";
     //document.getElementById("kakuninForm").style.display = "flex";
@@ -213,13 +253,13 @@ class KOREGAUIManagerDAZE {
   }
 }
 
+/**
+ * サーバー認証・URL変換を管理するクラス
+ */
 class AuthServer {
   /**
    * AuthServerの初期化
-   *@param {string} serverUrl 教師などから提供され、ユーザーによって入力された変換ずみサーバーのURL
-   *@param {boolean} ctype 変換するか、複合するかのパラメーター。 trueで変換、falseで複合。
-   *@param {boolean} AuthServer.ServerStatus サーバーのステータス。これは、`this.TestFetch`によって入力される。
-   *@param {string} AuthServer.url 変換されたURL
+   * @param {string} serverUrl 教師などから提供され、ユーザーによって入力された変換ずみサーバーのURL
    */
   constructor(serverUrl) {
     console.log(serverUrl);
@@ -230,8 +270,8 @@ class AuthServer {
   }
   /**
    * 初期化時に呼び出される変換システムの呼び出しポイント
-   *@param {string} serverUrl 教師などから提供され、ユーザーによって入力された変換ずみサーバーのURL
-   *@param {Boolean} ctype 変換するか、複合するかのパラメーター。 trueで変換、falseで複合。
+   * @param {string} serverUrl 入力されたサーバーのURL
+   * @param {boolean} ctype 変換するか、複合するかのパラメーター。 trueで変換、falseで複合。
    */
   convert(serverUrl, ctype) {
     if (ctype) {
@@ -323,8 +363,9 @@ class AuthServer {
   // console.log(decoded); // http://localhost:8080 と https://example.com:3000 を変換
   /*
    * 変換されたサーバーのURLが存在するかどうか試す関数。
-   *@param {string} url 元の形態に`this.convert(:string:,false)`によって変換されたURL
-   *@param {boolean} sumsu 詳細な情報を要求するかの引数。trueで必要として、falseで不要とする。
+   * @param {string} url 元の形態に`this.convert(:string:,false)`によって変換されたURL
+   * @param {boolean} sumsu 詳細な情報を要求するかの引数。trueで必要として、falseで不要とする。
+   * @returns {Promise<boolean>} サーバーが存在するかどうか
    */
   async TestFetch(url, sumsu) {
     try {
@@ -351,9 +392,9 @@ class AuthServer {
       console.error(error.message);
     }
   }
-  /*
-   *`TestFetch`を実行するための関数
-   *  `await`で実行。
+  /**
+   * `TestFetch`を実行するための関数
+   * @returns {Promise<void>}
    */
   async callTest() {
     this.ServerStatus = await this.TestFetch(this.url, false);
@@ -364,6 +405,7 @@ class AuthServer {
     }
   }
 }
+
 // アプリケーションの初期化
 window.onload = async function () {
   //document.getElementById("kakuninForm").style.display = "none";
