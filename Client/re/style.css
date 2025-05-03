@@ -955,4 +955,5 @@ body::-webkit-scrollbar {
   height: 64px;
   cursor: pointer;
   display:none;
+  position:static;
 }
