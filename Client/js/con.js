@@ -1,8 +1,9 @@
 /**
  * @param {string} scr_url SCRのURL
  */
-export let scr_url;
+let scr_url;
+export default scr_url;
 /**
- *  @param {string} scr_type SCRのURLのタイプ。 
+ *  @param {string} scr_type SCRのURLのタイプ。
  */
 export let scr_type;
