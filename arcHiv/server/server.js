@@ -7,6 +7,7 @@ import fs_0ds from "./api/fs_0ds.js";
 import nimi from "./api/nimi_03d.js";
 import poid from "./api/poid_02d.js";
 import tyypin from "./api/tyypin.js";
+import rateLimit from 'express-rate-limit';
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 const app = express();
@@ -15,6 +16,14 @@ const auto = {
   size: 16,
   view: 128,
 };
+
+// Rate limiting middleware
+const limiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 20, // 20 requests per minute
+  message: 'Too many requests, please try again later.',
+});
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
@@ -196,12 +205,17 @@ class _index {
     });
   }
   async setupServer() {
-    app.get("/get", (req, res) => {
+    // Apply rate limiter to the /get endpoint
+    app.get("/get", limiter, (req, res) => {
       const query = req.query.text;
       if (!query || query === null) {
         res.json(this.NameRam);
       } else {
-        fs.readFile("./data/" + query, "utf8", (err, datas) => {
+        // Sanitize the file name to prevent path traversal
+        const safeQuery = path.basename(query);
+        const filePath = path.join("./data", safeQuery);
+
+        fs.readFile(filePath, "utf8", (err, datas) => {
           if (err) {
             console.error(`${query} の読み込みに失敗しました:`, err);
             return;
