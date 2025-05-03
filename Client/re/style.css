@@ -751,11 +751,12 @@ body {
 #scr_app {
   max-width: 1200px;
   margin: auto;
-
+  z-index: 10;
   background: none;
   padding: 40px 0 0 0;
   border-radius: 0;
   box-shadow: none;
+  overflow-y: scroll;
 }
 
 /* 検索バーUI */
