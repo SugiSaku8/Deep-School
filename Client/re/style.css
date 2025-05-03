@@ -54,17 +54,17 @@ body {
   padding: 30px;
   border-radius: 12px;
   gap: 15px;
-  text-align:center;
+  text-align: center;
 }
 
-#schoolId{
-  width:200px;;
+#schoolId {
+  width: 200px;
 }
 
 .login-form label {
   font-size: 1.5rem;
   color: #ffffff;
-  text-align:center;
+  text-align: center;
 }
 
 .login-form input {
@@ -73,7 +73,7 @@ body {
   border: none;
   border-radius: 6px;
   outline: none;
-  margin:auto;
+  margin: auto;
 }
 
 .submit-button {
@@ -859,7 +859,7 @@ textarea {
   scrollbar-width: none;
 }
 
-#feed::-webkit-scrollbar{
+#feed::-webkit-scrollbar {
   display: none;
 }
 /* 質問カード（feed-item） */
@@ -922,16 +922,17 @@ body::-webkit-scrollbar {
   display: none;
 }
 
-
 .batsu {
   display: block;
   position: relative;
   width: 30px;
   height: 30px;
-  cursor:pointer;
+  cursor: pointer;
 }
- 
-.batsu::before, .batsu::after { /* 共通設定 */
+
+.batsu::before,
+.batsu::after {
+  /* 共通設定 */
   content: "";
   position: absolute;
   top: 50%;
@@ -940,17 +941,18 @@ body::-webkit-scrollbar {
   height: 30px; /* 棒の高さ */
   background: #333;
 }
- 
+
 .batsu::before {
-  transform: translate(-50%,-50%) rotate(45deg);
-}
- 
-.batsu::after {
-  transform: translate(-50%,-50%) rotate(-45deg);
+  transform: translate(-50%, -50%) rotate(45deg);
 }
 
-#backicon{
-  width:64px;
-  height:64px;
-  
+.batsu::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+#backicon {
+  width: 64px;
+  height: 64px;
+  cursor: pointer;
+  display:none;
 }
