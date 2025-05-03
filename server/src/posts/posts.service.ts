@@ -69,6 +69,21 @@ export class PostsService {
 
   async getPostByQuery(query: string) {
     try {
+      if (typeof query !== 'string') {
+        console.error('Invalid query type. Expected string.');
+        return {
+          value: {
+            PostId: { value: "" },
+            PostName: { value: "" },
+            PostTime: { value: "" },
+            UserName: { value: "" },
+            UserId: { value: "" },
+            PostData: { value: "" },
+            LikerData: { value: "" },
+            LinkerData: [],
+          }
+        };
+      }
       const postId = query.startsWith('_') ? query.slice(1) : query;
       console.log('Searching for post with ID:', postId);
       
