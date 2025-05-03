@@ -307,6 +307,7 @@ class AuthServer {
           return false;
         }
       } else {
+        document.getElementById("menu").style.display = 'block';
         return true;
       }
     } catch (error) {
