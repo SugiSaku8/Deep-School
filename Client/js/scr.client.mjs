@@ -139,7 +139,8 @@ export default async function loadFeed() {
   try {
     const response = await fetch(window.scr_url + "/get");
     const data = await response.json();
-    if (data === undefined) {
+    //!undefinedかテスト
+    if (typeof data === undefined) {
       console.error("SCRにデータが存在しません。");
       throw new Error();
     }
@@ -148,14 +149,16 @@ export default async function loadFeed() {
     const postsMap = new Map(); // postId をキーとして投稿を保存
 
     // 1. すべての投稿をロードし、postsMap に保存
-    if (data[1] === undefined) {
+    //!undefinedかテスト
+    if (typeof data[1] === undefined) {
       console.error("SCRにデータが存在しません。");
       throw new Error();
     }
     for (let i = 0; i < data.length; i++) {
       let selectedPost = data[i];
+      //!undefinedかテスト
       if (
-        selectedPost === undefined ||
+        typeof selectedPost === undefined ||
         selectedPost === null ||
         !selectedPost
       ) {
