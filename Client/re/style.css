@@ -749,7 +749,7 @@ body {
 
 /* アプリ全体の枠 */
 #scr_app {
-  height: 9000px;
+  
   max-width: 1200px;
   margin: auto;
   z-index: 10;
@@ -846,6 +846,8 @@ textarea {
   flex-wrap: wrap;
   gap: 40px 30px;
   justify-content: center;
+  height: 9000px;
+  overflow-y: scroll;
 }
 
 /* 質問カード（feed-item） */
