@@ -8,7 +8,7 @@ postButton.addEventListener("click", async () => {
   const postname = document.getElementById("postname").value;
   const postdata = document.getElementById("postdata").value;
 
-  const response = await fetch("http://localhost:8080/post", {
+  const response = await fetch(window.scr_url + "/post", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -59,7 +59,7 @@ function getValue(data, path) {
 }
 
 async function getPost(file) {
-  const response = await fetch("http://localhost:8080/get?text=" + file);
+  const response = await fetch(scr_url + "/get?text=" + file);
   const data = await response.json();
   return data;
 }
@@ -95,9 +95,9 @@ function createReplyHTML(postValue) {
   return html;
 }
 
-async function loadFeed() {
+export default async function loadFeed() {
   try {
-    const response = await fetch("http://localhost:8080/get");
+    const response = await fetch(window.scr_url + "/get");
     const data = await response.json();
     const numberOfPostsToLoad = Math.min(50); // 最大 50 件、またはデータ数
     const loadedPosts = [];
@@ -220,4 +220,3 @@ document.addEventListener("click", async (event) => {
     loadFeed(); // フィードをリロードしてリプライを表示
   }
 });
-
