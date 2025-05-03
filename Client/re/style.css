@@ -749,6 +749,7 @@ body {
 
 /* アプリ全体の枠 */
 #scr_app {
+  height: 9000px;
   max-width: 1200px;
   margin: auto;
   z-index: 10;
