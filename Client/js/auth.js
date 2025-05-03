@@ -294,6 +294,7 @@ class AuthServer {
    */
   async TestFetch(url, sumsu) {
     try {
+      console.log("TestFetch attempts to communicate with "+url);
       const response = await fetch(url);
       const statuscode = response.status;
       if (!response.ok) {
