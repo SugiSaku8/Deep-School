@@ -756,7 +756,6 @@ body {
   padding: 40px 0 0 0;
   border-radius: 0;
   box-shadow: none;
-  overflow-y: scroll;
 }
 
 /* 検索バーUI */
@@ -907,4 +906,30 @@ textarea {
 /* スクロールバー非表示（オプション） */
 body::-webkit-scrollbar {
   display: none;
+}
+
+
+.batsu {
+  display: block;
+  position: relative;
+  width: 30px;
+  height: 30px;
+}
+ 
+.batsu::before, .batsu::after { /* 共通設定 */
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px; /* 棒の幅（太さ） */
+  height: 30px; /* 棒の高さ */
+  background: #333;
+}
+ 
+.batsu::before {
+  transform: translate(-50%,-50%) rotate(45deg);
+}
+ 
+.batsu::after {
+  transform: translate(-50%,-50%) rotate(-45deg);
 }
