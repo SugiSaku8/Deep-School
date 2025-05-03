@@ -85,7 +85,7 @@ function getValue(data, path) {
  */
 async function getPost(file) {
   const response = await fetch(
-    scr_url + "http://localhost:3776/get?text=" + file
+    scr_url + "http://localhost:8080/get?text=" + file
   );
   const data = await response.json();
   return data;
@@ -125,7 +125,7 @@ function addfeed(postValue) {
  */
 async function loadFeed() {
   try {
-    const response = await fetch("http://localhost:3776/get");
+    const response = await fetch("http://localhost:8080/get");
     const data = await response.json();
     const numberOfPostsToLoad = Math.min(50); // 最大 50 件、またはデータ数
     const loadedPosts = [];
