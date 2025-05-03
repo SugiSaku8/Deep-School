@@ -1,14 +1,20 @@
 // DOMとすべてのスクリプトの読み込みを待つ
 window.addEventListener("load", () => {
+  /**
+   * ChatManagerの初期化チェック
+   */
   if (!window.chatManager) {
     console.error("チャットマネージャーの初期化に失敗しました。");
     return;
   }
 
+  /** @type {ChatManager} */
   const chatManager = window.chatManager;
   chatManager.loadChat();
 
-  // チャット送信ボタン
+  /**
+   * チャット送信ボタンのクリックイベント
+   */
   document
     .getElementById("chat-submit-btn")
     .addEventListener("click", async () => {
@@ -21,7 +27,9 @@ window.addEventListener("load", () => {
       }
     });
 
-  // チャット入力のEnterキー
+  /**
+   * チャット入力欄のCtrl+Enterで送信
+   */
   document
     .getElementById("chat-input")
     .addEventListener("keydown", async (e) => {
@@ -37,7 +45,10 @@ window.addEventListener("load", () => {
       }
     });
 
-  // 新規チャットボタン
+  /**
+   * 新規チャットボタンのクリックイベント
+   * チャット履歴をクリアし、スプラッシュ画面を表示
+   */
   document.getElementById("new-chat-btn").addEventListener("click", () => {
     if (confirm("チャットをクリアしますか？")) {
       chatManager.clearChat();
@@ -45,7 +56,9 @@ window.addEventListener("load", () => {
     }
   });
 
-  // スプラッシュ画面の送信ボタン
+  /**
+   * スプラッシュ画面の送信ボタンのクリックイベント
+   */
   document.getElementById("submit-btn").addEventListener("click", async () => {
     const input = document.getElementById("user-input");
     const message = input.value.trim();
@@ -57,7 +70,9 @@ window.addEventListener("load", () => {
     }
   });
 
-  // スプラッシュ画面の入力欄のEnterキー
+  /**
+   * スプラッシュ画面の入力欄のEnterキーで送信
+   */
   document
     .getElementById("user-input")
     .addEventListener("keydown", async (e) => {
@@ -74,7 +89,9 @@ window.addEventListener("load", () => {
       }
     });
 
-  // イベントリスナーの設定
+  /**
+   * UIManager経由の送信ボタンイベント
+   */
   UIManager.elements.submitBtn.addEventListener("click", () => {
     const text = UIManager.elements.userInput.value.trim();
     if (!text) return;
@@ -84,6 +101,9 @@ window.addEventListener("load", () => {
     UIManager.elements.userInput.value = "";
   });
 
+  /**
+   * UIManager経由のチャット送信ボタンイベント
+   */
   UIManager.elements.chatSubmitBtn.addEventListener("click", () => {
     const text = UIManager.elements.chatInput.value.trim();
     if (!text) return;
@@ -92,19 +112,27 @@ window.addEventListener("load", () => {
     UIManager.elements.chatInput.value = "";
   });
 
+  /**
+   * UIManager経由の新規チャットボタンイベント
+   */
   UIManager.elements.newChatBtn.addEventListener("click", () => {
     UIManager.clearMessages();
     UIManager.showSplash();
     chatManager.clearChat();
   });
 
-  // Enterキーのイベント処理
+  /**
+   * UIManager経由のユーザー入力欄Enterキーイベント
+   */
   UIManager.elements.userInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
       UIManager.elements.submitBtn.click();
     }
   });
 
+  /**
+   * UIManager経由のチャット入力欄Enterキーイベント
+   */
   UIManager.elements.chatInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
       UIManager.elements.chatSubmitBtn.click();
