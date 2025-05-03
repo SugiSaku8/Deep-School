@@ -170,22 +170,18 @@
       >
         New
       </button>
-      <div id="post-form" style="display:none;">
-        <span class="batsu" onclick="document.getElementById('post-form').style.display = 'none';"></span>
+      <div id="post-form" style="display: none">
+        <span
+          class="batsu"
+          onclick="document.getElementById('post-form').style.display = 'none';"
+        ></span>
         <input type="text" id="username" placeholder="ユーザー名" required />
         <input type="text" id="userid" placeholder="ユーザーID" required />
         <input type="text" id="postname" placeholder="ポスト名" required />
         <textarea id="postdata" placeholder="ポスト内容" required></textarea>
-        <button
-          id="post-button"
-          class="auto-btn"
-          
-        >
-          ポストする
-        </button>
+        <button id="post-button" class="auto-btn">ポストする</button>
       </div>
       <div id="feed">
-        <h2>フィード</h2>
         <div id="feed-content"></div>
       </div>
     </div>

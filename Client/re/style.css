@@ -842,7 +842,7 @@ textarea {
   margin-top: 20px;
   display: flex;
   flex-wrap: wrap;
-  gap: 40px 30px;
+  gap: 30px 20px;
   justify-content: center;
   height: 220px;
   overflow-y: scroll;
