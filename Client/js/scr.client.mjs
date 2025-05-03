@@ -137,7 +137,7 @@ function createReplyHTML(postValue) {
  */
 export default async function loadFeed() {
   try {
-    if(typeof window.scr_url === undefined){
+    if(typeof window.scr_url === undefined || window.scr_url === null){
       throw new Error("指定されたSCRサーバーは存在しません。")
     }
     console.log("Loading Feed With "+window.scr_url)
