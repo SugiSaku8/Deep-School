@@ -486,6 +486,7 @@ window.onload = async function () {
         await loadFeed();
         window.scr_url = stuth.url;
         console.log("SCRのURLを設定しました。");
+        document.getElementById("menu").style.display = "block";
       }
     });
 };
