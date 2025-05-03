@@ -101,7 +101,7 @@ function addfeed(postValue) {
         <div class="feed-card">
           <h3>${postValue.PostName?.value || ""}</h3>
           <div class="meta">
-            <span>${postValue.Genre?.value || "general"}</span>
+            <span>${postValue.Genre?.value || ""}</span>
             <span>${postValue.UserId?.value || ""}</span>
           </div>
           <div class="content">
