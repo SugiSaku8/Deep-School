@@ -38,10 +38,32 @@ class GoogleAuthManager {
         // まだ有効
         this.accessToken = savedToken;
         this.tokenTimestamp = Number(savedTimestamp);
-        document.getElementById("loginForm").style.display = "block";
-        document.getElementById("openLoginButton").style.display = "none";
-        // ここでreturnすれば再認証不要
-        return;
+        //SchoolID認証処理
+        const dsToken = localStorage.getItem("ds_id");
+        const dsTimestamp = localStorage.getItem("ds_id_timestamp");
+        if (dsToken && dsTimestamp) {
+          const now = Date.now();
+          const tokenAge = now - Number(dsTimestamp);
+          if (tokenAge < this.TOKEN_VALIDITY_MS) {
+            this.accessToken = savedToken;
+            this.tokenTimestamp = Number(savedTimestamp);
+            document.getElementById("loginForm").style.display = "none";
+            document.getElementById("openLoginButton").style.display = "none";
+            document.getElementById("memu").style.display = "block";
+            return;
+          } else {
+            // 期限切れ
+            localStorage.removeItem("ds_id");
+            localStorage.removeItem("ds_id_timestamp");
+            document.getElementById("loginForm").style.display = "block";
+            document.getElementById("openLoginButton").style.display = "none";
+          }
+          return;
+        } else {
+          // 期限切れ
+          localStorage.removeItem("google_access_token");
+          localStorage.removeItem("google_token_timestamp");
+        }
       } else {
         // 期限切れ
         localStorage.removeItem("google_access_token");
@@ -267,6 +289,8 @@ class AuthServer {
     console.log("SCRのURL:" + this.url);
     window.scr_url = this.url;
     this.ServerStatus = null;
+    localStorage.setItem(this.url);
+    localStorage.getItem(new Date());
   }
   /**
    * 初期化時に呼び出される変換システムの呼び出しポイント
