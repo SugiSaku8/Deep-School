@@ -29,6 +29,9 @@
       <p>10月</p>
       <p>3日</p>
     </div>
+    <div id="backicon" onclick="backtomenu()">
+      <img src="./re/ico/home.svg" />
+    </div>
     <div class="container_top" id="login">
       <h1 class="title">Deep-School</h1>
       <p>&nbsp;</p>
@@ -192,6 +195,13 @@
         document.getElementById("toaster_chat").style.display = "block";
         document.getElementById("splash").style.display = "block";
         document.getElementById("menu").style.display = "none";
+      }
+      function backtomenu() {
+        document.getElementById("toaster_chat").style.display = "none";
+        document.getElementById("splash").style.display = "none";
+        document.getElementById("scr_app").style.display = "none";
+        document.getElementById("login").style.display = "none";
+        document.getElementById("menu").style.display = "block";
       }
       function InitSCRwindow() {
         document.getElementById("toaster_chat").style.display = "none";
