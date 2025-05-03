@@ -87,8 +87,7 @@ export class PostsService {
       const postId = query.startsWith('_') ? query.slice(1) : query;
       console.log('Searching for post with ID:', postId);
       
-      const post = await this.postModel.findOne({ PostId: postId }).exec();
-      
+      const post = await this.postModel.findOne({ PostId: { $eq: postId } }).exec();      
       if (!post) {
         console.log('Post not found for ID:', postId);
         // 投稿が見つからない場合は空のデータを返す
