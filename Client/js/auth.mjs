@@ -62,8 +62,7 @@ class GoogleAuthManager {
 
     // UIの制御
     if (googleValid || schoolValid) {
-      document.getElementById("loginForm").style.display = "none";
-      document.getElementById("openLoginButton").style.display = "none";
+      document.getElementById("login").style.display = "none";
       document.getElementById("menu").style.display = "block";
       return;
     } else {
