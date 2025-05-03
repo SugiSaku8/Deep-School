@@ -51,10 +51,6 @@
   "devDependencies": {
     "electron": "latest",
     "electron-build": "latest",
-    "electron-builder": "latest",
-    "qs": "latest",
-    "jszip": "latest",
-    "bl": "latest",
-    "tunnel-agent": "latest"
+    "electron-builder": "latest"
   }
 }
