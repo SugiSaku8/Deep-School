@@ -949,11 +949,6 @@ body::-webkit-scrollbar {
 .batsu::after {
   transform: translate(-50%, -50%) rotate(-45deg);
 }
-
-#backicon {
-  width: 64px;
-  height: 64px;
-  cursor: pointer;
-  display:none;
-  position:static;
+#nindtitle {
+  display: none;
 }
