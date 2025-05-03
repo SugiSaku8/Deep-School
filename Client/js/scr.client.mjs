@@ -289,9 +289,5 @@ document.addEventListener("click", async (event) => {
   }
 });
 
-/**
- * ページロード時にフィードを読み込む
- */
-window.onload = async function () {
-  await loadFeed();
-};
+
+export default loadFeed();

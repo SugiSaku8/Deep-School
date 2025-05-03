@@ -364,6 +364,7 @@ window.onload = async function () {
     .addEventListener("click", async () => {
       let stuth = new AuthServer(document.getElementById("schoolId").value);
       await stuth.callTest();
+      await loadFeed();
       window.scr_url = stuth.url;
       console.log("SCRのURLを設定しました。");
     });
