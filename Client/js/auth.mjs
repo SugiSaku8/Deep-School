@@ -68,7 +68,7 @@ class GoogleAuthManager {
     } else {
       if (!googleValid) {
         document.getElementById("login").style.display = "block";
-        document.getElementById("loginForm").style.display = "none";
+       // document.getElementById("loginForm").style.display = "none";
         document.getElementById("openLoginButton").style.display = "block";
         document.getElementById("menu").style.display = "none";
       } else {
