@@ -458,7 +458,7 @@ window.onload = async function () {
         }
       } else {
         document.getElementById("itisttitle").style.display = "none";
-        document.getElementById("nindtitle").style.display = "none";
+        document.getElementById("nindtitle").style.display = "block";
         let stuth = new AuthServer(document.getElementById("schoolId").value);
         await stuth.callTest();
         await loadFeed();
