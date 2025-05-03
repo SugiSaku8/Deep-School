@@ -1,4 +1,4 @@
-import loadFeed from './scr.client.mjs';
+import loadFeed from "./scr.client.mjs";
 // Google APIのクライアントID
 const CLIENT_ID =
   "54111871338-nv4bn99r48cohhverg3l9oicirthmtpp.apps.googleusercontent.com";
@@ -65,6 +65,13 @@ class GoogleAuthManager {
           throw tokenResponse;
         }
         this.accessToken = tokenResponse.access_token;
+        this.tokenTimestamp = Date.now();
+        // ここでlocalStorageに保存
+        localStorage.setItem("google_access_token", this.accessToken);
+        localStorage.setItem(
+          "google_token_timestamp",
+          this.tokenTimestamp.toString()
+        );
         console.log("Google Drive APIのアクセストークンを取得しました");
       },
     });
