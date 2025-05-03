@@ -914,6 +914,7 @@ body::-webkit-scrollbar {
   position: relative;
   width: 30px;
   height: 30px;
+  cursor:pointer;
 }
  
 .batsu::before, .batsu::after { /* 共通設定 */
