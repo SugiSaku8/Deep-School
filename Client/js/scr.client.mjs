@@ -139,11 +139,15 @@ export default async function loadFeed() {
   try {
     const response = await fetch(window.scr_url + "/get");
     const data = await response.json();
+    if (data === undefined) {
+    }
     const numberOfPostsToLoad = Math.min(50); // 最大 50 件、またはデータ数
     const loadedPosts = [];
     const postsMap = new Map(); // postId をキーとして投稿を保存
 
     // 1. すべての投稿をロードし、postsMap に保存
+    if (data[1] === undefined) {
+    }
     for (let i = 0; i < data.length; i++) {
       let selectedPost = data[i];
       let feedContenter = await getPost(selectedPost);
