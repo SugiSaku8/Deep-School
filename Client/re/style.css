@@ -846,8 +846,14 @@ textarea {
   justify-content: center;
   height: 220px;
   overflow-y: scroll;
+  /*スクロールバー対策*/
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
+#feed::-webkit-scrollbar{
+  display: none;
+}
 /* 質問カード（feed-item） */
 .feed-item[data-post-id] {
   margin-bottom: 0;
