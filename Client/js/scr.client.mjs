@@ -289,5 +289,4 @@ document.addEventListener("click", async (event) => {
   }
 });
 
-
 export default loadFeed();
