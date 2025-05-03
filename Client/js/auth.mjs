@@ -66,15 +66,9 @@ class GoogleAuthManager {
       document.getElementById("menu").style.display = "block";
       return;
     } else {
-      if (!googleValid) {
-        document.getElementById("openLoginButton").style.display = "block";
-        document.getElementById("menu").style.display = "none";
-      }
-      if (!schoolValid) {
-        document.getElementById("loginForm").style.display = "block";
-        document.getElementById("openLoginButton").style.display = "block";
-        document.getElementById("menu").style.display = "none";
-      }
+      document.getElementById("loginForm").style.display = "none";
+      document.getElementById("openLoginButton").style.display = "block";
+      document.getElementById("menu").style.display = "none";
     }
 
     // Googleアカウントの初期化
