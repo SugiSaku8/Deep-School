@@ -171,7 +171,7 @@
         New
       </button>
       <div id="post-form" style="display:none;">
-        <span class="batsu"></span>
+        <span class="batsu" onclick="document.getElementById('post-form').style.display = 'none';"></span>
         <input type="text" id="username" placeholder="ユーザー名" required />
         <input type="text" id="userid" placeholder="ユーザーID" required />
         <input type="text" id="postname" placeholder="ポスト名" required />
@@ -179,7 +179,7 @@
         <button
           id="post-button"
           class="auto-btn"
-          onclick="document.getElementById('post-form').style.display = 'none';"
+          
         >
           ポストする
         </button>
