@@ -154,6 +154,14 @@ export default async function loadFeed() {
     }
     for (let i = 0; i < data.length; i++) {
       let selectedPost = data[i];
+      if (
+        selectedPost === undefined ||
+        selectedPost === null ||
+        !selectedPost
+      ) {
+        console.error("SCRにデータが存在しません。");
+        throw new Error();
+      }
       let feedContenter = await getPost(selectedPost);
       let postValue = feedContenter.value;
       postsMap.set(postValue.PostId.value, postValue);
