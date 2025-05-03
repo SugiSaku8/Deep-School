@@ -451,11 +451,13 @@ window.onload = async function () {
         if (result) {
           document.getElementById("login").style.display = "none";
           document.getElementById("scr_menu_icon").style.display = "none";
+          document.getElementById("backicon").style.display = "block";
           document.getElementById("menu").style.display = "block";
         } else {
           return;
         }
       } else {
+        document.getElementById("backicon").style.display = "block";
         let stuth = new AuthServer(document.getElementById("schoolId").value);
         await stuth.callTest();
         await loadFeed();
