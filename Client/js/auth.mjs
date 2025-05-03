@@ -309,7 +309,8 @@ class AuthServer {
           return false;
         }
       } else {
-        document.getElementById("login").style.display = "block";
+        document.getElementById("login").style.display = "none";
+        document.getElementById("app_scr").style.display = "none";
 
         document.getElementById("menu").style.display = "block";
         return true;
