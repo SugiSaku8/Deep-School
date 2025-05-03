@@ -217,7 +217,7 @@ class _index {
 
         fs.readFile(filePath, "utf8", (err, datas) => {
           if (err) {
-            console.error(`${query} の読み込みに失敗しました:`, err);
+            console.error(`%s の読み込みに失敗しました:`, query, err);
             return;
           }
           res.json(JSON.parse(datas));
