@@ -749,7 +749,6 @@ body {
 
 /* アプリ全体の枠 */
 #scr_app {
-  
   max-width: 1200px;
   margin: auto;
   z-index: 10;
@@ -846,7 +845,7 @@ textarea {
   flex-wrap: wrap;
   gap: 40px 30px;
   justify-content: center;
-  height: 9000px;
+  height: 500px;
   overflow-y: scroll;
 }
 
