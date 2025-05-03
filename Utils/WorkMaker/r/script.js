@@ -68,8 +68,10 @@ class QuestionCreator {
     this.examples.forEach((example, index) => {
       const div = document.createElement("div");
       div.className = "example-item";
+      // Sanitize the example text
+      const sanitizedExample = this.sanitizeHTML(example);
       div.innerHTML = `
-                <p>${example}</p>
+                <p>${sanitizedExample}</p>
                 <button onclick="questionCreator.removeExample(${index})">削除</button>
             `;
       examplesContainer.appendChild(div);
@@ -154,6 +156,8 @@ class QuestionCreator {
     this.options.forEach((option, index) => {
       const div = document.createElement("div");
       div.className = "option-item";
+      // Sanitize the option text
+      const sanitizedText = this.sanitizeHTML(option.text);
       div.innerHTML = `
                   <input type="text" 
                          placeholder="選択肢のテキスト" 
@@ -478,6 +482,18 @@ class QuestionCreator {
       questionElement.innerText = question.title;
       questionsContainer.appendChild(questionElement);
     });
+  }
+
+  /**
+   * HTMLをサニタイズする
+   * @param {string} html サニタイズするHTML
+   * @returns {string} サニタイズされたHTML
+   */
+  sanitizeHTML(html) {
+    const text = document.createTextNode(html);
+    const p = document.createElement('p');
+    p.appendChild(text);
+    return p.innerHTML;
   }
 }
 
