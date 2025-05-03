@@ -166,7 +166,7 @@ export default async function loadFeed() {
         <p>${postValue.PostName.value}</p>
         <p>${postValue.PostData.value}</p>
         <small>${postValue.PostTime.value}</small>
-        <button class="reply-button" data-post-id="${postValue.PostId.value}">Reply</button>
+        <button class="reply-button auto-btn" data-post-id="${postValue.PostId.value}">Reply</button>
         <div class="reply-form" style="display:none;">
           <textarea class="reply-text"></textarea>
           <button class="submit-reply auto-btn" data-post-id="${postValue.PostId.value}">Submit Reply</button>
