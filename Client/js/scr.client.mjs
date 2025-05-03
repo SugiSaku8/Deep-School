@@ -140,6 +140,7 @@ export default async function loadFeed() {
     if(typeof window.scr_url === undefined){
       throw new Error("指定されたSCRサーバーは存在しません。")
     }
+    console.log("Loading Feed With "+window.scr_url)
     const response = await fetch(window.scr_url + "/get");
     const data = await response.json();
     //!undefinedかテスト
