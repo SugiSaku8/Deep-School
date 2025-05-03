@@ -68,12 +68,16 @@ class QuestionCreator {
     this.examples.forEach((example, index) => {
       const div = document.createElement("div");
       div.className = "example-item";
-      // Sanitize the example text
-      const sanitizedExample = this.sanitizeHTML(example);
-      div.innerHTML = `
-                <p>${sanitizedExample}</p>
-                <button onclick="questionCreator.removeExample(${index})">削除</button>
-            `;
+
+      const p = document.createElement('p');
+      p.textContent = example; // Use textContent to avoid HTML interpretation
+
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = '削除';
+      deleteButton.onclick = () => this.removeExample(index);
+
+      div.appendChild(p);
+      div.appendChild(deleteButton);
       examplesContainer.appendChild(div);
     });
   }
