@@ -26,49 +26,50 @@ class GoogleAuthManager {
    * 認証の初期化処理を行う
    * @returns {Promise<void>}
    */
+
   async initialize() {
-    // 1. localStorageからトークンを取得
+    // Googleトークンの確認
     const savedToken = localStorage.getItem("google_access_token");
     const savedTimestamp = localStorage.getItem("google_token_timestamp");
-
+    let googleValid = false;
     if (savedToken && savedTimestamp) {
       const now = Date.now();
       const tokenAge = now - Number(savedTimestamp);
       if (tokenAge < this.TOKEN_VALIDITY_MS) {
-        // まだ有効
         this.accessToken = savedToken;
         this.tokenTimestamp = Number(savedTimestamp);
-        //SchoolID認証処理
-        const dsToken = localStorage.getItem("ds_id");
-        const dsTimestamp = localStorage.getItem("ds_id_timestamp");
-        if (dsToken && dsTimestamp) {
-          const now = Date.now();
-          const tokenAge = now - Number(dsTimestamp);
-          if (tokenAge < this.TOKEN_VALIDITY_MS) {
-            this.accessToken = savedToken;
-            this.tokenTimestamp = Number(savedTimestamp);
-            document.getElementById("loginForm").style.display = "none";
-            document.getElementById("openLoginButton").style.display = "none";
-            document.getElementById("memu").style.display = "block";
-            return;
-          } else {
-            // 期限切れ
-            localStorage.removeItem("ds_id");
-            localStorage.removeItem("ds_id_timestamp");
-            document.getElementById("loginForm").style.display = "block";
-            document.getElementById("openLoginButton").style.display = "none";
-          }
-          return;
-        } else {
-          // 期限切れ
-          localStorage.removeItem("google_access_token");
-          localStorage.removeItem("google_token_timestamp");
-        }
+        googleValid = true;
       } else {
-        // 期限切れ
         localStorage.removeItem("google_access_token");
         localStorage.removeItem("google_token_timestamp");
       }
+    }
+
+    // SchoolIDトークンの確認
+    const dsToken = localStorage.getItem("ds_id");
+    const dsTimestamp = localStorage.getItem("ds_id_timestamp");
+    let schoolValid = false;
+    if (dsToken && dsTimestamp) {
+      const now = Date.now();
+      const tokenAge = now - Number(dsTimestamp);
+      if (tokenAge < this.TOKEN_VALIDITY_MS) {
+        schoolValid = true;
+      } else {
+        localStorage.removeItem("ds_id");
+        localStorage.removeItem("ds_id_timestamp");
+      }
+    }
+
+    // UIの制御
+    if (googleValid || schoolValid) {
+      document.getElementById("loginForm").style.display = "none";
+      document.getElementById("openLoginButton").style.display = "none";
+      document.getElementById("menu").style.display = "block";
+      return;
+    } else {
+      document.getElementById("loginForm").style.display = "block";
+      document.getElementById("openLoginButton").style.display = "block";
+      document.getElementById("menu").style.display = "none";
     }
 
     // Googleアカウントの初期化
