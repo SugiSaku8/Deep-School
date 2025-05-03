@@ -478,15 +478,17 @@ window.onload = async function () {
           document.getElementById("backicon").style.display = "block";
           document.getElementById("menu").style.display = "block";
         } else {
+          document.getElementById("menu").style.display = "block";
+
           return;
         }
       } else {
+        document.getElementById("menu").style.display = "block";
         let stuth = new AuthServer(document.getElementById("schoolId").value);
         await stuth.callTest();
         await loadFeed();
         window.scr_url = stuth.url;
         console.log("SCRのURLを設定しました。");
-        document.getElementById("menu").style.display = "block";
       }
     });
 };
