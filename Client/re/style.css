@@ -44,7 +44,7 @@ body {
   font-weight: bold;
   margin-top: -100px;
   font-family: "anka";
-  cursor:pointer;
+  cursor: pointer;
 }
 
 /* Login Form */
@@ -949,4 +949,14 @@ body::-webkit-scrollbar {
 
 .batsu::after {
   transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.copyright {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  font-size: 22px;
+  color: white;
+  text-align: left;
+  line-height: 1.5;
 }
