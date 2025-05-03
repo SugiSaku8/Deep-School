@@ -440,7 +440,10 @@ window.onload = async function () {
   document
     .getElementById("school_login_btn")
     .addEventListener("click", async () => {
-      if (document.getElementById("schoolId").value === null) {
+      if (
+        document.getElementById("schoolId").value === null ||
+        document.getElementById("schoolId").value === ""
+      ) {
         var result = window.confirm(
           "学校IDを入力していません。\n学校に接続せず利用しますか？"
         );
