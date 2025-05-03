@@ -1,3 +1,4 @@
+import { loadFeed } from "./scr.client.mjs";
 // Google APIのクライアントID
 const CLIENT_ID =
   "54111871338-nv4bn99r48cohhverg3l9oicirthmtpp.apps.googleusercontent.com";
@@ -294,7 +295,7 @@ class AuthServer {
    */
   async TestFetch(url, sumsu) {
     try {
-      console.log("TestFetch attempts to communicate with "+url);
+      console.log("TestFetch attempts to communicate with " + url);
       const response = await fetch(url);
       const statuscode = response.status;
       if (!response.ok) {
@@ -307,9 +308,9 @@ class AuthServer {
           return false;
         }
       } else {
-        document.getElementById("login").style.display = 'block';
+        document.getElementById("login").style.display = "block";
 
-        document.getElementById("menu").style.display = 'block';
+        document.getElementById("menu").style.display = "block";
         return true;
       }
     } catch (error) {
