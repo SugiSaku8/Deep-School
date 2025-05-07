@@ -83,7 +83,7 @@
     <h1>Deep-School <span style="font-weight: 300;">Installer</span></h1>
     <div class="subtitle">By Carnation Studio</div>
     <div class="description">Deep-Schoolは、${path}にインストールされます。</div>
-    <button id="install-btn" onclick="executeCode()">インストール</button>
+    <button id="install-btn">インストール</button>
     <div id="progress-container">
       <div id="progress-bar"></div>
     </div>
@@ -126,15 +126,5 @@
     // 外部からも setProgress(50) のように利用可能
     window.setProgress = setProgress;
   </script>
-   <button >インストール</button>
-   <script>
-     async function executeCode() {
-       const code = {};
-       const result = await window.api.executeNodeCode(code);
-       document.getElementById("result").innerText = JSON.stringify(result);
-     }
-   </script>
- </body>
 </body>
 </html>
-
