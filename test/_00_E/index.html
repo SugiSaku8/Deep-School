@@ -6,14 +6,14 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <button class="back-button">←</button>
-    <h1 class="title">eStore</h1>
+  <div class="page-container">
+    <button class="go-back-button">←</button>
+    <h1 class="page-title">eStore</h1>
 
-    <div class="card toaster-card" onclick="openModal('toaster')">
-      <div class="toaster-content">
+    <div class="card product-card toaster-card" onclick="openModal('toaster')">
+      <div class="product-content">
         <h2>ToasterMachine<br>Plus</h2>
-        <div class="carousel" id="carousel">
+        <div class="image-carousel" id="imageCarousel">
           <img src="placeholder1.png" alt="pop1">
           <img src="placeholder2.png" alt="pop2">
           <img src="placeholder3.png" alt="pop3">
@@ -22,16 +22,16 @@
     </div>
 
     <div class="card-row">
-      <div class="card math-card" onclick="openModal('math')">
+      <div class="card product-card math-card" onclick="openModal('math')">
         <span><span class="fx">f(x)</span> Math Kit</span>
       </div>
-      <div class="card room-card" onclick="openModal('room')">Room</div>
+      <div class="card product-card room-card" onclick="openModal('room')">Room</div>
     </div>
   </div>
 
-  <div id="modal" class="modal hidden">
+  <div id="productModal" class="product-modal hidden">
     <div class="modal-content" id="modalContent"></div>
-    <button onclick="closeModal()" class="modal-close">✖</button>
+    <button onclick="closeModal()" class="modal-close-button">✖</button>
   </div>
 
   <script src="script.js"></script>

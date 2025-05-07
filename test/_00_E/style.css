@@ -5,17 +5,17 @@ body {
   color: white;
 }
 
-.container {
+.page-container {
   padding: 20px;
 }
 
-.title {
+.page-title {
   text-align: center;
   font-size: 2rem;
   margin-top: 10px;
 }
 
-.back-button {
+.go-back-button {
   position: absolute;
   top: 20px;
   left: 20px;
@@ -39,17 +39,17 @@ body {
   font-weight: bold;
 }
 
-.toaster-card {
+.product-card {
   max-width: 700px;
 }
 
-.toaster-content {
+.product-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.carousel {
+.image-carousel {
   display: flex;
   gap: 10px;
   overflow-x: auto;
@@ -58,7 +58,7 @@ body {
   scroll-behavior: smooth;
 }
 
-.carousel img {
+.image-carousel img {
   border-radius: 20px;
   width: 70px;
   height: 70px;
@@ -66,7 +66,7 @@ body {
   transition: transform 0.3s ease;
 }
 
-.carousel img:hover {
+.image-carousel img:hover {
   transform: scale(1.1);
 }
 
@@ -76,7 +76,7 @@ body {
   gap: 20px;
 }
 
-.math-card, .room-card {
+.product-card.math-card, .product-card.room-card {
   flex: 1;
   max-width: 300px;
   padding: 20px;
@@ -89,7 +89,7 @@ body {
 }
 
 /* モーダル */
-.modal {
+.product-modal {
   position: fixed;
   top: 0; left: 0;
   width: 100%;
@@ -105,7 +105,7 @@ body {
   pointer-events: none;
 }
 
-.modal.show {
+.product-modal.show {
   opacity: 1;
   transform: scale(1);
   pointer-events: auto;
@@ -120,7 +120,7 @@ body {
   transition: all 0.4s ease;
 }
 
-.modal-close {
+.modal-close-button {
   position: absolute;
   top: 20px;
   right: 30px;

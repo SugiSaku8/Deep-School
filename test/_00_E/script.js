@@ -1,5 +1,5 @@
 function openModal(type) {
-  const modal = document.getElementById('modal');
+  const modal = document.getElementById('productModal');
   const content = document.getElementById('modalContent');
 
   let html = '';
@@ -32,7 +32,7 @@ function openModal(type) {
 }
 
 function closeModal() {
-  const modal = document.getElementById('modal');
+  const modal = document.getElementById('productModal');
   modal.classList.remove('show');
   setTimeout(() => {
     modal.classList.add('hidden');
@@ -42,7 +42,7 @@ function closeModal() {
 // 自動スライド
 let scrollIndex = 0;
 setInterval(() => {
-  const carousel = document.getElementById('carousel');
+  const carousel = document.getElementById('imageCarousel');
   if (!carousel) return;
 
   const images = carousel.querySelectorAll('img');
