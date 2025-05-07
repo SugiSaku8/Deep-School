@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>eStore</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <button class="back-button">←</button>
+    <h1 class="title">eStore</h1>
+
+    <div class="card toaster-card" onclick="openModal('toaster')">
+      <div class="toaster-content">
+        <h2>ToasterMachine<br>Plus</h2>
+        <div class="carousel" id="carousel">
+          <!-- Replace src with actual image paths -->
+          <img src="placeholder1.png" alt="pop1">
+          <img src="placeholder2.png" alt="pop2">
+          <img src="placeholder3.png" alt="pop3">
+        </div>
+      </div>
+    </div>
+
+    <div class="card-row">
+      <div class="card math-card" onclick="openModal('math')">
+        <span><span class="fx">f(x)</span> Math Kit</span>
+      </div>
+      <div class="card room-card" onclick="openModal('room')">Room</div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-content" id="modalContent"></div>
+    <button onclick="closeModal()" class="modal-close">✖</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
