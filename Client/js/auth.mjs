@@ -485,7 +485,6 @@ window.onload = async function () {
           document.getElementById("menu").style.display = "block";
         } else {
           document.getElementById("menu").style.display = "block";
-
           return;
         }
       } else {
