@@ -21,7 +21,7 @@
     "pkg": "pkg ."
   },
   "bin": {
-    "deep-school-server": "./staRt.sh"
+    "deep-school-server": "./dist/main.js"
   },
   "pkg": {
     "scripts": "./dist/**/*.js",
