@@ -21,14 +21,17 @@
     "pkg": "pkg ."
   },
   "bin": {
-    "deep-school-server": "./dist/start.ts"
+    "deep-school-server": "./staRt.sh"
   },
   "pkg": {
     "scripts": "./dist/**/*.js",
     "targets": [
       "node18-macos-arm64"
     ],
-    "outputPath": "dist"
+    "assets": [
+      "./staRt.sh"
+    ],
+    "outputPath": "build"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.21",
