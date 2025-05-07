@@ -4,4 +4,4 @@ npm update
 npm i
 npm prune --production
 pkg -t node18-macos-x64 . --no-bytecode --public-packages "*" --public --compress Brotli
-upx ./build/deep-school-server-macos-arm64
+upx --force-macos /Users/sugisaku/Developer/Deep-School/server/build/deep-school-server
