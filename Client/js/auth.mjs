@@ -1,4 +1,8 @@
 import loadFeed from "./scr.client.mjs";
+function getQueryParam(name) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(name);
+}
 // Google APIのクライアントID
 const CLIENT_ID =
   "54111871338-nv4bn99r48cohhverg3l9oicirthmtpp.apps.googleusercontent.com";
@@ -464,14 +468,16 @@ window.onload = async function () {
   document
     .getElementById("school_login_btn")
     .addEventListener("click", async () => {
+      const schoolId_query = getQueryParam("schoolId");
       if (
         document.getElementById("schoolId").value === null ||
-        document.getElementById("schoolId").value === ""
+        document.getElementById("schoolId").value === "" ||
+        schoolId_query === null ||
+        schoolId_query === ""
       ) {
         var result = window.confirm(
           "学校IDを入力していません。\n学校に接続せず利用しますか？"
         );
-
         if (result) {
           document.getElementById("login").style.display = "none";
           document.getElementById("scr_menu_icon").style.display = "none";
@@ -484,11 +490,22 @@ window.onload = async function () {
         }
       } else {
         document.getElementById("menu").style.display = "block";
-        let stuth = new AuthServer(document.getElementById("schoolId").value);
-        await stuth.callTest();
-        await loadFeed();
-        window.scr_url = stuth.url;
-        console.log("SCRのURLを設定しました。");
+        if (
+          document.getElementById("schoolId").value === null ||
+          document.getElementById("schoolId").value === ""
+        ) {
+          let stuth = new AuthServer(document.getElementById("schoolId").value);
+          await stuth.callTest();
+          await loadFeed();
+          window.scr_url = stuth.url;
+          console.log("SCRのURLを設定しました。");
+        } else {
+          let stuth = new AuthServer(schoolId_query);
+          await stuth.callTest();
+          await loadFeed();
+          window.scr_url = stuth.url;
+          console.log("SCRのURLを設定しました。");
+        }
       }
     });
 };
