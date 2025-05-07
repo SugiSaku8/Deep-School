@@ -1,6 +1,6 @@
 {
   "name": "deep-school-server",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "",
   "author": "",
   "private": true,
@@ -17,7 +17,18 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "pkg": "pkg ."
+  },
+  "bin": {
+    "deep-school-server": "./dist/start.ts"
+  },
+  "pkg": {
+    "scripts": "./dist/**/*.js",
+    "targets": [
+      "node18-macos-arm64"
+    ],
+    "outputPath": "dist"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.21",
