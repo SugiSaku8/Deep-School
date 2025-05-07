@@ -1,52 +1,52 @@
 function openModal(type) {
-  const modal = document.getElementById("modal");
-  const content = document.getElementById("modalContent");
+  const modal = document.getElementById('modal');
+  const content = document.getElementById('modalContent');
 
-  let html = "";
+  let html = '';
 
   switch (type) {
-    case "toaster":
+    case 'toaster':
       html = `
-          <h2>ToasterMachine Plus</h2>
-          <p>これはToasterMachine Plusの詳細情報です。</p>
-          <img src="placeholder1.png" alt="Detail Image" style="width: 100%; border-radius: 12px;">
-        `;
+        <h2>ToasterMachine Plus</h2>
+        <p>これはToasterMachine Plusの詳細情報です。</p>
+        <img src="placeholder1.png" alt="Detail Image" style="width: 100%; border-radius: 12px;">
+      `;
       break;
-    case "math":
+    case 'math':
       html = `
-          <h2>f(x) Math Kit</h2>
-          <p>これはMath Kitの詳細情報です。</p>
-        `;
+        <h2>f(x) Math Kit</h2>
+        <p>これはMath Kitの詳細情報です。</p>
+      `;
       break;
-    case "room":
+    case 'room':
       html = `
-          <h2>Room</h2>
-          <p>これはRoomの詳細情報です。</p>
-        `;
+        <h2>Room</h2>
+        <p>これはRoomの詳細情報です。</p>
+      `;
       break;
   }
 
   content.innerHTML = html;
-  modal.classList.remove("hidden");
-  setTimeout(() => modal.classList.add("show"), 10); // スムーズ表示
+  modal.classList.remove('hidden');
+  setTimeout(() => modal.classList.add('show'), 10);
 }
 
 function closeModal() {
-  const modal = document.getElementById("modal");
-  modal.classList.remove("show");
+  const modal = document.getElementById('modal');
+  modal.classList.remove('show');
   setTimeout(() => {
-    modal.classList.add("hidden");
-  }, 300); // アニメーション終了後に非表示
+    modal.classList.add('hidden');
+  }, 300);
 }
 
-// POP 自動スライド：ループ付き
+// Auto-scroll carousel with loop
 let scrollIndex = 0;
 setInterval(() => {
-  const carousel = document.getElementById("carousel");
+  const carousel = document.getElementById('carousel');
   if (!carousel) return;
 
-  const images = carousel.querySelectorAll("img");
-  scrollIndex = (scrollIndex + 1) % images.length;
-  const scrollTo = images[scrollIndex].offsetLeft;
-  carousel.scrollTo({ left: scrollTo, behavior: "smooth" });
+  const items = carousel.querySelectorAll('.pop-item');
+  scrollIndex = (scrollIndex + 1) % items.length;
+  const scrollTo = items[scrollIndex].offsetLeft;
+  carousel.scrollTo({ left: scrollTo, behavior: 'smooth' });
 }, 3000);

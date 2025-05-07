@@ -10,18 +10,25 @@
     <button class="back-button">←</button>
     <h1 class="title">eStore</h1>
 
-    <div class="card toaster-card" onclick="openModal('toaster')">
-      <div class="toaster-content">
-        <h2>ToasterMachine<br>Plus</h2>
-        <div class="carousel" id="carousel">
-          <!-- Replace src with actual image paths -->
+    <!-- ToasterMachine Plus Carousel -->
+    <div class="card toaster-card">
+      <div class="carousel" id="carousel">
+        <div class="pop-item" onclick="openModal('toaster')">
+          <h2>ToasterMachine<br>Plus</h2>
+        </div>
+        <div class="pop-item">
           <img src="placeholder1.png" alt="pop1">
+        </div>
+        <div class="pop-item">
           <img src="placeholder2.png" alt="pop2">
+        </div>
+        <div class="pop-item">
           <img src="placeholder3.png" alt="pop3">
         </div>
       </div>
     </div>
 
+    <!-- Bottom Buttons -->
     <div class="card-row">
       <div class="card math-card" onclick="openModal('math')">
         <span><span class="fx">f(x)</span> Math Kit</span>
