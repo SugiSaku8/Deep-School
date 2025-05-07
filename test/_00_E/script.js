@@ -39,14 +39,16 @@ function closeModal() {
   }, 300);
 }
 
-// Auto-scroll carousel with loop
+// 自動スライド
 let scrollIndex = 0;
 setInterval(() => {
   const carousel = document.getElementById('carousel');
   if (!carousel) return;
 
-  const items = carousel.querySelectorAll('.pop-item');
-  scrollIndex = (scrollIndex + 1) % items.length;
-  const scrollTo = items[scrollIndex].offsetLeft;
+  const images = carousel.querySelectorAll('img');
+  if (images.length === 0) return;
+
+  scrollIndex = (scrollIndex + 1) % images.length;
+  const scrollTo = images[scrollIndex].offsetLeft;
   carousel.scrollTo({ left: scrollTo, behavior: 'smooth' });
 }, 3000);

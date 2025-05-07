@@ -35,47 +35,39 @@ body {
   margin: 20px auto;
   padding: 20px;
   text-align: center;
+  cursor: pointer;
   font-weight: bold;
 }
 
 .toaster-card {
-  max-width: 720px;
-  overflow-x: auto;
+  max-width: 700px;
+}
+
+.toaster-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .carousel {
   display: flex;
   gap: 10px;
   overflow-x: auto;
+  max-width: 200px;
+  padding: 5px;
   scroll-behavior: smooth;
-  padding: 10px 0;
 }
 
-.pop-item {
-  flex: 0 0 auto;
-  width: 120px;
-  height: 120px;
-  background: #1b755b;
+.carousel img {
   border-radius: 20px;
-  margin-right: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: bold;
-  text-align: center;
-  cursor: pointer;
+  width: 70px;
+  height: 70px;
+  flex-shrink: 0;
   transition: transform 0.3s ease;
 }
 
-.pop-item:hover {
-  transform: scale(1.05);
-}
-
-.pop-item img {
-  width: 80px;
-  height: 80px;
-  border-radius: 20px;
+.carousel img:hover {
+  transform: scale(1.1);
 }
 
 .card-row {
@@ -88,7 +80,6 @@ body {
   flex: 1;
   max-width: 300px;
   padding: 20px;
-  cursor: pointer;
 }
 
 .fx {
@@ -97,7 +88,7 @@ body {
   font-size: 1.2em;
 }
 
-/* Modal Animation */
+/* モーダル */
 .modal {
   position: fixed;
   top: 0; left: 0;
@@ -124,7 +115,7 @@ body {
   background: white;
   color: black;
   padding: 30px;
-  border-radius: 10px;
+  border-radius: 12px;
   max-width: 90%;
   transition: all 0.4s ease;
 }
