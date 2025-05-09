@@ -63,6 +63,7 @@ class TemplateConverter {
 }
 
 function convertAndPreview() {
+    console.log("A")
   const templateStr = document.getElementById("templateInput").value;
   const converter = new TemplateConverter();
   const result = converter.convert(templateStr);
