@@ -30,9 +30,6 @@
                 return `<style>${styleContent}</style>`;
             });
 
-            // marked.jsを使用してMarkdownをHTMLに変換
-            markdown = marked.parse(markdown);
-
             // tag, btn, scriptタグを処理
             markdown = markdown.replace(/@tag (\w+) \[(open|close)\s?(\^hide\^)?\]([\s\S]*?)@tag \w+ \[close\]/g, (match, tagName, openClose, hide, tagContent) => {
                 let style = '';
@@ -61,6 +58,9 @@
                             })();
                         <\/script>`;
             });
+
+            // marked.jsを使用してMarkdownをHTMLに変換
+            markdown = marked.parse(markdown);
 
             return markdown;
         }
