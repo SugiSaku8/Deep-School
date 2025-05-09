@@ -45,7 +45,7 @@
           /@tag (\w+) \[(open|close)\s?(\^hide\^)?\]([\s\S]*?)@tag \w+ \[close\]/g,
           (match, tagName, openClose, hide, tagContent) => {
             let style = "";
-            if (tagName === "testB" || hide === "^hide^") {
+            if (hide === "^hide^") {
               style = "display: none;";
             }
             const parsedTagContent = marked.parse(tagContent);
@@ -67,8 +67,7 @@
               .replace(/&lt;/g, "<")
               .replace(/&gt;/g, ">")
               .replace(/&amp;/g, "&");
-            evalrun(`
-                                const btn = document.getElementById("${onId}");
+            evalrun(`const btn = document.getElementById("${onId}");
                                 if (btn) {
                                     btn.addEventListener('click', function() {
                                         try {
