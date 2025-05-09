@@ -5,6 +5,9 @@ ver 1.0.0
  #red{
     color:red;
  }
+ #testB{
+  display:none;
+ }
 @style [close]
 @config [close]
 @tag testA [open]
@@ -19,7 +22,7 @@ function main(){
 }
 @script [close]
 
-@tag testB [open] ^hide^
+@tag testB [open]
 # これは、見出し2です。
 -　リスト1
 -　リスト2
