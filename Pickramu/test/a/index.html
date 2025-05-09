@@ -152,7 +152,7 @@
           line = line.trim();
           if (!line) return; // 空行を無視
 
-          const match = line.match(/#(\\w+)\\s*\\{([\\s\\S]*?)\\}/);
+          const match = line.match(/#(\w+)\s*\{([\s\S]*?)\}/);
           if (match) {
             const id = match[1];
             const css = match[2].trim();
@@ -162,7 +162,7 @@
               cssLine = cssLine.trim();
               if (!cssLine) return; // 空のCSS行を無視
 
-              const cssMatch = cssLine.match(/(\\w+)\\s*:\\s*([^;]+)/);
+              const cssMatch = cssLine.match(/(\w+)\s*:\s*([^;]+)/);
               if (cssMatch) {
                 const property = cssMatch[1].trim();
                 const value = cssMatch[2].trim();
@@ -188,12 +188,12 @@
                 const style = styleObject[id];
                 for (const property in style) {
                   if (style.hasOwnProperty(property)) {
-                    console.log(\`Setting ${property} to ${style[property]} on element ${id}\`);
+                    console.log(\`Setting ${property} to ${style[property]} on element \${id}\`);
                     element.style[property] = style[property];
                   }
                 }
               } else {
-                console.error(\`Element with id '${id}' not found\`);
+                console.error(\`Element with id '\${id}' not found\`);
               }
             }
           }
