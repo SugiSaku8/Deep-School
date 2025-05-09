@@ -58,7 +58,8 @@
           }
         );
         // marked.jsを使用してMarkdownをHTMLに変換
-        return marked.parse(markdown);
+        markdown = marked.parse(markdown);
+        return markdown;
       }
 
       // ページのロード時にMarkdownファイルを読み込む
