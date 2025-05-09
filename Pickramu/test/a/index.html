@@ -55,7 +55,9 @@
           (match, tagName, openClose, hide, tagContent) => {
             let style = "";
             if (hide === "^hide^") {
-              style = "display: none;";
+              style = "display: none !important;";
+            } else {
+              style = ""; // スタイルが適用されない場合でも空の文字列を設定
             }
             const parsedTagContent = marked.parse(tagContent);
             return `<div id="${tagName}" style="${style}">${parsedTagContent}</div>`;
