@@ -1,5 +1,4 @@
-
-
+// converter.js
 class TemplateConverter {
     constructor() {
         this.htmlContent = [];
@@ -14,8 +13,8 @@ class TemplateConverter {
         let htmlHeader = `<!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<style>
+    <meta charset="UTF-8">
+    <style>
 `;
 
         if (styleMatch) {
@@ -58,3 +57,47 @@ class TemplateConverter {
         return this.htmlContent.join('\n');
     }
 }
+
+function convertAndPreview() {
+    const templateStr = document.getElementById('templateInput').value;
+    const converter = new TemplateConverter();
+    const result = converter.convert(templateStr);
+    
+    document.getElementById('preview').innerHTML = result;
+    
+    const scripts = document.getElementById('preview').getElementsByTagName('script');
+    Array.from(scripts).forEach(script => {
+        const newScript = document.createElement('script');
+        newScript.textContent = script.textContent;
+        document.head.appendChild(newScript);
+    });
+}
+
+// デフォルトテンプレートの設定
+document.addEventListener('DOMContentLoaded', () => {
+    const templateInput = document.getElementById('templateInput');
+    templateInput.value = `@config [open]
+name テスト
+ver 1.0.0
+@style [open]
+#red{
+color:red;
+}@style [close]
+@config [close]
+@tag testA [open]
+# 見出し1
+これは、段落です。
+@btn id=testbtn ボタン
+@tag testa [close]
+@script on=testbtn [open]
+function main(){
+dom.Tag("testA").style.display('none','auto');
+dom.Tag("testB").style.display('block','auto');
+}
+@script [close]
+@tag testB [open]
+# これは、見出し2です。
+- リスト1
+- リスト2
+@tag testB [close]`;
+});
