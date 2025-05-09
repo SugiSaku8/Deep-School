@@ -38,6 +38,10 @@
 
       function parseMarkdown(markdown) {
         markdown = markdown.replace(
+          /@config \[open\]([\s\S]*?)@config \[close\]/g,
+          ""
+        );
+        markdown = markdown.replace(
           /@style \[open\]([\s\S]*?)@style \[close\]/g,
           (match, styleContent) => {
             console.log("styleContent:", styleContent);
@@ -46,16 +50,13 @@
             console.log("styleObject:", styleObject);
             // スタイルを適用するスクリプトを生成
             const styleScript = generateStyleScript(styleObject);
-            console.log("styleScript:", styleScript);
+             console.log("styleScript:", styleScript);
             // スクリプトをscriptsToEvalに追加
             scriptsToEval.push(styleScript);
             return ""; // スタイルタグを削除
           }
         );
-        markdown = markdown.replace(
-          /@config \[open\]([\s\S]*?)@config \[close\]/g,
-          ""
-        );
+
         // tag, btn, scriptタグを処理
         markdown = markdown.replace(
           /@tag (\w+) \[(open|close)\s?(\^hide\^)?\]([\s\S]*?)@tag \w+ \[close\]/g,
@@ -80,6 +81,9 @@
         markdown = markdown.replace(
           /@script on=(\w+) \[open\]([\s\S]*?)@script \[close\]/g,
           (match, onId, scriptContent) => {
+            console.log("id:" + onId);
+            console.log("scriptContent:" + scriptContent);
+
             // HTMLエンティティをデコード
             const decodedScript = scriptContent
               .replace(/&lt;/g, "<")
@@ -93,7 +97,7 @@
                 if (btn) {
                   btn.addEventListener('click', function() {
                     try {
-                      ${decodedScript}
+                      (function() { ${decodedScript} })();
                     } catch (e) {
                       console.error("Error executing script:", e);
                     }
@@ -179,9 +183,7 @@
                 const style = styleObject[id];
                 for (const property in style) {
                   if (style.hasOwnProperty(property)) {
-                    console.log(
-                      `Setting ${property} to ${style[property]} on element ${id}`
-                    );
+                    console.log(`Setting ${property} to ${style[property]} on element ${id}`);
                     element.style[property] = style[property];
                   }
                 }
