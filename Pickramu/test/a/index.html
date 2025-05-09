@@ -34,8 +34,12 @@
             markdown = marked.parse(markdown);
 
             // tag, btn, scriptタグを処理
-            markdown = markdown.replace(/@tag (\w+) \[open\]([\s\S]*?)@tag \w+ \[close\]/g, (match, tagName, tagContent) => {
-                return `<div id="${tagName}">${tagContent}</div>`;
+            markdown = markdown.replace(/@tag (\w+) \[(open|close) ?(hide)?\]([\s\S]*?)@tag \w+ \[close\]/g, (match, tagName, openClose, hide, tagContent) => {
+                let style = '';
+                if (hide === 'hide') {
+                    style = 'style="display: none;"';
+                }
+                return `<div id="${tagName}" ${style}>${tagContent}</div>`;
             });
             markdown = markdown.replace(/@btn id=(\w+) ([\s\S]*)/g, (match, btnId, btnContent) => {
                 const content = btnContent.replace(/^id=/, '').trim();
