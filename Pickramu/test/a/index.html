@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Markdown Viewer</title>
+  <style id="custom-style"></style>
+</head>
+<body>
+  <div id="content"></div>
+
+  <script>
+    const dom = {
+      Tag: (id) => {
+        const element = document.getElementById(id);
+        return {
+          style: {
+            display: (displayValue, important = 'auto') => {
+              element.style.display = displayValue;
+              if(important === 'important'){
+                element.style.setProperty('display', displayValue, 'important');
+              }
+            }
+          }
+        };
+      }
+    };
+
+    async function loadMarkdown(file) {
+      const response = await fetch(file);
+      const markdown = await response.text();
+      return markdown;
+    }
+
+    function parseMarkdown(markdown) {
+      const lines = markdown.split('\n');
+      let config = {};
+      let styles = '';
+      let tags = {};
+      let scripts = {};
+      let currentTag = null;
+      let currentScript = null;
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+
+        if (line.startsWith('@config [open]')) {
+          // Config start
+        } else if (line.startsWith('@config [close]')) {
+          // Config end
+        } else if (line.startsWith('@style [open]')) {
+          // Style start
+          let j = i + 1;
+          while (j < lines.length && !lines[j].trim().startsWith('@style [close]')) {
+            styles += lines[j] + '\n';
+            j++;
+          }
+          i = j;
+          // Style end
+        } else if (line.startsWith('@tag ')) {
+          const tagMatch = line.match(/@tag (\w+) \[open\]/);
+          if (tagMatch) {
+            const tagName = tagMatch[1];
+            currentTag = { name: tagName, content: '' };
+          }
+        } else if (line.startsWith('@tag ') && line.endsWith('[close]')) {
+            if (currentTag) {
+              tags[currentTag.name] = currentTag.content;
+              currentTag = null;
+            }
+        } else if (line.startsWith('@btn ')) {
+          const btnMatch = line.match(/@btn id=(\w+) (.*)/);
+          if (btnMatch) {
+            const btnId = btnMatch[1];
+            const btnText = btnMatch[2];
+            if (currentTag) {
+              currentTag.content += `<button id="${btnId}">${btnText}</button>`;
+            }
+          }
+        } else if (line.startsWith('@script on=')) {
+          const scriptMatch = line.match(/@script on=(\w+) \[open\]/);
+          if (scriptMatch) {
+            const btnId = scriptMatch[1];
+            currentScript = { btnId: btnId, content: '' };
+          }
+        } else if (line.startsWith('@script [close]')) {
+          if (currentScript) {
+            scripts[currentScript.btnId] = currentScript.content;
+            currentScript = null;
+          }
+        } else {
+          if (currentTag) {
+            currentTag.content += line + '\n';
+          }
+          if (currentScript) {
+            currentScript.content += line + '\n';
+          }
+        }
+      }
+
+      return { config, styles, tags, scripts };
+    }
+
+    function renderContent(data) {
+      const { styles, tags, scripts } = data;
+      let html = '';
+
+      // Apply styles
+      document.getElementById('custom-style').textContent = styles;
+
+      // Render tags
+      for (const tagId in tags) {
+        html += `<div id="${tagId}">${tags[tagId]}</div>`;
+      }
+
+      // Apply scripts to buttons
+      for (const btnId in scripts) {
+        const script = scripts[btnId];
+        const button = document.getElementById(btnId);
+        if (button) {
+          button.addEventListener('click', () => {
+            eval(script);
+          });
+        }
+      }
+
+      document.getElementById('content').innerHTML = html;
+    }
+
+    async function main() {
+      const markdown = await loadMarkdown('test.md');
+      const data = parseMarkdown(markdown);
+      renderContent(data);
+    }
+
+    main();
+  </script>
+</body>
+</html>
