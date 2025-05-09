@@ -16,7 +16,7 @@
       let scriptsToEval = []; // 実行するスクリプトを格納する配列
 
       function evalrun(code) {
-        setTimeout(Function(code)(), 0.9);
+        Function(code)(), 0.9;
       }
 
       function loadMarkdown(file) {
