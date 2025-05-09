@@ -60,7 +60,7 @@
           /@tag (\w+) \[(open|close)\s?(\^hide\^)?\]([\s\S]*?)@tag \w+ \[close\]/g,
           (match, tagName, openClose, hide, tagContent) => {
             let style = "";
-            if (hide === "hide") {
+            if (hide === ";hide") {
               style = "display: none !important;";
             } else {
               style = ""; // スタイルが適用されない場合でも空の文字列を設定
