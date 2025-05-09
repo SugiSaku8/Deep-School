@@ -38,9 +38,9 @@
             });
             markdown = markdown.replace(/@script on=(\w+) \[open\]([\s\S]*?)@script \[close\]/g, (match, onId, scriptContent) => {
                 return `<script>
-                            document.getElementById("${onId}").addEventListener("click", function() {
+                            document.getElementById("${onId}").onclick = function() {
                                 ${scriptContent}
-                            });
+                            };
                         <\/script>`;
             });
             // marked.jsを使用してMarkdownをHTMLに変換
@@ -50,7 +50,7 @@
 
         // ページのロード時にMarkdownファイルを読み込む
         window.onload = function() {
-            loadMarkdown('test.md'); // Markdownファイルのパス
+            loadMarkdown('test/a/test.md'); // Markdownファイルのパス
         };
     </script>
 </body>
