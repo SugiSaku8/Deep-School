@@ -16,7 +16,7 @@
       let scriptsToEval = []; // 実行するスクリプトを格納する配列
 
       function evalrun(code) {
-        Function(code)();
+        Function(code)(), 0.9;
       }
 
       function loadMarkdown(file) {
@@ -25,7 +25,7 @@
           .then((markdown) => {
             const html = parseMarkdown(markdown);
             document.getElementById("content").innerHTML = html;
-            document.getElementById("content").style.display = "block";
+            document.getElementById("content").style.display = "block"; // コンテンツを表示
 
             // すべてのスクリプトを実行
             scriptsToEval.forEach((script) => {
@@ -44,11 +44,13 @@
         markdown = markdown.replace(
           /@style \[open\]([\s\S]*?)@style \[close\]/g,
           (match, styleContent) => {
-            console.log(styleContent);
+            console.log("styleContent:", styleContent);
             // スタイルをJavaScriptオブジェクトとして格納
             const styleObject = parseStyles(styleContent);
+            console.log("styleObject:", styleObject);
             // スタイルを適用するスクリプトを生成
             const styleScript = generateStyleScript(styleObject);
+             console.log("styleScript:", styleScript);
             // スクリプトをscriptsToEvalに追加
             scriptsToEval.push(styleScript);
             return ""; // スタイルタグを削除
@@ -60,7 +62,7 @@
           /@tag (\w+) \[(open|close)\s?(\^hide\^)?\]([\s\S]*?)@tag \w+ \[close\]/g,
           (match, tagName, openClose, hide, tagContent) => {
             let style = "";
-            if (hide) {
+            if (hide === "^hide^") {
               style = "display: none !important;";
             } else {
               style = ""; // スタイルが適用されない場合でも空の文字列を設定
@@ -79,6 +81,9 @@
         markdown = markdown.replace(
           /@script on=(\w+) \[open\]([\s\S]*?)@script \[close\]/g,
           (match, onId, scriptContent) => {
+            console.log("id:" + onId);
+            console.log("scriptContent:" + scriptContent);
+
             // HTMLエンティティをデコード
             const decodedScript = scriptContent
               .replace(/&lt;/g, "<")
@@ -168,14 +173,17 @@
 
       // スタイルを適用するスクリプトを生成する関数
       function generateStyleScript(styleObject) {
+        console.log("generateStyleScript called with:", styleObject);
         return function () {
           for (const id in styleObject) {
             if (styleObject.hasOwnProperty(id)) {
               const element = document.getElementById(id);
               if (element) {
+                console.log("Element found:", element);
                 const style = styleObject[id];
                 for (const property in style) {
                   if (style.hasOwnProperty(property)) {
+                    console.log(`Setting ${property} to ${style[property]} on element ${id}`);
                     element.style[property] = style[property];
                   }
                 }

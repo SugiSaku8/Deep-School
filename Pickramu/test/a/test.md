@@ -19,7 +19,7 @@ dom.Tag("testA").style.display('none','auto');
 dom.Tag("testB").style.display('block','auto');
 @script [close]
 
-@tag testB  [open]
+@tag testB [open]
 
 # これは、見出し 2 です。
 
