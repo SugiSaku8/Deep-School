@@ -1,54 +1,73 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Markdown Viewer</title>
     <style>
-        /* スタイルはここに記述 */
+      /* スタイルはここに記述 */
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-</head>
-<body>
-    <div id="content" style="display: none;">
-        <!-- Markdownコンテンツがここに表示される -->
+  </head>
+  <body>
+    <div id="content" style="display: none">
+      <!-- Markdownコンテンツがここに表示される -->
     </div>
 
     <script>
-        function loadMarkdown(file) {
-            fetch(file)
-                .then(response => response.text())
-                .then(markdown => {
-                    const html = parseMarkdown(markdown);
-                    document.getElementById('content').innerHTML = html;
-                    document.getElementById('content').style.display = 'block'; // コンテンツを表示
-                })
-                .catch(error => console.error('Error loading markdown:', error));
-        }
+      function evalrun(code) {
+        Function(code)();
+      }
+      function loadMarkdown(file) {
+        fetch(file)
+          .then((response) => response.text())
+          .then((markdown) => {
+            const html = parseMarkdown(markdown);
+            document.getElementById("content").innerHTML = html;
+            document.getElementById("content").style.display = "block"; // コンテンツを表示
+          })
+          .catch((error) => console.error("Error loading markdown:", error));
+      }
 
-        function parseMarkdown(markdown) {
-            // config, styleを除去
-            markdown = markdown.replace(/@config \[open\]([\s\S]*?)@config \[close\]/g, '');
-            markdown = markdown.replace(/@style \[open\]([\s\S]*?)@style \[close\]/g, (match, styleContent) => {
-                return `<style>${styleContent}</style>`;
-            });
+      function parseMarkdown(markdown) {
+        // config, styleを除去
+        markdown = markdown.replace(
+          /@config \[open\]([\s\S]*?)@config \[close\]/g,
+          ""
+        );
+        markdown = markdown.replace(
+          /@style \[open\]([\s\S]*?)@style \[close\]/g,
+          (match, styleContent) => {
+            return `<style>${styleContent}</style>`;
+          }
+        );
 
-            // tag, btn, scriptタグを処理
-            markdown = markdown.replace(/@tag (\w+) \[(open|close)\s?(\^hide\^)?\]([\s\S]*?)@tag \w+ \[close\]/g, (match, tagName, openClose, hide, tagContent) => {
-                let style = '';
-                 if (tagName === 'testB' || hide === '^hide^') {
-                    style = 'display: none;';
-                }
-                const parsedTagContent = marked.parse(tagContent);
-                return `<div id="${tagName}" style="${style}">${parsedTagContent}</div>`;
-            });
-            markdown = markdown.replace(/@btn id=(\w+) ([\s\S]*)/g, (match, btnId, btnContent) => {
-                const content = btnContent.replace(/^id=/, '').trim();
-                return `<button id="${btnId}">${content}</button>`;
-            });
-            markdown = markdown.replace(/@script on=(\w+) \[open\]([\s\S]*?)@script \[close\]/g, (match, onId, scriptContent) => {
-                // HTMLエンティティをデコード
-                const decodedScript = scriptContent.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
-                return `<script>
-                            (function() {
+        // tag, btn, scriptタグを処理
+        markdown = markdown.replace(
+          /@tag (\w+) \[(open|close)\s?(\^hide\^)?\]([\s\S]*?)@tag \w+ \[close\]/g,
+          (match, tagName, openClose, hide, tagContent) => {
+            let style = "";
+            if (tagName === "testB" || hide === "^hide^") {
+              style = "display: none;";
+            }
+            const parsedTagContent = marked.parse(tagContent);
+            return `<div id="${tagName}" style="${style}">${parsedTagContent}</div>`;
+          }
+        );
+        markdown = markdown.replace(
+          /@btn id=(\w+) ([\s\S]*)/g,
+          (match, btnId, btnContent) => {
+            const content = btnContent.replace(/^id=/, "").trim();
+            return `<button id="${btnId}">${content}</button>`;
+          }
+        );
+        markdown = markdown.replace(
+          /@script on=(\w+) \[open\]([\s\S]*?)@script \[close\]/g,
+          (match, onId, scriptContent) => {
+            // HTMLエンティティをデコード
+            const decodedScript = scriptContent
+              .replace(/&lt;/g, "<")
+              .replace(/&gt;/g, ">")
+              .replace(/&amp;/g, "&");
+            evalrun(`
                                 const btn = document.getElementById("${onId}");
                                 if (btn) {
                                     btn.addEventListener('click', function() {
@@ -60,39 +79,41 @@
                                     });
                                 } else {
                                     console.error("Button with id '${onId}' not found");
-                                }
-                            })();
-                        <\/script>`;
-            });
+                                }`);
+          }
+        );
 
-            // marked.jsを使用してMarkdownをHTMLに変換
-            markdown = marked.parse(markdown);
+        // marked.jsを使用してMarkdownをHTMLに変換
+        markdown = marked.parse(markdown);
 
-            return markdown;
-        }
+        return markdown;
+      }
 
+      // ページのロード時にMarkdownファイルを読み込む
+      window.onload = function () {
+        loadMarkdown("test.md"); // Markdownファイルのパス
+      };
 
-        // ページのロード時にMarkdownファイルを読み込む
-        window.onload = function() {
-            loadMarkdown('test.md'); // Markdownファイルのパス
-        };
-
-        // domオブジェクトを定義
-        const dom = {
-            Tag: function(tagName) {
-                const element = document.getElementById(tagName);
-                return {
-                    style: {
-                        display: function(displayValue, important) {
-                            element.style.display = displayValue;
-                            if (important === 'auto') {
-                                element.style.setProperty('display', displayValue, 'important');
-                            }
-                        }
-                    }
-                };
-            }
-        };
+      // domオブジェクトを定義
+      const dom = {
+        Tag: function (tagName) {
+          const element = document.getElementById(tagName);
+          return {
+            style: {
+              display: function (displayValue, important) {
+                element.style.display = displayValue;
+                if (important === "auto") {
+                  element.style.setProperty(
+                    "display",
+                    displayValue,
+                    "important"
+                  );
+                }
+              },
+            },
+          };
+        },
+      };
     </script>
-</body>
+  </body>
 </html>
