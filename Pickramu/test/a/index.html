@@ -1,23 +1,55 @@
-<!-- index.html -->
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="style.css">
+    <title>Markdown Viewer</title>
+    <style>
+        /* スタイルはここに記述 */
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div class="split-view">
-            <div class="editor">
-                <textarea id="templateInput"></textarea>
-                <button id="pre"onclick="">プレビュー</button>
-            </div>
-            <div class="preview">
-                <h2>プレビュー</h2>
-                <div id="preview"></div>
-            </div>
-        </div>
+    <div id="content">
+        <!-- Markdownコンテンツがここに表示される -->
     </div>
-    <script src="main.js"></script>
+
+    <script>
+        function loadMarkdown(file) {
+            fetch(file)
+                .then(response => response.text())
+                .then(markdown => {
+                    const html = parseMarkdown(markdown);
+                    document.getElementById('content').innerHTML = html;
+                })
+                .catch(error => console.error('Error loading markdown:', error));
+        }
+
+        function parseMarkdown(markdown) {
+            // config, style, tag, scriptタグを除去
+            markdown = markdown.replace(/@config \[open\]([\s\S]*?)@config \[close\]/g, '');
+            markdown = markdown.replace(/@style \[open\]([\s\S]*?)@style \[close\]/g, (match, styleContent) => {
+                return `<style>${styleContent}</style>`;
+            });
+            markdown = markdown.replace(/@tag (\w+) \[open\]([\s\S]*?)@tag \w+ \[close\]/g, (match, tagName, tagContent) => {
+                return `<div id="${tagName}">${marked.parse(tagContent)}</div>`;
+            });
+             markdown = markdown.replace(/@btn id=(\w+) ([\s\S]*?)@btn/g, (match, btnId, btnContent) => {
+                return `<button id="${btnId}">${btnContent}</button>`;
+            });
+            markdown = markdown.replace(/@script on=(\w+) \[open\]([\s\S]*?)@script \[close\]/g, (match, onId, scriptContent) => {
+                return `<script>
+                            document.getElementById("${onId}").addEventListener("click", function() {
+                                ${scriptContent}
+                            });
+                        <\/script>`;
+            });
+            // marked.jsを使用してMarkdownをHTMLに変換
+            return marked.parse(markdown);
+        }
+
+        // ページのロード時にMarkdownファイルを読み込む
+        window.onload = function() {
+            loadMarkdown('test/a/test.md'); // Markdownファイルのパス
+        };
+    </script>
 </body>
 </html>
