@@ -179,7 +179,7 @@
       // スタイルを適用するスクリプトを生成する関数
       function generateStyleScript(styleObject) {
         console.log("generateStyleScript called with:", styleObject);
-        return `(function() {
+        return function () {
           for (const id in styleObject) {
             if (styleObject.hasOwnProperty(id)) {
               const element = document.getElementById(id);
@@ -197,7 +197,7 @@
               }
             }
           }
-        })();`;
+        };
       }
     </script>
   </body>
