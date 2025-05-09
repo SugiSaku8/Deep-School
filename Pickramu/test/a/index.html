@@ -1,137 +1,70 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Markdown Viewer</title>
-  <style id="custom-style"></style>
-</head>
-<body>
-  <div id="content"></div>
-
-  <script>
-    const dom = {
-      Tag: (id) => {
-        const element = document.getElementById(id);
-        return {
-          style: {
-            display: (displayValue, important = 'auto') => {
-              element.style.display = displayValue;
-              if(important === 'important'){
-                element.style.setProperty('display', displayValue, 'important');
-              }
-            }
-          }
-        };
+  <head>
+    <style>
+      .container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 15px;
+        font-family: Arial, sans-serif;
       }
-    };
-
-    async function loadMarkdown(file) {
-      const response = await fetch(file);
-      const markdown = await response.text();
-      return markdown;
-    }
-
-    function parseMarkdown(markdown) {
-      const lines = markdown.split('\n');
-      let config = {};
-      let styles = '';
-      let tags = {};
-      let scripts = {};
-      let currentTag = null;
-      let currentScript = null;
-
-      for (let i = 0; i < lines.length; i++) {
-        const line = lines[i].trim();
-
-        if (line.startsWith('@config [open]')) {
-          // Config start
-        } else if (line.startsWith('@config [close]')) {
-          // Config end
-        } else if (line.startsWith('@style [open]')) {
-          // Style start
-          let j = i + 1;
-          while (j < lines.length && !lines[j].trim().startsWith('@style [close]')) {
-            styles += lines[j] + '\n';
-            j++;
-          }
-          i = j;
-          // Style end
-        } else if (line.startsWith('@tag ')) {
-          const tagMatch = line.match(/@tag (\w+) \[open\]/);
-          if (tagMatch) {
-            const tagName = tagMatch[1];
-            currentTag = { name: tagName, content: '' };
-          }
-        } else if (line.startsWith('@tag ') && line.endsWith('[close]')) {
-            if (currentTag) {
-              tags[currentTag.name] = currentTag.content;
-              currentTag = null;
-            }
-        } else if (line.startsWith('@btn ')) {
-          const btnMatch = line.match(/@btn id=(\w+) (.*)/);
-          if (btnMatch) {
-            const btnId = btnMatch[1];
-            const btnText = btnMatch[2];
-            if (currentTag) {
-              currentTag.content += `<button id="${btnId}">${btnText}</button>`;
-            }
-          }
-        } else if (line.startsWith('@script on=')) {
-          const scriptMatch = line.match(/@script on=(\w+) \[open\]/);
-          if (scriptMatch) {
-            const btnId = scriptMatch[1];
-            currentScript = { btnId: btnId, content: '' };
-          }
-        } else if (line.startsWith('@script [close]')) {
-          if (currentScript) {
-            scripts[currentScript.btnId] = currentScript.content;
-            currentScript = null;
-          }
-        } else {
-          if (currentTag) {
-            currentTag.content += line + '\n';
-          }
-          if (currentScript) {
-            currentScript.content += line + '\n';
-          }
-        }
+      textarea {
+        width: 100%;
+        height: 200px;
+        margin-bottom: 15px;
+        padding: 10px;
+        font-family: monospace;
       }
-
-      return { config, styles, tags, scripts };
-    }
-
-    function renderContent(data) {
-      const { styles, tags, scripts } = data;
-      let html = '';
-
-      // Apply styles
-      document.getElementById('custom-style').textContent = styles;
-
-      // Render tags
-      for (const tagId in tags) {
-        html += `<div id="${tagId}">${tags[tagId]}</div>`;
+      .preview-area {
+        border: 1px solid #ccc;
+        padding: 15px;
+        margin-top: 15px;
+        min-height: 200px;
       }
-
-      // Apply scripts to buttons
-      for (const btnId in scripts) {
-        const script = scripts[btnId];
-        const button = document.getElementById(btnId);
-        if (button) {
-          button.addEventListener('click', () => {
-            eval(script);
-          });
-        }
+      button {
+        padding: 8px 15px;
+        cursor: pointer;
       }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>テンプレートエディタ</h2>
+      <textarea id="templateInput">
+@config [open]
+name テスト
+ver 1.0.0
+@style [open]
+#red{
+color:red;
+}@style [close]
+@config [close]
+@tag testA [open]
+# 見出し1
+これは、段落です。
+@btn id=testbtn ボタン
+@tag testa [close]
+@script on=testbtn [open]
+function main(){
+dom.Tag("testA").style.display('none','auto');
+dom.Tag("testB").style.display('block','auto');
+}
+@script [close]
+@tag testB [open]
+# これは、見出し2です。
+- リスト1
+- リスト2
+@tag testB [close]</textarea
+      >
 
-      document.getElementById('content').innerHTML = html;
-    }
+      <button onclick="convertAndPreview()">プレビュー</button>
 
-    async function main() {
-      const markdown = await loadMarkdown('test.md');
-      const data = parseMarkdown(markdown);
-      renderContent(data);
-    }
+      <div class="preview-area">
+        <h2>プレビュー</h2>
+        <div id="preview"></div>
+      </div>
+    </div>
 
-    main();
-  </script>
-</body>
+    <script src="main.js"></script>
+  </body>
 </html>
