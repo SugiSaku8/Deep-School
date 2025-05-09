@@ -16,6 +16,7 @@
       let scriptsToEval = []; // 実行するスクリプトを格納する配列
 
       function evalrun(code, args) {
+        args = args || {}; // args が undefined または null の場合、空のオブジェクトを使用
         const func = new Function(...Object.keys(args), code);
         func(...Object.values(args));
       }
