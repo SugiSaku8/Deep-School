@@ -30,19 +30,7 @@
                 return `<style>${styleContent}</style>`;
             });
 
-            // tag, btn, scriptタグを処理
-            markdown = markdown.replace(/@tag (\w+) \[(open|close)\s?(\^hide\^)?\]([\s\S]*?)@tag \w+ \[close\]/g, (match, tagName, openClose, hide, tagContent) => {
-                let style = '';
-                if (hide === '^hide^') {
-                    style = 'display: none;';
-                }
-                const parsedTagContent = marked.parse(tagContent);
-                return `<div id="${tagName}" style="${style}">${parsedTagContent}</div>`;
-            });
-            markdown = markdown.replace(/@btn id=(\w+) ([\s\S]*)/g, (match, btnId, btnContent) => {
-                const content = btnContent.replace(/^id=/, '').trim();
-                return `<button id="${btnId}">${content}</button>`;
-            });
+            // scriptタグを先に処理
             markdown = markdown.replace(/@script on=(\w+) \[open\]([\s\S]*?)@script \[close\]/g, (match, onId, scriptContent) => {
                 // HTMLエンティティをデコード
                 const decodedScript = scriptContent.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
@@ -62,6 +50,20 @@
                                 }
                             })();
                         <\/script>`;
+            });
+
+            // tag, btnタグを処理
+            markdown = markdown.replace(/@tag (\w+) \[(open|close)\s?(\^hide\^)?\]([\s\S]*?)@tag \w+ \[close\]/g, (match, tagName, openClose, hide, tagContent) => {
+                let style = '';
+                if (hide === '^hide^') {
+                    style = 'display: none;';
+                }
+                const parsedTagContent = marked.parse(tagContent);
+                return `<div id="${tagName}" style="${style}">${parsedTagContent}</div>`;
+            });
+            markdown = markdown.replace(/@btn id=(\w+) ([\s\S]*)/g, (match, btnId, btnContent) => {
+                const content = btnContent.replace(/^id=/, '').trim();
+                return `<button id="${btnId}">${content}</button>`;
             });
 
             // marked.jsを使用してMarkdownをHTMLに変換
