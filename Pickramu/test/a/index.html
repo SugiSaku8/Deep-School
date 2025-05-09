@@ -50,9 +50,13 @@
                             (function() {
                                 const btn = document.getElementById("${onId}");
                                 if (btn) {
-                                    btn.onclick = function() {
-                                        ${decodedScript}
-                                    };
+                                    btn.addEventListener('click', function() {
+                                        try {
+                                            ${decodedScript}
+                                        } catch (e) {
+                                            console.error("Error executing script:", e);
+                                        }
+                                    });
                                 } else {
                                     console.error("Button with id '${onId}' not found");
                                 }
