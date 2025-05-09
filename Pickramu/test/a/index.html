@@ -72,6 +72,9 @@
         markdown = markdown.replace(
           /@script on=(\w+) \[open\]([\s\S]*?)@script \[close\]/g,
           (match, onId, scriptContent) => {
+            console.log("id:" + onId);
+            console.log("scriptContent:" + scriptContent);
+
             // HTMLエンティティをデコード
             const decodedScript = scriptContent
               .replace(/&lt;/g, "<")
