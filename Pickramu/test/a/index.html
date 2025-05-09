@@ -15,10 +15,12 @@
     <script>
       let scriptsToEval = []; // 実行するスクリプトを格納する配列
 
-      function evalrun(code, args) {
-        args = args || {}; // args が undefined または null の場合、空のオブジェクトを使用
-        const func = new Function(...Object.keys(args), code);
-        func(...Object.values(args));
+      function evalrun(code) {
+        try {
+          eval(code);
+        } catch (error) {
+          console.error("Error executing script:", error);
+        }
       }
 
       function loadMarkdown(file) {
@@ -98,14 +100,14 @@
                 const btn = document.getElementById("${onId}");
                 if (btn) {
                   btn.addEventListener('click', function() {
-                    evalrun(\`${decodedScript}\`, { dom: dom });
+                    evalrun(\`${decodedScript}\`);
                   });
                 } else {
                   console.error("Button with id '${onId}' not found");
                 }
               })();
             `);
-            return ""; // 空文字列を返す
+            return "";
           }
         );
 
@@ -149,14 +151,17 @@
         styleContent.split("\n").forEach((line) => {
           line = line.trim();
           if (!line) return; // 空行を無視
+
           const match = line.match(/#(\w+)\s*\{([\s\S]*?)\}/);
           if (match) {
             const id = match[1];
             const css = match[2].trim();
             styles[id] = {};
+
             css.split(";").forEach((cssLine) => {
               cssLine = cssLine.trim();
               if (!cssLine) return; // 空のCSS行を無視
+
               const cssMatch = cssLine.match(/(\w+)\s*:\s*([^;]+)/);
               if (cssMatch) {
                 const property = cssMatch[1].trim();
@@ -164,6 +169,8 @@
                 styles[id][property] = value;
               }
             });
+          } else if (line) {
+            console.warn("Invalid style line:", line);
           }
         });
         return styles;
