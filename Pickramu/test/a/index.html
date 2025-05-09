@@ -25,7 +25,7 @@
           .then((markdown) => {
             const html = parseMarkdown(markdown);
             document.getElementById("content").innerHTML = html;
-            document.getElementById("content").style.display = "block"; // コンテンツを表示
+           // document.getElementById("content").style.display = "block"; // コンテンツを表示
 
             // すべてのスクリプトを実行
             scriptsToEval.forEach((script) => {
