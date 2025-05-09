@@ -15,5 +15,6 @@ dom.Tag("testB").style.display('block','auto');
 
 # これは、見出し 2 です。
 
--　リスト 1 -　リスト 2
+- リスト 1 　
+- リスト 2
 @tag testB [close]
