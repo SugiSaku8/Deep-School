@@ -3,8 +3,8 @@ name テスト
 ver 1.0.0
 @config [close]
 @tag testA [open] #　見出し 1
-これは、段落です。
-@btn id=testbtn ボタン
+これは、段落です。           
+@btn id=testbtn 次へ
 @tag testa [close]
 @script on=testbtn [open]
 dom.Tag("testA").style.display('none','auto');
