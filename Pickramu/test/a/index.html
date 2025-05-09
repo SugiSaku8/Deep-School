@@ -38,13 +38,9 @@
 
       function parseMarkdown(markdown) {
         markdown = markdown.replace(
-          /@config \[open\]([\s\S]*?)@config \[close\]/g,
-          ""
-        );
-        markdown = markdown.replace(
           /@style \[open\]([\s\S]*?)@style \[close\]/g,
           (match, styleContent) => {
-            console.log("style:"+styleContent);
+            console.log("style:" + styleContent);
             console.log("styleContent:", styleContent);
             // スタイルをJavaScriptオブジェクトとして格納
             const styleObject = parseStyles(styleContent);
@@ -57,7 +53,10 @@
             return ""; // スタイルタグを削除
           }
         );
-
+        markdown = markdown.replace(
+          /@config \[open\]([\s\S]*?)@config \[close\]/g,
+          ""
+        );
         // tag, btn, scriptタグを処理
         markdown = markdown.replace(
           /@tag (\w+) \[(open|close)\s?(\^hide\^)?\]([\s\S]*?)@tag \w+ \[close\]/g,
