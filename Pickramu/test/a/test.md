@@ -18,7 +18,7 @@ function main(){
   dom.Tag("testB").style.display('block','auto');
 }
 @script [close]
-@tag testB [open] hide
+@tag testB [open] ^hide
 # これは、見出し2です。
 -　リスト1
 -　リスト2
