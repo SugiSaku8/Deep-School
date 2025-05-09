@@ -44,13 +44,14 @@
         markdown = markdown.replace(
           /@style \[open\]([\s\S]*?)@style \[close\]/g,
           (match, styleContent) => {
+            console.log(styleContent);
             console.log("styleContent:", styleContent);
             // スタイルをJavaScriptオブジェクトとして格納
             const styleObject = parseStyles(styleContent);
             console.log("styleObject:", styleObject);
             // スタイルを適用するスクリプトを生成
             const styleScript = generateStyleScript(styleObject);
-             console.log("styleScript:", styleScript);
+            console.log("styleScript:", styleScript);
             // スクリプトをscriptsToEvalに追加
             scriptsToEval.push(styleScript);
             return ""; // スタイルタグを削除
@@ -81,7 +82,6 @@
         markdown = markdown.replace(
           /@script on=(\w+) \[open\]([\s\S]*?)@script \[close\]/g,
           (match, onId, scriptContent) => {
-
             // HTMLエンティティをデコード
             const decodedScript = scriptContent
               .replace(/&lt;/g, "<")
@@ -181,7 +181,9 @@
                 const style = styleObject[id];
                 for (const property in style) {
                   if (style.hasOwnProperty(property)) {
-                    console.log(`Setting ${property} to ${style[property]} on element ${id}`);
+                    console.log(
+                      `Setting ${property} to ${style[property]} on element ${id}`
+                    );
                     element.style[property] = style[property];
                   }
                 }
