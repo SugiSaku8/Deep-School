@@ -24,25 +24,32 @@
         }
 
         function parseMarkdown(markdown) {
-            // config, style, tag, scriptタグを除去
+            // config, style, tagを除去
             markdown = markdown.replace(/@config \[open\]([\s\S]*?)@config \[close\]/g, '');
             markdown = markdown.replace(/@style \[open\]([\s\S]*?)@style \[close\]/g, (match, styleContent) => {
                 return `<style>${styleContent}</style>`;
             });
+
+            // marked.jsを使用してMarkdownをHTMLに変換
+            markdown = marked.parse(markdown);
+
+            // tag, btn, scriptタグを処理
             markdown = markdown.replace(/@tag (\w+) \[open\]([\s\S]*?)@tag \w+ \[close\]/g, (match, tagName, tagContent) => {
-                return `<div id="${tagName}">${marked.parse(tagContent)}</div>`;
+                return `<div id="${tagName}">${tagContent}</div>`;
             });
             markdown = markdown.replace(/@btn id=(\w+) ([\s\S]*)/g, (match, btnId, btnContent) => {
                 const content = btnContent.replace(/^id=/, '').trim();
                 return `<button id="${btnId}">${content}</button>`;
             });
-           markdown = markdown.replace(/@script on=(\w+) \[open\]([\s\S]*?)@script \[close\]/g, (match, onId, scriptContent) => {
+            markdown = markdown.replace(/@script on=(\w+) \[open\]([\s\S]*?)@script \[close\]/g, (match, onId, scriptContent) => {
+                // HTMLエンティティをデコード
+                const decodedScript = scriptContent.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
                 return `<script>
                             (function() {
                                 const btn = document.getElementById("${onId}");
                                 if (btn) {
                                     btn.onclick = function() {
-                                        ${scriptContent}
+                                        ${decodedScript}
                                     };
                                 } else {
                                     console.error("Button with id '${onId}' not found");
@@ -50,10 +57,10 @@
                             })();
                         <\/script>`;
             });
-            // marked.jsを使用してMarkdownをHTMLに変換
-            markdown = marked.parse(markdown);
+
             return markdown;
         }
+
 
         // ページのロード時にMarkdownファイルを読み込む
         window.onload = function() {
