@@ -67,23 +67,23 @@
               .replace(/&lt;/g, "<")
               .replace(/&gt;/g, ">")
               .replace(/&amp;/g, "&");
-            // Store the script to be executed later
-            return `<script type="text/javascript">
-                      window.addEventListener('load', function() {
-                        const btn = document.getElementById("${onId}");
-                        if (btn) {
-                          btn.addEventListener('click', function() {
-                            try {
-                              ${decodedScript}
-                            } catch (e) {
-                              console.error("Error executing script:", e);
-                            }
-                          });
-                        } else {
-                          console.error("Button with id '${onId}' not found");
-                        }
-                      });
-                    <\/script>`;
+            // Generate the script to be executed on button click
+            return `
+              (function() {
+                const btn = document.getElementById("${onId}");
+                if (btn) {
+                  btn.addEventListener('click', function() {
+                    try {
+                      ${decodedScript}
+                    } catch (e) {
+                      console.error("Error executing script:", e);
+                    }
+                  });
+                } else {
+                  console.error("Button with id '${onId}' not found");
+                }
+              })();
+            `;
           }
         );
 
