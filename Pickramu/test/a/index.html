@@ -69,14 +69,13 @@
           /@btn id=(\w+) ([\s\S]*)/g,
           (match, btnId, btnContent) => {
             const content = btnContent.replace(/^id=/, "").trim();
+            console.log(content)
             return `<button id="${btnId}">${content}</button>`;
           }
         );
         markdown = markdown.replace(
           /@script on=(\w+) \[open\]([\s\S]*?)@script \[close\]/g,
           (match, onId, scriptContent) => {
-            console.log("id:" + onId);
-            console.log("scriptContent:" + scriptContent);
 
             // HTMLエンティティをデコード
             const decodedScript = scriptContent
