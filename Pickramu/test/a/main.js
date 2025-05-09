@@ -1,19 +1,4 @@
-function convertAndPreview() {
-    const templateStr = document.getElementById('templateInput').value;
-    const converter = new TemplateConverter();
-    const result = converter.convert(templateStr);
-    
-    // プレビュー領域に結果を表示
-    document.getElementById('preview').innerHTML = result;
-    
-    // スクリプトの動的追加
-    const scripts = document.getElementById('preview').getElementsByTagName('script');
-    Array.from(scripts).forEach(script => {
-        const newScript = document.createElement('script');
-        newScript.textContent = script.textContent;
-        document.head.appendChild(newScript);
-    });
-}
+
 
 class TemplateConverter {
     constructor() {
