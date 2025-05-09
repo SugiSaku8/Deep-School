@@ -1,5 +1,14 @@
+/**
+ * @type {Array<string>} scriptsToEval - 実行するスクリプトを格納する配列
+ */
 let scriptsToEval = []; // 実行するスクリプトを格納する配列
 
+/**
+ * evalrun - 与えられたコードをevalで実行し、エラーがあればconsole.errorに出力する。
+ *
+ * @param {string} code - 実行するJavaScriptコード
+ * @returns {void}
+ */
 function evalrun(code) {
   try {
     eval(code);
@@ -8,6 +17,12 @@ function evalrun(code) {
   }
 }
 
+/**
+ * loadMarkdown - Markdownファイルを読み込み、HTMLに変換して指定された要素に表示する。
+ *
+ * @param {string} file - Markdownファイルのパス
+ * @returns {void}
+ */
 function loadMarkdown(file) {
   fetch(file)
     .then((response) => response.text())
@@ -25,6 +40,12 @@ function loadMarkdown(file) {
     .catch((error) => console.error("Error loading markdown:", error));
 }
 
+/**
+ * parseMarkdown - Markdownテキストを解析し、カスタムタグを処理してHTMLに変換する。
+ *
+ * @param {string} markdown - Markdown形式のテキスト
+ * @returns {string} - 変換されたHTML
+ */
 function parseMarkdown(markdown) {
   markdown = markdown.replace(
     /@config \[open\]([\s\S]*?)@config \[close\]/g,
@@ -102,12 +123,26 @@ function parseMarkdown(markdown) {
   return markdown;
 }
 
-// domオブジェクトを定義
+/**
+ * dom - DOM操作を簡単にするためのオブジェクト
+ * @namespace dom
+ */
 const dom = {
+  /**
+   * Tag - 指定されたIDを持つ要素を取得し、その要素のスタイルを操作するための関数を提供する。
+   * @param {string} tagName - 取得する要素のID
+   * @returns {{style: {display: Function}}} - スタイル操作関数を持つオブジェクト
+   */
   Tag: function (tagName) {
     const element = document.getElementById(tagName);
     return {
       style: {
+        /**
+         * display - 要素のdisplayスタイルを変更する。
+         * @param {string} displayValue - 設定するdisplayの値
+         * @param {string} important - 'auto'の場合、!importantを設定する
+         * @returns {void}
+         */
         display: function (displayValue, important) {
           element.style.display = displayValue;
           if (important === "auto") {
