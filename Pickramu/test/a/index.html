@@ -40,7 +40,6 @@
         markdown = markdown.replace(
           /@style \[open\]([\s\S]*?)@style \[close\]/g,
           (match, styleContent) => {
-            console.log("style:" + styleContent);
             console.log("styleContent:", styleContent);
             // スタイルをJavaScriptオブジェクトとして格納
             const styleObject = parseStyles(styleContent);
