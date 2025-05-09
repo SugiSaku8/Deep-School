@@ -2,14 +2,6 @@
 name テスト
 ver 1.0.0
 @config [close]
-@style [open]
-#red{
-color:red;
-}
-#testB{
-display:none;
-}
-@style [close]
 @tag testA [open] #　見出し 1
 これは、段落です。
 @btn id=testbtn ボタン

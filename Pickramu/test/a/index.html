@@ -3,7 +3,12 @@
   <head>
     <title>Markdown Viewer</title>
     <style>
-      /* スタイルはここに記述 */
+      #red {
+        color: red;
+      }
+      #testB {
+        display: none;
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   </head>
@@ -44,21 +49,6 @@
         markdown = markdown.replace(
           /@config \[open\]([\s\S]*?)@config \[close\]/g,
           ""
-        );
-        markdown = markdown.replace(
-          /@style \[open\]([\s\S]*?)@style \[close\]/g,
-          (match, styleContent) => {
-            console.log("styleContent:", styleContent);
-            // スタイルをJavaScriptオブジェクトとして格納
-            const styleObject = parseStyles(styleContent);
-            console.log("styleObject:", styleObject);
-            // スタイルを適用するスクリプトを生成
-            const styleScript = generateStyleScript(styleObject);
-             console.log("styleScript:", styleScript);
-            // スクリプトをscriptsToEvalに追加
-            scriptsToEval.push(styleScript);
-            return ""; // スタイルタグを削除
-          }
         );
 
         // tag, btn, scriptタグを処理
@@ -142,63 +132,6 @@
           };
         },
       };
-    </script>
-
-    <script>
-      // CSSライクな文字列をJavaScriptオブジェクトに変換する関数
-      function parseStyles(styleContent) {
-        const styles = {};
-        styleContent.split("\n").forEach((line) => {
-          line = line.trim();
-          if (!line) return; // 空行を無視
-
-          const match = line.match(/#(\w+)\s*\{([\s\S]*?)\}/);
-          if (match) {
-            const id = match[1];
-            const css = match[2].trim();
-            styles[id] = {};
-
-            css.split(";").forEach((cssLine) => {
-              cssLine = cssLine.trim();
-              if (!cssLine) return; // 空のCSS行を無視
-
-              const cssMatch = cssLine.match(/(\w+)\s*:\s*([^;]+)/);
-              if (cssMatch) {
-                const property = cssMatch[1].trim();
-                const value = cssMatch[2].trim();
-                styles[id][property] = value;
-              }
-            });
-          } else if (line) {
-            console.warn("Invalid style line:", line);
-          }
-        });
-        return styles;
-      }
-
-      // スタイルを適用するスクリプトを生成する関数
-      function generateStyleScript(styleObject) {
-        console.log("generateStyleScript called with:", styleObject);
-        return `(function() {
-          for (const id in styleObject) {
-            if (styleObject.hasOwnProperty(id)) {
-              const element = document.getElementById(id);
-              if (element) {
-                console.log("Element found:", element);
-                const style = styleObject[id];
-                for (const property in style) {
-                  if (style.hasOwnProperty(property)) {
-                    console.log(\`Setting ${property} to ${style[property]} on element \${id}\`);
-                    element.style[property] = style[property];
-                  }
-                }
-              } else {
-                console.error(\`Element with id '\${id}' not found\`);
-              }
-            }
-          }
-        })();`;
-      }
     </script>
   </body>
 </html>
