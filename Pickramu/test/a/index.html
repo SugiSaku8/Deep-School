@@ -24,7 +24,7 @@
         }
 
         function parseMarkdown(markdown) {
-            // config, style, tagを除去
+            // config, styleを除去
             markdown = markdown.replace(/@config \[open\]([\s\S]*?)@config \[close\]/g, '');
             markdown = markdown.replace(/@style \[open\]([\s\S]*?)@style \[close\]/g, (match, styleContent) => {
                 return `<style>${styleContent}</style>`;
@@ -36,7 +36,8 @@
                 if (hide === '^hide^') {
                     style = 'display: none;';
                 }
-                return `<div id="${tagName}" style="${style}">${tagContent}</div>`;
+                const parsedTagContent = marked.parse(tagContent);
+                return `<div id="${tagName}" style="${style}">${parsedTagContent}</div>`;
             });
             markdown = markdown.replace(/@btn id=(\w+) ([\s\S]*)/g, (match, btnId, btnContent) => {
                 const content = btnContent.replace(/^id=/, '').trim();
