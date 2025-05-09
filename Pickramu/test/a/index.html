@@ -14,7 +14,7 @@
 
     <script>
       function evalrun(code) {
-        Function(code)();
+        setTimeout(Function(code)(),0.9);
       }
       function loadMarkdown(file) {
         fetch(file)
