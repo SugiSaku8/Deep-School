@@ -39,7 +39,7 @@
                 if (hide === 'hide') {
                     style = 'style="display: none;"';
                 }
-                return `<div id="${tagName}" ${style}>${tagContent}</div>`;
+                return `<div id="${tagName}" style="${style}">${tagContent}</div>`;
             });
             markdown = markdown.replace(/@btn id=(\w+) ([\s\S]*)/g, (match, btnId, btnContent) => {
                 const content = btnContent.replace(/^id=/, '').trim();
