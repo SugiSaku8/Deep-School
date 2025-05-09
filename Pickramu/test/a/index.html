@@ -1,89 +1,23 @@
+<!-- index.html -->
 <!DOCTYPE html>
-<html>
-  <head>
-    <style>
-      .container {
-        max-width: 800px;
-        margin: 20px auto;
-        padding: 15px;
-        font-family: Arial, sans-serif;
-      }
-      textarea {
-        width: 100%;
-        height: 200px;
-        margin-bottom: 15px;
-        padding: 10px;
-        font-family: monospace;
-      }
-      .preview-area {
-        border: 1px solid #ccc;
-        padding: 15px;
-        margin-top: 15px;
-        min-height: 200px;
-      }
-      button {
-        padding: 8px 15px;
-        cursor: pointer;
-      }
-    </style>
-  </head>
-  <body>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
     <div class="container">
-      <h2>テンプレートエディタ</h2>
-      <textarea id="templateInput">
-@config [open]
-name テスト
-ver 1.0.0
-@style [open]
-#red{
-color:red;
-}@style [close]
-@config [close]
-@tag testA [open]
-# 見出し1
-これは、段落です。
-@btn id=testbtn ボタン
-@tag testa [close]
-@script on=testbtn [open]
-function main(){
-dom.Tag("testA").style.display('none','auto');
-dom.Tag("testB").style.display('block','auto');
-}
-@script [close]
-@tag testB [open]
-# これは、見出し2です。
-- リスト1
-- リスト2
-@tag testB [close]</textarea
-      >
-
-      <button onclick="convertAndPreview()">プレビュー</button>
-
-      <div class="preview-area">
-        <h2>プレビュー</h2>
-        <div id="preview"></div>
-      </div>
+        <div class="split-view">
+            <div class="editor">
+                <textarea id="templateInput"></textarea>
+                <button onclick="convertAndPreview()">プレビュー</button>
+            </div>
+            <div class="preview">
+                <h2>プレビュー</h2>
+                <div id="preview"></div>
+            </div>
+        </div>
     </div>
-    <script>
-      function convertAndPreview() {
-        const templateStr = document.getElementById("templateInput").value;
-        const converter = new TemplateConverter();
-        const result = converter.convert(templateStr);
-
-        // プレビュー領域に結果を表示
-        document.getElementById("preview").innerHTML = result;
-
-        // スクリプトの動的追加
-        const scripts = document
-          .getElementById("preview")
-          .getElementsByTagName("script");
-        Array.from(scripts).forEach((script) => {
-          const newScript = document.createElement("script");
-          newScript.textContent = script.textContent;
-          document.head.appendChild(newScript);
-        });
-      }
-    </script>
     <script src="main.js"></script>
-  </body>
+</body>
 </html>
