@@ -13,9 +13,12 @@
     </div>
 
     <script>
+      let scriptsToEval = []; // 実行するスクリプトを格納する配列
+
       function evalrun(code) {
-        setTimeout(Function(code)(),0.9);
+        setTimeout(Function(code)(), 0.9);
       }
+
       function loadMarkdown(file) {
         fetch(file)
           .then((response) => response.text())
@@ -23,6 +26,12 @@
             const html = parseMarkdown(markdown);
             document.getElementById("content").innerHTML = html;
             document.getElementById("content").style.display = "block"; // コンテンツを表示
+
+            // すべてのスクリプトを実行
+            scriptsToEval.forEach((script) => {
+              evalrun(script);
+            });
+            scriptsToEval = []; // 配列をクリア
           })
           .catch((error) => console.error("Error loading markdown:", error));
       }
@@ -67,8 +76,9 @@
               .replace(/&lt;/g, "<")
               .replace(/&gt;/g, ">")
               .replace(/&amp;/g, "&");
-            // Generate the script to be executed on button click
-            return `
+
+            // スクリプトを配列に格納
+            scriptsToEval.push(`
               (function() {
                 const btn = document.getElementById("${onId}");
                 if (btn) {
@@ -83,7 +93,8 @@
                   console.error("Button with id '${onId}' not found");
                 }
               })();
-            `;
+            `);
+            return ""; // 空文字列を返す
           }
         );
 
