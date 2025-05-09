@@ -37,7 +37,7 @@
             markdown = markdown.replace(/@tag (\w+) \[(open|close)\s?(\^hide\^)?\]([\s\S]*?)@tag \w+ \[close\]/g, (match, tagName, openClose, hide, tagContent) => {
                 let style = '';
                 if (hide === '^hide^') {
-                    style = 'style="display: none;"';
+                    style = 'display: none;';
                 }
                 return `<div id="${tagName}" style="${style}">${tagContent}</div>`;
             });
