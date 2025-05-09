@@ -23,7 +23,7 @@
                 .catch(error => console.error('Error loading markdown:', error));
         }
 
-        function parseMarkdown(markdown) {
+       function parseMarkdown(markdown) {
             // config, style, tag, scriptタグを除去
             markdown = markdown.replace(/@config \[open\]([\s\S]*?)@config \[close\]/g, '');
             markdown = markdown.replace(/@style \[open\]([\s\S]*?)@style \[close\]/g, (match, styleContent) => {
@@ -38,9 +38,10 @@
             });
             markdown = markdown.replace(/@script on=(\w+) \[open\]([\s\S]*?)@script \[close\]/g, (match, onId, scriptContent) => {
                 return `<script>
-                            document.getElementById("${onId}").onclick = function() {
-                                ${scriptContent}
-                            };
+                            document.getElementById("${onId}").addEventListener("click", function() {
+                                // スクリプトの内容をそのまま実行
+                                eval(\`${scriptContent}\`);
+                            });
                         <\/script>`;
             });
             // marked.jsを使用してMarkdownをHTMLに変換
@@ -50,7 +51,24 @@
 
         // ページのロード時にMarkdownファイルを読み込む
         window.onload = function() {
-            loadMarkdown('test.md'); // Markdownファイルのパス
+            loadMarkdown('test/a/test.md'); // Markdownファイルのパス
+        };
+
+       // domオブジェクトを定義
+        const dom = {
+            Tag: function(tagName) {
+                const element = document.getElementById(tagName);
+                return {
+                    style: {
+                        display: function(displayValue, important) {
+                            element.style.display = displayValue;
+                            if (important === 'auto') {
+                                element.style.setProperty('display', displayValue, 'important');
+                            }
+                        }
+                    }
+                };
+            }
         };
     </script>
 </body>
