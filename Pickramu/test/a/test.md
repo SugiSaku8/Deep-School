@@ -19,7 +19,7 @@ function main(){
 }
 @script [close]
 
-@tag testB [open] ^hide^
+@tag testB [open] hide
 # これは、見出し2です。
 -　リスト1
 -　リスト2
