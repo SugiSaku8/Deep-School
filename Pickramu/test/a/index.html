@@ -34,9 +34,7 @@
             // tag, btn, scriptタグを処理
             markdown = markdown.replace(/@tag (\w+) \[(open|close)\s?(\^hide\^)?\]([\s\S]*?)@tag \w+ \[close\]/g, (match, tagName, openClose, hide, tagContent) => {
                 let style = '';
-                if (tagName === 'testB') {
-                    style = 'display: none;'; // testBを初期状態で非表示
-                } else if (hide === '^hide^') {
+                 if (tagName === 'testB' || hide === '^hide^') {
                     style = 'display: none;';
                 }
                 const parsedTagContent = marked.parse(tagContent);
