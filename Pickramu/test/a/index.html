@@ -15,8 +15,9 @@
     <script>
       let scriptsToEval = []; // 実行するスクリプトを格納する配列
 
-      function evalrun(code) {
-        (new Function(code))();
+      function evalrun(code, args) {
+        const func = new Function(...Object.keys(args), code);
+        func(...Object.values(args));
       }
 
       function loadMarkdown(file) {
@@ -96,7 +97,7 @@
                 const btn = document.getElementById("${onId}");
                 if (btn) {
                   btn.addEventListener('click', function() {
-                    ${decodedScript}
+                    evalrun(\`${decodedScript}\`, { dom: dom });
                   });
                 } else {
                   console.error("Button with id '${onId}' not found");
