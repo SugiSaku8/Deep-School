@@ -81,6 +81,9 @@ function convertAndPreview() {
 
 // デフォルトテンプレートの設定
 document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("pre").onclick = function () {
+    convertAndPreview();
+  };
   const templateInput = document.getElementById("templateInput");
   templateInput.value = `@config [open]
 name テスト
