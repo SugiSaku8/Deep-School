@@ -44,7 +44,14 @@
         markdown = markdown.replace(
           /@style \[open\]([\s\S]*?)@style \[close\]/g,
           (match, styleContent) => {
-            return `<style>${styleContent}</style>`;
+            //return `<style>${styleContent}</style>`;
+            // スタイルをJavaScriptオブジェクトとして格納
+            const styleObject = parseStyles(styleContent);
+            // スタイルを適用するスクリプトを生成
+            const styleScript = generateStyleScript(styleObject);
+            // スクリプトをscriptsToEvalに追加
+            scriptsToEval.push(styleScript);
+            return ""; // スタイルタグを削除
           }
         );
 
@@ -133,6 +140,55 @@
           };
         },
       };
+    </script>
+
+    <script>
+      // CSSライクな文字列をJavaScriptオブジェクトに変換する関数
+      function parseStyles(styleContent) {
+        const styles = {};
+        styleContent.split("\n").forEach((line) => {
+          line = line.trim();
+          if (!line) return; // 空行を無視
+          const match = line.match(/#(\w+)\s*\{([\s\S]*?)\}/);
+          if (match) {
+            const id = match[1];
+            const css = match[2].trim();
+            styles[id] = {};
+            css.split(";").forEach((cssLine) => {
+              cssLine = cssLine.trim();
+              if (!cssLine) return; // 空のCSS行を無視
+              const cssMatch = cssLine.match(/(\w+)\s*:\s*([^;]+)/);
+              if (cssMatch) {
+                const property = cssMatch[1].trim();
+                const value = cssMatch[2].trim();
+                styles[id][property] = value;
+              }
+            });
+          }
+        });
+        return styles;
+      }
+
+      // スタイルを適用するスクリプトを生成する関数
+      function generateStyleScript(styleObject) {
+        return function () {
+          for (const id in styleObject) {
+            if (styleObject.hasOwnProperty(id)) {
+              const element = document.getElementById(id);
+              if (element) {
+                const style = styleObject[id];
+                for (const property in style) {
+                  if (style.hasOwnProperty(property)) {
+                    element.style[property] = style[property];
+                  }
+                }
+              } else {
+                console.error(`Element with id '${id}' not found`);
+              }
+            }
+          }
+        };
+      }
     </script>
   </body>
 </html>
