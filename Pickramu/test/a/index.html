@@ -37,7 +37,6 @@
       }
 
       function parseMarkdown(markdown) {
-        // config, styleを除去
         markdown = markdown.replace(
           /@config \[open\]([\s\S]*?)@config \[close\]/g,
           ""
