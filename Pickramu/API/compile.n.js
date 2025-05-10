@@ -66,7 +66,6 @@ function convertToHtml(inputText) {
     return outputHtml;
   }
   
-  // Example usage:
   const inputText = `
   @tag n1 [open]
   @tag question [open]
