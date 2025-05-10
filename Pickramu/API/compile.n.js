@@ -8,16 +8,21 @@ function convertToHtml(inputText) {
     const line = lines[i].trim();
 
     // Handle @tag [open] blocks
-    let tagOpenMatch = line.match(/@tag\s+([\w,-]+)\s+\[open\]/);
+    let tagOpenMatch = line.match(/@tag\s+([\w,-]+)?\s+\[open\]/);
     if (tagOpenMatch) {
-      const tagIds = tagOpenMatch[1].split(',').map(id => id.trim()).join(' '); // Split and join IDs
+      const tagIds = tagOpenMatch[1]
+        ? tagOpenMatch[1]
+            .split(",")
+            .map((id) => id.trim())
+            .join(" ")
+        : ""; // Split and join IDs
       outputHtml += `<div id="${tagIds}">\n`;
       i++;
       continue;
     }
 
     // Handle @tag [close] blocks
-    let tagCloseMatch = line.match(/@tag\s+([\w,-]+)\s+\[close\]/);
+    let tagCloseMatch = line.match(/@tag\s+([\w,-]+)?\s+\[close\]/);
     if (tagCloseMatch) {
       i++; // Consume the close tag line
       outputHtml += `</div>\n`;
@@ -27,7 +32,10 @@ function convertToHtml(inputText) {
     // Handle @btn tags
     let btnMatch = line.match(/@btn\s+id=([\w,-]+)\s+(.+)/);
     if (btnMatch) {
-      const btnIds = btnMatch[1].split(',').map(id => id.trim()).join(' '); // Split and join IDs
+      const btnIds = btnMatch[1]
+        .split(",")
+        .map((id) => id.trim())
+        .join(" "); // Split and join IDs
       const btnContent = btnMatch[2];
       outputHtml += `<button id="${btnIds}">${btnContent}</button>\n`;
       i++;
@@ -68,25 +76,46 @@ function convertToHtml(inputText) {
 }
 
 const inputText = `
-@tag n1,unit [open]
-@tag question,text [open]
-約10万年前ごろのものと見られる人類の痕跡が日本列島から見つかりました。
+@config [open]
+name 旧石器時代
+ver 1.0.0
+unit 1
+chapter 1
+@config [close]
+
+@tag unit-title [open] Jla-1 社会 Unit 2
+@tag unit-title [close]
+@tag chapter-title [open] 連立方程式の計算 Chapter 23
+@tag chapter-title [close]
+
+@tag n1 [open]
+
+@tag question [open]
+約 10 万年前ごろのものと見られる人類の痕跡が日本列島から見つかりました。  
 この頃の人類は、動物を狩って生活していました。
-@tag question,text [close]
+
+@tag question [close]
+
 @btn id=btn1,button-next 次へ
-@tag n1,unit [close]
-@tag question,text [open]
+
+@tag n1 [close]
+
+@tag question [open]
 約 1 万年前、日本列島が大陸から分離しました。
 紀元前 3000 年ごろ、稲作が日本列島に伝わりました。
-@tag question,text [close]
-@btn id=btn2,button-next 次へ
+@tag question [close]
+@btn id=btn2 次へ
+
 @script on=btn1 [open]
 dom.Tag("n1").style.display('none','auto');
 dom.Tag("n2").style.display('block','auto');
 @script [close]
+
 @script on=btn2 [open]
 dom.back();
 @script [close]
+
+
 `;
 
 const htmlOutput = convertToHtml(inputText);
