@@ -26,7 +26,7 @@ chapter 1
 約 1 万年前、日本列島が大陸から分離しました。
 紀元前 3000 年ごろ、稲作が日本列島に伝わりました。
 @tag question [close]
-@btn id=btn2 次へ
+@btn id=btn2,button-next 次へ
 
 @script on=btn1 [open]
 dom.Tag("n1").style.display('none','auto');
