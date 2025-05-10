@@ -30,14 +30,18 @@ function convertToHtml(inputText) {
     }
 
     // Handle @btn tags
-    let btnMatch = line.match(/@btn\s+id=([\w,-]+)\s+(.+)/);
+    let btnMatch = line.match(/@btn\s+id=([\w,-]+)\s+class=([\w,-]+)\s+(.+)/);
     if (btnMatch) {
       const btnIds = btnMatch[1]
         .split(",")
         .map((id) => id.trim())
         .join(" "); // Split and join IDs
-      const btnContent = btnMatch[2];
-      outputHtml += `<button id="${btnIds}">${btnContent}</button>\n`;
+      const btnClasses = btnMatch[2]
+        .split(",")
+        .map((cls) => cls.trim())
+        .join(" "); // Split and join classes
+      const btnContent = btnMatch[3];
+      outputHtml += `<button id="${btnIds}" class="${btnClasses}">${btnContent}</button>\n`;
       i++;
       continue;
     }
@@ -76,40 +80,25 @@ function convertToHtml(inputText) {
 }
 
 const inputText = `
-
-@tag unit-title [open] Jla-1 社会 Unit 2
-@tag unit-title [close]
-@tag chapter-title [open] 連立方程式の計算 Chapter 23
-@tag chapter-title [close]
-
-@tag n1 [open]
-
+@tag n1,unit [open]
 @tag question [open]
-約 10 万年前ごろのものと見られる人類の痕跡が日本列島から見つかりました。  
+約10万年前ごろのものと見られる人類の痕跡が日本列島から見つかりました。
 この頃の人類は、動物を狩って生活していました。
-
 @tag question [close]
-
-@btn id=btn1,button-next 次へ
-
-@tag n1 [close]
-
+@btn id=btn1 class=button-next 次へ
+@tag n1,unit [close]
 @tag question [open]
 約 1 万年前、日本列島が大陸から分離しました。
 紀元前 3000 年ごろ、稲作が日本列島に伝わりました。
 @tag question [close]
-@btn id=btn2 次へ
-
+@btn id=btn2 class=button-next 次へ
 @script on=btn1 [open]
 dom.Tag("n1").style.display('none','auto');
 dom.Tag("n2").style.display('block','auto');
 @script [close]
-
 @script on=btn2 [open]
 dom.back();
 @script [close]
-
-
 `;
 
 const htmlOutput = convertToHtml(inputText);
@@ -699,7 +688,6 @@ const styles = `
     }
 
     #content #chapter-title {
-      font-weight: bold;
       font-size: 2em;
     }
 
