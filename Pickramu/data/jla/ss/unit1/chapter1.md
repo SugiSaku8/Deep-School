@@ -16,11 +16,12 @@ chapter 1
 この頃の人類は、動物を狩って生活していました。
 @tag question [close]
 @btn id=btn1 次へ
+
 @tag n1 [close]
+
+@tag question [open]
 約 1 万年前、日本列島が大陸から分離しました。
 紀元前 3000 年ごろ、稲作が日本列島に伝わりました。
-@tag question [open]
-
 @tag question [close]
 @btn id=btn2 次へ
 
