@@ -580,33 +580,33 @@
         margin: 0.2em 0;
       }
 
-      #content .unit-title {
+      #content #unit-title {
         font-weight: bold;
         font-size: 1.5em;
       }
 
-      #content .chapter-title {
+      #content #chapter-title {
         font-weight: bold;
         font-size: 2em;
       }
 
-      #content .question {
+      #content #question {
         font-size: 1.7em;
         margin: 0.5em 0;
       }
 
-      #content .equations {
+      #content #equations {
         font-size: 1.6em;
         line-height: 1.6;
       }
 
-      #content .input-container {
+      #content #input-container {
         display: flex;
         margin-top: 2em;
         gap: 1em;
       }
 
-      #content .input-box {
+      #content #input-box {
         background-color: #a3b1a6;
         border-radius: 25px;
         padding: 0.8em 2em;
@@ -616,7 +616,7 @@
         width: 300px;
       }
 
-      #content .button-next {
+      #content #button-next {
         background-color: #33aaff;
         border: none;
         border-radius: 25px;
@@ -626,7 +626,7 @@
         cursor: pointer;
       }
 
-      #content .footer-bar {
+      #content #footer-bar {
         position: absolute;
         bottom: 0;
         width: 100%;
@@ -686,7 +686,7 @@
         markdown = markdown.replace(
           /@tag ([\w-]+) \[(open|close)\s?(\^hide\^)?\]([\s\S]*?)@tag (?:[\w-]+)? \[close\]/g,
           (match, tagName, openClose, hide, tagContent) => {
-            if (tagName === 'question' && openClose === 'open') {
+            if (tagName === "question" && openClose === "open") {
               const questionContent = tagContent.trim();
               const parsedQuestionContent = marked.parse(questionContent);
               return `<div id="${tagName}" style="">${parsedQuestionContent}</div>`;
