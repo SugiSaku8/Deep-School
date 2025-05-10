@@ -646,17 +646,8 @@
     </div>
 
     <script>
-      /**
-       * @type {Array<string>} scriptsToEval - 実行するスクリプトを格納する配列
-       */
       let scriptsToEval = []; // 実行するスクリプトを格納する配列
 
-      /**
-       * evalrun - 与えられたコードをevalで実行し、エラーがあればconsole.errorに出力する。
-       *
-       * @param {string} code - 実行するJavaScriptコード
-       * @returns {void}
-       */
       function evalrun(code) {
         try {
           eval(code);
@@ -665,35 +656,26 @@
         }
       }
 
-      /**
-       * loadMarkdown - Markdownファイルを読み込み、HTMLに変換して指定された要素に表示する。
-       *
-       * @param {string} file - Markdownファイルのパス
-       * @returns {void}
-       */
-      function loadMarkdown(file) {
-        fetch(file)
-          .then((response) => response.text())
-          .then((markdown) => {
+      function handleFileSelect(evt) {
+        const file = evt.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            const markdown = e.target.result;
             const html = parseMarkdown(markdown);
             document.getElementById("content").innerHTML = html;
-            document.getElementById("content").style.display = "block"; // コンテンツを表示
+            document.getElementById("content").style.display = "block";
 
-            // すべてのスクリプトを実行
+            // スクリプトの実行
             scriptsToEval.forEach((script) => {
               evalrun(script);
             });
-            scriptsToEval = []; // 配列をクリア
-          })
-          .catch((error) => console.error("Error loading markdown:", error));
+            scriptsToEval = [];
+          };
+          reader.readAsText(file);
+        }
       }
 
-      /**
-       * parseMarkdown - Markdownテキストを解析し、カスタムタグを処理してHTMLに変換する。
-       *
-       * @param {string} markdown - Markdown形式のテキスト
-       * @returns {string} - 変換されたHTML
-       */
       function parseMarkdown(markdown) {
         markdown = markdown.replace(
           /@config \[open\]([\s\S]*?)@config \[close\]/g,
@@ -702,7 +684,7 @@
 
         // tag, btn, scriptタグを処理
         markdown = markdown.replace(
-          /@tag ([\w-]+) \[(open|close)\s?(\^hide\^)?\]([\s\S]*?)@tag \w+ \[close\]/g,
+          /@tag (\w+) \[(open|close)\s?(\^hide\^)?\]([\s\S]*?)@tag \w+ \[close\]/g,
           (match, tagName, openClose, hide, tagContent) => {
             let style = "";
             if (hide === "^hide^") {
@@ -774,14 +756,6 @@
         return markdown;
       }
 
-      /**
-       * dom - DOM操作を簡単にするためのオブジェクト
-       * @namespace dom
-       */
-      //How to use
-      //window.onload = function () {
-      //  loadMarkdown(filepath); // Markdownファイルのパス
-      //};
       // ページのロード時にMarkdownファイルを読み込む
       window.onload = function () {
         //loadMarkdown("test.md"); // Markdownファイルのパス
