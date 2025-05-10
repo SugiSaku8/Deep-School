@@ -733,8 +733,8 @@ font-family: "Noto Sans JP", sans-serif;
       background-color: #33aaff;
       border: none;
       border-radius: 25px;
-      padding: 0.8em 2em;
-      font-size: 1.6em;
+      padding: 0.5em 0.8em;
+      font-size: 1.0em;
       color: white;
       cursor: pointer;
     }
