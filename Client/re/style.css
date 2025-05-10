@@ -1096,7 +1096,7 @@ body::-webkit-scrollbar {
   display: none;
 }
 
-.pickcontent {
+#pickcontent {
   font-family: "Noto Sans JP", sans-serif;
   color: white;
   text-align: center;
@@ -1106,604 +1106,604 @@ body::-webkit-scrollbar {
   justify-content: center;
 }
 
-.pickcontent #red {
+#pickcontent #red {
   color: red;
 }
-.pickcontent #red {
+#pickcontent #red {
   color: red;
 }
-.pickcontent #aliceblue {
+#pickcontent #aliceblue {
   color: aliceblue;
 }
 
-.pickcontent #antiquewhite {
+#pickcontent #antiquewhite {
   color: antiquewhite;
 }
 
-.pickcontent #aqua {
+#pickcontent #aqua {
   color: aqua;
 }
 
-.pickcontent #aquamarine {
+#pickcontent #aquamarine {
   color: aquamarine;
 }
 
-.pickcontent #azure {
+#pickcontent #azure {
   color: azure;
 }
 
-.pickcontent #beige {
+#pickcontent #beige {
   color: beige;
 }
 
-.pickcontent #bisque {
+#pickcontent #bisque {
   color: bisque;
 }
 
-.pickcontent #black {
+#pickcontent #black {
   color: black;
 }
 
-.pickcontent #blanchedalmond {
+#pickcontent #blanchedalmond {
   color: blanchedalmond;
 }
 
-.pickcontent #blue {
+#pickcontent #blue {
   color: blue;
 }
 
-.pickcontent #blueviolet {
+#pickcontent #blueviolet {
   color: blueviolet;
 }
 
-.pickcontent #brown {
+#pickcontent #brown {
   color: brown;
 }
 
-.pickcontent #burlywood {
+#pickcontent #burlywood {
   color: burlywood;
 }
 
-.pickcontent #cadetblue {
+#pickcontent #cadetblue {
   color: cadetblue;
 }
 
-.pickcontent #chartreuse {
+#pickcontent #chartreuse {
   color: chartreuse;
 }
 
-.pickcontent #chocolate {
+#pickcontent #chocolate {
   color: chocolate;
 }
 
-.pickcontent #coral {
+#pickcontent #coral {
   color: coral;
 }
 
-.pickcontent #cornflowerblue {
+#pickcontent #cornflowerblue {
   color: cornflowerblue;
 }
 
-.pickcontent #cornsilk {
+#pickcontent #cornsilk {
   color: cornsilk;
 }
 
-.pickcontent #crimson {
+#pickcontent #crimson {
   color: crimson;
 }
 
-.pickcontent #cyan {
+#pickcontent #cyan {
   color: cyan;
 }
 
-.pickcontent #darkblue {
+#pickcontent #darkblue {
   color: darkblue;
 }
 
-.pickcontent #darkcyan {
+#pickcontent #darkcyan {
   color: darkcyan;
 }
 
-.pickcontent #darkgoldenrod {
+#pickcontent #darkgoldenrod {
   color: darkgoldenrod;
 }
 
-.pickcontent #darkgray {
+#pickcontent #darkgray {
   color: darkgray;
 }
 
-.pickcontent #darkgreen {
+#pickcontent #darkgreen {
   color: darkgreen;
 }
 
-.pickcontent #darkkhaki {
+#pickcontent #darkkhaki {
   color: darkkhaki;
 }
 
-.pickcontent #darkmagenta {
+#pickcontent #darkmagenta {
   color: darkmagenta;
 }
 
-.pickcontent #darkolivegreen {
+#pickcontent #darkolivegreen {
   color: darkolivegreen;
 }
 
-.pickcontent #darkorange {
+#pickcontent #darkorange {
   color: darkorange;
 }
 
-.pickcontent #darkorchid {
+#pickcontent #darkorchid {
   color: darkorchid;
 }
 
-.pickcontent #darkred {
+#pickcontent #darkred {
   color: darkred;
 }
 
-.pickcontent #darksalmon {
+#pickcontent #darksalmon {
   color: darksalmon;
 }
 
-.pickcontent #darkseagreen {
+#pickcontent #darkseagreen {
   color: darkseagreen;
 }
 
-.pickcontent #darkslateblue {
+#pickcontent #darkslateblue {
   color: darkslateblue;
 }
 
-.pickcontent #darkslategray {
+#pickcontent #darkslategray {
   color: darkslategray;
 }
 
-.pickcontent #darkturquoise {
+#pickcontent #darkturquoise {
   color: darkturquoise;
 }
 
-.pickcontent #darkviolet {
+#pickcontent #darkviolet {
   color: darkviolet;
 }
 
-.pickcontent #deeppink {
+#pickcontent #deeppink {
   color: deeppink;
 }
 
-.pickcontent #deepskyblue {
+#pickcontent #deepskyblue {
   color: deepskyblue;
 }
 
-.pickcontent #dimgray {
+#pickcontent #dimgray {
   color: dimgray;
 }
 
-.pickcontent #dodgerblue {
+#pickcontent #dodgerblue {
   color: dodgerblue;
 }
 
-.pickcontent #firebrick {
+#pickcontent #firebrick {
   color: firebrick;
 }
 
-.pickcontent #floralwhite {
+#pickcontent #floralwhite {
   color: floralwhite;
 }
 
-.pickcontent #forestgreen {
+#pickcontent #forestgreen {
   color: forestgreen;
 }
 
-.pickcontent #fuchsia {
+#pickcontent #fuchsia {
   color: fuchsia;
 }
 
-.pickcontent #gainsboro {
+#pickcontent #gainsboro {
   color: gainsboro;
 }
 
-.pickcontent #ghostwhite {
+#pickcontent #ghostwhite {
   color: ghostwhite;
 }
 
-.pickcontent #gold {
+#pickcontent #gold {
   color: gold;
 }
 
-.pickcontent #goldenrod {
+#pickcontent #goldenrod {
   color: goldenrod;
 }
 
-.pickcontent #gray {
+#pickcontent #gray {
   color: gray;
 }
 
-.pickcontent #green {
+#pickcontent #green {
   color: green;
 }
 
-.pickcontent #greenyellow {
+#pickcontent #greenyellow {
   color: greenyellow;
 }
 
-.pickcontent #honeydew {
+#pickcontent #honeydew {
   color: honeydew;
 }
 
-.pickcontent #hotpink {
+#pickcontent #hotpink {
   color: hotpink;
 }
 
-.pickcontent #indianred {
+#pickcontent #indianred {
   color: indianred;
 }
 
-.pickcontent #indigo {
+#pickcontent #indigo {
   color: indigo;
 }
 
-.pickcontent #ivory {
+#pickcontent #ivory {
   color: ivory;
 }
 
-.pickcontent #khaki {
+#pickcontent #khaki {
   color: khaki;
 }
 
-.pickcontent #lavender {
+#pickcontent #lavender {
   color: lavender;
 }
 
-.pickcontent #lavenderblush {
+#pickcontent #lavenderblush {
   color: lavenderblush;
 }
 
-.pickcontent #lawngreen {
+#pickcontent #lawngreen {
   color: lawngreen;
 }
 
-.pickcontent #lemonchiffon {
+#pickcontent #lemonchiffon {
   color: lemonchiffon;
 }
 
-.pickcontent #lightblue {
+#pickcontent #lightblue {
   color: lightblue;
 }
 
-.pickcontent #lightcoral {
+#pickcontent #lightcoral {
   color: lightcoral;
 }
 
-.pickcontent #lightcyan {
+#pickcontent #lightcyan {
   color: lightcyan;
 }
 
-.pickcontent #lightgoldenrodyellow {
+#pickcontent #lightgoldenrodyellow {
   color: lightgoldenrodyellow;
 }
 
-.pickcontent #lightgray {
+#pickcontent #lightgray {
   color: lightgray;
 }
 
-.pickcontent #lightgreen {
+#pickcontent #lightgreen {
   color: lightgreen;
 }
 
-.pickcontent #lightpink {
+#pickcontent #lightpink {
   color: lightpink;
 }
 
-.pickcontent #lightsalmon {
+#pickcontent #lightsalmon {
   color: lightsalmon;
 }
 
-.pickcontent #lightseagreen {
+#pickcontent #lightseagreen {
   color: lightseagreen;
 }
 
-.pickcontent #lightskyblue {
+#pickcontent #lightskyblue {
   color: lightskyblue;
 }
 
-.pickcontent #lightslategray {
+#pickcontent #lightslategray {
   color: lightslategray;
 }
 
-.pickcontent #lightsteelblue {
+#pickcontent #lightsteelblue {
   color: lightsteelblue;
 }
 
-.pickcontent #lightyellow {
+#pickcontent #lightyellow {
   color: lightyellow;
 }
 
-.pickcontent #lime {
+#pickcontent #lime {
   color: lime;
 }
 
-.pickcontent #limegreen {
+#pickcontent #limegreen {
   color: limegreen;
 }
 
-.pickcontent #linen {
+#pickcontent #linen {
   color: linen;
 }
 
-.pickcontent #magenta {
+#pickcontent #magenta {
   color: magenta;
 }
 
-.pickcontent #maroon {
+#pickcontent #maroon {
   color: maroon;
 }
 
-.pickcontent #mediumaquamarine {
+#pickcontent #mediumaquamarine {
   color: mediumaquamarine;
 }
 
-.pickcontent #mediumblue {
+#pickcontent #mediumblue {
   color: mediumblue;
 }
 
-.pickcontent #mediumorchid {
+#pickcontent #mediumorchid {
   color: mediumorchid;
 }
 
-.pickcontent #mediumpurple {
+#pickcontent #mediumpurple {
   color: mediumpurple;
 }
 
-.pickcontent #mediumseagreen {
+#pickcontent #mediumseagreen {
   color: mediumseagreen;
 }
 
-.pickcontent #mediumslateblue {
+#pickcontent #mediumslateblue {
   color: mediumslateblue;
 }
 
-.pickcontent #mediumspringgreen {
+#pickcontent #mediumspringgreen {
   color: mediumspringgreen;
 }
 
-.pickcontent #mediumturquoise {
+#pickcontent #mediumturquoise {
   color: mediumturquoise;
 }
 
-.pickcontent #mediumvioletred {
+#pickcontent #mediumvioletred {
   color: mediumvioletred;
 }
 
-.pickcontent #midnightblue {
+#pickcontent #midnightblue {
   color: midnightblue;
 }
 
-.pickcontent #mintcream {
+#pickcontent #mintcream {
   color: mintcream;
 }
 
-.pickcontent #mistyrose {
+#pickcontent #mistyrose {
   color: mistyrose;
 }
 
-.pickcontent #moccasin {
+#pickcontent #moccasin {
   color: moccasin;
 }
 
-.pickcontent #navajowhite {
+#pickcontent #navajowhite {
   color: navajowhite;
 }
 
-.pickcontent #navy {
+#pickcontent #navy {
   color: navy;
 }
 
-.pickcontent #oldlace {
+#pickcontent #oldlace {
   color: oldlace;
 }
 
-.pickcontent #olive {
+#pickcontent #olive {
   color: olive;
 }
 
-.pickcontent #olivedrab {
+#pickcontent #olivedrab {
   color: olivedrab;
 }
 
-.pickcontent #orange {
+#pickcontent #orange {
   color: orange;
 }
 
-.pickcontent #orangered {
+#pickcontent #orangered {
   color: orangered;
 }
 
-.pickcontent #orchid {
+#pickcontent #orchid {
   color: orchid;
 }
 
-.pickcontent #palegoldenrod {
+#pickcontent #palegoldenrod {
   color: palegoldenrod;
 }
 
-.pickcontent #palegreen {
+#pickcontent #palegreen {
   color: palegreen;
 }
 
-.pickcontent #paleturquoise {
+#pickcontent #paleturquoise {
   color: paleturquoise;
 }
 
-.pickcontent #palevioletred {
+#pickcontent #palevioletred {
   color: palevioletred;
 }
 
-.pickcontent #papayawhip {
+#pickcontent #papayawhip {
   color: papayawhip;
 }
 
-.pickcontent #peachpuff {
+#pickcontent #peachpuff {
   color: peachpuff;
 }
 
-.pickcontent #peru {
+#pickcontent #peru {
   color: peru;
 }
 
-.pickcontent #pink {
+#pickcontent #pink {
   color: pink;
 }
 
-.pickcontent #plum {
+#pickcontent #plum {
   color: plum;
 }
 
-.pickcontent #powderblue {
+#pickcontent #powderblue {
   color: powderblue;
 }
 
-.pickcontent #purple {
+#pickcontent #purple {
   color: purple;
 }
 
-.pickcontent #rebeccapurple {
+#pickcontent #rebeccapurple {
   color: rebeccapurple;
 }
 
-.pickcontent #rosybrown {
+#pickcontent #rosybrown {
   color: rosybrown;
 }
 
-.pickcontent #royalblue {
+#pickcontent #royalblue {
   color: royalblue;
 }
 
-.pickcontent #saddlebrown {
+#pickcontent #saddlebrown {
   color: saddlebrown;
 }
 
-.pickcontent #salmon {
+#pickcontent #salmon {
   color: salmon;
 }
 
-.pickcontent #sandybrown {
+#pickcontent #sandybrown {
   color: sandybrown;
 }
 
-.pickcontent #seagreen {
+#pickcontent #seagreen {
   color: seagreen;
 }
 
-.pickcontent #seashell {
+#pickcontent #seashell {
   color: seashell;
 }
 
-.pickcontent #sienna {
+#pickcontent #sienna {
   color: sienna;
 }
 
-.pickcontent #silver {
+#pickcontent #silver {
   color: silver;
 }
 
-.pickcontent #skyblue {
+#pickcontent #skyblue {
   color: skyblue;
 }
 
-.pickcontent #slateblue {
+#pickcontent #slateblue {
   color: slateblue;
 }
 
-.pickcontent #slategray {
+#pickcontent #slategray {
   color: slategray;
 }
 
-.pickcontent #snow {
+#pickcontent #snow {
   color: snow;
 }
 
-.pickcontent #springgreen {
+#pickcontent #springgreen {
   color: springgreen;
 }
 
-.pickcontent #steelblue {
+#pickcontent #steelblue {
   color: steelblue;
 }
 
-.pickcontent #tan {
+#pickcontent #tan {
   color: tan;
 }
 
-.pickcontent #teal {
+#pickcontent #teal {
   color: teal;
 }
 
-.pickcontent #thistle {
+#pickcontent #thistle {
   color: thistle;
 }
 
-.pickcontent #tomato {
+#pickcontent #tomato {
   color: tomato;
 }
 
-.pickcontent #turquoise {
+#pickcontent #turquoise {
   color: turquoise;
 }
 
-.pickcontent #violet {
+#pickcontent #violet {
   color: violet;
 }
 
-.pickcontent #wheat {
+#pickcontent #wheat {
   color: wheat;
 }
 
-.pickcontent #white {
+#pickcontent #white {
   color: white;
 }
 
-.pickcontent #whitesmoke {
+#pickcontent #whitesmoke {
   color: whitesmoke;
 }
 
-.pickcontent #yellow {
+#pickcontent #yellow {
   color: yellow;
 }
 
-.pickcontent #yellowgreen {
+#pickcontent #yellowgreen {
   color: yellowgreen;
 }
 
-.pickcontent h1 {
+#pickcontent h1 {
   font-size: 2em;
   margin: 0.2em 0;
 }
 
-.pickcontent .unit-title {
+#pickcontent #unit-title {
   font-weight: bold;
   font-size: 1.5em;
 }
 
-.pickcontent .chapter-title {
+#pickcontent #chapter-title {
   font-weight: bold;
   font-size: 2em;
 }
 
-.pickcontent .question {
+#pickcontent #question {
   font-size: 1.7em;
   margin: 0.5em 0;
 }
 
-.pickcontent .equations {
+#pickcontent #equations {
   font-size: 1.6em;
   line-height: 1.6;
 }
 
-.pickcontent .input-container {
+#pickcontent #input-container {
   display: flex;
   margin-top: 2em;
   gap: 1em;
 }
 
-.pickcontent .input-box {
+#pickcontent #input-box {
   background-color: #a3b1a6;
   border-radius: 25px;
   padding: 0.8em 2em;
@@ -1713,7 +1713,7 @@ body::-webkit-scrollbar {
   width: 300px;
 }
 
-.pickcontent .button-next {
+#pickcontent #button-next {
   background-color: #33aaff;
   border: none;
   border-radius: 25px;
@@ -1723,7 +1723,7 @@ body::-webkit-scrollbar {
   cursor: pointer;
 }
 
-.pickcontent .footer-bar {
+#pickcontent #footer-bar {
   position: absolute;
   bottom: 0;
   width: 100%;
