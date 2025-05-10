@@ -724,8 +724,8 @@
         markdown = markdown.replace(
           /@btn id=(\w+) ([\s\S]*)/g,
           (match, btnId, btnContent) => {
-            //const content = btnContent.replace(/^id=/, "").trim();
-            //return `<button id="${btnId}">${content}</button>`;
+            const content = btnContent.replace(/^id=/, "").trim();
+            return `<button id="${btnId}">${content}</button>`;
             return "";
           }
         );
