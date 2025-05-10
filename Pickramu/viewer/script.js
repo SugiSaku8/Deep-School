@@ -8,21 +8,17 @@ function convertToHtml(inputText) {
     const line = lines[i].trim();
 
     // Handle @tag [open] blocks
-    let tagOpenMatch = line.match(/@tag\s+([\w,-]+)?\s+\[open\]/);
+    let tagOpenMatch = line.match(/@tag\s+([\w,-]+)?(?:\s+class=([\w,-]+))?\s+\[open\]/);
     if (tagOpenMatch) {
-      const tagIds = tagOpenMatch[1]
-        ? tagOpenMatch[1]
-            .split(",")
-            .map((id) => id.trim())
-            .join(" ")
-        : ""; // Split and join IDs
-      outputHtml += `<div id="${tagIds}">\n`;
+      const tagIds = tagOpenMatch[1] ? tagOpenMatch[1].split(',').map(id => id.trim()).join(' ') : ''; // Split and join IDs
+      const tagClasses = tagOpenMatch[2] ? tagOpenMatch[2].split(',').map(cls => cls.trim()).join(' ') : ''; // Split and join classes
+      outputHtml += `<div id="${tagIds}" class="${tagClasses}">\n`;
       i++;
       continue;
     }
 
     // Handle @tag [close] blocks
-    let tagCloseMatch = line.match(/@tag\s+([\w,-]+)?\s+\[close\]/);
+     let tagCloseMatch = line.match(/@tag\s+([\w,-]+)?(?:\s+class=([\w,-]+))?\s+\[close\]/);
     if (tagCloseMatch) {
       i++; // Consume the close tag line
       outputHtml += `</div>\n`;
@@ -32,14 +28,8 @@ function convertToHtml(inputText) {
     // Handle @btn tags
     let btnMatch = line.match(/@btn\s+id=([\w,-]+)\s+class=([\w,-]+)\s+(.+)/);
     if (btnMatch) {
-      const btnIds = btnMatch[1]
-        .split(",")
-        .map((id) => id.trim())
-        .join(" "); // Split and join IDs
-      const btnClasses = btnMatch[2]
-        .split(",")
-        .map((cls) => cls.trim())
-        .join(" "); // Split and join classes
+      const btnIds = btnMatch[1].split(',').map(id => id.trim()).join(' '); // Split and join IDs
+      const btnClasses = btnMatch[2].split(',').map(cls => cls.trim()).join(' '); // Split and join classes
       const btnContent = btnMatch[3];
       outputHtml += `<button id="${btnIds}" class="${btnClasses}">${btnContent}</button>\n`;
       i++;
