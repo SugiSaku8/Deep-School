@@ -56,6 +56,11 @@ function parseMarkdown(markdown) {
   markdown = markdown.replace(
     /@tag ([\w-]+) \[(open|close)\s?(\^hide\^)?\]([\s\S]*?)@tag (?:[\w-]+)? \[close\]/g,
     (match, tagName, openClose, hide, tagContent) => {
+      if (tagName === 'question' && openClose === 'open') {
+        const questionContent = tagContent.trim();
+        const parsedQuestionContent = marked.parse(questionContent);
+        return `<div id="${tagName}" style="">${parsedQuestionContent}</div>`;
+      }
       let style = "";
       if (hide === "^hide^") {
         style = "display: none !important;";
