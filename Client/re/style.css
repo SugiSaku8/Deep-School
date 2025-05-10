@@ -1096,6 +1096,16 @@ body::-webkit-scrollbar {
   display: none;
 }
 
+.pickcontent {
+  font-family: "Noto Sans JP", sans-serif;
+  color: white;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .pickcontent #red {
   color: red;
 }
@@ -1660,4 +1670,63 @@ body::-webkit-scrollbar {
 
 .pickcontent #yellowgreen {
   color: yellowgreen;
+}
+
+.pickcontent h1 {
+  font-size: 2em;
+  margin: 0.2em 0;
+}
+
+.pickcontent .unit-title {
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+.pickcontent .chapter-title {
+  font-weight: bold;
+  font-size: 2em;
+}
+
+.pickcontent .question {
+  font-size: 1.7em;
+  margin: 0.5em 0;
+}
+
+.pickcontent .equations {
+  font-size: 1.6em;
+  line-height: 1.6;
+}
+
+.pickcontent .input-container {
+  display: flex;
+  margin-top: 2em;
+  gap: 1em;
+}
+
+.pickcontent .input-box {
+  background-color: #a3b1a6;
+  border-radius: 25px;
+  padding: 0.8em 2em;
+  font-size: 1.6em;
+  color: white;
+  border: none;
+  width: 300px;
+}
+
+.pickcontent .button-next {
+  background-color: #33aaff;
+  border: none;
+  border-radius: 25px;
+  padding: 0.8em 2em;
+  font-size: 1.6em;
+  color: white;
+  cursor: pointer;
+}
+
+.pickcontent .footer-bar {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 20px;
+  background: linear-gradient(to right, #dca10d, #8c5d00);
 }
