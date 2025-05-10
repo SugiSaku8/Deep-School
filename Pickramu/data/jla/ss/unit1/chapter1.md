@@ -11,10 +11,10 @@ chapter 1
 @tag chapter-title [close]
 
 @tag n1 [open]
-@tag question [open]
-約 10 万年前ごろのものと見られる人類の痕跡が日本列島から見つかりました。
-この頃の人類は、動物を狩って生活していました。
+
+@tag question [open]約 10 万年前ごろのものと見られる人類の痕跡が日本列島から見つかりました。 この頃の人類は、動物を狩って生活していました。
 @tag question [close]
+
 @btn id=btn1 次へ
 
 @tag n1 [close]

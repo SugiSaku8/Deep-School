@@ -56,7 +56,7 @@ function parseMarkdown(markdown) {
   markdown = markdown.replace(
     /@tag ([\w-]+) \[(open|close)\s?(\^hide\^)?\]([\s\S]*?)@tag (?:[\w-]+)? \[close\]/g,
     (match, tagName, openClose, hide, tagContent) => {
-      if (tagName === 'question' && openClose === 'open') {
+      if (tagName === "question" && openClose === "open") {
         const questionContent = tagContent.trim();
         const parsedQuestionContent = marked.parse(questionContent);
         return `<div id="${tagName}" style="">${parsedQuestionContent}</div>`;
@@ -91,8 +91,8 @@ function parseMarkdown(markdown) {
   markdown = markdown.replace(
     /@btn id=(\w+) ([\s\S]*)/g,
     (match, btnId, btnContent) => {
-      //const content = btnContent.replace(/^id=/, "").trim();
-      //return `<button id="${btnId}">${content}</button>`;
+      const content = btnContent.replace(/^id=/, "").trim();
+      return `<button id="${btnId}">${content}</button>`;
       return "";
     }
   );
