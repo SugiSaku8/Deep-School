@@ -1,0 +1,93 @@
+{
+    "window.commandCenter": 1,
+    "explorer.confirmDelete": false,
+    "debug.javascript.autoAttachFilter": "disabled",
+    "redhat.telemetry.enabled": false,
+    "explorer.confirmDragAndDrop": false,
+    "cursor.cpp.disabledLanguages": [],
+    "cmake.showOptionsMovedNotification": false,
+    "cmake.configureOnOpen": true,
+    "editor.largeFileOptimizations": false,
+    "terminal.integrated.enableMultiLinePasteWarning": false,
+    "remoteHub.commitDirectlyWarning": "off",
+    "python.createEnvironment.trigger": "off",
+    "git.enableSmartCommit": true,
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "git.openRepositoryInParentFolders": "never",
+    "explorer.confirmPasteNative": false,
+    "files.autoSave": "afterDelay",
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "cursor.cpp.enablePartialAccepts": true,
+    "cursor.composer.collapsePaneInputBoxPills": true,
+    "cursor.composer.renderPillsInsteadOfBlocks": true,
+    "editor.fontFamily": "Hack",
+    "workbench.colorTheme": "Repl.it Theme",
+    "editor.accessibilitySupport": "off",
+    "[css]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "workbench.editor.defaultBinaryEditor": "default",
+    "editor.unicodeHighlight.invisibleCharacters": false,
+    "editor.tokenColorCustomizations": {
+      "textMateRules": [
+        {
+          "name": "Config Open",
+          "scope": "keyword.control.config.open",
+          "match": "@config \\[open\\]",
+          "settings": {
+            "foreground": "#FF0000"
+          }
+        },
+        {
+          "name": "Config Close",
+          "scope": "keyword.control.config.close",
+          "match": "@config \\[close\\]",
+          "settings": {
+            "foreground": "#FF0000"
+          }
+        },
+        {
+          "name": "Tag Open",
+          "scope": "keyword.control.tag.open",
+          "match": "@tag .* \\[open\\]",
+          "settings": {
+            "foreground": "#00FF00"
+          }
+        },
+        {
+          "name": "Tag Close",
+          "scope": "keyword.control.tag.close",
+          "match": "@tag .* \\[close\\]",
+          "settings": {
+            "foreground": "#00FF00"
+          }
+        },
+        {
+          "name": "Button",
+          "scope": "keyword.control.button",
+          "match": "@btn .* ",
+          "settings": {
+            "foreground": "#0000FF"
+          }
+        },
+        {
+          "name": "Script Open",
+          "scope": "keyword.control.script.open",
+          "match": "@script .* \\[open\\]",
+          "settings": {
+            "foreground": "#FFFF00"
+          }
+        },
+        {
+          "name": "Script Close",
+          "scope": "keyword.control.script.close",
+          "match": "@script \\[close\\]",
+          "settings": {
+            "foreground": "#FFFF00"
+          }
+        }
+      ]
+    }
+  }
