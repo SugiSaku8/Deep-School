@@ -120,7 +120,7 @@ font-family: "Noto Sans JP", sans-serif;
       display: none;
     }
       #content{
-      font-size:50px;
+      font-size:1.6em;
       }
     #content .red {
       color: red;
