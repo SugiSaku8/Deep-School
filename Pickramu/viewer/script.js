@@ -107,7 +107,7 @@ const htmlOutput = convertToHtml(inputText);
 const styles = `
 body{
 font-family: "Noto Sans JP", sans-serif;
-  color: white;
+  color: black;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -120,6 +120,9 @@ font-family: "Noto Sans JP", sans-serif;
     #testB {
       display: none;
     }
+      #content{
+      font-size:50px;
+      }
     #content .red {
       color: red;
     }
