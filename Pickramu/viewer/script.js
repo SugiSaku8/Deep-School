@@ -752,6 +752,7 @@ const fullHtml = `
   `;
 
 const iframe = document.getElementById("myIframe");
-iframe.open();
-iframe.write(fullHtml);
-iframe.close();
+const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+iframeDocument.open();
+iframeDocument.write(fullHtml);
+iframeDocument.close();
