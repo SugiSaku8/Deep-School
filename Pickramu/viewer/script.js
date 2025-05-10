@@ -87,11 +87,13 @@ const inputText = `
 @tag question [close]
 @btn id=btn1 class=button-next 次へ
 @tag n1,unit [close]
+@tag n2,unit [open]
 @tag question [open]
 約 1 万年前、日本列島が大陸から分離しました。
 紀元前 3000 年ごろ、稲作が日本列島に伝わりました。
 @tag question [close]
 @btn id=btn2 class=button-next 次へ
+@tag n2,unit [close]
 @script on=btn1 [open]
 dom.Tag("n1").style.display('none','auto');
 dom.Tag("n2").style.display('block','auto');
@@ -105,6 +107,7 @@ const htmlOutput = convertToHtml(inputText);
 
 // Define the CSS styles
 const styles = `
+
 body{
 font-family: "Noto Sans JP", sans-serif;
   color: black;
@@ -750,7 +753,38 @@ font-family: "Noto Sans JP", sans-serif;
       display: none;
     }
   `;
-
+const script = `
+  /**
+   * dom - DOM操作を簡単にするためのオブジェクト
+   * @namespace dom
+   */
+  const dom = {
+    /**
+     * Tag - 指定されたIDを持つ要素を取得し、その要素のスタイルを操作するための関数を提供する。
+     * @param {string} tagName - 取得する要素のID
+     * @returns {{style: {display: Function}}} - スタイル操作関数を持つオブジェクト
+     */
+    Tag: function (tagName) {
+      const element = document.getElementById(tagName);
+      return {
+        style: {
+          /**
+           * display - 要素のdisplayスタイルを変更する。
+           * @param {string} displayValue - 設定するdisplayの値
+           * @param {string} important - 'auto'の場合、!importantを設定する
+           * @returns {void}
+           */
+          display: function (displayValue, important) {
+            element.style.display = displayValue;
+            if (important === "auto") {
+              element.style.setProperty("display", displayValue, "important");
+            }
+          },
+        },
+      };
+    },
+  };
+  `;
 // Create the full HTML content with styles
 const fullHtml = `
   <!DOCTYPE html>
@@ -759,6 +793,9 @@ const fullHtml = `
   <style>
   ${styles}
   </style>
+  <script>
+  ${script}
+  </script>
   </head>
   <body>
   <div id="content">
