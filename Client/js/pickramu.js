@@ -28,8 +28,8 @@ function loadMarkdown(file) {
     .then((response) => response.text())
     .then((markdown) => {
       const html = parseMarkdown(markdown);
-      document.getElementById("content").innerHTML = html;
-      document.getElementById("content").style.display = "block"; // コンテンツを表示
+      document.getElementById("pickcontent").innerHTML = html;
+      document.getElementById("pickcontent").style.display = "block"; // コンテンツを表示
 
       // すべてのスクリプトを実行
       scriptsToEval.forEach((script) => {
