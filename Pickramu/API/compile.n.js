@@ -6,24 +6,19 @@ function convertToHtml(inputText) {
     while (i < lines.length) {
       const line = lines[i].trim();
   
-      // Handle @tag blocks
-      let tagMatch = line.match(/@tag\s+(\w+)\s+\[open\]/);
-      if (tagMatch) {
-        const tagId = tagMatch[1];
+      // Handle @tag [open] blocks
+      let tagOpenMatch = line.match(/@tag\s+(\w+)\s+\[open\]/);
+      if (tagOpenMatch) {
+        const tagId = tagOpenMatch[1];
         outputHtml += `<div id="${tagId}">\n`;
         i++;
-        let contentLines = [];
-        while (i < lines.length && !lines[i].match(/@tag\s+\w+\s+\[close\]/)) {
-          contentLines.push(lines[i]);
-          i++;
-        }
-        if (i < lines.length) {
-          outputHtml += contentLines.join("\n") + "\n";
-          outputHtml += `</div>\n`; // Corrected closing tag
-        } else {
-          console.error("Error: Missing closing tag");
-          return null;
-        }
+        continue;
+      }
+  
+      // Handle @tag [close] blocks
+      let tagCloseMatch = line.match(/@tag\s+(\w+)\s+\[close\]/);
+      if (tagCloseMatch) {
+        outputHtml += `</div>\n`;
         i++;
         continue;
       }
