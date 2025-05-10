@@ -18,7 +18,7 @@ chapter 1
 
 @tag question [close]
 
-@btn id=btn1 次へ
+@btn id=btn1,button-next 次へ
 
 @tag n1 [close]
 
