@@ -746,7 +746,7 @@ font-family: "Noto Sans JP", sans-serif;
       height: 20px;
       background: linear-gradient(to right, #dca10d, #8c5d00);
     }
-    #n2 {
+    #content #n2 {
       display: none;
     }
   `;
