@@ -105,6 +105,15 @@ const htmlOutput = convertToHtml(inputText);
 
 // Define the CSS styles
 const styles = `
+body{
+font-family: "Noto Sans JP", sans-serif;
+  color: white;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
     #red {
       color: red;
     }
