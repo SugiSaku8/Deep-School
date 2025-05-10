@@ -57,7 +57,7 @@
       </div>
     -->
       <button class="login-button" id="openLoginButton">ログイン</button>
-      <p class="copyright">(c) 2022-2025  Carnation Studio v0.0.2</p>
+      <p class="copyright">(c) 2022-2025 Carnation Studio v0.0.2</p>
     </div>
     <div class="container_top menu" id="menu">
       <div class="menu-content">
@@ -185,28 +185,36 @@
         <div id="feed-content"></div>
       </div>
     </div>
-    <div id="estore" style="display:none">
+    <div id="estore" style="display: none">
       <div class="page-container">
         <button class="go-back-button">←</button>
         <h1 class="page-title">eStore</h1>
-    
-        <div class="card product-card toaster-card" onclick="openModal('toaster')">
+
+        <div
+          class="card product-card toaster-card"
+          onclick="openModal('toaster')"
+        >
           <div class="product-content">
-            <h2>ToasterMachine<br>Plus</h2>
-            <img src="placeholder2.png" alt="pop2">
+            <h2>ToasterMachine<br />Plus</h2>
+            <img src="placeholder2.png" alt="pop2" />
           </div>
         </div>
         <div class="card-row">
           <div class="card product-card math-card" onclick="openModal('math')">
             <span><span class="fx">f(x)</span> Math Kit</span>
           </div>
-          <div class="card product-card room-card" onclick="openModal('room')">Room</div>
+          <div class="card product-card room-card" onclick="openModal('room')">
+            Room
+          </div>
         </div>
       </div>
       <div id="productModal" class="product-modal hidden">
         <div class="modal-content" id="modalContent"></div>
         <button onclick="closeModal()" class="modal-close-button">✖</button>
       </div>
+    </div>
+    <div id="pickramu" style="display: none">
+      <div id="content" style="display: none"></div>
     </div>
     <script>
       function InitToasterChat() {
