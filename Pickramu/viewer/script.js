@@ -1,73 +1,79 @@
 // Pickramu/API/compile.n.js
 function convertToHtml(inputText) {
-    let outputHtml = "";
-    const lines = inputText.split("\n");
-    let i = 0;
-  
-    while (i < lines.length) {
-      const line = lines[i].trim();
-  
-      // Handle @tag [open] blocks
-      let tagOpenMatch = line.match(/@tag\s+([\w,-]+)\s+\[open\]/);
-      if (tagOpenMatch) {
-        const tagIds = tagOpenMatch[1].split(',').map(id => id.trim()).join(' '); // Split and join IDs
-        outputHtml += `<div id="${tagIds}">\n`;
-        i++;
-        continue;
-      }
-  
-      // Handle @tag [close] blocks
-      let tagCloseMatch = line.match(/@tag\s+([\w,-]+)\s+\[close\]/);
-      if (tagCloseMatch) {
-        i++; // Consume the close tag line
-        outputHtml += `</div>\n`;
-        continue;
-      }
-  
-      // Handle @btn tags
-      let btnMatch = line.match(/@btn\s+id=([\w,-]+)\s+(.+)/);
-      if (btnMatch) {
-        const btnIds = btnMatch[1].split(',').map(id => id.trim()).join(' '); // Split and join IDs
-        const btnContent = btnMatch[2];
-        outputHtml += `<button id="${btnIds}">${btnContent}</button>\n`;
-        i++;
-        continue;
-      }
-  
-      // Handle @script blocks
-      let scriptMatch = line.match(/@script\s+on=(\w+)\s+\[open\]/);
-      if (scriptMatch) {
-        const scriptOn = scriptMatch[1];
-        i++;
-        let scriptContentLines = [];
-        while (i < lines.length && !lines[i].match(/@script\s+\[close\]/)) {
-          scriptContentLines.push(lines[i]);
-          i++;
-        }
-        if (i < lines.length) {
-          const scriptContent = scriptContentLines.join("\n");
-          outputHtml += `<script>\n`;
-          outputHtml += `document.getElementById("${scriptOn}").onclick = function() {\n`;
-          outputHtml += scriptContent + "\n";
-          outputHtml += `}\n`;
-          outputHtml += `</script>\n`;
-        } else {
-          console.error("Error: Missing closing script tag");
-          return null;
-        }
-        i++;
-        continue;
-      }
-  
-      // If no match, treat the line as plain text
-      outputHtml += line + "\n";
+  let outputHtml = "";
+  const lines = inputText.split("\n");
+  let i = 0;
+
+  while (i < lines.length) {
+    const line = lines[i].trim();
+
+    // Handle @tag [open] blocks
+    let tagOpenMatch = line.match(/@tag\s+([\w,-]+)\s+\[open\]/);
+    if (tagOpenMatch) {
+      const tagIds = tagOpenMatch[1]
+        .split(",")
+        .map((id) => id.trim())
+        .join(" "); // Split and join IDs
+      outputHtml += `<div id="${tagIds}">\n`;
       i++;
+      continue;
     }
-  
-    return outputHtml;
+
+    // Handle @tag [close] blocks
+    let tagCloseMatch = line.match(/@tag\s+([\w,-]+)\s+\[close\]/);
+    if (tagCloseMatch) {
+      i++; // Consume the close tag line
+      outputHtml += `</div>\n`;
+      continue;
+    }
+
+    // Handle @btn tags
+    let btnMatch = line.match(/@btn\s+id=([\w,-]+)\s+(.+)/);
+    if (btnMatch) {
+      const btnIds = btnMatch[1]
+        .split(",")
+        .map((id) => id.trim())
+        .join(" "); // Split and join IDs
+      const btnContent = btnMatch[2];
+      outputHtml += `<button id="${btnIds}">${btnContent}</button>\n`;
+      i++;
+      continue;
+    }
+
+    // Handle @script blocks
+    let scriptMatch = line.match(/@script\s+on=(\w+)\s+\[open\]/);
+    if (scriptMatch) {
+      const scriptOn = scriptMatch[1];
+      i++;
+      let scriptContentLines = [];
+      while (i < lines.length && !lines[i].match(/@script\s+\[close\]/)) {
+        scriptContentLines.push(lines[i]);
+        i++;
+      }
+      if (i < lines.length) {
+        const scriptContent = scriptContentLines.join("\n");
+        outputHtml += `<script>\n`;
+        outputHtml += `document.getElementById("${scriptOn}").onclick = function() {\n`;
+        outputHtml += scriptContent + "\n";
+        outputHtml += `}\n`;
+        outputHtml += `</script>\n`;
+      } else {
+        console.error("Error: Missing closing script tag");
+        return null;
+      }
+      i++;
+      continue;
+    }
+
+    // If no match, treat the line as plain text
+    outputHtml += line + "\n";
+    i++;
   }
-  
-  const inputText = `
+
+  return outputHtml;
+}
+
+const inputText = `
   @tag n1,unit [open]
   @tag question,text [open]
   約10万年前ごろのものと見られる人類の痕跡が日本列島から見つかりました。
@@ -88,11 +94,11 @@ function convertToHtml(inputText) {
   dom.back();
   @script [close]
   `;
-  
-  const htmlOutput = convertToHtml(inputText);
-  
-  // Define the CSS styles
-  const styles = `
+
+const htmlOutput = convertToHtml(inputText);
+
+// Define the CSS styles
+const styles = `
       #red {
         color: red;
       }
@@ -727,9 +733,9 @@ function convertToHtml(inputText) {
         display: none;
       }
     `;
-  
-  // Create the full HTML content with styles
-  const fullHtml = `
+
+// Create the full HTML content with styles
+const fullHtml = `
     <!DOCTYPE html>
     <html>
     <head>
@@ -744,10 +750,8 @@ function convertToHtml(inputText) {
     </body>
     </html>
   `;
-  
-  console.log(fullHtml);
 
-  // Write the HTML content to the iframe
-  iframeDocument.open();
-  iframeDocument.write(fullHtml);
-  iframeDocument.close();
+const iframe = document.getElementById("myIframe");
+iframe.open();
+iframe.write(fullHtml);
+iframe.close();
