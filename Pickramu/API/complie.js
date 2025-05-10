@@ -54,7 +54,7 @@ function parseMarkdown(markdown) {
 
   // tag, btn, scriptタグを処理
   markdown = markdown.replace(
-    /@tag ([\w-]+) \[(open|close)\s?(\^hide\^)?\]([\s\S]*?)@tag \w+ \[close\]/g,
+    /@tag ([\w-]+) \[(open|close)\s?(\^hide\^)?\]([\s\S]*?)@tag (?:[\w-]+)? \[close\]/g,
     (match, tagName, openClose, hide, tagContent) => {
       let style = "";
       if (hide === "^hide^") {
