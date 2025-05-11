@@ -1,10 +1,3 @@
-@config [open]
-name 旧石器時代
-ver 1.0.0
-unit 1
-chapter 1
-@config [close]
-
 @tag unit-title [open] Jla-1 社会 Unit 2
 @tag unit-title [close]
 @tag chapter-title [open] 連立方程式の計算 Chapter 23
@@ -12,9 +5,9 @@ chapter 1
 
 @tag n1 [open]
 
-@tag question [open] 
-約10万年前ごろのものと見られる人類の痕跡が日本列島から見つかりました。  
-この頃の人類は、動物を狩って生活していました。 
+@tag question [open]
+約 10 万年前ごろのものと見られる人類の痕跡が日本列島から見つかりました。  
+この頃の人類は、動物を狩って生活していました。
 
 @tag question [close]
 
