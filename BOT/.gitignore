@@ -1,0 +1,10 @@
+node_modules
+node_modules/*
+dist 
+dist/*
+hide
+hide/*
+hide/markitdown
+hide/markitdown/*
+.pyodide-xbuildenv
+.pyodide-xbuildenv/*
