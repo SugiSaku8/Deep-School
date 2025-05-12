@@ -1,5 +1,5 @@
 // script.js
-
+import word_check from "../custom/loop";
 /**
  * 投稿ボタンの要素
  * @type {HTMLButtonElement}
@@ -137,10 +137,10 @@ function createReplyHTML(postValue) {
  */
 export default async function loadFeed() {
   try {
-    if(typeof window.scr_url === undefined || window.scr_url === null){
-      throw new Error("指定されたSCRサーバーは存在しません。")
+    if (typeof window.scr_url === undefined || window.scr_url === null) {
+      throw new Error("指定されたSCRサーバーは存在しません。");
     }
-    console.log("Loading Feed With "+ window.scr_url)
+    console.log("Loading Feed With " + window.scr_url);
     const response = await fetch(window.scr_url + "/get");
     const data = await response.json();
     //!undefinedかテスト
@@ -255,31 +255,33 @@ document.addEventListener("click", async (event) => {
     const postId = event.target.dataset.postId;
     const replyText =
       event.target.parentNode.querySelector(".reply-text").value;
-    const username = "Reply";
-    const userid = "@Reply";
+    if (word_check(replyText)) {
+      const username = "Reply";
+      const userid = "@Reply";
 
-    const response = await fetch(window.scr_url + "/post", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        PostName: postId + " 's Reply",
-        UserName: username,
-        UserId: userid,
-        PostData: replyText,
-        PostTime: new Date().toISOString(),
-        Genre: "Reply",
-        LinkerData: [
-          {
-            replyed: postId,
-          },
-        ],
-      }),
-    });
+      const response = await fetch(window.scr_url + "/post", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          PostName: postId + " 's Reply",
+          UserName: username,
+          UserId: userid,
+          PostData: replyText,
+          PostTime: new Date().toISOString(),
+          Genre: "Reply",
+          LinkerData: [
+            {
+              replyed: postId,
+            },
+          ],
+        }),
+      });
 
-    const result = await response.json();
-    console.log(result.message);
-    loadFeed(); // フィードをリロードしてリプライを表示
+      const result = await response.json();
+      console.log(result.message);
+      loadFeed(); // フィードをリロードしてリプライを表示
+    }
   }
 });
