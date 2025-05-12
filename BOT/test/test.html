@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ブラウザベースの悪口検出</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/wasm-webcam@latest/dist/webcam.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <textarea id="text-input" rows="5" cols="50" placeholder="テキストを入力してください"></textarea>
+        <button onclick="analyzeText()">分析開始</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // モデルの初期化
+        const model = tf.sequential();
+        
+        // 単純なMLモデル構築（実際のアプリケーションではより複雑なモデルを使用）
+        model.add(tf.layers.dense({ 
+            units: 64, 
+            activation: 'relu', 
+            inputShape: [100] 
+        }));
+        model.add(tf.layers.dense({ 
+            units: 32, 
+            activation: 'relu' 
+        }));
+        model.add(tf.layers.dense({ 
+            units: 1, 
+            activation: 'sigmoid' 
+        }));
+
+        // モデルコンパイル
+        model.compile({
+            optimizer: tf.train.adam(),
+            loss: 'binaryCrossentropy',
+            metrics: ['accuracy']
+        });
+
+        // テキスト分析関数
+        async function analyzeText() {
+            const text = document.getElementById('text-input').value;
+            
+            // 前処理：正規化とベクトル化
+            const processedText = preprocessText(text);
+            
+            // 予測実行
+            const prediction = await predict(processedText);
+            
+            // 結果表示
+            displayResult(prediction);
+        }
+
+        // テキスト前処理
+        function preprocessText(text) {
+            // 大文字小文字統一
+            text = text.toLowerCase();
+            
+            // 特殊文字の除去
+            text = text.replace(/[^ぁ-んァ-ン一-龥]/g, '');
+            
+            // 形態素解析（簡略版）
+            const words = text.match(/[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]+/g) || [];
+            
+            return words.join(' ');
+        }
+
+        // 予測実行
+        async function predict(inputText) {
+            const tensor = tf.tensor2d([inputText], [1, 100]);
+            const prediction = await model.predict(tensor);
+            return prediction.dataSync()[0];
+        }
+
+        // 結果表示
+        function displayResult(score) {
+            const resultDiv = document.getElementById('result');
+            const threshold = 0.5;
+            
+            if (score > threshold) {
+                resultDiv.innerHTML = `
+                    <div style="color: red; padding: 10px;">
+                        不適切な内容が検出されました。
+                        スコア: ${Math.round(score * 100)}%
+                    </div>`;
+            } else {
+                resultDiv.innerHTML = `
+                    <div style="color: green; padding: 10px;">
+                        不適切な内容は検出されませんでした。
+                        スコア: ${Math.round(score * 100)}%
+                    </div>`;
+            }
+        }
+    </script>
+</body>
+</html>

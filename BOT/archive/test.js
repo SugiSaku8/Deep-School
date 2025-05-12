@@ -24,7 +24,6 @@ class OffensiveLanguageDetector {
   static async trainOnFeedback(feedbackData) {
     const model = this.getInstance();
     const dataset = prepareDatasetFromFeedback(feedbackData);
-    
     await model.fit(
       dataset.trainingData,
       dataset.labels,
