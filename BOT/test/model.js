@@ -31,9 +31,11 @@ function createModel() {
 
     // レイヤー1: 入力層 - 100次元の入力を受け取る全結合層
     model.add(tf.layers.dense({units: 4096, activation: 'relu', inputShape: [1024]}));
+    model.add(tf.layers.dropout({rate: 0.5})); // Dropout layer
 
     // レイヤー2: 中間層 - 活性化関数にReLUを使用
     model.add(tf.layers.dense({units: 128, activation: 'relu'}));
+    model.add(tf.layers.dropout({rate: 0.5})); // Dropout layer
 
     // レイヤー3: 出力層 - 1つのニューロンを持つ全結合層（二値分類）
     model.add(tf.layers.dense({units: 2, activation: 'sigmoid'}));
