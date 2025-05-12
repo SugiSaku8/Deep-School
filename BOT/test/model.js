@@ -41,7 +41,7 @@ function compileModel(model) {
 // モデルのトレーニング
 async function trainModel(model, trainingData) {
     // トレーニングデータの準備
-    if (!trainingData || trainingData.length === 0 || !trainingData[0].input) {
+    if (!trainingData || trainingData.length === 0 || !trainingData[0] || !trainingData[0].input) {
         console.error("トレーニングデータが無効です:", trainingData);
         return;
     }
@@ -51,7 +51,7 @@ async function trainModel(model, trainingData) {
 
     // モデルのトレーニング
     const history = await model.fit(xs, ys, {
-        epochs: 100, // エポック数
+        epochs: 10, // エポック数
         batchSize: 32, // バッチサイズ
         validationSplit: 0.1, // 検証データの割合
         callbacks: {
@@ -66,7 +66,7 @@ async function trainModel(model, trainingData) {
 
 // モデルの評価
 function evaluateModel(model, testingData) {
-    if (!testingData || testingData.length === 0 || !testingData[0].input) {
+    if (!testingData || testingData.length === 0 || !testingData[0] || !testingData[0].input) {
         console.error("テストデータが無効です:", testingData);
         return;
     }
