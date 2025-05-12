@@ -157,6 +157,9 @@ async function main() {
             console.log("モデルの読み込みに失敗しました。新しいモデルを作成します。");
             model = createModel();
             compileModel(model);
+        } else {
+            // モデルが読み込まれた場合もコンパイルする
+            compileModel(model);
         }
     } catch (error) {
         console.error("モデルの読み込みエラー:", error);
@@ -182,8 +185,6 @@ async function main() {
     const probability = predict(model, inputText);
     console.log(`テキスト: "${inputText}" のポジティブな確率: ${probability.toFixed(4)}`);
 }
-
-// データセットの準備 (削除)
 
 // メイン関数の実行
 main();
