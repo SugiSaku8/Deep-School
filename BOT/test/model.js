@@ -72,7 +72,7 @@ async function trainModel(model, trainingData) {
 
     // モデルのトレーニング
     const history = await model.fit(xs, ys, {
-        epochs: 2, // エポック数
+        epochs: 10, // エポック数
         batchSize: 64, // バッチサイズ
         validationSplit: 0.2, // 検証データの割合
         callbacks: {
