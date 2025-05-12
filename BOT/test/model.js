@@ -15,7 +15,7 @@ async function loadDataset(filePath) {
 
 // モデルの定義
 function createModel() {
-const model = tf.sequential();
+    const model = tf.sequential();
 
     // レイヤー1: 入力層 - 100次元の入力を受け取る全結合層
     model.add(tf.layers.dense({units: 128, activation: 'relu', inputShape: [100]}));
@@ -31,7 +31,7 @@ const model = tf.sequential();
 
 // モデルのコンパイル
 function compileModel(model) {
-model.compile({
+    model.compile({
         optimizer: 'adam', // 最適化アルゴリズム
         loss: 'binaryCrossentropy', // 損失関数（二値分類用）
         metrics: ['accuracy'] // 評価指標
@@ -41,6 +41,10 @@ model.compile({
 // モデルのトレーニング
 async function trainModel(model, trainingData) {
     // トレーニングデータの準備
+    if (!trainingData || trainingData.length === 0 || !trainingData[0].input) {
+        console.error("トレーニングデータが無効です:", trainingData);
+        return;
+    }
     const xs = tf.tensor2d(trainingData.map(item => item.input), [trainingData.length, trainingData[0].input.length]);
     const ys = tf.tensor2d(trainingData.map(item => item.output), [trainingData.length, 1]);
 
@@ -50,8 +54,8 @@ async function trainModel(model, trainingData) {
         epochs: 10, // エポック数
         batchSize: 32, // バッチサイズ
         validationSplit: 0.1, // 検証データの割合
-      callbacks: {
-        onEpochEnd: async (epoch, logs) => {
+        callbacks: {
+            onEpochEnd: async (epoch, logs) => {
                 console.log(`エポック ${epoch + 1}: 損失 = ${logs.loss.toFixed(4)}, 精度 = ${logs.acc.toFixed(4)}, 検証損失 = ${logs.val_loss.toFixed(4)}, 検証精度 = ${logs.val_acc.toFixed(4)}`);
             }
         }
@@ -62,7 +66,11 @@ async function trainModel(model, trainingData) {
 
 // モデルの評価
 function evaluateModel(model, testingData) {
-    const xs = tf.tensor2d(testingData.map(item => item.input), [testingData.length, 100]);
+    if (!testingData || testingData.length === 0 || !testingData[0].input) {
+        console.error("テストデータが無効です:", testingData);
+        return;
+    }
+    const xs = tf.tensor2d(testingData.map(item => item.input), [testingData.length, testingData[0].input.length]);
     const ys = tf.tensor2d(testingData.map(item => item.output), [testingData.length, 1]);
 
     const results = model.evaluate(xs, ys);
@@ -158,7 +166,7 @@ async function main() {
     console.log("モデルの評価を開始します。");
     evaluateModel(model, testingData);
 
-  // モデルの保存
+    // モデルの保存
     console.log("モデルを保存します。");
     await saveModel(model, modelPath);
 
