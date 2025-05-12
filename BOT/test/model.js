@@ -185,7 +185,7 @@ async function main() {
     // 新しいテキストに対する予測
     const inputText = "死ね";
     const probability = predict(model, inputText);
-    console.log(`テキスト: "${inputText}" のポジティブな確率: ${probability.toFixed(4)}`);
+    console.log(`テキスト: "${inputText}" のBADな確率: ${probability.toFixed(4)}`);
 }
 
 // メイン関数の実行
