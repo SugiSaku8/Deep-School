@@ -2,6 +2,18 @@
 const tf = require("@tensorflow/tfjs-node");
 const fs = require('fs');
 
+// テキストを数値ベクトルに変換する関数（例：one-hot encoding）
+function textToVector(text) {
+    // ここにテキストを数値ベクトルに変換するロジックを実装
+    // 例：単語のone-hot encoding、TF-IDFなど
+    // 簡単な例として、テキストの長さを100次元のベクトルに変換
+    let vector = new Array(100).fill(0);
+    for (let i = 0; i < text.length && i < 100; i++) {
+        vector[i] = text.charCodeAt(i) / 255; // 正規化
+    }
+    return vector;
+}
+
 // データセットの読み込み
 async function loadDataset(filePath) {
     try {
@@ -15,7 +27,7 @@ async function loadDataset(filePath) {
 
 // モデルの定義
 function createModel() {
-const model = tf.sequential();
+    const model = tf.sequential();
 
     // レイヤー1: 入力層 - 100次元の入力を受け取る全結合層
     model.add(tf.layers.dense({units: 128, activation: 'relu', inputShape: [100]}));
@@ -31,7 +43,7 @@ const model = tf.sequential();
 
 // モデルのコンパイル
 function compileModel(model) {
-model.compile({
+    model.compile({
         optimizer: 'adam', // 最適化アルゴリズム
         loss: 'binaryCrossentropy', // 損失関数（二値分類用）
         metrics: ['accuracy'] // 評価指標
@@ -61,8 +73,8 @@ async function trainModel(model, trainingData) {
         epochs: 10, // エポック数
         batchSize: 32, // バッチサイズ
         validationSplit: 0.1, // 検証データの割合
-      callbacks: {
-        onEpochEnd: async (epoch, logs) => {
+        callbacks: {
+            onEpochEnd: async (epoch, logs) => {
                 console.log(`エポック ${epoch + 1}: 損失 = ${logs.loss.toFixed(4)}, 精度 = ${logs.acc.toFixed(4)}, 検証損失 = ${logs.val_loss.toFixed(4)}, 検証精度 = ${logs.val_acc.toFixed(4)}`);
             }
         }
@@ -119,18 +131,6 @@ function predict(model, inputText) {
     return probability;
 }
 
-// テキストを数値ベクトルに変換する関数（例：one-hot encoding）
-function textToVector(text) {
-    // ここにテキストを数値ベクトルに変換するロジックを実装
-    // 例：単語のone-hot encoding、TF-IDFなど
-    // 簡単な例として、テキストの長さを100次元のベクトルに変換
-    let vector = new Array(100).fill(0);
-    for (let i = 0; i < text.length && i < 100; i++) {
-        vector[i] = text.charCodeAt(i) / 255; // 正規化
-    }
-    return vector;
-}
-
 // メイン関数
 async function main() {
     // データセットのパス
@@ -173,7 +173,7 @@ async function main() {
     console.log("モデルの評価を開始します。");
     evaluateModel(model, testingData);
 
-  // モデルの保存
+    // モデルの保存
     console.log("モデルを保存します。");
     await saveModel(model, modelPath);
 
@@ -183,40 +183,7 @@ async function main() {
     console.log(`テキスト: "${inputText}" のポジティブな確率: ${probability.toFixed(4)}`);
 }
 
-// データセットの準備
-async function prepareDataset() {
-    // データセットの読み込み
-    const positiveExamples = await loadDataset('positive_examples.json');
-    const negativeExamples = await loadDataset('negative_examples.json');
-
-    // データの整形
-    let dataset = [];
-
-    positiveExamples.forEach(item => {
-        dataset.push({
-            input: textToVector(item.text),
-            output: [1] // ポジティブな例
-        });
-    });
-
-    negativeExamples.forEach(item => {
-        dataset.push({
-            input: textToVector(item.text),
-            output: [0] // ネガティブな例
-        });
-    });
-
-    // データセットをシャッフル
-    dataset = tf.util.shuffle(dataset);
-
-    // データセットをJSONファイルに保存
-    fs.writeFileSync('dataset.json', JSON.stringify(dataset, null, 2));
-    console.log("データセットを保存しました: dataset.json");
-}
-
-// prepareDataset().then(() => {
-//     console.log("データセットの準備が完了しました。");
-// });
+// データセットの準備 (削除)
 
 // メイン関数の実行
 main();
