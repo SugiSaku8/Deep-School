@@ -15,7 +15,7 @@ async function loadDataset(filePath) {
 
 // モデルの定義
 function createModel() {
-    const model = tf.sequential();
+const model = tf.sequential();
 
     // レイヤー1: 入力層 - 100次元の入力を受け取る全結合層
     model.add(tf.layers.dense({units: 128, activation: 'relu', inputShape: [100]}));
@@ -31,7 +31,7 @@ function createModel() {
 
 // モデルのコンパイル
 function compileModel(model) {
-    model.compile({
+model.compile({
         optimizer: 'adam', // 最適化アルゴリズム
         loss: 'binaryCrossentropy', // 損失関数（二値分類用）
         metrics: ['accuracy'] // 評価指標
@@ -50,8 +50,8 @@ async function trainModel(model, trainingData) {
         epochs: 10, // エポック数
         batchSize: 32, // バッチサイズ
         validationSplit: 0.1, // 検証データの割合
-        callbacks: {
-            onEpochEnd: async (epoch, logs) => {
+      callbacks: {
+        onEpochEnd: async (epoch, logs) => {
                 console.log(`エポック ${epoch + 1}: 損失 = ${logs.loss.toFixed(4)}, 精度 = ${logs.acc.toFixed(4)}, 検証損失 = ${logs.val_loss.toFixed(4)}, 検証精度 = ${logs.val_acc.toFixed(4)}`);
             }
         }
@@ -158,7 +158,7 @@ async function main() {
     console.log("モデルの評価を開始します。");
     evaluateModel(model, testingData);
 
-    // モデルの保存
+  // モデルの保存
     console.log("モデルを保存します。");
     await saveModel(model, modelPath);
 
