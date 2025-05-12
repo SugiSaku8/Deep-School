@@ -41,10 +41,17 @@ function compileModel(model) {
 // モデルのトレーニング
 async function trainModel(model, trainingData) {
     // トレーニングデータの準備
-    if (!trainingData || trainingData.length === 0 || !trainingData[0] || !trainingData[0].input) {
+    if (!trainingData || trainingData.length === 0) {
         console.error("トレーニングデータが無効です:", trainingData);
         return;
     }
+
+    // Check if the first element has the expected structure
+    if (!trainingData[0] || !trainingData[0].input) {
+        console.error("トレーニングデータの構造が無効です:", trainingData[0]);
+        return;
+    }
+
     const xs = tf.tensor2d(trainingData.map(item => item.input), [trainingData.length, trainingData[0].input.length]);
     const ys = tf.tensor2d(trainingData.map(item => item.output), [trainingData.length, 1]);
 
