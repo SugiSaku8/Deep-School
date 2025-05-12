@@ -70,9 +70,9 @@ async function trainModel(model, trainingData) {
 
     // モデルのトレーニング
     const history = await model.fit(xs, ys, {
-        epochs: 10, // エポック数
-        batchSize: 32, // バッチサイズ
-        validationSplit: 0.1, // 検証データの割合
+        epochs: 2, // エポック数
+        batchSize: 8, // バッチサイズ
+        validationSplit: 0.01, // 検証データの割合
         callbacks: {
             onEpochEnd: async (epoch, logs) => {
                 console.log(`エポック ${epoch + 1}: 損失 = ${logs.loss.toFixed(4)}, 精度 = ${logs.acc.toFixed(4)}, 検証損失 = ${logs.val_loss.toFixed(4)}, 検証精度 = ${logs.val_acc.toFixed(4)}`);
@@ -181,7 +181,7 @@ async function main() {
     await saveModel(model, modelPath);
 
     // 新しいテキストに対する予測
-    const inputText = "This is a positive example.";
+    const inputText = "死ね";
     const probability = predict(model, inputText);
     console.log(`テキスト: "${inputText}" のポジティブな確率: ${probability.toFixed(4)}`);
 }
