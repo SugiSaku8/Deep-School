@@ -13,7 +13,7 @@ async function convertFile(inputFile) {
         // JSON形式のデータに変換
         const jsonData = lines.map((text, index) => ({
             text: text.trim(),
-            label: 1
+            label: 0
         }));
         
         // JSON文字列に変換
