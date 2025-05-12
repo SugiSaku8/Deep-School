@@ -113,6 +113,13 @@ class GoogleAuthManager {
 
     try {
       // Google Drive APIの認証を実行
+      // Googleのユーザー名とIDをグローバル関数に設定
+      const jwt = decodeURIComponent(escape(window.atob(response.credential.split('.')[1])));
+      const payload = JSON.parse(jwt);
+      window.googleUserName = payload.name;
+      window.googleUserId = payload.sub;
+      console.log("Google ユーザー名:", window.googleUserName);
+      console.log("Google ユーザーID:", window.googleUserId);
       await this.initializeGoogleDriveAuth();
     } catch (error) {
       console.error("Google Drive認証エラー:", error);
