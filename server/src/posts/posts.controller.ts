@@ -1,64 +1,30 @@
+// src/posts/posts.controller.ts
 import {
   Controller,
   Post,
   Get,
-  Put,
-  Delete,
   Body,
   Query,
-  Param,
-  HttpException,
-  HttpStatus,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
-import { Post as PostModel } from './schemas/post.schema';
 
-@Controller()
+@Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  @Post('post')
+  @Post('create')
   async createPost(@Body() createPostDto: CreatePostDto) {
-    try {
-      const result = await this.postsService.createPost(createPostDto);
-      return result;
-    } catch (error) {
-      console.error('Create post error:', error);
-      throw new HttpException(
-        {
-          message: 'Failed to post.',
-          error: error.message,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    return await this.postsService.createPost(createPostDto);
   }
 
-  @Get('get')
-  async getPosts(@Query('text') query?: string) {
-    try {
-      if (!query) {
-        return await this.postsService.getAllPosts();
-      }
-      return await this.postsService.getPostByQuery(query);
-    } catch (error) {
-      console.error('Get posts error:', error);
-      if (!query) {
-        return [];
-      }
-      return {
-        value: {
-          PostId: { value: "" },
-          PostName: { value: "" },
-          PostTime: { value: "" },
-          UserName: { value: "" },
-          UserId: { value: "" },
-          PostData: { value: "" },
-          LikerData: { value: "" },
-          LinkerData: [],
-        }
-      };
-    }
+  @Get('all')
+  async getAllPosts() {
+    return await this.postsService.getAllPosts();
+  }
+
+  @Get('query')
+  async getPostByQuery(@Query('text') query: string) {
+    return await this.postsService.getPostByQuery(query);
   }
 }
