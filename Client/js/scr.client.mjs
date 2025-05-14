@@ -1,5 +1,5 @@
 // script.js
-import word_check from "../custom/loop";
+import word_check from "./bd/loop.js";
 /**
  * 投稿ボタンの要素
  * @type {HTMLButtonElement}
