@@ -5,16 +5,16 @@ import { Model } from 'mongoose';
 import { Post, PostDocument } from './schemas/post.schema';
 import { CreatePostDto } from './dto/create-post.dto';
 import { Poid } from '../utils/poid';
-import { Filter } from 'profanity-filter'; // 修正: 名前付きエクスポートを使用
+import * as Filter from 'profanity-filter'; // 修正: 名前付きエクスポートを使用
 
 @Injectable()
 export class PostsService {
-  private filter: Filter;
+  private filter: any; // 型をanyに変更
 
   constructor(
     @InjectModel(Post.name) private postModel: Model<PostDocument>,
   ) {
-    this.filter = new Filter();
+    this.filter = new Filter(); // ここはそのまま
   }
 
   async createPost(createPostDto: CreatePostDto): Promise<any> {
