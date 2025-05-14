@@ -1099,6 +1099,8 @@ body::-webkit-scrollbar {
 #perlinNoiseImage{
   z-index:100;
   opacity:0.9;
+  width:fit-content;
+  height:fit-content;
   background-size: cover; /* Adjusts the size of the background */
   background-repeat: no-repeat; /* Prevents the image from repeating */
   position: relative;
