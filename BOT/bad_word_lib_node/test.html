@@ -12,11 +12,11 @@
     <p id="result"></p>
 
     <script>
-        const Filter = new badWords();
+        const filter = new Filter(); // 'badWords'を'filter'に変更
         
         document.getElementById('checkButton').addEventListener('click', () => {
             const text = document.getElementById('inputText').value;
-            const isProfane = Filter.isProfane(text);
+            const isProfane = filter.isProfane(text); // 'Filter'を'filter'に変更
             const resultText = isProfane ? "悪口が検出されました。" : "悪口は検出されませんでした。";
             document.getElementById('result').innerText = resultText;
         });
