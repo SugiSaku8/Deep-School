@@ -87,9 +87,21 @@ function convertToHtml(inputText) {
 
   return outputHtml;
 }
-
-// Define the CSS styles
-const styles = `
+//How to use
+//window.onload = function () {
+//  loadMarkdown(filepath); // Markdownファイルのパス
+//};
+window.onload = function () {
+  const iframeDocument =
+    iframe.contentDocument || iframe.contentWindow.document;
+  const iframe = document.getElementById("PickFrame");
+};
+function loadMarkdown(file) {
+  fetch(file)
+    .then((response) => response.text())
+    .then((markdown) => {
+      const htmlOutput = convertToHtml(inputText);
+      const styles = `
 
 body{
 font-family: "Noto Sans JP", sans-serif;
@@ -736,7 +748,7 @@ font-family: "Noto Sans JP", sans-serif;
       display: none;
     }
   `;
-const script = `
+      const script = `
   /**
    * dom - DOM操作を簡単にするためのオブジェクト
    * @namespace dom
@@ -768,8 +780,8 @@ const script = `
     },
   };
   `;
-// Create the full HTML content with styles
-const fullHtml = `
+      // Create the full HTML content with styles
+      const fullHtml = `
   <!DOCTYPE html>
   <html>
   <head>
@@ -787,23 +799,6 @@ const fullHtml = `
   </body>
   </html>
 `;
-
-console.log(fullHtml);
-
-//How to use
-//window.onload = function () {
-//  loadMarkdown(filepath); // Markdownファイルのパス
-//};
-window.onload = function () {
-  const iframeDocument =
-    iframe.contentDocument || iframe.contentWindow.document;
-  const iframe = document.getElementById("PickFrame");
-};
-function loadMarkdown(file) {
-  fetch(file)
-    .then((response) => response.text())
-    .then((markdown) => {
-      const htmlOutput = convertToHtml(inputText);
       iframeDocument.open();
       iframeDocument.write(fullHtml);
       iframeDocument.close();
