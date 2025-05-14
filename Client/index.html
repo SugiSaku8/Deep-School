@@ -218,7 +218,7 @@
     <div id="pickramu" style="display: none">
       <iframe id="PickFrame" width="1200" height="600"></iframe>
     </div>
-    <img src="" id="perlinNoiseImage" style="display: none" />
+    <img src="" id="perlinNoiseImage" style="display: block" />
     <script>
       function generatePerlinNoise(width, height) {
         const canvas = document.createElement("canvas");
@@ -281,6 +281,7 @@
         document.getElementById("perlinNoiseImage").src = noiseImage;
       }
       IninterDom();
+      makeNoise();
     </script>
   </body>
 </html>
