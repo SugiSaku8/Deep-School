@@ -30,15 +30,15 @@ function createModel() {
     const model = tf.sequential();
 
     // レイヤー1: 入力層 - 100次元の入力を受け取る全結合層
-    model.add(tf.layers.dense({units: 4096, activation: 'relu', inputShape: [1024]}));
-    model.add(tf.layers.dropout({rate: 0.5})); // Dropout layer
+    model.add(tf.layers.dense({units: 100, activation: 'relu', inputShape: [1024]}));
+    model.add(tf.layers.dropout({rate: 0.8})); // Dropout layer
 
     // レイヤー2: 中間層 - 活性化関数にReLUを使用
-    model.add(tf.layers.dense({units: 128, activation: 'relu'}));
-    model.add(tf.layers.dropout({rate: 0.5})); // Dropout layer
+    model.add(tf.layers.dense({units: 100, activation: 'relu'}));
+    model.add(tf.layers.dropout({rate: 0.8})); // Dropout layer
 
     // レイヤー3: 出力層 - 1つのニューロンを持つ全結合層（二値分類）
-    model.add(tf.layers.dense({units: 2, activation: 'sigmoid'}));
+    model.add(tf.layers.dense({units: 100, activation: 'sigmoid'}));
 
     return model;
 }
@@ -73,8 +73,8 @@ async function trainModel(model, trainingData) {
     // モデルのトレーニング
     const history = await model.fit(xs, ys, {
         epochs: 10, // エポック数
-        batchSize: 64, // バッチサイズ
-        validationSplit: 0.2, // 検証データの割合
+        batchSize: 8, // バッチサイズ
+        validationSplit: 0.1, // 検証データの割合
         callbacks: {
             onEpochEnd: async (epoch, logs) => {
                 console.log(`エポック ${epoch + 1}: 損失 = ${logs.loss.toFixed(4)}, 精度 = ${logs.acc.toFixed(4)}, 検証損失 = ${logs.val_loss.toFixed(4)}, 検証精度 = ${logs.val_acc.toFixed(4)}`);
@@ -147,8 +147,8 @@ async function main() {
     }
 
     // データの分割（トレーニングデータとテストデータ）
-    const trainingData = dataset.slice(0, Math.floor(dataset.length * 0.8));
-    const testingData = dataset.slice(Math.floor(dataset.length * 0.8));
+    const trainingData = dataset.slice(0, Math.floor(dataset.length * 0.9));
+    const testingData = dataset.slice(Math.floor(dataset.length * 0.9));
 
     let model;
 
