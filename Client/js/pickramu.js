@@ -92,9 +92,9 @@ function convertToHtml(inputText) {
 //  loadMarkdown(filepath); // Markdownファイルのパス
 //};
 window.onload = function () {
+  const iframe = document.getElementById("PickFrame");
   const iframeDocument =
     iframe.contentDocument || iframe.contentWindow.document;
-  const iframe = document.getElementById("PickFrame");
 };
 function loadMarkdown(file) {
   fetch(file)
