@@ -1,11 +1,11 @@
 // src/posts/posts.service.ts
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Post, PostDocument } from './schemas/post.schema';
 import { CreatePostDto } from './dto/create-post.dto';
 import { Poid } from '../utils/poid';
-import Filter from 'profanity-filter';
+import { Filter } from 'profanity-filter'; // 修正: 名前付きエクスポートを使用
 
 @Injectable()
 export class PostsService {
