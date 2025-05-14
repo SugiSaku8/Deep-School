@@ -1123,3 +1123,8 @@ body::-webkit-scrollbar {
   box-shadow: 0 0 0 2px #fff;
   pointer-events: none;
 }
+
+.menu-item {
+  position: relative;
+  display: inline-block;
+}
