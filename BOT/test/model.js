@@ -2,6 +2,7 @@
 const tf = require("@tensorflow/tfjs-node");
 const fs = require('fs');
 
+// テキストを数値ベクトルに変換する関数
 function textToVector(text) {
     const uniqueChars = Array.from(new Set(text.split(''))); // Get unique characters
     const vector = new Array(100).fill(0); // Initialize vector with fixed length of 100
@@ -30,16 +31,15 @@ async function loadDataset(filePath) {
 function createModel() {
     const model = tf.sequential();
 
-    // レイヤー1: 入力層 - 100次元の入力を受け取る全結合層
-    model.add(tf.layers.dense({units: 100, activation: 'relu', inputShape: [1024]}));
-    model.add(tf.layers.dropout({rate: 0.8})); // Dropout layer
+    // Increase the number of units and add more layers
+    model.add(tf.layers.dense({units: 256, activation: 'relu', inputShape: [100], kernelRegularizer: tf.regularizers.l2(0.01)}));
+    model.add(tf.layers.dropout({rate: 0.5})); // Adjusted dropout rate
 
-    // レイヤー2: 中間層 - 活性化関数にReLUを使用
-    model.add(tf.layers.dense({units: 100, activation: 'relu'}));
-    model.add(tf.layers.dropout({rate: 0.8})); // Dropout layer
+    model.add(tf.layers.dense({units: 128, activation: 'relu', kernelRegularizer: tf.regularizers.l2(0.01)}));
+    model.add(tf.layers.dropout({rate: 0.5}));
 
-    // レイヤー3: 出力層 - 1つのニューロンを持つ全結合層（二値分類）
-    model.add(tf.layers.dense({units: 100, activation: 'sigmoid'}));
+    // Output layer for binary classification
+    model.add(tf.layers.dense({units: 1, activation: 'sigmoid'}));
 
     return model;
 }
@@ -70,12 +70,11 @@ async function trainModel(model, trainingData) {
     const xs = tf.tensor2d(trainingData.map(item => item.input), [trainingData.length, trainingData[0].input.length]);
     const ys = tf.tensor2d(trainingData.map(item => item.output), [trainingData.length, 1]);
 
-
     // モデルのトレーニング
     const history = await model.fit(xs, ys, {
-        epochs: 5, // エポック数
-        batchSize: 8, // バッチサイズ
-        validationSplit: 0.1, // 検証データの割合
+        epochs: 20, // Increased epochs
+        batchSize: 16, // Adjusted batch size
+        validationSplit: 0.2, // Increased validation split
         callbacks: {
             onEpochEnd: async (epoch, logs) => {
                 console.log(`エポック ${epoch + 1}: 損失 = ${logs.loss.toFixed(4)}, 精度 = ${logs.acc.toFixed(4)}, 検証損失 = ${logs.val_loss.toFixed(4)}, 検証精度 = ${logs.val_acc.toFixed(4)}`);
@@ -121,7 +120,7 @@ async function loadModel(filePath) {
 
 // 新しいテキストに対する予測
 function predict(model, inputText) {
-    // テキストを数値ベクトルに変換（例：one-hot encoding）
+    // テキストを数値ベクトルに変換
     const inputVector = textToVector(inputText);
 
     // モデルへの入力として適切な形状に変換
@@ -184,7 +183,7 @@ async function main() {
     await saveModel(model, modelPath);
 
     // 新しいテキストに対する予測
-    const inputText = "優しいな";
+    const inputText = "優しいね";
     const probability = predict(model, inputText);
     console.log(`テキスト: "${inputText}" のBADな確率: ${probability.toFixed(4)}`);
 }
