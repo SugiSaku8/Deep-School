@@ -1096,7 +1096,7 @@ body::-webkit-scrollbar {
   display: none;
 }
 
-.perlinNoiseImage{
+#perlinNoiseImage{
   z-index:2;
   opacity:0.2;
   background-size: cover; /* Adjusts the size of the background */
