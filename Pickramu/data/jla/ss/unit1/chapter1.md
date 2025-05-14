@@ -11,6 +11,9 @@
 
 @tag question [close]
 
+@tag answer [open]
+<input type="search" value="">
+@tag answer [close]
 @btn id=btn1 次へ
 
 @tag n1 [close]

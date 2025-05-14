@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>悪口検出</title>
+    <script src="https://cdn.jsdelivr.net/npm/bad-words@3.0.0/bad-words.min.js"></script>
+</head>
+<body>
+    <h1>悪口検出システム</h1>
+    <input type="text" id="inputText" placeholder="テキストを入力してください">
+    <button id="checkButton">検出</button>
+    <p id="result"></p>
+
+    <script>
+        const Filter = new badWords();
+        
+        document.getElementById('checkButton').addEventListener('click', () => {
+            const text = document.getElementById('inputText').value;
+            const isProfane = Filter.isProfane(text);
+            const resultText = isProfane ? "悪口が検出されました。" : "悪口は検出されませんでした。";
+            document.getElementById('result').innerText = resultText;
+        });
+    </script>
+</body>
+</html>
