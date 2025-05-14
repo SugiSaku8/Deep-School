@@ -220,29 +220,6 @@
     </div>
     <img src="" id="perlinNoiseImage" style="display: block" />
     <script>
-      function generatePerlinNoise(width, height) {
-        const canvas = document.createElement("canvas");
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext("2d");
-        const imageData = ctx.createImageData(width, height);
-        const noise = new SimplexNoise();
-
-        for (let x = 0; x < width; x++) {
-          for (let y = 0; y < height; y++) {
-            const value = noise.noise2D(x / 100, y / 100); // Adjust the scale as needed
-            const color = Math.floor((value + 1) * 128); // Normalize to 0-255
-            const index = (x + y * width) * 4;
-            imageData.data[index] = color; // Red
-            imageData.data[index + 1] = color; // Green
-            imageData.data[index + 2] = color; // Blue
-            imageData.data[index + 3] = 255; // Alpha
-          }
-        }
-
-        ctx.putImageData(imageData, 0, 0);
-        return canvas.toDataURL(); // Returns the image as a base64 encoded string
-      }
       function InitToasterChat() {
         document.getElementById("toaster_chat").style.display = "block";
         document.getElementById("splash").style.display = "block";
@@ -276,12 +253,7 @@
         });
         */
       }
-      function makeNoise() {
-        const noiseImage = generatePerlinNoise(screen.width, screen.heigh);
-        document.getElementById("perlinNoiseImage").src = noiseImage;
-      }
       IninterDom();
-      makeNoise();
     </script>
   </body>
 </html>
