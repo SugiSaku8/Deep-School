@@ -25,6 +25,8 @@
   }
 
   // Example usage
-  const noiseImage = generatePerlinNoise(512, 512); // Generate a 512x512 image
-  console.log(noiseImage); // You can use this data URL in an <img> tag or as a background
+  const noiseImage = generatePerlinNoise(screen.width, screen.heigh);
+document.getElementById("perlinNoiseImage").src = noiseImage;
+  
 </script>
+<img src="" id="perlinNoiseImage" style="display:block;" />
