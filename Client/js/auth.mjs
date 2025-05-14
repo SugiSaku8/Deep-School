@@ -114,7 +114,9 @@ class GoogleAuthManager {
     try {
       // Google Drive APIの認証を実行
       // Googleのユーザー名とIDをグローバル関数に設定
-      const jwt = decodeURIComponent(escape(window.atob(response.credential.split('.')[1])));
+      const jwt = decodeURIComponent(
+        escape(window.atob(response.credential.split(".")[1]))
+      );
       const payload = JSON.parse(jwt);
       window.googleUserName = payload.name;
       window.googleUserId = payload.sub;
@@ -444,7 +446,6 @@ class AuthServer {
 
 // アプリケーションの初期化
 window.onload = async function () {
-  //document.getElementById("kakuninForm").style.display = "none";
   const authManager = new GoogleAuthManager();
   const driveManager = new GoogleDriveManager(authManager);
   const uiManager = new KOREGAUIManagerDAZE();
@@ -460,17 +461,6 @@ window.onload = async function () {
     }
   };
   */
-
-  window.loadData = async function () {
-    try {
-      const data = await driveManager.loadAppData("deep-school-user-data.json");
-      console.log("データを読み込みました");
-      return data;
-    } catch (error) {
-      console.log("データの読み込みに失敗しました");
-      return null;
-    }
-  };
 
   document
     .getElementById("school_login_btn")
@@ -514,4 +504,14 @@ window.onload = async function () {
         }
       }
     });
+};
+window.loadData = async function () {
+  try {
+    const data = await driveManager.loadAppData("deep-school-user-data.json");
+    console.log("データを読み込みました");
+    return data;
+  } catch (error) {
+    console.log("データの読み込みに失敗しました");
+    return null;
+  }
 };
