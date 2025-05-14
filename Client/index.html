@@ -252,8 +252,10 @@
         });
         */
       }
-      const noiseImage = generatePerlinNoise(512, 512);
-      document.getElementById("perlinNoiseImage").src = noiseImage;
+      function makeNoise() {
+        const noiseImage = generatePerlinNoise(screen.width, screen.heigh);
+        document.getElementById("perlinNoiseImage").src = noiseImage;
+      }
       IninterDom();
     </script>
   </body>
