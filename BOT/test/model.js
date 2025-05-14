@@ -184,7 +184,7 @@ async function main() {
     await saveModel(model, modelPath);
 
     // 新しいテキストに対する予測
-    const inputText = "優しいね";
+    const inputText = "優しいな";
     const probability = predict(model, inputText);
     console.log(`テキスト: "${inputText}" のBADな確率: ${probability.toFixed(4)}`);
 }
