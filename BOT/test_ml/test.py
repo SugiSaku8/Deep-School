@@ -434,7 +434,7 @@ detector = AutoLearningTextDetector()
 detector.train(texts, labels)
 
 # 新しいテキストを検出
-new_text = "いいね欲しいからって都合の良い解釈するな"
+new_text = "優しいじゃん"
 result = detector.detect(new_text)
 
 # 結果を表示
