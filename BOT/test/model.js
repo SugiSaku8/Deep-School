@@ -31,11 +31,17 @@ async function loadDataset(filePath) {
 function createModel() {
     const model = tf.sequential();
 
-    // Increase the number of units and add more layers
+    // Add more layers and use Batch Normalization
     model.add(tf.layers.dense({units: 256, activation: 'relu', inputShape: [100], kernelRegularizer: tf.regularizers.l2(0.01)}));
-    model.add(tf.layers.dropout({rate: 0.5})); // Adjusted dropout rate
+    model.add(tf.layers.batchNormalization());
+    model.add(tf.layers.dropout({rate: 0.5}));
 
     model.add(tf.layers.dense({units: 128, activation: 'relu', kernelRegularizer: tf.regularizers.l2(0.01)}));
+    model.add(tf.layers.batchNormalization());
+    model.add(tf.layers.dropout({rate: 0.5}));
+
+    model.add(tf.layers.dense({units: 64, activation: 'relu', kernelRegularizer: tf.regularizers.l2(0.01)}));
+    model.add(tf.layers.batchNormalization());
     model.add(tf.layers.dropout({rate: 0.5}));
 
     // Output layer for binary classification
@@ -47,7 +53,7 @@ function createModel() {
 // モデルのコンパイル
 function compileModel(model) {
     model.compile({
-        optimizer: 'adam', // 最適化アルゴリズム
+        optimizer: tf.train.adam(0.001), // Adjusted learning rate
         loss: 'binaryCrossentropy', // 損失関数（二値分類用）
         metrics: ['accuracy'] // 評価指標
     });
@@ -72,7 +78,7 @@ async function trainModel(model, trainingData) {
 
     // モデルのトレーニング
     const history = await model.fit(xs, ys, {
-        epochs: 20, // Increased epochs
+        epochs: 10, // Increased epochs
         batchSize: 16, // Adjusted batch size
         validationSplit: 0.2, // Increased validation split
         callbacks: {
