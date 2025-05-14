@@ -1097,7 +1097,6 @@ body::-webkit-scrollbar {
 }
 
 #perlinNoiseImage{
-  background-image:url("./img/noise_release_may_14t.webp");
   z-index:2;
   opacity:0.2;
   background-size: cover; /* Adjusts the size of the background */
