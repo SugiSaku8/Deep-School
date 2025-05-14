@@ -5,17 +5,13 @@ import { Model } from 'mongoose';
 import { Post, PostDocument } from './schemas/post.schema';
 import { CreatePostDto } from './dto/create-post.dto';
 import { Poid } from '../utils/poid';
-import { Filter } from 'bad-words'; // 修正: 名前付きエクスポートを使用
-
+import { Filter } from 'profanity-check'; // profanity-checkをインポート
+const df = new Filter({languages: ["japanese", "english", "french"]})
 @Injectable()
 export class PostsService {
-  private filter: Filter; // 型をFilterに変更
-
   constructor(
     @InjectModel(Post.name) private postModel: Model<PostDocument>,
-  ) {
-    this.filter = new Filter(); // 修正: Filterのインスタンスを作成
-  }
+  ) {}
 
   async createPost(createPostDto: CreatePostDto): Promise<any> {
     const postId = Poid(createPostDto.UserId, createPostDto.PostTime);
@@ -47,11 +43,10 @@ export class PostsService {
   async scanAndMaskProfanity(): Promise<void> {
     const posts = await this.postModel.find().exec();
     for (const post of posts) {
-      if (this.filter.isProfane(post.PostData)) {
+      if (df.isProfane(post.PostData)) { // profanity-checkを使用
         const originalText = post.PostData;
-        post.PostData = this.filter.clean(post.PostData);
-        await post.save();
-        console.log(`Post ID: ${post.PostId} has been masked. Original: ${originalText}`);
+        await this.postModel.deleteOne({ PostId: post.PostId }); // 投稿を削除
+        console.log(`Post ID: ${post.PostId} has been removed. Original: ${originalText}`);
       }
     }
   }
