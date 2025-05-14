@@ -1096,12 +1096,30 @@ body::-webkit-scrollbar {
   display: none;
 }
 
-#perlinNoiseImage{
-  z-index:100;
-  opacity:0.9;
-  width:fit-content;
-  height:fit-content;
+#perlinNoiseImage {
+  z-index: 100;
+  opacity: 0.9;
+  width: fit-content;
+  height: fit-content;
   background-size: cover; /* Adjusts the size of the background */
   background-repeat: no-repeat; /* Prevents the image from repeating */
   position: relative;
+}
+
+.notification-badge {
+  position: absolute;
+  top: 0px;
+  right: 10px;
+  background: #ff3b3b;
+  color: #fff;
+  border-radius: 51px;
+  padding: 0.2em 0.6em;
+  font-size: 1.3em;
+  font-weight: bold;
+  z-index: 2;
+  transform: translate(50%, -50%);
+  min-width: 2em;
+  text-align: center;
+  box-shadow: 0 0 0 2px #fff;
+  pointer-events: none;
 }
