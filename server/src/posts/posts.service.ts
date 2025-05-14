@@ -5,16 +5,16 @@ import { Model } from 'mongoose';
 import { Post, PostDocument } from './schemas/post.schema';
 import { CreatePostDto } from './dto/create-post.dto';
 import { Poid } from '../utils/poid';
-import { Filter } from 'bad-words'
+import { Filter } from 'bad-words'; // 修正: 名前付きエクスポートを使用
 
 @Injectable()
 export class PostsService {
-  private filter: any; // 型をanyに変更
+  private filter: Filter; // 型をFilterに変更
 
   constructor(
     @InjectModel(Post.name) private postModel: Model<PostDocument>,
   ) {
-    this.filter = new Filter(); // 修正: createBadWordsを呼び出してフィルタを作成
+    this.filter = new Filter(); // 修正: Filterのインスタンスを作成
   }
 
   async createPost(createPostDto: CreatePostDto): Promise<any> {
