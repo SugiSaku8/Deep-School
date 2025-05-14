@@ -1107,6 +1107,7 @@ body::-webkit-scrollbar {
 }
 
 .notification-badge {
+  display:none;
   position: absolute;
   top: 0px;
   right: 10px;
@@ -1120,7 +1121,7 @@ body::-webkit-scrollbar {
   transform: translate(50%, -50%);
   min-width: 2em;
   text-align: center;
-  box-shadow: 0 0 0 2px #fff;
+  box-shadow: 0 0 0 2px #ff3b3b;
   pointer-events: none;
 }
 
