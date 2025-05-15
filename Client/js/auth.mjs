@@ -531,10 +531,9 @@ class AuthServer {
 window.onload = function () {
   console.log("初期化中.................");
   const authManager = new GoogleAuthManager();
+  authManager.initialize();
   const driveManager = new GoogleDriveManager(authManager);
   const uiManager = new KOREGAUIManagerDAZE();
-
-  /* await */ authManager.initialize();
   /*
   window.saveData = async function(data) {
     try {
@@ -576,6 +575,7 @@ window.onload = function () {
       document.getElementById("menu").style.display = "block";
     });
 };
+
 window.loadData = async function () {
   try {
     const data = await driveManager.loadAppData("deep-school-user-data.json");
