@@ -1,10 +1,3 @@
-@config [open]
-name 旧石器時代
-ver 1.0.0
-unit 1
-chapter 1
-@config [close]
-
 @tag unit-title [open] Jla-1 社会 Unit 2
 @tag unit-title [close]
 @tag chapter-title [open] 連立方程式の計算 Chapter 23
