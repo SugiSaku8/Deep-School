@@ -1,4 +1,10 @@
-// Pickramu/API/compile.n.js
+/* 
+Pickramu
+The Pickramu is a language for creating teaching materials for Deep-School.
+version:0.0.2
+Development:Carnaion Studio
+License:MPL-2.0
+*/
 function convertToHtml(inputText) {
   let outputHtml = "";
   // Remove lines starting with //
