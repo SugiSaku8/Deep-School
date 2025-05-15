@@ -563,6 +563,7 @@ export function initializeApp() {
       window.scr_url = stuth.url;
       console.log("SCRのURLを設定しました。");
       document.getElementById("menu").style.display = "block";
+      document.getElementById("menu").style.display = "flex";
     });
 }
 
