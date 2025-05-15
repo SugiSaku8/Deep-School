@@ -24,6 +24,7 @@ class GoogleAuthManager {
     this.accessToken = null;
     this.tokenTimestamp = null;
     this.TOKEN_VALIDITY_MS = 104 * 24 * 60 * 60 * 1000; // 104日
+    this.initialized = false;
   }
 
   /**
@@ -33,10 +34,15 @@ class GoogleAuthManager {
   async initialize() {
     try {
       console.log('Initializing auth manager...');
+      
+      // Google APIの読み込みを待機
+      await this.waitForGoogleAPI();
+      
       // Googleトークンの確認
       const savedToken = localStorage.getItem("google_access_token");
       const savedTimestamp = localStorage.getItem("google_token_timestamp");
       let googleValid = false;
+      
       if (savedToken && savedTimestamp) {
         const now = Date.now();
         const tokenAge = now - Number(savedTimestamp);
@@ -56,6 +62,7 @@ class GoogleAuthManager {
       const dsToken = localStorage.getItem("ds_id");
       const dsTimestamp = localStorage.getItem("ds_id_timestamp");
       let schoolValid = false;
+      
       if (dsToken && dsTimestamp) {
         const now = Date.now();
         const tokenAge = now - Number(dsTimestamp);
@@ -75,16 +82,85 @@ class GoogleAuthManager {
         document.getElementById("login").style.display = "none";
         document.getElementById("menu").style.display = "block";
         return;
-      } else {
-        console.log('User not logged in');
-        document.getElementById("loginForm").style.display = "none";
-        document.getElementById("openLoginButton").style.display = "block";
-        document.getElementById("menu").style.display = "none";
       }
+
+      // Googleログインボタンの初期化
+      await this.initializeGoogleLogin();
+      
+      console.log('User not logged in');
+      document.getElementById("loginForm").style.display = "none";
+      document.getElementById("openLoginButton").style.display = "block";
+      document.getElementById("menu").style.display = "none";
+      
     } catch (error) {
       console.error("認証の初期化に失敗しました:", error);
       document.getElementById("loginForm").style.display = "block";
       document.getElementById("openLoginButton").style.display = "none";
+    }
+  }
+
+  async waitForGoogleAPI() {
+    return new Promise((resolve) => {
+      if (window.google) {
+        console.log('Google API already loaded');
+        resolve();
+      } else {
+        console.log('Waiting for Google API to load...');
+        const checkGoogleAPI = setInterval(() => {
+          if (window.google) {
+            clearInterval(checkGoogleAPI);
+            console.log('Google API loaded');
+            resolve();
+          }
+        }, 100);
+
+        // タイムアウト処理
+        setTimeout(() => {
+          clearInterval(checkGoogleAPI);
+          console.error('Google API loading timeout');
+          resolve();
+        }, 10000);
+      }
+    });
+  }
+
+  async initializeGoogleLogin() {
+    if (!window.google) {
+      console.error('Google API not loaded');
+      return;
+    }
+
+    try {
+      google.accounts.id.initialize({
+        client_id: CLIENT_ID,
+        callback: (response) => this.handleCredentialResponse(response),
+        auto_select: false,
+        cancel_on_tap_outside: false,
+        context: 'signin'
+      });
+      console.log('Google login initialized');
+
+      const buttonContainer = document.getElementById("openLoginButton");
+      if (!buttonContainer) {
+        console.error('Login button container not found');
+        return;
+      }
+
+      google.accounts.id.renderButton(
+        buttonContainer,
+        {
+          type: "standard",
+          theme: "outline",
+          size: "large",
+          text: "signin_with_google",
+          shape: "rectangular",
+          locale: "ja",
+          width: 250
+        }
+      );
+      console.log('Google login button rendered');
+    } catch (error) {
+      console.error('Error initializing Google login:', error);
     }
   }
 

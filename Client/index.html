@@ -4,124 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Deep-School</title>
-    <script>
-      // Google APIの初期化を待つ関数
-      function waitForGoogleAPI() {
-        return new Promise((resolve) => {
-          if (window.google) {
-            console.log('Google API already loaded');
-            resolve();
-          } else {
-            console.log('Waiting for Google API to load...');
-            window.addEventListener('load', () => {
-              if (window.google) {
-                console.log('Google API loaded after window load');
-                resolve();
-              } else {
-                console.log('Loading Google API manually...');
-                const gsiScript = document.createElement('script');
-                gsiScript.src = 'https://accounts.google.com/gsi/client';
-                gsiScript.onload = () => {
-                  console.log('GSI client loaded');
-                  const apiScript = document.createElement('script');
-                  apiScript.src = 'https://apis.google.com/js/api.js';
-                  apiScript.onload = () => {
-                    console.log('Google API loaded manually');
-                    resolve();
-                  };
-                  document.head.appendChild(apiScript);
-                };
-                document.head.appendChild(gsiScript);
-              }
-            });
-          }
-        });
-      }
-
-      // Googleログインボタンの初期化
-      function initGoogleLogin() {
-        console.log('Initializing Google login...');
-        if (!window.google) {
-          console.error('Google API not loaded');
-          return;
-        }
-
-        try {
-          google.accounts.id.initialize({
-            client_id: '54111871338-nv4bn99r48cohhverg3l9oicirthmtpp.apps.googleusercontent.com',
-            callback: handleCredentialResponse,
-            auto_select: false,
-            cancel_on_tap_outside: false
-          });
-          console.log('Google login initialized');
-
-          const buttonContainer = document.getElementById("openLoginButton");
-          if (!buttonContainer) {
-            console.error('Login button container not found');
-            return;
-          }
-
-          google.accounts.id.renderButton(
-            buttonContainer,
-            {
-              type: "standard",
-              theme: "outline",
-              size: "large",
-              text: "signin_with_google",
-              shape: "rectangular",
-              locale: "ja",
-            }
-          );
-          console.log('Google login button rendered');
-        } catch (error) {
-          console.error('Error initializing Google login:', error);
-        }
-      }
-
-      // Google認証レスポンスのハンドリング
-      function handleCredentialResponse(response) {
-        console.log("認証トークンを受信:", response.credential);
-        document.getElementById("loginForm").style.display = "block";
-        document.getElementById("openLoginButton").style.display = "none";
-
-        try {
-          const jwt = decodeURIComponent(
-            escape(window.atob(response.credential.split(".")[1]))
-          );
-          const payload = JSON.parse(jwt);
-          window.googleUserName = payload.name;
-          window.googleUserId = payload.sub;
-          console.log("Google ユーザー名:", window.googleUserName);
-          console.log("Google ユーザーID:", window.googleUserId);
-
-          // ログイン成功後の処理
-          document.getElementById("login").style.display = "none";
-          document.getElementById("menu").style.display = "block";
-        } catch (error) {
-          console.error("Google認証エラー:", error);
-        }
-      }
-
-      // ページ読み込み完了時の処理
-      window.onload = function() {
-        console.log('Window loaded, initializing...');
-        waitForGoogleAPI().then(() => {
-          console.log('Google API ready, initializing login...');
-          initGoogleLogin();
-        }).catch(error => {
-          console.error('Error during initialization:', error);
-        });
-      };
-    </script>
-    <script src="https://accounts.google.com/gsi/client"></script>
-    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://apis.google.com/js/api.js" async defer></script>
     <meta
       name="google-signin-client_id"
       content="54111871338-nv4bn99r48cohhverg3l9oicirthmtpp.apps.googleusercontent.com"
     />
     <link rel="stylesheet" href="re/style.css" />
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
     <script src="js/auth.mjs" type="module"></script>
     <script src="js/ui.js"></script>
     <script src="js/tm/config.js"></script>
@@ -157,7 +52,7 @@
           <p>学校IDは、pL:2^4,5,101 のような形式の文字列です。</p>
         </form>
       </div>
-      <button class="login-button" id="openLoginButton">ログイン</button>
+      <div id="openLoginButton" class="login-button"></div>
       <p class="copyright">(c) 2022-2025 Carnation Studio v0.0.2</p>
     </div>
     <div class="menu-item" id="menu">
