@@ -14,14 +14,12 @@
 @tag answer [open]
 @input n1_input [open]
 この時代のことをなんというか答えなさい。
-@input n1_input futter=[close]
+@input n1_input futter=n1_asnwer_futter [close]
 //入力欄
-@futter n1_asnwer_futter [open]
+@futter n1_asnwer_futter futter=n1_asnwer_futter [open]
 この時代のことは、旧石器時代と言います。
-@futter n1_asnwer_futter [close]
+@futter n1_asnwer_futter futter=n1_asnwer_futter[close]
 //回答した後に表示されるフッター
-@futter_script n1_input n1_asnwer_futter
-//リンクづけ。
 //n1_inputがenterされたらn1_asnwer_futterに転送する。
 @tag answer [close]
 @btn id=btn1 次へ
