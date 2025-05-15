@@ -38,64 +38,18 @@ class GoogleAuthManager {
       // Google APIの読み込みを待機
       await this.waitForGoogleAPI();
       
-      // Googleトークンの確認
-      const savedToken = localStorage.getItem("google_access_token");
-      const savedTimestamp = localStorage.getItem("google_token_timestamp");
-      let googleValid = false;
-      
-      if (savedToken && savedTimestamp) {
-        const now = Date.now();
-        const tokenAge = now - Number(savedTimestamp);
-        if (tokenAge < this.TOKEN_VALIDITY_MS) {
-          this.accessToken = savedToken;
-          this.tokenTimestamp = Number(savedTimestamp);
-          googleValid = true;
-          console.log('Valid Google token found');
-        } else {
-          localStorage.removeItem("google_access_token");
-          localStorage.removeItem("google_token_timestamp");
-          console.log('Google token expired');
-        }
-      }
-
-      // SchoolIDトークンの確認
-      const dsToken = localStorage.getItem("ds_id");
-      const dsTimestamp = localStorage.getItem("ds_id_timestamp");
-      let schoolValid = false;
-      
-      if (dsToken && dsTimestamp) {
-        const now = Date.now();
-        const tokenAge = now - Number(dsTimestamp);
-        if (tokenAge < this.TOKEN_VALIDITY_MS) {
-          schoolValid = true;
-          console.log('Valid school token found');
-        } else {
-          localStorage.removeItem("ds_id");
-          localStorage.removeItem("ds_id_timestamp");
-          console.log('School token expired');
-        }
-      }
-
-      // UIの制御
-      if (googleValid || schoolValid) {
-        console.log('User already logged in');
-        document.getElementById("login").style.display = "none";
-        document.getElementById("menu").style.display = "block";
+      // 既存のトークンを確認
+      const isLoggedIn = await this.checkExistingTokens();
+      if (isLoggedIn) {
         return;
       }
 
       // Googleログインボタンの初期化
       await this.initializeGoogleLogin();
       
-      console.log('User not logged in');
-      document.getElementById("loginForm").style.display = "none";
-      document.getElementById("openLoginButton").style.display = "block";
-      document.getElementById("menu").style.display = "none";
-      
     } catch (error) {
       console.error("認証の初期化に失敗しました:", error);
-      document.getElementById("loginForm").style.display = "block";
-      document.getElementById("openLoginButton").style.display = "none";
+      this.showLoginForm();
     }
   }
 
@@ -122,6 +76,48 @@ class GoogleAuthManager {
         }, 10000);
       }
     });
+  }
+
+  async checkExistingTokens() {
+    // Googleトークンの確認
+    const savedToken = localStorage.getItem("google_access_token");
+    const savedTimestamp = localStorage.getItem("google_token_timestamp");
+    
+    if (savedToken && savedTimestamp) {
+      const now = Date.now();
+      const tokenAge = now - Number(savedTimestamp);
+      if (tokenAge < this.TOKEN_VALIDITY_MS) {
+        this.accessToken = savedToken;
+        this.tokenTimestamp = Number(savedTimestamp);
+        console.log('Valid Google token found');
+        this.showMenu();
+        return true;
+      } else {
+        localStorage.removeItem("google_access_token");
+        localStorage.removeItem("google_token_timestamp");
+        console.log('Google token expired');
+      }
+    }
+
+    // SchoolIDトークンの確認
+    const dsToken = localStorage.getItem("ds_id");
+    const dsTimestamp = localStorage.getItem("ds_id_timestamp");
+    
+    if (dsToken && dsTimestamp) {
+      const now = Date.now();
+      const tokenAge = now - Number(dsTimestamp);
+      if (tokenAge < this.TOKEN_VALIDITY_MS) {
+        console.log('Valid school token found');
+        this.showMenu();
+        return true;
+      } else {
+        localStorage.removeItem("ds_id");
+        localStorage.removeItem("ds_id_timestamp");
+        console.log('School token expired');
+      }
+    }
+
+    return false;
   }
 
   async initializeGoogleLogin() {
@@ -159,8 +155,11 @@ class GoogleAuthManager {
         }
       );
       console.log('Google login button rendered');
+
+      this.showGoogleLogin();
     } catch (error) {
       console.error('Error initializing Google login:', error);
+      this.showLoginForm();
     }
   }
 
@@ -184,13 +183,10 @@ class GoogleAuthManager {
       // Google Drive APIの認証を実行
       await this.initializeGoogleDriveAuth();
       
-      // ログイン成功後の処理
-      document.getElementById("login").style.display = "none";
-      document.getElementById("menu").style.display = "block";
+      this.showMenu();
     } catch (error) {
       console.error("Google認証エラー:", error);
-      document.getElementById("loginForm").style.display = "block";
-      document.getElementById("openLoginButton").style.display = "none";
+      this.showLoginForm();
     }
   }
 
@@ -224,6 +220,23 @@ class GoogleAuthManager {
       console.error("Google Drive APIの認証に失敗しました:", error);
       throw error;
     }
+  }
+
+  showLoginForm() {
+    document.getElementById("loginForm").style.display = "block";
+    document.getElementById("openLoginButton").style.display = "none";
+    document.getElementById("menu").style.display = "none";
+  }
+
+  showGoogleLogin() {
+    document.getElementById("loginForm").style.display = "none";
+    document.getElementById("openLoginButton").style.display = "block";
+    document.getElementById("menu").style.display = "none";
+  }
+
+  showMenu() {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("menu").style.display = "block";
   }
 }
 
@@ -536,44 +549,27 @@ window.onload = async function () {
   document
     .getElementById("school_login_btn")
     .addEventListener("click", async () => {
-      const schoolId_query = getQueryParam("schoolId");
-      if (
-        document.getElementById("schoolId").value === null ||
-        document.getElementById("schoolId").value === "" ||
-        schoolId_query === null ||
-        schoolId_query === ""
-      ) {
-        var result = window.confirm(
-          "学校IDを入力していません。\n学校に接続せず利用しますか？"
-        );
+      const schoolId = document.getElementById("schoolId").value;
+      const schoolId_query = new URLSearchParams(window.location.search).get("schoolId");
+      
+      if (!schoolId && !schoolId_query) {
+        const result = window.confirm("学校IDを入力していません。\n学校に接続せず利用しますか？");
         if (result) {
           document.getElementById("login").style.display = "none";
           document.getElementById("scr_menu_icon").style.display = "none";
           document.getElementById("backicon").style.display = "block";
           document.getElementById("menu").style.display = "block";
-        } else {
-          document.getElementById("menu").style.display = "block";
-          return;
         }
-      } else {
-        document.getElementById("menu").style.display = "block";
-        if (
-          document.getElementById("schoolId").value === null ||
-          document.getElementById("schoolId").value === ""
-        ) {
-          let stuth = new AuthServer(document.getElementById("schoolId").value);
-          await stuth.callTest();
-          await loadFeed();
-          window.scr_url = stuth.url;
-          console.log("SCRのURLを設定しました。");
-        } else {
-          let stuth = new AuthServer(schoolId_query);
-          await stuth.callTest();
-          await loadFeed();
-          window.scr_url = stuth.url;
-          console.log("SCRのURLを設定しました。");
-        }
+        return;
       }
+
+      const serverUrl = schoolId || schoolId_query;
+      const stuth = new AuthServer(serverUrl);
+      await stuth.callTest();
+      await loadFeed();
+      window.scr_url = stuth.url;
+      console.log("SCRのURLを設定しました。");
+      document.getElementById("menu").style.display = "block";
     });
 };
 window.loadData = async function () {
