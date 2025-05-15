@@ -103,17 +103,19 @@ function convertToHtml(inputText) {
       continue;
     }
 
-    // Handle @btn tags
-    let btnMatch = line.match(/@btn\s+id=([\w,-]+)\s+class=([\w,-]+)\s+(.+)/);
+    // Handle regular @btn tags (without on=^set^)
+    let btnMatch = line.match(/@btn\s+id=([\w,-]+)(?:\s+class=([\w,-]+))?\s+(.+)/);
     if (btnMatch) {
       const btnIds = btnMatch[1]
         .split(",")
         .map((id) => id.trim())
         .join(" ");
       const btnClasses = btnMatch[2]
-        .split(",")
-        .map((cls) => cls.trim())
-        .join(" ");
+        ? btnMatch[2]
+            .split(",")
+            .map((cls) => cls.trim())
+            .join(" ")
+        : "button-next";
       const btnContent = btnMatch[3];
       outputHtml += `<button id="${btnIds}" class="${btnClasses}">${btnContent}</button>\n`;
       i++;

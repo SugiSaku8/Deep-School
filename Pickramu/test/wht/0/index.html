@@ -689,31 +689,48 @@ const dom = {
 <body>
 <div id="content">
 
-<div id="n1" class="unit">
+<div id="unit-title" class="">
+</div>
+<div id="chapter-title" class="">
+</div>
+<div id="n1" class="">
 <div id="question" class="">
-約10万年前ごろのものと見られる人類の痕跡が日本列島から見つかりました。
+約 10 万年前ごろのものと見られる人類の痕跡が日本列島から見つかりました。
 この頃の人類は、動物を狩って生活していました。
 </div>
-<button id="btn1" class="button-next">次へ</button>
+<div id="answer" class="">
+<div class="input-container">
+<div id="n1_input">
+<input type="text" class="input-box" placeholder="答えを入力">
+この時代のことをなんというか答えなさい。
 </div>
-<div id="n2" class="unit">
+</div>
+<div id="n1_asnwer_futter" style="display: none;">
+この時代のことは、旧石器時代と言います。
+@futter n1_asnwer_futter futter=n1_asnwer_futter[close]
+</div>
+<button id="btn1" class="button-next">次へ</button>
+
+</div>
+
 <div id="question" class="">
 約 1 万年前、日本列島が大陸から分離しました。
 紀元前 3000 年ごろ、稲作が日本列島に伝わりました。
 </div>
 <button id="btn2" class="button-next">次へ</button>
-</div>
 <script>
 document.getElementById("btn1").onclick = function() {
 dom.Tag("n1").style.display('none','auto');
 dom.Tag("n2").style.display('block','auto');
 }
 </script>
+
 <script>
 document.getElementById("btn2").onclick = function() {
 dom.back();
 }
 </script>
+
 
 
 </div>
