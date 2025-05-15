@@ -52,8 +52,10 @@ function convertToHtml(inputText) {
 
       // Create input container with content and button
       outputHtml += `<div class="input-container">\n`;
-      outputHtml += `<input type="text" id="${inputId}" class="input-box" placeholder="答えを入力">\n`;
+      outputHtml += `<div id="${inputId}">\n`;
+      outputHtml += `<input type="text" class="input-box" placeholder="答えを入力">\n`;
       outputHtml += inputContent;
+      outputHtml += `</div>\n`;
       outputHtml += `</div>\n`;
 
       // Add script for button click handler
