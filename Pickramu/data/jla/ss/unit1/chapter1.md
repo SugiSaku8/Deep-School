@@ -12,7 +12,12 @@
 @tag question [close]
 
 @tag answer [open]
-<input type="search" value="">
+@input n1_input [open]
+この時代のことをなんというか答えなさい。
+@input n1_input futter=[close]
+@futter n1_asnwer_futter [open]
+この時代のことは、旧石器時代と言います。
+@futter n1_asnwer_futter [close]
 @tag answer [close]
 @btn id=btn1 次へ
 
