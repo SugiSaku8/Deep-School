@@ -1,7 +1,7 @@
 /* 
 Pickramu
 The Pickramu is a language for creating teaching materials for Deep-School.
-version:0.0.2
+version:0.0.3
 Development:Carnaion Studio
 License:MPL-2.0
 */
@@ -163,41 +163,39 @@ function convertToHtml(inputText) {
 }
 
 const inputText = `
-@tag unit-title [open] Jla-1 社会 Unit 2
+$$ \frac{39}{10} $$
+@tag unit-title [open] Jla-2 数学 Unit 1
 @tag unit-title [close]
-@tag chapter-title [open] 連立方程式の計算 Chapter 23
+@tag chapter-title [open] 式の計算 1節 用語 Chapter 1
 @tag chapter-title [close]
+
 @tag n1 [open]
+
 @tag question [open]
-約 10 万年前ごろのものと見られる人類の痕跡が日本列島から見つかりました。
-この頃の人類は、動物を狩って生活していました。
+a+b+c=$$ \frac{23}{20} $$,$$ \frac{1}{a+b} $$+$$ \frac{1}{b+c} $$+$$ \frac{1}{c+a} $$=b/br
+このとき$$ \frac{a}{b+c} $$+$$ \frac{b}{c+a} $$+$$ \frac{c}{a+b} $$の値を求めなさい。
 @tag question [close]
+
 @tag answer [open]
-@input n1_input [open]
-この時代のことをなんというか答えなさい。
-@input n1_input futter=n1_asnwer_futter [close]
-@futter n1_asnwer_futter futter=n1_asnwer_futter [open]
-この時代のことは、旧石器時代と言います。
-@futter n1_asnwer_futter futter=n1_asnwer_futter[close]
+
+@input q1_input [open]
+すぎさくならとけるよね?:)
+btn on=^set^ 回答する
+@input q1_input futter=q1_answer [close] 
+
+@futter q1_answer futter=q1_answer [open]
+正解は「$$ \frac{39}{10} $$」です。
+@futter q1_answer futter=q1_answer [close]
+
 @tag answer [close]
-@btn id=btn1 次へ
+
+@btn id=next1 次へ
+
 @tag n1 [close]
 
-@tag n2 [open]
-@tag question [open]
-約 1 万年前、日本列島が大陸から分離しました。
-紀元前 3000 年ごろ、稲作が日本列島に伝わりました。
-@tag question [close]
-@btn id=btn2 次へ
-@tag n2 [close]
-
-@script on=btn1 [open]
+@script on=next1 [open]
 dom.Tag("n1").style.display('none','auto');
 dom.Tag("n2").style.display('block','auto');
-@script [close]
-
-@script on=btn2 [open]
-dom.back();
 @script [close]
 `;
 
@@ -889,6 +887,7 @@ const fullHtml = `
   <!DOCTYPE html>
   <html>
   <head>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <style>
   ${styles}
   </style>
