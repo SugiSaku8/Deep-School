@@ -49,7 +49,9 @@ function convertToHtml(inputText) {
     }
 
     // Handle @input blocks with button
-    let inputMatch = line.match(/@input\s+(\w+)(?:\s+futter=(\w+))?\s+\[open\]/);
+    let inputMatch = line.match(
+      /@input\s+(\w+)(?:\s+futter=(\w+))?\s+\[open\]/
+    );
     if (inputMatch) {
       const inputId = inputMatch[1];
       const futterId = inputMatch[2];
@@ -120,7 +122,9 @@ function convertToHtml(inputText) {
     }
 
     // Handle regular @btn tags (without on=^set^)
-    let btnMatch = line.match(/@btn\s+id=([\w,-]+)(?:\s+class=([\w,-]+))?\s+(.+)/);
+    let btnMatch = line.match(
+      /@btn\s+id=([\w,-]+)(?:\s+class=([\w,-]+))?\s+(.+)/
+    );
     if (btnMatch) {
       const btnIds = btnMatch[1]
         .split(",")

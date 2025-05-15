@@ -109,10 +109,8 @@ class GoogleAuthManager {
     console.log("認証トークンを受信:", response.credential);
     document.getElementById("loginForm").style.display = "block";
     document.getElementById("openLoginButton").style.display = "none";
-    // document.getElementById("kakuninForm").style.display = "none";
 
     try {
-      // Google Drive APIの認証を実行
       // Googleのユーザー名とIDをグローバル関数に設定
       const jwt = decodeURIComponent(
         escape(window.atob(response.credential.split(".")[1]))
@@ -122,6 +120,8 @@ class GoogleAuthManager {
       window.googleUserId = payload.sub;
       console.log("Google ユーザー名:", window.googleUserName);
       console.log("Google ユーザーID:", window.googleUserId);
+
+      // Google Drive APIの認証を実行
       await this.initializeGoogleDriveAuth();
     } catch (error) {
       console.error("Google Drive認証エラー:", error);
@@ -133,26 +133,31 @@ class GoogleAuthManager {
    * @returns {Promise<void>}
    */
   async initializeGoogleDriveAuth() {
-    this.tokenClient = google.accounts.oauth2.initTokenClient({
-      client_id: CLIENT_ID,
-      scope: SCOPES.join(" "),
-      callback: (tokenResponse) => {
-        if (tokenResponse.error !== undefined) {
-          throw tokenResponse;
-        }
-        this.accessToken = tokenResponse.access_token;
-        this.tokenTimestamp = Date.now();
-        // ここでlocalStorageに保存
-        localStorage.setItem("google_access_token", this.accessToken);
-        localStorage.setItem(
-          "google_token_timestamp",
-          this.tokenTimestamp.toString()
-        );
-        console.log("Google Drive APIのアクセストークンを取得しました");
-      },
-    });
+    try {
+      const tokenResponse = await new Promise((resolve, reject) => {
+        this.tokenClient = google.accounts.oauth2.initTokenClient({
+          client_id: CLIENT_ID,
+          scope: SCOPES.join(" "),
+          callback: (response) => {
+            if (response.error) {
+              reject(response);
+            } else {
+              resolve(response);
+            }
+          },
+        });
+        this.tokenClient.requestAccessToken();
+      });
 
-    this.tokenClient.requestAccessToken();
+      this.accessToken = tokenResponse.access_token;
+      this.tokenTimestamp = Date.now();
+      localStorage.setItem("google_access_token", this.accessToken);
+      localStorage.setItem("google_token_timestamp", this.tokenTimestamp.toString());
+      console.log("Google Drive APIのアクセストークンを取得しました");
+    } catch (error) {
+      console.error("Google Drive APIの認証に失敗しました:", error);
+      throw error;
+    }
   }
 }
 
