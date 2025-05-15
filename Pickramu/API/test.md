@@ -31,5 +31,6 @@ a+b+c=$$ \frac{23}{20} $$,$$ \frac{1}{a+b} $$+$$ \frac{1}{b+c} $$+$$ \frac{1}{c+
 @script on=next1 [open]
 dom.Tag("n1").style.display('none','auto');
 dom.Tag("n2").style.display('block','auto');
-dom.answer.set.ID("q1_input").
+dom.answer.set.ID("q1_input").txt('$$ \frac{39}{10} $$');
+dom.answer.set.ID("q1_input").config('AI');
 @script [close]
