@@ -32,6 +32,15 @@ class GoogleAuthManager {
    */
 
   async initialize() {
+    // Google APIの読み込みを待つ
+    await new Promise((resolve) => {
+      if (window.google) {
+        resolve();
+      } else {
+        window.addEventListener('load', resolve);
+      }
+    });
+
     // Googleトークンの確認
     const savedToken = localStorage.getItem("google_access_token");
     const savedTimestamp = localStorage.getItem("google_token_timestamp");
@@ -75,29 +84,36 @@ class GoogleAuthManager {
       document.getElementById("menu").style.display = "none";
     }
 
-    // Googleアカウントの初期化
-    google.accounts.id.initialize({
-      client_id: CLIENT_ID,
-      callback: this.handleCredentialResponse.bind(this),
-      auto_select: false,
-      use_fedcm_for_prompt: true,
-    });
+    try {
+      // Googleアカウントの初期化
+      await new Promise((resolve, reject) => {
+        google.accounts.id.initialize({
+          client_id: CLIENT_ID,
+          callback: this.handleCredentialResponse.bind(this),
+          auto_select: false,
+          use_fedcm_for_prompt: true,
+        });
+        resolve();
+      });
 
-    // ログインボタンのレンダリング
-    google.accounts.id.renderButton(
-      document.getElementById("openLoginButton"),
-      {
-        type: "standard",
-        theme: "outline",
-        size: "large",
-        text: "signin_with_google",
-        shape: "rectangular",
-        locale: "ja",
-      }
-    );
+      // ログインボタンのレンダリング
+      google.accounts.id.renderButton(
+        document.getElementById("openLoginButton"),
+        {
+          type: "standard",
+          theme: "outline",
+          size: "large",
+          text: "signin_with_google",
+          shape: "rectangular",
+          locale: "ja",
+        }
+      );
 
-    // ワンタップログイン
-    google.accounts.id.prompt();
+      // ワンタップログイン
+      google.accounts.id.prompt();
+    } catch (error) {
+      console.error("Google認証の初期化に失敗しました:", error);
+    }
   }
 
   /**
