@@ -528,22 +528,12 @@ class AuthServer {
 }
 
 // アプリケーションの初期化
-window.onload = function () {
+export function initializeApp() {
   console.log("初期化中.................");
   const authManager = new GoogleAuthManager();
   authManager.initialize();
   const driveManager = new GoogleDriveManager(authManager);
   const uiManager = new KOREGAUIManagerDAZE();
-  /*
-  window.saveData = async function(data) {
-    try {
-      await driveManager.saveAppData('app-data.json', data);
-      alert('データを保存しました');
-    } catch (error) {
-      alert('データの保存に失敗しました');
-    }
-  };
-  */
 
   document
     .getElementById("school_login_btn")
@@ -574,7 +564,7 @@ window.onload = function () {
       console.log("SCRのURLを設定しました。");
       document.getElementById("menu").style.display = "block";
     });
-};
+}
 
 window.loadData = async function () {
   try {

@@ -28,6 +28,10 @@
     <script src="js/pickramu.js" type="module"></script>
     <script src="js/tm/chat.js"></script>
     <script src="js/tm/main.js"></script>
+    <script type="module">
+      import { initializeApp } from './js/auth.mjs';
+      window.addEventListener('load', initializeApp);
+    </script>
   </head>
   <body>
     <div class="date">
