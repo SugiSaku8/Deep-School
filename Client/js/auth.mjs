@@ -33,11 +33,11 @@ class GoogleAuthManager {
    */
   async initialize() {
     try {
-      console.log('Initializing auth manager...');
-      
+      console.log("Initializing auth manager...");
+
       // Google APIの読み込みを待機
       await this.waitForGoogleAPI();
-      
+
       // 既存のトークンを確認
       const isLoggedIn = await this.checkExistingTokens();
       if (isLoggedIn) {
@@ -46,7 +46,6 @@ class GoogleAuthManager {
 
       // Googleログインボタンの初期化
       await this.initializeGoogleLogin();
-      
     } catch (error) {
       console.error("認証の初期化に失敗しました:", error);
       this.showLoginForm();
@@ -56,14 +55,14 @@ class GoogleAuthManager {
   async waitForGoogleAPI() {
     return new Promise((resolve) => {
       if (window.google) {
-        console.log('Google API already loaded');
+        console.log("Google API already loaded");
         resolve();
       } else {
-        console.log('Waiting for Google API to load...');
+        console.log("Waiting for Google API to load...");
         const checkGoogleAPI = setInterval(() => {
           if (window.google) {
             clearInterval(checkGoogleAPI);
-            console.log('Google API loaded');
+            console.log("Google API loaded");
             resolve();
           }
         }, 100);
@@ -71,7 +70,7 @@ class GoogleAuthManager {
         // タイムアウト処理
         setTimeout(() => {
           clearInterval(checkGoogleAPI);
-          console.error('Google API loading timeout');
+          console.error("Google API loading timeout");
           resolve();
         }, 10000);
       }
@@ -82,38 +81,38 @@ class GoogleAuthManager {
     // Googleトークンの確認
     const savedToken = localStorage.getItem("google_access_token");
     const savedTimestamp = localStorage.getItem("google_token_timestamp");
-    
+
     if (savedToken && savedTimestamp) {
       const now = Date.now();
       const tokenAge = now - Number(savedTimestamp);
       if (tokenAge < this.TOKEN_VALIDITY_MS) {
         this.accessToken = savedToken;
         this.tokenTimestamp = Number(savedTimestamp);
-        console.log('Valid Google token found');
+        console.log("Valid Google token found");
         this.showMenu();
         return true;
       } else {
         localStorage.removeItem("google_access_token");
         localStorage.removeItem("google_token_timestamp");
-        console.log('Google token expired');
+        console.log("Google token expired");
       }
     }
 
     // SchoolIDトークンの確認
     const dsToken = localStorage.getItem("ds_id");
     const dsTimestamp = localStorage.getItem("ds_id_timestamp");
-    
+
     if (dsToken && dsTimestamp) {
       const now = Date.now();
       const tokenAge = now - Number(dsTimestamp);
       if (tokenAge < this.TOKEN_VALIDITY_MS) {
-        console.log('Valid school token found');
+        console.log("Valid school token found");
         this.showMenu();
         return true;
       } else {
         localStorage.removeItem("ds_id");
         localStorage.removeItem("ds_id_timestamp");
-        console.log('School token expired');
+        console.log("School token expired");
       }
     }
 
@@ -122,7 +121,7 @@ class GoogleAuthManager {
 
   async initializeGoogleLogin() {
     if (!window.google) {
-      console.error('Google API not loaded');
+      console.error("Google API not loaded");
       return;
     }
 
@@ -132,33 +131,30 @@ class GoogleAuthManager {
         callback: (response) => this.handleCredentialResponse(response),
         auto_select: false,
         cancel_on_tap_outside: false,
-        context: 'signin'
+        context: "signin",
       });
-      console.log('Google login initialized');
+      console.log("Google login initialized");
 
       const buttonContainer = document.getElementById("openLoginButton");
       if (!buttonContainer) {
-        console.error('Login button container not found');
+        console.error("Login button container not found");
         return;
       }
 
-      google.accounts.id.renderButton(
-        buttonContainer,
-        {
-          type: "standard",
-          theme: "outline",
-          size: "large",
-          text: "signin_with_google",
-          shape: "rectangular",
-          locale: "ja",
-          width: 250
-        }
-      );
-      console.log('Google login button rendered');
+      google.accounts.id.renderButton(buttonContainer, {
+        type: "standard",
+        theme: "outline",
+        size: "large",
+        text: "signin_with_google",
+        shape: "rectangular",
+        locale: "ja",
+        width: 250,
+      });
+      console.log("Google login button rendered");
 
       this.showGoogleLogin();
     } catch (error) {
-      console.error('Error initializing Google login:', error);
+      console.error("Error initializing Google login:", error);
       this.showLoginForm();
     }
   }
@@ -182,7 +178,7 @@ class GoogleAuthManager {
 
       // Google Drive APIの認証を実行
       await this.initializeGoogleDriveAuth();
-      
+
       this.showMenu();
     } catch (error) {
       console.error("Google認証エラー:", error);
@@ -214,7 +210,10 @@ class GoogleAuthManager {
       this.accessToken = tokenResponse.access_token;
       this.tokenTimestamp = Date.now();
       localStorage.setItem("google_access_token", this.accessToken);
-      localStorage.setItem("google_token_timestamp", this.tokenTimestamp.toString());
+      localStorage.setItem(
+        "google_token_timestamp",
+        this.tokenTimestamp.toString()
+      );
       console.log("Google Drive APIのアクセストークンを取得しました");
     } catch (error) {
       console.error("Google Drive APIの認証に失敗しました:", error);
@@ -529,13 +528,13 @@ class AuthServer {
 }
 
 // アプリケーションの初期化
-window.onload = async function () {
-  console.log("初期化中.................")
+window.onload = function () {
+  console.log("初期化中.................");
   const authManager = new GoogleAuthManager();
   const driveManager = new GoogleDriveManager(authManager);
   const uiManager = new KOREGAUIManagerDAZE();
 
-  await authManager.initialize();
+  /* await */ authManager.initialize();
   /*
   window.saveData = async function(data) {
     try {
@@ -551,10 +550,14 @@ window.onload = async function () {
     .getElementById("school_login_btn")
     .addEventListener("click", async () => {
       const schoolId = document.getElementById("schoolId").value;
-      const schoolId_query = new URLSearchParams(window.location.search).get("schoolId");
-      
+      const schoolId_query = new URLSearchParams(window.location.search).get(
+        "schoolId"
+      );
+
       if (!schoolId && !schoolId_query) {
-        const result = window.confirm("学校IDを入力していません。\n学校に接続せず利用しますか？");
+        const result = window.confirm(
+          "学校IDを入力していません。\n学校に接続せず利用しますか？"
+        );
         if (result) {
           document.getElementById("login").style.display = "none";
           document.getElementById("scr_menu_icon").style.display = "none";
