@@ -530,6 +530,7 @@ class AuthServer {
 
 // アプリケーションの初期化
 window.onload = async function () {
+  console.log("初期化中.................")
   const authManager = new GoogleAuthManager();
   const driveManager = new GoogleDriveManager(authManager);
   const uiManager = new KOREGAUIManagerDAZE();
