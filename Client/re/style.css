@@ -218,11 +218,11 @@ body::after {
 #menu {
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 40px;
+  align-items: flex-start;
+  gap: 48px;
   position: absolute;
   left: 50%;
-  top: 40%;
+  top: 50%;
   transform: translate(-50%, -50%);
 }
 
@@ -239,15 +239,13 @@ body::after {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: auto;
-  min-width: 180px;
-  max-width: 220px;
-  height: 220px;
-  margin: 0 10px;
+  justify-content: flex-start;
+  width: 220px;
+  height: 240px;
+  margin: 0 0;
   background: none;
   box-shadow: none;
-  gap: 15px;
+  gap: 18px;
   position: relative;
 }
 
@@ -256,7 +254,7 @@ body::after {
   height: 120px;
   object-fit: contain;
   display: block;
-  margin: 0 auto 10px auto;
+  margin: 0 auto 0 auto;
 }
 
 .scr-icon {
@@ -270,12 +268,11 @@ body::after {
   color: white;
   font-family: "anka";
   font-size: 1.5rem;
-  padding: 8px 32px;
+  width: 160px;
+  height: 48px;
+  padding: 0;
   border-radius: 12px;
   text-align: center;
-  width: fit-content;
-  min-width: 90px;
-  max-width: 180px;
   display: flex;
   align-items: center;
   justify-content: center;
