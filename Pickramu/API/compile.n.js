@@ -2,24 +2,40 @@
 function convertToHtml(inputText) {
   let outputHtml = "";
   // Remove lines starting with //
-  const lines = inputText.split("\n").filter(line => !line.trim().startsWith("//"));
+  const lines = inputText
+    .split("\n")
+    .filter((line) => !line.trim().startsWith("//"));
   let i = 0;
 
   while (i < lines.length) {
     const line = lines[i].trim();
 
     // Handle @tag [open] blocks
-    let tagOpenMatch = line.match(/@tag\s+([\w,-]+)?(?:\s+class=([\w,-]+))?\s+\[open\]/);
+    let tagOpenMatch = line.match(
+      /@tag\s+([\w,-]+)?(?:\s+class=([\w,-]+))?\s+\[open\]/
+    );
     if (tagOpenMatch) {
-      const tagIds = tagOpenMatch[1] ? tagOpenMatch[1].split(',').map(id => id.trim()).join(' ') : '';
-      const tagClasses = tagOpenMatch[2] ? tagOpenMatch[2].split(',').map(cls => cls.trim()).join(' ') : '';
+      const tagIds = tagOpenMatch[1]
+        ? tagOpenMatch[1]
+            .split(",")
+            .map((id) => id.trim())
+            .join(" ")
+        : "";
+      const tagClasses = tagOpenMatch[2]
+        ? tagOpenMatch[2]
+            .split(",")
+            .map((cls) => cls.trim())
+            .join(" ")
+        : "";
       outputHtml += `<div id="${tagIds}" class="${tagClasses}">\n`;
       i++;
       continue;
     }
 
     // Handle @tag [close] blocks
-    let tagCloseMatch = line.match(/@tag\s+([\w,-]+)?(?:\s+class=([\w,-]+))?\s+\[close\]/);
+    let tagCloseMatch = line.match(
+      /@tag\s+([\w,-]+)?(?:\s+class=([\w,-]+))?\s+\[close\]/
+    );
     if (tagCloseMatch) {
       i++;
       outputHtml += `</div>\n`;
@@ -27,7 +43,7 @@ function convertToHtml(inputText) {
     }
 
     // Handle @input blocks with button
-    let inputMatch = line.match(/@input\s+(\w+)\s+futter=(\w+)\s+\[open\]/);
+    let inputMatch = line.match(/@input\s+(\w+)(?:\s+futter=(\w+))?\s+\[open\]/);
     if (inputMatch) {
       const inputId = inputMatch[1];
       const futterId = inputMatch[2];
@@ -59,7 +75,7 @@ function convertToHtml(inputText) {
       outputHtml += `</div>\n`;
 
       // Add script for button click handler
-      if (hasButton) {
+      if (hasButton && futterId) {
         outputHtml += `<script>\n`;
         outputHtml += `document.getElementById("${buttonId}").onclick = function() {\n`;
         outputHtml += `  document.getElementById("${inputId}").style.display = "none";\n`;
@@ -73,7 +89,9 @@ function convertToHtml(inputText) {
     }
 
     // Handle @futter blocks
-    let futterMatch = line.match(/@futter\s+(\w+)\s+futter=(\w+)\s+\[(open|close)\]/);
+    let futterMatch = line.match(
+      /@futter\s+(\w+)\s+futter=(\w+)\s+\[(open|close)\]/
+    );
     if (futterMatch) {
       const futterId = futterMatch[1];
       if (futterMatch[3] === "open") {
@@ -88,8 +106,14 @@ function convertToHtml(inputText) {
     // Handle @btn tags
     let btnMatch = line.match(/@btn\s+id=([\w,-]+)\s+class=([\w,-]+)\s+(.+)/);
     if (btnMatch) {
-      const btnIds = btnMatch[1].split(',').map(id => id.trim()).join(' ');
-      const btnClasses = btnMatch[2].split(',').map(cls => cls.trim()).join(' ');
+      const btnIds = btnMatch[1]
+        .split(",")
+        .map((id) => id.trim())
+        .join(" ");
+      const btnClasses = btnMatch[2]
+        .split(",")
+        .map((cls) => cls.trim())
+        .join(" ");
       const btnContent = btnMatch[3];
       outputHtml += `<button id="${btnIds}" class="${btnClasses}">${btnContent}</button>\n`;
       i++;
@@ -130,27 +154,53 @@ function convertToHtml(inputText) {
 }
 
 const inputText = `
-@tag n1 class=unit [open]
+@tag unit-title [open] Jla-1 社会 Unit 2
+@tag unit-title [close]
+//ユニットタイトル
+@tag chapter-title [open] 連立方程式の計算 Chapter 23
+@tag chapter-title [close]
+//チャプタータイトル
+@tag n1 [open]
+//n1タグ(はじめの画面)の要素
 @tag question [open]
-約10万年前ごろのものと見られる人類の痕跡が日本列島から見つかりました。
+約 10 万年前ごろのものと見られる人類の痕跡が日本列島から見つかりました。  
 この頃の人類は、動物を狩って生活していました。
 @tag question [close]
-@btn id=btn1 class=button-next 次へ
-@tag n1 class=unit [close]
-@tag n2 class=unit [open]
+//説明文（問題文）
+@tag answer [open]
+@input n1_input [open]
+この時代のことをなんというか答えなさい。
+@input n1_input futter=n1_asnwer_futter [close]
+//入力欄
+@futter n1_asnwer_futter futter=n1_asnwer_futter [open]
+この時代のことは、旧石器時代と言います。
+@futter n1_asnwer_futter futter=n1_asnwer_futter[close]
+//回答した後に表示されるフッター
+//n1_inputがenterされたらn1_asnwer_futterに転送する。
+@tag answer [close]
+@btn id=btn1 次へ
+//次へボタン
+
+@tag n1 [close]
+
 @tag question [open]
 約 1 万年前、日本列島が大陸から分離しました。
 紀元前 3000 年ごろ、稲作が日本列島に伝わりました。
 @tag question [close]
-@btn id=btn2 class=button-next 次へ
-@tag n2 class=unit [close]
+//説明文
+@btn id=btn2 次へ
+//次へボタン
 @script on=btn1 [open]
+//btn1がonclickした時に発動するscript
 dom.Tag("n1").style.display('none','auto');
 dom.Tag("n2").style.display('block','auto');
 @script [close]
+
 @script on=btn2 [open]
+//btn2がonclickした時に発動するscript
 dom.back();
 @script [close]
+
 `;
 
 const htmlOutput = convertToHtml(inputText);
