@@ -4,25 +4,44 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Deep-School</title>
+    <script>
+      // Google APIの初期化を待つ関数
+      function waitForGoogleAPI() {
+        return new Promise((resolve) => {
+          if (window.google) {
+            resolve();
+          } else {
+            window.addEventListener('load', () => {
+              if (window.google) {
+                resolve();
+              } else {
+                // Google APIが読み込まれていない場合、手動で読み込む
+                const gsiScript = document.createElement('script');
+                gsiScript.src = 'https://accounts.google.com/gsi/client';
+                gsiScript.onload = () => {
+                  const apiScript = document.createElement('script');
+                  apiScript.src = 'https://apis.google.com/js/api.js';
+                  apiScript.onload = resolve;
+                  document.head.appendChild(apiScript);
+                };
+                document.head.appendChild(gsiScript);
+              }
+            });
+          }
+        });
+      }
+    </script>
     <script src="https://accounts.google.com/gsi/client"></script>
     <script src="https://apis.google.com/js/api.js"></script>
     <meta
       name="google-signin-client_id"
       content="54111871338-nv4bn99r48cohhverg3l9oicirthmtpp.apps.googleusercontent.com"
     />
-    <script>
-      // Google APIの読み込み完了を待つ
-      window.onload = function() {
-        if (typeof google !== 'undefined') {
-          console.log('Google API loaded successfully');
-        } else {
-          console.error('Google API failed to load');
-        }
-      };
-    </script>
     <link rel="stylesheet" href="re/style.css" />
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script type="text/javascript" async src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <!-- MathJaxの新しいCDN -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="js/auth.mjs" type="module"></script>
     <script src="js/ui.js"></script>
     <script src="js/tm/config.js"></script>

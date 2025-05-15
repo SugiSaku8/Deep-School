@@ -30,70 +30,60 @@ class GoogleAuthManager {
    * 認証の初期化処理を行う
    * @returns {Promise<void>}
    */
-
   async initialize() {
-    // Google APIの読み込みを待つ
-    await new Promise((resolve) => {
-      if (window.google) {
-        resolve();
-      } else {
-        window.addEventListener('load', resolve);
-      }
-    });
-
-    // Googleトークンの確認
-    const savedToken = localStorage.getItem("google_access_token");
-    const savedTimestamp = localStorage.getItem("google_token_timestamp");
-    let googleValid = false;
-    if (savedToken && savedTimestamp) {
-      const now = Date.now();
-      const tokenAge = now - Number(savedTimestamp);
-      if (tokenAge < this.TOKEN_VALIDITY_MS) {
-        this.accessToken = savedToken;
-        this.tokenTimestamp = Number(savedTimestamp);
-        googleValid = true;
-      } else {
-        localStorage.removeItem("google_access_token");
-        localStorage.removeItem("google_token_timestamp");
-      }
-    }
-
-    // SchoolIDトークンの確認
-    const dsToken = localStorage.getItem("ds_id");
-    const dsTimestamp = localStorage.getItem("ds_id_timestamp");
-    let schoolValid = false;
-    if (dsToken && dsTimestamp) {
-      const now = Date.now();
-      const tokenAge = now - Number(dsTimestamp);
-      if (tokenAge < this.TOKEN_VALIDITY_MS) {
-        schoolValid = true;
-      } else {
-        localStorage.removeItem("ds_id");
-        localStorage.removeItem("ds_id_timestamp");
-      }
-    }
-
-    // UIの制御
-    if (googleValid || schoolValid) {
-      document.getElementById("login").style.display = "none";
-      document.getElementById("menu").style.display = "block";
-      return;
-    } else {
-      document.getElementById("loginForm").style.display = "none";
-      document.getElementById("openLoginButton").style.display = "block";
-      document.getElementById("menu").style.display = "none";
-    }
-
     try {
+      // Google APIの読み込みを待つ
+      await waitForGoogleAPI();
+
+      // Googleトークンの確認
+      const savedToken = localStorage.getItem("google_access_token");
+      const savedTimestamp = localStorage.getItem("google_token_timestamp");
+      let googleValid = false;
+      if (savedToken && savedTimestamp) {
+        const now = Date.now();
+        const tokenAge = now - Number(savedTimestamp);
+        if (tokenAge < this.TOKEN_VALIDITY_MS) {
+          this.accessToken = savedToken;
+          this.tokenTimestamp = Number(savedTimestamp);
+          googleValid = true;
+        } else {
+          localStorage.removeItem("google_access_token");
+          localStorage.removeItem("google_token_timestamp");
+        }
+      }
+
+      // SchoolIDトークンの確認
+      const dsToken = localStorage.getItem("ds_id");
+      const dsTimestamp = localStorage.getItem("ds_id_timestamp");
+      let schoolValid = false;
+      if (dsToken && dsTimestamp) {
+        const now = Date.now();
+        const tokenAge = now - Number(dsTimestamp);
+        if (tokenAge < this.TOKEN_VALIDITY_MS) {
+          schoolValid = true;
+        } else {
+          localStorage.removeItem("ds_id");
+          localStorage.removeItem("ds_id_timestamp");
+        }
+      }
+
+      // UIの制御
+      if (googleValid || schoolValid) {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("menu").style.display = "block";
+        return;
+      } else {
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("openLoginButton").style.display = "block";
+        document.getElementById("menu").style.display = "none";
+      }
+
       // Googleアカウントの初期化
-      await new Promise((resolve, reject) => {
-        google.accounts.id.initialize({
-          client_id: CLIENT_ID,
-          callback: this.handleCredentialResponse.bind(this),
-          auto_select: false,
-          use_fedcm_for_prompt: true,
-        });
-        resolve();
+      google.accounts.id.initialize({
+        client_id: CLIENT_ID,
+        callback: this.handleCredentialResponse.bind(this),
+        auto_select: false,
+        use_fedcm_for_prompt: true,
       });
 
       // ログインボタンのレンダリング
@@ -113,6 +103,9 @@ class GoogleAuthManager {
       google.accounts.id.prompt();
     } catch (error) {
       console.error("Google認証の初期化に失敗しました:", error);
+      // エラー時のフォールバック処理
+      document.getElementById("loginForm").style.display = "block";
+      document.getElementById("openLoginButton").style.display = "none";
     }
   }
 
