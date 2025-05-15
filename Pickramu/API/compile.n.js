@@ -61,7 +61,8 @@ function convertToHtml(inputText) {
           buttonId = btnMatch[1];
           inputContent += `<button id="${buttonId}" class="button-next">回答する</button>\n`;
         } else {
-          inputContent += currentLine + "\n";
+          // Replace /br with <br>
+          inputContent += currentLine.replace(/\/br/g, "<br>") + "\n";
         }
         i++;
       }
@@ -147,8 +148,8 @@ function convertToHtml(inputText) {
       continue;
     }
 
-    // If no match, treat the line as plain text
-    outputHtml += line + "\n";
+    // If no match, treat the line as plain text and replace /br with <br>
+    outputHtml += line.replace(/\/br/g, "<br>") + "\n";
     i++;
   }
 
