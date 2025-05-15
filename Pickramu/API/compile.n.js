@@ -1,7 +1,8 @@
 // Pickramu/API/compile.n.js
 function convertToHtml(inputText) {
   let outputHtml = "";
-  const lines = inputText.split("\n");
+  // Remove lines starting with //
+  const lines = inputText.split("\n").filter(line => !line.trim().startsWith("//"));
   let i = 0;
 
   while (i < lines.length) {
@@ -10,26 +11,83 @@ function convertToHtml(inputText) {
     // Handle @tag [open] blocks
     let tagOpenMatch = line.match(/@tag\s+([\w,-]+)?(?:\s+class=([\w,-]+))?\s+\[open\]/);
     if (tagOpenMatch) {
-      const tagIds = tagOpenMatch[1] ? tagOpenMatch[1].split(',').map(id => id.trim()).join(' ') : ''; // Split and join IDs
-      const tagClasses = tagOpenMatch[2] ? tagOpenMatch[2].split(',').map(cls => cls.trim()).join(' ') : ''; // Split and join classes
+      const tagIds = tagOpenMatch[1] ? tagOpenMatch[1].split(',').map(id => id.trim()).join(' ') : '';
+      const tagClasses = tagOpenMatch[2] ? tagOpenMatch[2].split(',').map(cls => cls.trim()).join(' ') : '';
       outputHtml += `<div id="${tagIds}" class="${tagClasses}">\n`;
       i++;
       continue;
     }
 
     // Handle @tag [close] blocks
-     let tagCloseMatch = line.match(/@tag\s+([\w,-]+)?(?:\s+class=([\w,-]+))?\s+\[close\]/);
+    let tagCloseMatch = line.match(/@tag\s+([\w,-]+)?(?:\s+class=([\w,-]+))?\s+\[close\]/);
     if (tagCloseMatch) {
-      i++; // Consume the close tag line
+      i++;
       outputHtml += `</div>\n`;
+      continue;
+    }
+
+    // Handle @input blocks with button
+    let inputMatch = line.match(/@input\s+(\w+)\s+futter=(\w+)\s+\[open\]/);
+    if (inputMatch) {
+      const inputId = inputMatch[1];
+      const futterId = inputMatch[2];
+      i++;
+      let inputContent = "";
+      let hasButton = false;
+      let buttonId = "";
+
+      // Collect input content until close tag
+      while (i < lines.length && !lines[i].match(/@input.*\[close\]/)) {
+        const currentLine = lines[i].trim();
+        const btnMatch = currentLine.match(/@btn\s+on=\^(\w+)\^/);
+        if (btnMatch) {
+          hasButton = true;
+          buttonId = btnMatch[1];
+          inputContent += `<button id="${buttonId}" class="button-next">回答する</button>\n`;
+        } else {
+          inputContent += currentLine + "\n";
+        }
+        i++;
+      }
+
+      // Create input container with content and button
+      outputHtml += `<div class="input-container">\n`;
+      outputHtml += `<input type="text" id="${inputId}" class="input-box" placeholder="答えを入力">\n`;
+      outputHtml += inputContent;
+      outputHtml += `</div>\n`;
+
+      // Add script for button click handler
+      if (hasButton) {
+        outputHtml += `<script>\n`;
+        outputHtml += `document.getElementById("${buttonId}").onclick = function() {\n`;
+        outputHtml += `  document.getElementById("${inputId}").style.display = "none";\n`;
+        outputHtml += `  document.getElementById("${futterId}").style.display = "block";\n`;
+        outputHtml += `}\n`;
+        outputHtml += `</script>\n`;
+      }
+
+      i++;
+      continue;
+    }
+
+    // Handle @futter blocks
+    let futterMatch = line.match(/@futter\s+(\w+)\s+futter=(\w+)\s+\[(open|close)\]/);
+    if (futterMatch) {
+      const futterId = futterMatch[1];
+      if (futterMatch[3] === "open") {
+        outputHtml += `<div id="${futterId}" style="display: none;">\n`;
+      } else {
+        outputHtml += `</div>\n`;
+      }
+      i++;
       continue;
     }
 
     // Handle @btn tags
     let btnMatch = line.match(/@btn\s+id=([\w,-]+)\s+class=([\w,-]+)\s+(.+)/);
     if (btnMatch) {
-      const btnIds = btnMatch[1].split(',').map(id => id.trim()).join(' '); // Split and join IDs
-      const btnClasses = btnMatch[2].split(',').map(cls => cls.trim()).join(' '); // Split and join classes
+      const btnIds = btnMatch[1].split(',').map(id => id.trim()).join(' ');
+      const btnClasses = btnMatch[2].split(',').map(cls => cls.trim()).join(' ');
       const btnContent = btnMatch[3];
       outputHtml += `<button id="${btnIds}" class="${btnClasses}">${btnContent}</button>\n`;
       i++;
