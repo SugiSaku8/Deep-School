@@ -215,15 +215,13 @@ body::after {
   -webkit-text-fill-color: transparent;
   color: blue;
 }
-#menu {
+.menu {
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 48px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  height: 100vh;
+  margin: 0;
 }
 
 .menu-content {
@@ -239,22 +237,13 @@ body::after {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  width: 220px;
-  height: 240px;
-  margin: 0 0;
-  background: none;
-  box-shadow: none;
-  gap: 18px;
-  position: relative;
+  gap: 15px;
 }
 
 .menu-icon {
-  width: 120px;
-  height: 120px;
+  width: 150px;
+  height: 150px;
   object-fit: contain;
-  display: block;
-  margin: 0 auto 0 auto;
 }
 
 .scr-icon {
@@ -268,15 +257,9 @@ body::after {
   color: white;
   font-family: "anka";
   font-size: 1.5rem;
-  width: 160px;
-  height: 48px;
-  padding: 0;
+  padding: 8px 20px;
   border-radius: 12px;
   text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto;
   white-space: nowrap;
 }
 
