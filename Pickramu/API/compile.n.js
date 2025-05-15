@@ -1,7 +1,7 @@
 /* 
 Pickramu
 The Pickramu is a language for creating teaching materials for Deep-School.
-version:0.0.3
+version:0.0.4
 Development:Carnaion Studio
 License:MPL-2.0
 */
@@ -57,6 +57,7 @@ function convertToHtml(inputText) {
       let inputContent = "";
       let hasButton = false;
       let buttonId = "";
+      let expectedAnswer = "";
 
       // Collect input content until close tag
       while (i < lines.length && !lines[i].match(/@input.*\[close\]/)) {
@@ -85,8 +86,16 @@ function convertToHtml(inputText) {
       if (hasButton && futterId) {
         outputHtml += `<script>\n`;
         outputHtml += `document.getElementById("${buttonId}").onclick = function() {\n`;
-        outputHtml += `  document.getElementById("${inputId}").style.display = "none";\n`;
-        outputHtml += `  document.getElementById("${futterId}").style.display = "block";\n`;
+        outputHtml += `  const input = document.querySelector("#${inputId} input");\n`;
+        outputHtml += `  const userAnswer = input.value.trim();\n`;
+        outputHtml += `  const expectedAnswer = "$$ \\\\frac{39}{10} $$";\n`;
+        outputHtml += `  const isCorrect = userAnswer === expectedAnswer;\n`;
+        outputHtml += `  if (isCorrect) {\n`;
+        outputHtml += `    document.getElementById("${inputId}").style.display = "none";\n`;
+        outputHtml += `    document.getElementById("${futterId}").style.display = "block";\n`;
+        outputHtml += `  } else {\n`;
+        outputHtml += `    alert("不正解です。もう一度試してください。");\n`;
+        outputHtml += `  }\n`;
         outputHtml += `}\n`;
         outputHtml += `</script>\n`;
       }
