@@ -32,9 +32,6 @@ class GoogleAuthManager {
    */
   async initialize() {
     try {
-      // Google APIの読み込みを待つ
-      await waitForGoogleAPI();
-
       // Googleトークンの確認
       const savedToken = localStorage.getItem("google_access_token");
       const savedTimestamp = localStorage.getItem("google_token_timestamp");
@@ -77,33 +74,8 @@ class GoogleAuthManager {
         document.getElementById("openLoginButton").style.display = "block";
         document.getElementById("menu").style.display = "none";
       }
-
-      // Googleアカウントの初期化
-      google.accounts.id.initialize({
-        client_id: CLIENT_ID,
-        callback: this.handleCredentialResponse.bind(this),
-        auto_select: false,
-        use_fedcm_for_prompt: true,
-      });
-
-      // ログインボタンのレンダリング
-      google.accounts.id.renderButton(
-        document.getElementById("openLoginButton"),
-        {
-          type: "standard",
-          theme: "outline",
-          size: "large",
-          text: "signin_with_google",
-          shape: "rectangular",
-          locale: "ja",
-        }
-      );
-
-      // ワンタップログイン
-      google.accounts.id.prompt();
     } catch (error) {
-      console.error("Google認証の初期化に失敗しました:", error);
-      // エラー時のフォールバック処理
+      console.error("認証の初期化に失敗しました:", error);
       document.getElementById("loginForm").style.display = "block";
       document.getElementById("openLoginButton").style.display = "none";
     }
@@ -120,7 +92,6 @@ class GoogleAuthManager {
     document.getElementById("openLoginButton").style.display = "none";
 
     try {
-      // Googleのユーザー名とIDをグローバル関数に設定
       const jwt = decodeURIComponent(
         escape(window.atob(response.credential.split(".")[1]))
       );
@@ -133,7 +104,7 @@ class GoogleAuthManager {
       // Google Drive APIの認証を実行
       await this.initializeGoogleDriveAuth();
     } catch (error) {
-      console.error("Google Drive認証エラー:", error);
+      console.error("Google認証エラー:", error);
     }
   }
 

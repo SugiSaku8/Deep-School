@@ -30,6 +30,57 @@
           }
         });
       }
+
+      // Googleログインボタンの初期化
+      function initGoogleLogin() {
+        if (window.google) {
+          google.accounts.id.initialize({
+            client_id: '54111871338-nv4bn99r48cohhverg3l9oicirthmtpp.apps.googleusercontent.com',
+            callback: handleCredentialResponse,
+            auto_select: false,
+            cancel_on_tap_outside: false
+          });
+
+          google.accounts.id.renderButton(
+            document.getElementById("openLoginButton"),
+            {
+              type: "standard",
+              theme: "outline",
+              size: "large",
+              text: "signin_with_google",
+              shape: "rectangular",
+              locale: "ja",
+            }
+          );
+        }
+      }
+
+      // Google認証レスポンスのハンドリング
+      function handleCredentialResponse(response) {
+        console.log("認証トークンを受信:", response.credential);
+        document.getElementById("loginForm").style.display = "block";
+        document.getElementById("openLoginButton").style.display = "none";
+
+        try {
+          const jwt = decodeURIComponent(
+            escape(window.atob(response.credential.split(".")[1]))
+          );
+          const payload = JSON.parse(jwt);
+          window.googleUserName = payload.name;
+          window.googleUserId = payload.sub;
+          console.log("Google ユーザー名:", window.googleUserName);
+          console.log("Google ユーザーID:", window.googleUserId);
+        } catch (error) {
+          console.error("Google認証エラー:", error);
+        }
+      }
+
+      // ページ読み込み完了時の処理
+      window.onload = function() {
+        waitForGoogleAPI().then(() => {
+          initGoogleLogin();
+        });
+      };
     </script>
     <script src="https://accounts.google.com/gsi/client"></script>
     <script src="https://apis.google.com/js/api.js"></script>
@@ -40,7 +91,6 @@
     <link rel="stylesheet" href="re/style.css" />
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <!-- MathJaxの新しいCDN -->
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="js/auth.mjs" type="module"></script>
     <script src="js/ui.js"></script>
