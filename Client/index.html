@@ -9,19 +9,26 @@
       function waitForGoogleAPI() {
         return new Promise((resolve) => {
           if (window.google) {
+            console.log('Google API already loaded');
             resolve();
           } else {
+            console.log('Waiting for Google API to load...');
             window.addEventListener('load', () => {
               if (window.google) {
+                console.log('Google API loaded after window load');
                 resolve();
               } else {
-                // Google APIが読み込まれていない場合、手動で読み込む
+                console.log('Loading Google API manually...');
                 const gsiScript = document.createElement('script');
                 gsiScript.src = 'https://accounts.google.com/gsi/client';
                 gsiScript.onload = () => {
+                  console.log('GSI client loaded');
                   const apiScript = document.createElement('script');
                   apiScript.src = 'https://apis.google.com/js/api.js';
-                  apiScript.onload = resolve;
+                  apiScript.onload = () => {
+                    console.log('Google API loaded manually');
+                    resolve();
+                  };
                   document.head.appendChild(apiScript);
                 };
                 document.head.appendChild(gsiScript);
@@ -33,16 +40,29 @@
 
       // Googleログインボタンの初期化
       function initGoogleLogin() {
-        if (window.google) {
+        console.log('Initializing Google login...');
+        if (!window.google) {
+          console.error('Google API not loaded');
+          return;
+        }
+
+        try {
           google.accounts.id.initialize({
             client_id: '54111871338-nv4bn99r48cohhverg3l9oicirthmtpp.apps.googleusercontent.com',
             callback: handleCredentialResponse,
             auto_select: false,
             cancel_on_tap_outside: false
           });
+          console.log('Google login initialized');
+
+          const buttonContainer = document.getElementById("openLoginButton");
+          if (!buttonContainer) {
+            console.error('Login button container not found');
+            return;
+          }
 
           google.accounts.id.renderButton(
-            document.getElementById("openLoginButton"),
+            buttonContainer,
             {
               type: "standard",
               theme: "outline",
@@ -52,6 +72,9 @@
               locale: "ja",
             }
           );
+          console.log('Google login button rendered');
+        } catch (error) {
+          console.error('Error initializing Google login:', error);
         }
       }
 
@@ -70,6 +93,10 @@
           window.googleUserId = payload.sub;
           console.log("Google ユーザー名:", window.googleUserName);
           console.log("Google ユーザーID:", window.googleUserId);
+
+          // ログイン成功後の処理
+          document.getElementById("login").style.display = "none";
+          document.getElementById("menu").style.display = "block";
         } catch (error) {
           console.error("Google認証エラー:", error);
         }
@@ -77,8 +104,12 @@
 
       // ページ読み込み完了時の処理
       window.onload = function() {
+        console.log('Window loaded, initializing...');
         waitForGoogleAPI().then(() => {
+          console.log('Google API ready, initializing login...');
           initGoogleLogin();
+        }).catch(error => {
+          console.error('Error during initialization:', error);
         });
       };
     </script>
@@ -90,7 +121,6 @@
     />
     <link rel="stylesheet" href="re/style.css" />
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <!-- MathJaxの新しいCDN -->
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="js/auth.mjs" type="module"></script>
     <script src="js/ui.js"></script>

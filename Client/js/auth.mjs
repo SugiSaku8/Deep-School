@@ -32,6 +32,7 @@ class GoogleAuthManager {
    */
   async initialize() {
     try {
+      console.log('Initializing auth manager...');
       // Googleトークンの確認
       const savedToken = localStorage.getItem("google_access_token");
       const savedTimestamp = localStorage.getItem("google_token_timestamp");
@@ -43,9 +44,11 @@ class GoogleAuthManager {
           this.accessToken = savedToken;
           this.tokenTimestamp = Number(savedTimestamp);
           googleValid = true;
+          console.log('Valid Google token found');
         } else {
           localStorage.removeItem("google_access_token");
           localStorage.removeItem("google_token_timestamp");
+          console.log('Google token expired');
         }
       }
 
@@ -58,18 +61,22 @@ class GoogleAuthManager {
         const tokenAge = now - Number(dsTimestamp);
         if (tokenAge < this.TOKEN_VALIDITY_MS) {
           schoolValid = true;
+          console.log('Valid school token found');
         } else {
           localStorage.removeItem("ds_id");
           localStorage.removeItem("ds_id_timestamp");
+          console.log('School token expired');
         }
       }
 
       // UIの制御
       if (googleValid || schoolValid) {
+        console.log('User already logged in');
         document.getElementById("login").style.display = "none";
         document.getElementById("menu").style.display = "block";
         return;
       } else {
+        console.log('User not logged in');
         document.getElementById("loginForm").style.display = "none";
         document.getElementById("openLoginButton").style.display = "block";
         document.getElementById("menu").style.display = "none";
@@ -88,9 +95,6 @@ class GoogleAuthManager {
    */
   async handleCredentialResponse(response) {
     console.log("認証トークンを受信:", response.credential);
-    document.getElementById("loginForm").style.display = "block";
-    document.getElementById("openLoginButton").style.display = "none";
-
     try {
       const jwt = decodeURIComponent(
         escape(window.atob(response.credential.split(".")[1]))
@@ -103,8 +107,14 @@ class GoogleAuthManager {
 
       // Google Drive APIの認証を実行
       await this.initializeGoogleDriveAuth();
+      
+      // ログイン成功後の処理
+      document.getElementById("login").style.display = "none";
+      document.getElementById("menu").style.display = "block";
     } catch (error) {
       console.error("Google認証エラー:", error);
+      document.getElementById("loginForm").style.display = "block";
+      document.getElementById("openLoginButton").style.display = "none";
     }
   }
 
