@@ -229,8 +229,8 @@ body::after {
   gap: 40px;
   align-items: center;
   justify-content: center;
-  margin-top: 300px;
-  flex-wrap: wrap;
+  margin-top: ０;
+  flex-wrap: nowrap;
 }
 
 .menu-item {
