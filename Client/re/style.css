@@ -217,7 +217,7 @@ body::after {
 }
 .menu {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   gap: 20px;
   height: 100vh;
@@ -1107,7 +1107,7 @@ body::-webkit-scrollbar {
 }
 
 .notification-badge {
-  display:none;
+  display: none;
   position: absolute;
   top: 0px;
   right: 10px;
