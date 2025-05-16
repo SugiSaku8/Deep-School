@@ -222,6 +222,7 @@ body::after {
   justify-content: center;
   gap: 20px;
   height: 100vh;
+  width:100%;
   margin: 0;
 }
 
@@ -231,12 +232,13 @@ body::after {
   align-items: center;
   justify-content: center;
   margin-top: 0;
+  width:100%;
   flex-wrap: nowrap;
 }
 
 .menu-item {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   gap: 15px;
 }
