@@ -59,6 +59,7 @@
       <div id="openLoginButton" class="login-button"></div>
       <p class="copyright">(c) 2022-2025 Carnation Studio v0.0.2</p>
     </div>
+    <div id="menu">
     <div class="menu-item">
       <img src="re/ico/note.svg" alt="ブックアイコン" class="menu-icon" />
       <span class="notification-badge">10</span>
@@ -81,6 +82,7 @@
         SCR
       </div>
     </div>
+  </div>
     <div id="toaster_chat" id="toaster_chat" style="display: none">
       <div class="splash-container" id="splash">
         <div class="card">
@@ -205,23 +207,23 @@
       function InitToasterChat() {
         document.getElementById("toaster_chat").style.display = "block";
         document.getElementById("splash").style.display = "block";
-        document.getElementById("menu-item").style.display = "none";
+        document.getElementById("menu").style.display = "none";
       }
       function backtomenu() {
         document.getElementById("toaster_chat").style.display = "none";
         document.getElementById("splash").style.display = "none";
         document.getElementById("scr_app").style.display = "none";
         document.getElementById("login").style.display = "none";
-        document.getElementById("menu-item").style.display = "block";
+        document.getElementById("menu").style.display = "block";
       }
       function InitSCRwindow() {
         document.getElementById("toaster_chat").style.display = "none";
         document.getElementById("splash").style.display = "none";
-        document.getElementById("menu-item").style.display = "none";
+        document.getElementById("menu").style.display = "none";
         document.getElementById("scr_app").style.display = "block";
       }
       function IninterDom() {
-        document.getElementById("menu-item").style.display = "none";
+        document.getElementById("menu").style.display = "none";
         document
           .getElementById("school_login_btn")
           .addEventListener("click", () => {
