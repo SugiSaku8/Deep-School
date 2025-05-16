@@ -219,6 +219,7 @@ body::after {
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
   gap: 20px;
   height: 100vh;
   margin: 0;
@@ -229,7 +230,7 @@ body::after {
   gap: 40px;
   align-items: center;
   justify-content: center;
-  margin-top: ０;
+  margin-top: 0;
   flex-wrap: nowrap;
 }
 
