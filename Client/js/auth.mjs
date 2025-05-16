@@ -224,18 +224,18 @@ class GoogleAuthManager {
   showLoginForm() {
     document.getElementById("loginForm").style.display = "block";
     document.getElementById("openLoginButton").style.display = "none";
-    document.getElementById("menu").style.display = "none";
+    document.getElementById("menu-item").style.display = "none";
   }
 
   showGoogleLogin() {
     document.getElementById("loginForm").style.display = "none";
     document.getElementById("openLoginButton").style.display = "block";
-    document.getElementById("menu").style.display = "none";
+    document.getElementById("menu-item").style.display = "none";
   }
 
   showMenu() {
     document.getElementById("login").style.display = "none";
-    document.getElementById("menu").style.display = "block";
+    document.getElementById("menu-item").style.display = "block";
   }
 }
 
@@ -365,7 +365,7 @@ class KOREGAUIManagerDAZE {
    * UIイベントリスナーの初期化
    */
   initializeEventListeners() {
-    document.getElementById("menu").style.display = "none";
+    document.getElementById("menu-item").style.display = "none";
     //document.getElementById("kakuninForm").style.display = "flex";
     document.getElementById("loginForm").style.display = "none";
   }
@@ -505,7 +505,7 @@ class AuthServer {
         document.getElementById("login").style.display = "none";
         document.getElementById("scr_app").style.display = "none";
 
-        document.getElementById("menu").style.display = "block";
+        document.getElementById("menu-item").style.display = "block";
         return true;
       }
     } catch (error) {
@@ -551,7 +551,7 @@ export function initializeApp() {
           document.getElementById("login").style.display = "none";
           document.getElementById("scr_menu_icon").style.display = "none";
           document.getElementById("backicon").style.display = "block";
-          document.getElementById("menu").style.display = "block";
+          document.getElementById("menu-item").style.display = "block";
         }
         return;
       }
@@ -562,8 +562,8 @@ export function initializeApp() {
       await loadFeed();
       window.scr_url = stuth.url;
       console.log("SCRのURLを設定しました。");
-      document.getElementById("menu").style.display = "block";
-      document.getElementById("menu").style.display = "flex";
+      document.getElementById("menu-item").style.display = "block";
+      document.getElementById("menu-item").style.display = "flex";
     });
 }
 
