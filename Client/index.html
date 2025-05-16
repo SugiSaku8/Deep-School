@@ -59,30 +59,32 @@
       <div id="openLoginButton" class="login-button"></div>
       <p class="copyright">(c) 2022-2025 Carnation Studio v0.0.2</p>
     </div>
-    <div id="menu" class="menu-content">
-    <div class="menu-item">
-      <img src="re/ico/note.svg" alt="ブックアイコン" class="menu-icon" />
-      <span class="notification-badge">10</span>
-      <div class="menu-label" style="cursor: pointer">ワーク</div>
-    </div>
-    <div class="menu-item">
-      <img src="re/ico/tm.png" alt="ToasterMachineアイコン" class="menu-icon" />
-      <div
-        class="menu-label"
-        style="cursor: pointer"
-        onclick="InitToasterChat();"
-      >
-        ToasterMachine
+    <div id="menu">
+      <div class="menu-content">
+        <div class="menu-item">
+          <img src="re/ico/note.svg" alt="ブックアイコン" class="menu-icon" />
+          <span class="notification-badge">10</span>
+          <div class="menu-label" style="cursor: pointer">ワーク</div>
+        </div>
+        <div class="menu-item">
+          <img src="re/ico/tm.png" alt="ToasterMachineアイコン" class="menu-icon" />
+          <div
+            class="menu-label"
+            style="cursor: pointer"
+            onclick="InitToasterChat();"
+          >
+            ToasterMachine
+          </div>
+        </div>
+        <div class="menu-item" id="scr_menu_icon">
+          <img src="re/ico/SCR.png" alt="SCRアイコン" class="menu-icon scr-icon" />
+          <span class="notification-badge">25</span>
+          <div class="menu-label" style="cursor: pointer" onclick="InitSCRwindow()">
+            SCR
+          </div>
+        </div>
       </div>
     </div>
-    <div class="menu-item" id="scr_menu_icon">
-      <img src="re/ico/SCR.png" alt="SCRアイコン" class="menu-icon scr-icon" />
-      <span class="notification-badge">25</span>
-      <div class="menu-label" style="cursor: pointer" onclick="InitSCRwindow()">
-        SCR
-      </div>
-    </div>
-  </div>
     <div id="toaster_chat" id="toaster_chat" style="display: none">
       <div class="splash-container" id="splash">
         <div class="card">
