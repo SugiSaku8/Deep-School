@@ -112,6 +112,7 @@ JSON形式で出力してください。`;
 
         const requestBody = {
             contents: [{
+                role: "user",
                 parts: [{
                     text: systemPrompt + "\n\n" + message
                 }]
