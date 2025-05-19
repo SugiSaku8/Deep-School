@@ -52,15 +52,62 @@ class EGuide {
     }
 
     async generateScenario(subject, unit) {
-        const prompt = `
-以下の条件に従って、${subject}の「${unit}」についての13限の授業シナリオを生成してください：
+        // まずチャプター構造を生成
+        const chapterPrompt = `
+以下の条件に従って、${subject}の「${unit}」についてのチャプター構成を生成してください：
 
-1. 単元を3-4つの大きなチャプターに分割し、各チャプターを3-4回の授業で完結させてください
-2. 各チャプターの構成：
-   - 導入（1回）：チャプターの概要と学習目標の説明
-   - 基本概念（1-2回）：重要な概念の説明と基本的な例題
-   - 応用（1回）：実践的な問題演習と応用例
-3. 各限の内容は以下の形式で出力してください：
+1. 単元を3-4つの大きなチャプターに分割してください
+2. 各チャプターは以下の情報を含めてください：
+   - チャプターのタイトル
+   - 学習目標
+   - 必要な授業回数（3-4回）
+   - 重要な学習項目
+
+以下の形式で出力してください：
+{
+    "chapters": [
+        {
+            "title": "チャプターのタイトル",
+            "objectives": ["学習目標1", "学習目標2", ...],
+            "lessons": 4,
+            "keyPoints": ["重要な項目1", "重要な項目2", ...]
+        }
+    ]
+}
+
+注意点：
+- 13限で全ての内容を網羅するのは難しいため、重要な部分に焦点を当ててください
+- 各チャプターの授業回数の合計が13になるように調整してください
+- 最後のチャプターは総まとめとして設定してください
+
+JSON形式で出力してください。`;
+
+        try {
+            // チャプター構造の生成
+            const chapterResponse = await this.callGemini(chapterPrompt);
+            const chapterMatch = chapterResponse.match(/\{[\s\S]*\}/);
+            if (!chapterMatch) {
+                throw new Error('No chapter structure found in response');
+            }
+            const chapterStructure = JSON.parse(chapterMatch[0]);
+            
+            if (!chapterStructure.chapters || !Array.isArray(chapterStructure.chapters)) {
+                throw new Error('Invalid chapter structure format');
+            }
+
+            // 各チャプターの授業内容を生成
+            const lessons = [];
+            for (const chapter of chapterStructure.chapters) {
+                const lessonPrompt = `
+以下の条件に従って、${subject}の「${unit}」の「${chapter.title}」についての${chapter.lessons}回分の授業内容を生成してください：
+
+学習目標：
+${chapter.objectives.map(obj => `- ${obj}`).join('\n')}
+
+重要な学習項目：
+${chapter.keyPoints.map(point => `- ${point}`).join('\n')}
+
+以下の形式で出力してください：
 {
     "lessons": [
         {
@@ -73,26 +120,32 @@ class EGuide {
 }
 
 注意点：
-- 各チャプターは3-4回の授業で完結するようにしてください
-- 13限で全ての内容を網羅するのは難しいため、重要な部分に焦点を当ててください
-- 各チャプターの最後には、そのチャプターの内容を確認する演習を含めてください
-- 最後の授業は全体の復習とまとめにしてください
+- 導入（1回）：チャプターの概要と学習目標の説明
+- 基本概念（1-2回）：重要な概念の説明と基本的な例題
+- 応用（1回）：実践的な問題演習と応用例
+- 最後のチャプターの場合は、全体の復習とまとめを含めてください
 
 JSON形式で出力してください。`;
 
-        try {
-            const response = await this.callGemini(prompt);
-            // レスポンスからJSON部分を抽出
-            const jsonMatch = response.match(/\{[\s\S]*\}/);
-            if (!jsonMatch) {
-                throw new Error('No JSON found in response');
+                const lessonResponse = await this.callGemini(lessonPrompt);
+                const lessonMatch = lessonResponse.match(/\{[\s\S]*\}/);
+                if (!lessonMatch) {
+                    throw new Error('No lesson content found in response');
+                }
+                const lessonContent = JSON.parse(lessonMatch[0]);
+                
+                if (!lessonContent.lessons || !Array.isArray(lessonContent.lessons)) {
+                    throw new Error('Invalid lesson content format');
+                }
+
+                lessons.push(...lessonContent.lessons);
             }
-            const scenario = JSON.parse(jsonMatch[0]);
-            if (!scenario.lessons || !Array.isArray(scenario.lessons)) {
-                throw new Error('Invalid scenario format');
-            }
-            this.lessons = scenario.lessons;
-            this.originalScenario = JSON.stringify(scenario);
+
+            this.lessons = lessons;
+            this.originalScenario = JSON.stringify({ 
+                chapters: chapterStructure.chapters,
+                lessons: lessons 
+            });
         } catch (error) {
             console.error('シナリオ生成エラー:', error);
             // エラー時のフォールバックシナリオ
@@ -111,7 +164,35 @@ JSON形式で出力してください。`;
                 { title: '第3章：応用', content: '第3章の内容を実践的に活用しましょう。', chapter: 3, type: '応用' },
                 { title: '総まとめ', content: 'これまでの学習内容を整理し、全体を復習しましょう。', chapter: 4, type: 'まとめ' }
             ];
-            this.originalScenario = JSON.stringify({ lessons: this.lessons });
+            this.originalScenario = JSON.stringify({ 
+                chapters: [
+                    {
+                        title: "第1章",
+                        objectives: ["基本的な概念の理解", "基礎的な問題解決"],
+                        lessons: 4,
+                        keyPoints: ["重要な概念1", "重要な概念2"]
+                    },
+                    {
+                        title: "第2章",
+                        objectives: ["応用的な概念の理解", "実践的な問題解決"],
+                        lessons: 4,
+                        keyPoints: ["応用概念1", "応用概念2"]
+                    },
+                    {
+                        title: "第3章",
+                        objectives: ["総合的な理解", "実践的な応用"],
+                        lessons: 4,
+                        keyPoints: ["総合概念1", "総合概念2"]
+                    },
+                    {
+                        title: "総まとめ",
+                        objectives: ["全体の復習", "理解度の確認"],
+                        lessons: 1,
+                        keyPoints: ["重要項目の確認", "応用力の確認"]
+                    }
+                ],
+                lessons: this.lessons 
+            });
         }
     }
 
