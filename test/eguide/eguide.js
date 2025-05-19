@@ -68,9 +68,9 @@ class EGuide {
     "chapters": [
         {
             "title": "チャプターのタイトル",
-            "objectives": ["学習目標1", "学習目標2", ...],
+            "objectives": ["学習目標1", "学習目標2"],
             "lessons": 3,
-            "keyPoints": ["重要な項目1", "重要な項目2", ...]
+            "keyPoints": ["重要な項目1", "重要な項目2"]
         }
     ]
 }
@@ -110,10 +110,10 @@ JSON形式で出力してください。`;
 以下の条件に従って、${subject}の「${unit}」の「${chapter.title}」についての${chapter.lessons}回分の授業内容を生成してください：
 
 学習目標：
-${chapter.objectives.map(obj => `- ${obj}`).join('\n')}
+${chapter.objectives.map(obj => `- ${obj}`).join('\\n')}
 
 重要な学習項目：
-${chapter.keyPoints.map(point => `- ${point}`).join('\n')}
+${chapter.keyPoints.map(point => `- ${point}`).join('\\n')}
 
 以下の形式で出力してください：
 {
@@ -123,8 +123,8 @@ ${chapter.keyPoints.map(point => `- ${point}`).join('\n')}
             "content": {
                 "introduction": "導入部分の具体的な文章",
                 "mainContent": "本題の具体的な説明",
-                "examples": ["具体例1", "具体例2", ...],
-                "exercises": ["演習問題1", "演習問題2", ...],
+                "examples": ["具体例1", "具体例2"],
+                "exercises": ["演習問題1", "演習問題2"],
                 "summary": "まとめの文章",
                 "nextPreview": "次回の予告"
             },
@@ -142,6 +142,8 @@ ${chapter.keyPoints.map(point => `- ${point}`).join('\n')}
 - まとめは、その授業の重要なポイントを簡潔にまとめてください
 - 次回の予告は、生徒の興味を引くような形で次の授業の内容を紹介してください
 - 数式や図表が必要な場合は、適切な形式で記述してください（例：数式は $...$ で囲む）
+- 改行は "\\n" を使用してください
+- 特殊文字は適切にエスケープしてください
 
 JSON形式で出力してください。`;
 
@@ -155,6 +157,17 @@ JSON形式で出力してください。`;
                 if (!lessonContent.lessons || !Array.isArray(lessonContent.lessons)) {
                     throw new Error('Invalid lesson content format');
                 }
+
+                // 改行文字を適切に処理
+                lessonContent.lessons.forEach(lesson => {
+                    if (lesson.content) {
+                        Object.keys(lesson.content).forEach(key => {
+                            if (typeof lesson.content[key] === 'string') {
+                                lesson.content[key] = lesson.content[key].replace(/\\n/g, '\n');
+                            }
+                        });
+                    }
+                });
 
                 lessons.push(...lessonContent.lessons);
             }
@@ -187,8 +200,7 @@ JSON形式で出力してください。`;
                     },
                     chapter: 1,
                     type: '導入'
-                },
-                // ... 他のフォールバックレッスンも同様の形式で更新 ...
+                }
             ];
             this.originalScenario = JSON.stringify({ 
                 chapters: [
