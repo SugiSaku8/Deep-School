@@ -1,3 +1,5 @@
+import { GeminiAPI } from './api.js';
+
 class ChatManager {
   constructor() {
     this.conversationHistory = [];
