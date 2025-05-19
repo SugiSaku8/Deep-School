@@ -73,7 +73,12 @@ JSON形式で出力してください。`;
 
         try {
             const response = await this.callGemini(prompt);
-            const scenario = JSON.parse(response);
+            // レスポンスからJSON部分を抽出
+            const jsonMatch = response.match(/\{[\s\S]*\}/);
+            if (!jsonMatch) {
+                throw new Error('No JSON found in response');
+            }
+            const scenario = JSON.parse(jsonMatch[0]);
             if (!scenario.lessons || !Array.isArray(scenario.lessons)) {
                 throw new Error('Invalid scenario format');
             }
