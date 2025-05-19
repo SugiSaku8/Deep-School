@@ -1,6 +1,1 @@
-export function updatePopout(message) {
-  const popoutElement = document.getElementById('persistent-popout');
-  if (popoutElement) {
-    popoutElement.innerHTML = message;
-  }
-} 
+// This file is no longer needed as updatePopout has been moved to utils.mjs 
