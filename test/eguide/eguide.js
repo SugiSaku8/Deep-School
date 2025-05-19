@@ -54,57 +54,100 @@ class EGuide {
     async generateScenario(subject, unit) {
         // 文字列をサニタイズする関数
         const sanitizeString = (str) => {
-            return str
-                // 制御文字を除去
-                .replace(/[\x00-\x1F\x7F-\x9F]/g, '')
-                // 改行を適切に処理
-                .replace(/\n/g, '\\n')
-                // 数式のエスケープ
-                .replace(/\\\(/g, '\\\\(')
-                .replace(/\\\)/g, '\\\\)')
-                .replace(/\\\[/g, '\\\\[')
-                .replace(/\\\]/g, '\\\\]')
-                // その他の特殊文字をエスケープ
+            // まず制御文字を除去
+            str = str.replace(/[\x00-\x1F\x7F-\x9F]/g, '');
+            
+            // 数式の部分を一時的に置換
+            const mathExpressions = [];
+            str = str.replace(/\\\(.*?\\\)|\\\[.*?\\\]/g, (match) => {
+                mathExpressions.push(match);
+                return `__MATH_${mathExpressions.length - 1}__`;
+            });
+
+            // 基本的なエスケープ処理
+            str = str
                 .replace(/\\/g, '\\\\')
                 .replace(/"/g, '\\"')
-                .replace(/\t/g, '\\t')
+                .replace(/\n/g, '\\n')
                 .replace(/\r/g, '\\r')
+                .replace(/\t/g, '\\t')
                 .replace(/\f/g, '\\f')
                 .replace(/\b/g, '\\b');
+
+            // 数式を元に戻す
+            str = str.replace(/__MATH_(\d+)__/g, (_, index) => {
+                return mathExpressions[parseInt(index)];
+            });
+
+            return str;
         };
 
         // 文字列をデサニタイズする関数
         const desanitizeString = (str) => {
-            return str
-                // 改行を復元
-                .replace(/\\n/g, '\n')
-                // 数式のエスケープを復元
-                .replace(/\\\\\(/g, '\\(')
-                .replace(/\\\\\)/g, '\\)')
-                .replace(/\\\\\[/g, '\\[')
-                .replace(/\\\\\]/g, '\\]')
-                // その他の特殊文字を復元
+            // 数式の部分を一時的に置換
+            const mathExpressions = [];
+            str = str.replace(/\\\(.*?\\\)|\\\[.*?\\\]/g, (match) => {
+                mathExpressions.push(match);
+                return `__MATH_${mathExpressions.length - 1}__`;
+            });
+
+            // 基本的なデサニタイズ処理
+            str = str
                 .replace(/\\\\/g, '\\')
                 .replace(/\\"/g, '"')
-                .replace(/\\t/g, '\t')
+                .replace(/\\n/g, '\n')
                 .replace(/\\r/g, '\r')
+                .replace(/\\t/g, '\t')
                 .replace(/\\f/g, '\f')
                 .replace(/\\b/g, '\b');
+
+            // 数式を元に戻す
+            str = str.replace(/__MATH_(\d+)__/g, (_, index) => {
+                return mathExpressions[parseInt(index)];
+            });
+
+            return str;
         };
 
         // JSONの検証関数
         const validateJSON = (jsonStr) => {
             try {
                 // 制御文字を除去
-                const cleanStr = jsonStr.replace(/[\x00-\x1F\x7F-\x9F]/g, '');
+                let cleanStr = jsonStr.replace(/[\x00-\x1F\x7F-\x9F]/g, '');
+                
+                // 数式の部分を一時的に置換
+                const mathExpressions = [];
+                cleanStr = cleanStr.replace(/\\\(.*?\\\)|\\\[.*?\\\]/g, (match) => {
+                    mathExpressions.push(match);
+                    return `__MATH_${mathExpressions.length - 1}__`;
+                });
+
                 // プロパティ名の検証
-                if (cleanStr.includes('\\b')) {
+                if (cleanStr.includes('\\b') || cleanStr.includes('\\t') || cleanStr.includes('\\n')) {
                     throw new Error('プロパティ名に制御文字が含まれています');
                 }
+
+                // 基本的なエスケープ処理
+                cleanStr = cleanStr
+                    .replace(/\\\\/g, '\\')
+                    .replace(/\\"/g, '"')
+                    .replace(/\\n/g, '\n')
+                    .replace(/\\r/g, '\r')
+                    .replace(/\\t/g, '\t')
+                    .replace(/\\f/g, '\f')
+                    .replace(/\\b/g, '\b');
+
+                // 数式を元に戻す
+                cleanStr = cleanStr.replace(/__MATH_(\d+)__/g, (_, index) => {
+                    return mathExpressions[parseInt(index)];
+                });
+
                 // JSONとしてパース
                 const parsed = JSON.parse(cleanStr);
                 return { valid: true, data: parsed };
             } catch (error) {
+                console.error('JSON検証エラー:', error);
+                console.error('問題のあるJSON文字列:', jsonStr);
                 return { valid: false, error: error.message };
             }
         };
@@ -154,6 +197,9 @@ class EGuide {
 - 数式は以下の形式で記述してください：
   - インライン数式: \\(数式\\)
   - ディスプレイ数式: \\[数式\\]
+- 改行は "\\n" を使用してください
+- 特殊文字は適切にエスケープしてください
+- JSONの形式を厳密に守ってください
 
 JSON形式で出力してください。`;
 
