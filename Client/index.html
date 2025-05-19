@@ -29,8 +29,11 @@
     <script src="js/tm/chat.js"></script>
     <script src="js/tm/main.js"></script>
     <script type="module">
+      import { updatePopout } from './js/popout.mjs';
       import { initializeApp } from './js/auth.mjs';
       window.addEventListener('load', initializeApp);
+      // Example usage:
+      // updatePopout('これはポップアウトのテストメッセージです。');
     </script>
   </head>
   <body>
