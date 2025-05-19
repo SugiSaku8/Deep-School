@@ -170,39 +170,58 @@ JSON形式で出力してください。`;
                         throw new Error(`「${chapter.title}」の授業内容生成に失敗しました。AIからの応答が不正な形式です。`);
                     }
 
-                    // 数式のエスケープを修正
+                    // 文字列のサニタイズとエスケープ処理
                     let jsonStr = lessonMatch[0]
-                        .replace(/\\\\/g, '\\')  // 二重エスケープを単一エスケープに
-                        .replace(/\\"/g, '"')    // エスケープされた引用符を通常の引用符に
-                        .replace(/\\n/g, '\n')   // 改行を実際の改行に
-                        .replace(/\\\\\(/g, '\\(')  // 数式の開始
-                        .replace(/\\\\\)/g, '\\)')  // 数式の終了
-                        .replace(/\\\\\[/g, '\\[')  // ディスプレイ数式の開始
-                        .replace(/\\\\\]/g, '\\]'); // ディスプレイ数式の終了
+                        // 制御文字の除去
+                        .replace(/[\x00-\x1F\x7F-\x9F]/g, '')
+                        // 二重エスケープを単一エスケープに
+                        .replace(/\\\\/g, '\\')
+                        // エスケープされた引用符を通常の引用符に
+                        .replace(/\\"/g, '"')
+                        // 改行を実際の改行に
+                        .replace(/\\n/g, '\n')
+                        // 数式の開始・終了
+                        .replace(/\\\\\(/g, '\\(')
+                        .replace(/\\\\\)/g, '\\)')
+                        .replace(/\\\\\[/g, '\\[')
+                        .replace(/\\\\\]/g, '\\]')
+                        // その他の特殊文字のエスケープ
+                        .replace(/\\t/g, '\t')
+                        .replace(/\\r/g, '\r')
+                        .replace(/\\f/g, '\f')
+                        .replace(/\\b/g, '\b');
 
-                    const lessonContent = JSON.parse(jsonStr);
-                    
-                    if (!lessonContent.lessons || !Array.isArray(lessonContent.lessons)) {
-                        throw new Error(`「${chapter.title}」の授業内容の形式が不正です。lessons配列が見つかりません。`);
-                    }
-
-                    // 改行文字を適切に処理
-                    lessonContent.lessons.forEach(lesson => {
-                        if (lesson.content) {
-                            Object.keys(lesson.content).forEach(key => {
-                                if (typeof lesson.content[key] === 'string') {
-                                    lesson.content[key] = lesson.content[key]
-                                        .replace(/\\n/g, '\n')
-                                        .replace(/\\\(/g, '(')
-                                        .replace(/\\\)/g, ')')
-                                        .replace(/\\\[/g, '[')
-                                        .replace(/\\\]/g, ']');
-                                }
-                            });
+                    try {
+                        const lessonContent = JSON.parse(jsonStr);
+                        
+                        if (!lessonContent.lessons || !Array.isArray(lessonContent.lessons)) {
+                            throw new Error(`「${chapter.title}」の授業内容の形式が不正です。lessons配列が見つかりません。`);
                         }
-                    });
 
-                    lessons.push(...lessonContent.lessons);
+                        // 改行文字を適切に処理
+                        lessonContent.lessons.forEach(lesson => {
+                            if (lesson.content) {
+                                Object.keys(lesson.content).forEach(key => {
+                                    if (typeof lesson.content[key] === 'string') {
+                                        lesson.content[key] = lesson.content[key]
+                                            .replace(/\\n/g, '\n')
+                                            .replace(/\\\(/g, '(')
+                                            .replace(/\\\)/g, ')')
+                                            .replace(/\\\[/g, '[')
+                                            .replace(/\\\]/g, ']')
+                                            // 制御文字の除去
+                                            .replace(/[\x00-\x1F\x7F-\x9F]/g, '');
+                                    }
+                                });
+                            }
+                        });
+
+                        lessons.push(...lessonContent.lessons);
+                    } catch (parseError) {
+                        console.error('JSONパースエラー:', parseError);
+                        console.error('問題のあるJSON文字列:', jsonStr);
+                        throw new Error(`「${chapter.title}」の授業内容のJSONパースに失敗しました: ${parseError.message}`);
+                    }
                 } catch (error) {
                     console.error(`「${chapter.title}」の授業内容生成エラー:`, error);
                     throw new Error(`「${chapter.title}」の授業内容生成中にエラーが発生しました: ${error.message}`);
