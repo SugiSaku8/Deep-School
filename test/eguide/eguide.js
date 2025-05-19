@@ -92,6 +92,23 @@ class EGuide {
                 .replace(/\\b/g, '\b');
         };
 
+        // JSONの検証関数
+        const validateJSON = (jsonStr) => {
+            try {
+                // 制御文字を除去
+                const cleanStr = jsonStr.replace(/[\x00-\x1F\x7F-\x9F]/g, '');
+                // プロパティ名の検証
+                if (cleanStr.includes('\\b')) {
+                    throw new Error('プロパティ名に制御文字が含まれています');
+                }
+                // JSONとしてパース
+                const parsed = JSON.parse(cleanStr);
+                return { valid: true, data: parsed };
+            } catch (error) {
+                return { valid: false, error: error.message };
+            }
+        };
+
         // まずチャプター構造を生成
         const chapterPrompt = `
 以下の条件に従って、${subject}の「${unit}」についてのチャプター構成を生成してください：
@@ -133,6 +150,10 @@ class EGuide {
 - 具体例チャプターは実践的な例を含めてください
 - 演習チャプターは適切な難易度の問題を含めてください
 - まとめチャプターは重要ポイントを整理してください
+- プロパティ名には制御文字を使用しないでください
+- 数式は以下の形式で記述してください：
+  - インライン数式: \\(数式\\)
+  - ディスプレイ数式: \\[数式\\]
 
 JSON形式で出力してください。`;
 
@@ -143,7 +164,13 @@ JSON形式で出力してください。`;
             if (!chapterMatch) {
                 throw new Error('チャプター構造の生成に失敗しました。AIからの応答が不正な形式です。');
             }
-            const chapterStructure = JSON.parse(chapterMatch[0]);
+
+            // JSONの検証
+            const validation = validateJSON(chapterMatch[0]);
+            if (!validation.valid) {
+                throw new Error(`チャプター構造のJSONが不正です: ${validation.error}`);
+            }
+            const chapterStructure = validation.data;
             
             if (!chapterStructure.chapters || !Array.isArray(chapterStructure.chapters)) {
                 throw new Error('チャプター構造の形式が不正です。chapters配列が見つかりません。');
@@ -200,6 +227,8 @@ ${chapter.keyPoints.map(point => `- ${point}`).join('\\n')}
 - 特殊文字は適切にエスケープしてください
 - 各チャプターは独立した完結した内容を持つようにしてください
 - チャプター間の関連性と学習の流れを考慮してください
+- プロパティ名には制御文字を使用しないでください
+- JSONの形式を厳密に守ってください
 
 JSON形式で出力してください。`;
 
@@ -228,30 +257,29 @@ JSON形式で出力してください。`;
                         return mathExpressions[parseInt(index)];
                     });
 
-                    try {
-                        const lessonContent = JSON.parse(jsonStr);
-                        
-                        if (!lessonContent.lessons || !Array.isArray(lessonContent.lessons)) {
-                            throw new Error(`「${chapter.title}」の授業内容の形式が不正です。lessons配列が見つかりません。`);
-                        }
-
-                        // 文字列のデサニタイズ
-                        lessonContent.lessons.forEach(lesson => {
-                            if (lesson.content) {
-                                Object.keys(lesson.content).forEach(key => {
-                                    if (typeof lesson.content[key] === 'string') {
-                                        lesson.content[key] = desanitizeString(lesson.content[key]);
-                                    }
-                                });
-                            }
-                        });
-
-                        lessons.push(...lessonContent.lessons);
-                    } catch (parseError) {
-                        console.error('JSONパースエラー:', parseError);
-                        console.error('問題のあるJSON文字列:', jsonStr);
-                        throw new Error(`「${chapter.title}」の授業内容のJSONパースに失敗しました: ${parseError.message}`);
+                    // JSONの検証
+                    const validation = validateJSON(jsonStr);
+                    if (!validation.valid) {
+                        throw new Error(`「${chapter.title}」の授業内容のJSONが不正です: ${validation.error}`);
                     }
+                    const lessonContent = validation.data;
+
+                    if (!lessonContent.lessons || !Array.isArray(lessonContent.lessons)) {
+                        throw new Error(`「${chapter.title}」の授業内容の形式が不正です。lessons配列が見つかりません。`);
+                    }
+
+                    // 文字列のデサニタイズ
+                    lessonContent.lessons.forEach(lesson => {
+                        if (lesson.content) {
+                            Object.keys(lesson.content).forEach(key => {
+                                if (typeof lesson.content[key] === 'string') {
+                                    lesson.content[key] = desanitizeString(lesson.content[key]);
+                                }
+                            });
+                        }
+                    });
+
+                    lessons.push(...lessonContent.lessons);
                 } catch (error) {
                     console.error(`「${chapter.title}」の授業内容生成エラー:`, error);
                     throw new Error(`「${chapter.title}」の授業内容生成中にエラーが発生しました: ${error.message}`);
