@@ -153,7 +153,9 @@ ${chapter.keyPoints.map(point => `- ${point}`).join('\\n')}
 - 演習問題は、その授業で学んだ内容を確認できる適切な難易度のものを含めてください
 - まとめは、その授業の重要なポイントを簡潔にまとめてください
 - 次回の予告は、生徒の興味を引くような形で次の授業の内容を紹介してください
-- 数式や図表が必要な場合は、適切な形式で記述してください（例：数式は $...$ で囲む）
+- 数式は以下の形式で記述してください：
+  - インライン数式: \\(数式\\)
+  - ディスプレイ数式: \\[数式\\]
 - 改行は "\\n" を使用してください
 - 特殊文字は適切にエスケープしてください
 - 各チャプターは独立した完結した内容を持つようにしてください
@@ -167,7 +169,18 @@ JSON形式で出力してください。`;
                     if (!lessonMatch) {
                         throw new Error(`「${chapter.title}」の授業内容生成に失敗しました。AIからの応答が不正な形式です。`);
                     }
-                    const lessonContent = JSON.parse(lessonMatch[0]);
+
+                    // 数式のエスケープを修正
+                    let jsonStr = lessonMatch[0]
+                        .replace(/\\\\/g, '\\')  // 二重エスケープを単一エスケープに
+                        .replace(/\\"/g, '"')    // エスケープされた引用符を通常の引用符に
+                        .replace(/\\n/g, '\n')   // 改行を実際の改行に
+                        .replace(/\\\\\(/g, '\\(')  // 数式の開始
+                        .replace(/\\\\\)/g, '\\)')  // 数式の終了
+                        .replace(/\\\\\[/g, '\\[')  // ディスプレイ数式の開始
+                        .replace(/\\\\\]/g, '\\]'); // ディスプレイ数式の終了
+
+                    const lessonContent = JSON.parse(jsonStr);
                     
                     if (!lessonContent.lessons || !Array.isArray(lessonContent.lessons)) {
                         throw new Error(`「${chapter.title}」の授業内容の形式が不正です。lessons配列が見つかりません。`);
@@ -178,7 +191,12 @@ JSON形式で出力してください。`;
                         if (lesson.content) {
                             Object.keys(lesson.content).forEach(key => {
                                 if (typeof lesson.content[key] === 'string') {
-                                    lesson.content[key] = lesson.content[key].replace(/\\n/g, '\n');
+                                    lesson.content[key] = lesson.content[key]
+                                        .replace(/\\n/g, '\n')
+                                        .replace(/\\\(/g, '(')
+                                        .replace(/\\\)/g, ')')
+                                        .replace(/\\\[/g, '[')
+                                        .replace(/\\\]/g, ']');
                                 }
                             });
                         }
