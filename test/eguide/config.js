@@ -1,11 +1,12 @@
 const CONFIG = {
     API_KEY: "AIzaSyDo7xQq1dIHy1j4xNCmZh2vyzX3rE74PF0",
-    API_URL: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent',
+    API_URL: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.0-pro:generateContent',
     GENERATION_CONFIG: {
         temperature: 0.7,
         topK: 40,
         topP: 0.95,
-        maxOutputTokens: 4086,
+        maxOutputTokens: 2048,
+        stopSequences: []
     },
     SAFETY_SETTINGS: [
         {
