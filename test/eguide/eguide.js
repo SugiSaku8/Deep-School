@@ -112,13 +112,10 @@ JSON形式で出力してください。`;
 
         const requestBody = {
             contents: [{
-                role: "user",
                 parts: [{
                     text: systemPrompt + "\n\n" + message
                 }]
-            }],
-            generationConfig: CONFIG.GENERATION_CONFIG,
-            safetySettings: CONFIG.SAFETY_SETTINGS
+            }]
         };
 
         try {
