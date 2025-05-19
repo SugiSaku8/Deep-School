@@ -56,18 +56,20 @@ class EGuide {
         const chapterPrompt = `
 以下の条件に従って、${subject}の「${unit}」についてのチャプター構成を生成してください：
 
-1. 各チャプターは以下の情報を含めてください：
+1. 各セクション（導入、本題、具体例、演習、まとめ）を独立したチャプターとして分割してください。
+
+2. 各チャプターは以下の情報を含めてください：
    - チャプターのタイトル（具体的で魅力的なタイトル）
    - 学習目標（具体的な到達目標）
    - 必要な授業回数（各チャプターの内容に応じて適切な回数を設定）
    - 重要な学習項目（具体的な項目）
 
-2. チャプターの構成例：
-   - 導入：概念の導入と興味喚起
-   - 基礎：基本的な概念と計算
-   - 応用：実践的な問題解決
-   - 発展：より高度な概念と応用
-   - 総合：知識の統合と実践
+3. チャプターの構成例：
+   - 導入：概念の導入と興味喚起（1回）
+   - 本題：基本的な概念の説明（2-3回）
+   - 具体例：実例を通じた理解（2-3回）
+   - 演習：実践的な問題解決（3-4回）
+   - まとめ：知識の確認と統合（1-2回）
 
 以下の形式で出力してください：
 {
@@ -85,8 +87,12 @@ class EGuide {
 - 各チャプターは独立した完結した内容を持つようにしてください
 - チャプター間の関連性と学習の流れを考慮してください
 - 全授業回数の合計が13回になるように調整してください
-- 最後のチャプターは総まとめとして設定してください
 - 各チャプターのタイトルは具体的で魅力的なものにしてください
+- 導入チャプターは生徒の興味を引く内容にしてください
+- 本題チャプターは段階的に理解を深められるようにしてください
+- 具体例チャプターは実践的な例を含めてください
+- 演習チャプターは適切な難易度の問題を含めてください
+- まとめチャプターは重要ポイントを整理してください
 
 JSON形式で出力してください。`;
 
@@ -95,18 +101,18 @@ JSON形式で出力してください。`;
             const chapterResponse = await this.callGemini(chapterPrompt);
             const chapterMatch = chapterResponse.match(/\{[\s\S]*\}/);
             if (!chapterMatch) {
-                throw new Error('No chapter structure found in response');
+                throw new Error('チャプター構造の生成に失敗しました。AIからの応答が不正な形式です。');
             }
             const chapterStructure = JSON.parse(chapterMatch[0]);
             
             if (!chapterStructure.chapters || !Array.isArray(chapterStructure.chapters)) {
-                throw new Error('Invalid chapter structure format');
+                throw new Error('チャプター構造の形式が不正です。chapters配列が見つかりません。');
             }
 
             // 授業回数の合計を確認
             const totalLessons = chapterStructure.chapters.reduce((sum, chapter) => sum + chapter.lessons, 0);
             if (totalLessons !== 13) {
-                throw new Error(`Total lessons (${totalLessons}) does not match required count (13)`);
+                throw new Error(`授業回数の合計（${totalLessons}回）が要件（13回）と一致しません。`);
             }
 
             // 各チャプターの授業内容を生成
@@ -155,29 +161,34 @@ ${chapter.keyPoints.map(point => `- ${point}`).join('\\n')}
 
 JSON形式で出力してください。`;
 
-                const lessonResponse = await this.callGemini(lessonPrompt);
-                const lessonMatch = lessonResponse.match(/\{[\s\S]*\}/);
-                if (!lessonMatch) {
-                    throw new Error('No lesson content found in response');
-                }
-                const lessonContent = JSON.parse(lessonMatch[0]);
-                
-                if (!lessonContent.lessons || !Array.isArray(lessonContent.lessons)) {
-                    throw new Error('Invalid lesson content format');
-                }
-
-                // 改行文字を適切に処理
-                lessonContent.lessons.forEach(lesson => {
-                    if (lesson.content) {
-                        Object.keys(lesson.content).forEach(key => {
-                            if (typeof lesson.content[key] === 'string') {
-                                lesson.content[key] = lesson.content[key].replace(/\\n/g, '\n');
-                            }
-                        });
+                try {
+                    const lessonResponse = await this.callGemini(lessonPrompt);
+                    const lessonMatch = lessonResponse.match(/\{[\s\S]*\}/);
+                    if (!lessonMatch) {
+                        throw new Error(`「${chapter.title}」の授業内容生成に失敗しました。AIからの応答が不正な形式です。`);
                     }
-                });
+                    const lessonContent = JSON.parse(lessonMatch[0]);
+                    
+                    if (!lessonContent.lessons || !Array.isArray(lessonContent.lessons)) {
+                        throw new Error(`「${chapter.title}」の授業内容の形式が不正です。lessons配列が見つかりません。`);
+                    }
 
-                lessons.push(...lessonContent.lessons);
+                    // 改行文字を適切に処理
+                    lessonContent.lessons.forEach(lesson => {
+                        if (lesson.content) {
+                            Object.keys(lesson.content).forEach(key => {
+                                if (typeof lesson.content[key] === 'string') {
+                                    lesson.content[key] = lesson.content[key].replace(/\\n/g, '\n');
+                                }
+                            });
+                        }
+                    });
+
+                    lessons.push(...lessonContent.lessons);
+                } catch (error) {
+                    console.error(`「${chapter.title}」の授業内容生成エラー:`, error);
+                    throw new Error(`「${chapter.title}」の授業内容生成中にエラーが発生しました: ${error.message}`);
+                }
             }
 
             this.lessons = lessons;
@@ -187,6 +198,7 @@ JSON形式で出力してください。`;
             });
         } catch (error) {
             console.error('シナリオ生成エラー:', error);
+            alert(`シナリオ生成中にエラーが発生しました: ${error.message}`);
             // エラー時のフォールバックシナリオ
             this.lessons = [
                 {
@@ -213,31 +225,31 @@ JSON形式で出力してください。`;
             this.originalScenario = JSON.stringify({ 
                 chapters: [
                     {
-                        title: "二次関数の基礎",
-                        objectives: ["二次関数の基本的な概念の理解", "グラフの特徴の把握"],
+                        title: "導入：放物線との出会い",
+                        objectives: ["放物線の概念の理解", "身近な例の認識"],
+                        lessons: 1,
+                        keyPoints: ["放物線の定義", "身近な例"]
+                    },
+                    {
+                        title: "本題：二次関数の基本",
+                        objectives: ["二次関数の定義の理解", "基本的な形の把握"],
                         lessons: 3,
-                        keyPoints: ["二次関数の定義", "グラフの形状", "係数の意味"]
+                        keyPoints: ["二次関数の定義", "基本的な形", "係数の意味"]
                     },
                     {
-                        title: "二次関数の応用",
-                        objectives: ["実践的な問題解決", "グラフの描画"],
+                        title: "具体例：放物線の特徴",
+                        objectives: ["具体例を通じた理解", "特徴の把握"],
                         lessons: 3,
-                        keyPoints: ["グラフの描き方", "実践的な問題", "応用例"]
+                        keyPoints: ["具体例", "特徴", "応用例"]
                     },
                     {
-                        title: "二次関数の発展",
-                        objectives: ["高度な概念の理解", "複雑な問題解決"],
-                        lessons: 3,
-                        keyPoints: ["発展的な概念", "複雑な問題", "応用技術"]
+                        title: "演習：実践的な問題",
+                        objectives: ["問題解決能力の向上", "理解度の確認"],
+                        lessons: 4,
+                        keyPoints: ["基礎問題", "応用問題", "実践問題"]
                     },
                     {
-                        title: "総合演習",
-                        objectives: ["知識の統合", "実践的な問題解決"],
-                        lessons: 2,
-                        keyPoints: ["総合的な問題", "実践的な応用"]
-                    },
-                    {
-                        title: "まとめと確認",
+                        title: "まとめ：知識の確認",
                         objectives: ["重要項目の確認", "理解度の確認"],
                         lessons: 2,
                         keyPoints: ["重要ポイント", "理解度確認"]
