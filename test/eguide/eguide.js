@@ -56,11 +56,11 @@ class EGuide {
         const chapterPrompt = `
 以下の条件に従って、${subject}の「${unit}」についてのチャプター構成を生成してください：
 
-1. 単元を3-4つの大きなチャプターに分割してください
+1. 単元を自然な学習の流れに沿って、適切な数のチャプターに分割してください
 2. 各チャプターは以下の情報を含めてください：
    - チャプターのタイトル
    - 学習目標
-   - 必要な授業回数（3-4回）
+   - 必要な授業回数（各チャプターの内容に応じて適切な回数を設定）
    - 重要な学習項目
 
 以下の形式で出力してください：
@@ -69,16 +69,18 @@ class EGuide {
         {
             "title": "チャプターのタイトル",
             "objectives": ["学習目標1", "学習目標2", ...],
-            "lessons": 4,
+            "lessons": 3,
             "keyPoints": ["重要な項目1", "重要な項目2", ...]
         }
     ]
 }
 
 注意点：
-- 13限で全ての内容を網羅するのは難しいため、重要な部分に焦点を当ててください
-- 各チャプターの授業回数の合計が13になるように調整してください
+- チャプター数は内容に応じて自然に決めてください（制限はありません）
+- 各チャプターの授業回数は、その内容の重要度や複雑さに応じて適切に設定してください
+- 全授業回数の合計が13回になるように調整してください
 - 最後のチャプターは総まとめとして設定してください
+- 学習の流れが自然になるように、チャプターの順序を考慮してください
 
 JSON形式で出力してください。`;
 
@@ -93,6 +95,12 @@ JSON形式で出力してください。`;
             
             if (!chapterStructure.chapters || !Array.isArray(chapterStructure.chapters)) {
                 throw new Error('Invalid chapter structure format');
+            }
+
+            // 授業回数の合計を確認
+            const totalLessons = chapterStructure.chapters.reduce((sum, chapter) => sum + chapter.lessons, 0);
+            if (totalLessons !== 13) {
+                throw new Error(`Total lessons (${totalLessons}) does not match required count (13)`);
             }
 
             // 各チャプターの授業内容を生成
@@ -120,10 +128,10 @@ ${chapter.keyPoints.map(point => `- ${point}`).join('\n')}
 }
 
 注意点：
-- 導入（1回）：チャプターの概要と学習目標の説明
-- 基本概念（1-2回）：重要な概念の説明と基本的な例題
-- 応用（1回）：実践的な問題演習と応用例
+- 授業の構成は、チャプターの内容と重要度に応じて柔軟に設定してください
+- 導入、基本概念、応用の配分は、チャプターの内容に応じて適切に調整してください
 - 最後のチャプターの場合は、全体の復習とまとめを含めてください
+- 各授業の内容は、前後の授業との関連性を考慮して設定してください
 
 JSON形式で出力してください。`;
 
@@ -150,45 +158,45 @@ JSON形式で出力してください。`;
             console.error('シナリオ生成エラー:', error);
             // エラー時のフォールバックシナリオ
             this.lessons = [
-                { title: '第1章：導入', content: `${unit}について、全体像を把握しましょう。`, chapter: 1, type: '導入' },
-                { title: '第1章：基本概念1', content: '第1章の重要な概念を学びましょう。', chapter: 1, type: '基本' },
-                { title: '第1章：基本概念2', content: 'さらに詳しく見ていきましょう。', chapter: 1, type: '基本' },
-                { title: '第1章：応用', content: '第1章の内容を実践的に活用しましょう。', chapter: 1, type: '応用' },
-                { title: '第2章：導入', content: '第2章の概要を理解しましょう。', chapter: 2, type: '導入' },
-                { title: '第2章：基本概念1', content: '第2章の重要な概念を学びましょう。', chapter: 2, type: '基本' },
-                { title: '第2章：基本概念2', content: 'さらに詳しく見ていきましょう。', chapter: 2, type: '基本' },
-                { title: '第2章：応用', content: '第2章の内容を実践的に活用しましょう。', chapter: 2, type: '応用' },
-                { title: '第3章：導入', content: '第3章の概要を理解しましょう。', chapter: 3, type: '導入' },
-                { title: '第3章：基本概念1', content: '第3章の重要な概念を学びましょう。', chapter: 3, type: '基本' },
-                { title: '第3章：基本概念2', content: 'さらに詳しく見ていきましょう。', chapter: 3, type: '基本' },
-                { title: '第3章：応用', content: '第3章の内容を実践的に活用しましょう。', chapter: 3, type: '応用' },
-                { title: '総まとめ', content: 'これまでの学習内容を整理し、全体を復習しましょう。', chapter: 4, type: 'まとめ' }
+                { title: '導入：単元の概要', content: `${unit}について、全体像を把握しましょう。`, chapter: 1, type: '導入' },
+                { title: '基礎概念1：重要な考え方', content: '基本的な概念を学びましょう。', chapter: 1, type: '基本' },
+                { title: '基礎概念2：応用の準備', content: 'さらに詳しく見ていきましょう。', chapter: 1, type: '基本' },
+                { title: '応用1：実践的な問題', content: '学んだ内容を実践的に活用しましょう。', chapter: 1, type: '応用' },
+                { title: '発展1：新しい視点', content: 'より深い理解を目指しましょう。', chapter: 2, type: '導入' },
+                { title: '発展2：応用力の向上', content: '応用力を高めていきましょう。', chapter: 2, type: '基本' },
+                { title: '発展3：実践演習', content: '実践的な問題に挑戦しましょう。', chapter: 2, type: '応用' },
+                { title: '総合1：知識の統合', content: 'これまでの内容を統合しましょう。', chapter: 3, type: '導入' },
+                { title: '総合2：応用力の確認', content: '総合的な問題に取り組みましょう。', chapter: 3, type: '基本' },
+                { title: '総合3：実践的な応用', content: '実践的な問題を解いてみましょう。', chapter: 3, type: '応用' },
+                { title: 'まとめ1：重要項目の確認', content: '重要なポイントを確認しましょう。', chapter: 4, type: 'まとめ' },
+                { title: 'まとめ2：理解度の確認', content: '理解度を確認しましょう。', chapter: 4, type: 'まとめ' },
+                { title: '総まとめ：全体の復習', content: 'これまでの学習内容を整理し、全体を復習しましょう。', chapter: 4, type: 'まとめ' }
             ];
             this.originalScenario = JSON.stringify({ 
                 chapters: [
                     {
-                        title: "第1章",
-                        objectives: ["基本的な概念の理解", "基礎的な問題解決"],
+                        title: "基礎編",
+                        objectives: ["基本的な概念の理解", "基礎的な問題解決能力の習得"],
                         lessons: 4,
-                        keyPoints: ["重要な概念1", "重要な概念2"]
+                        keyPoints: ["重要な概念", "基本的な解法"]
                     },
                     {
-                        title: "第2章",
-                        objectives: ["応用的な概念の理解", "実践的な問題解決"],
-                        lessons: 4,
-                        keyPoints: ["応用概念1", "応用概念2"]
+                        title: "発展編",
+                        objectives: ["応用的な概念の理解", "実践的な問題解決能力の向上"],
+                        lessons: 3,
+                        keyPoints: ["応用概念", "実践的な解法"]
                     },
                     {
-                        title: "第3章",
-                        objectives: ["総合的な理解", "実践的な応用"],
-                        lessons: 4,
-                        keyPoints: ["総合概念1", "総合概念2"]
+                        title: "総合編",
+                        objectives: ["知識の統合", "総合的な問題解決能力の習得"],
+                        lessons: 3,
+                        keyPoints: ["知識の統合", "総合的な解法"]
                     },
                     {
-                        title: "総まとめ",
-                        objectives: ["全体の復習", "理解度の確認"],
-                        lessons: 1,
-                        keyPoints: ["重要項目の確認", "応用力の確認"]
+                        title: "まとめ",
+                        objectives: ["重要項目の確認", "理解度の確認", "全体の復習"],
+                        lessons: 3,
+                        keyPoints: ["重要ポイント", "理解度", "全体の復習"]
                     }
                 ],
                 lessons: this.lessons 
