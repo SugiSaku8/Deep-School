@@ -54,102 +54,8 @@ class EGuide {
     async generateScenario(subject, unit) {
         // 文字列をサニタイズする関数
         const sanitizeString = (str) => {
-            // まず制御文字を除去
-            str = str.replace(/[\x00-\x1F\x7F-\x9F]/g, '');
-            
-            // 数式の部分を一時的に置換
-            const mathExpressions = [];
-            str = str.replace(/\\\(.*?\\\)|\\\[.*?\\\]/g, (match) => {
-                mathExpressions.push(match);
-                return `__MATH_${mathExpressions.length - 1}__`;
-            });
-
-            // 基本的なエスケープ処理
-            str = str
-                .replace(/\\/g, '\\\\')
-                .replace(/"/g, '\\"')
-                .replace(/\n/g, '\\n')
-                .replace(/\r/g, '\\r')
-                .replace(/\t/g, '\\t')
-                .replace(/\f/g, '\\f')
-                .replace(/\b/g, '\\b');
-
-            // 数式を元に戻す
-            str = str.replace(/__MATH_(\d+)__/g, (_, index) => {
-                return mathExpressions[parseInt(index)];
-            });
-
-            return str;
-        };
-
-        // 文字列をデサニタイズする関数
-        const desanitizeString = (str) => {
-            // 数式の部分を一時的に置換
-            const mathExpressions = [];
-            str = str.replace(/\\\(.*?\\\)|\\\[.*?\\\]/g, (match) => {
-                mathExpressions.push(match);
-                return `__MATH_${mathExpressions.length - 1}__`;
-            });
-
-            // 基本的なデサニタイズ処理
-            str = str
-                .replace(/\\\\/g, '\\')
-                .replace(/\\"/g, '"')
-                .replace(/\\n/g, '\n')
-                .replace(/\\r/g, '\r')
-                .replace(/\\t/g, '\t')
-                .replace(/\\f/g, '\f')
-                .replace(/\\b/g, '\b');
-
-            // 数式を元に戻す
-            str = str.replace(/__MATH_(\d+)__/g, (_, index) => {
-                return mathExpressions[parseInt(index)];
-            });
-
-            return str;
-        };
-
-        // JSONの検証関数
-        const validateJSON = (jsonStr) => {
-            try {
-                // 制御文字を除去
-                let cleanStr = jsonStr.replace(/[\x00-\x1F\x7F-\x9F]/g, '');
-                
-                // 数式の部分を一時的に置換
-                const mathExpressions = [];
-                cleanStr = cleanStr.replace(/\\\(.*?\\\)|\\\[.*?\\\]/g, (match) => {
-                    mathExpressions.push(match);
-                    return `__MATH_${mathExpressions.length - 1}__`;
-                });
-
-                // プロパティ名の検証
-                if (cleanStr.includes('\\b') || cleanStr.includes('\\t') || cleanStr.includes('\\n')) {
-                    throw new Error('プロパティ名に制御文字が含まれています');
-                }
-
-                // 基本的なエスケープ処理
-                cleanStr = cleanStr
-                    .replace(/\\\\/g, '\\')
-                    .replace(/\\"/g, '"')
-                    .replace(/\\n/g, '\n')
-                    .replace(/\\r/g, '\r')
-                    .replace(/\\t/g, '\t')
-                    .replace(/\\f/g, '\f')
-                    .replace(/\\b/g, '\b');
-
-                // 数式を元に戻す
-                cleanStr = cleanStr.replace(/__MATH_(\d+)__/g, (_, index) => {
-                    return mathExpressions[parseInt(index)];
-                });
-
-                // JSONとしてパース
-                const parsed = JSON.parse(cleanStr);
-                return { valid: true, data: parsed };
-            } catch (error) {
-                console.error('JSON検証エラー:', error);
-                console.error('問題のあるJSON文字列:', jsonStr);
-                return { valid: false, error: error.message };
-            }
+            // 制御文字を除去
+            return str.replace(/[\x00-\x1F\x7F-\x9F]/g, '');
         };
 
         // まずチャプター構造を生成
@@ -172,16 +78,17 @@ class EGuide {
    - まとめ：知識の確認と統合（1-2回）
 
 以下の形式で出力してください：
-{
-    "chapters": [
-        {
-            "title": "チャプターのタイトル",
-            "objectives": ["具体的な学習目標1", "具体的な学習目標2"],
-            "lessons": 2,
-            "keyPoints": ["具体的な項目1", "具体的な項目2"]
-        }
-    ]
-}
+---
+chapters:
+  - title: チャプターのタイトル
+    objectives:
+      - 具体的な学習目標1
+      - 具体的な学習目標2
+    lessons: 2
+    keyPoints:
+      - 具体的な項目1
+      - 具体的な項目2
+---
 
 注意点：
 - 各チャプターは独立した完結した内容を持つようにしてください
@@ -193,31 +100,22 @@ class EGuide {
 - 具体例チャプターは実践的な例を含めてください
 - 演習チャプターは適切な難易度の問題を含めてください
 - まとめチャプターは重要ポイントを整理してください
-- プロパティ名には制御文字を使用しないでください
 - 数式は以下の形式で記述してください：
   - インライン数式: \\(数式\\)
   - ディスプレイ数式: \\[数式\\]
-- 改行は "\\n" を使用してください
-- 特殊文字は適切にエスケープしてください
-- JSONの形式を厳密に守ってください
 
-JSON形式で出力してください。`;
+YAML形式で出力してください。`;
 
         try {
             // チャプター構造の生成
             const chapterResponse = await this.callGemini(chapterPrompt);
-            const chapterMatch = chapterResponse.match(/\{[\s\S]*\}/);
+            const chapterMatch = chapterResponse.match(/---\n([\s\S]*?)\n---/);
             if (!chapterMatch) {
                 throw new Error('チャプター構造の生成に失敗しました。AIからの応答が不正な形式です。');
             }
 
-            // JSONの検証
-            const validation = validateJSON(chapterMatch[0]);
-            if (!validation.valid) {
-                throw new Error(`チャプター構造のJSONが不正です: ${validation.error}`);
-            }
-            const chapterStructure = validation.data;
-            
+            // YAMLをパース
+            const chapterStructure = this.parseYAML(chapterMatch[1]);
             if (!chapterStructure.chapters || !Array.isArray(chapterStructure.chapters)) {
                 throw new Error('チャプター構造の形式が不正です。chapters配列が見つかりません。');
             }
@@ -235,29 +133,37 @@ JSON形式で出力してください。`;
 以下の条件に従って、${subject}の「${unit}」の「${chapter.title}」についての${chapter.lessons}回分の授業内容を生成してください：
 
 学習目標：
-${chapter.objectives.map(obj => `- ${obj}`).join('\\n')}
+${chapter.objectives.map(obj => `- ${obj}`).join('\n')}
 
 重要な学習項目：
-${chapter.keyPoints.map(point => `- ${point}`).join('\\n')}
+${chapter.keyPoints.map(point => `- ${point}`).join('\n')}
 
 以下の形式で出力してください：
-{
-    "lessons": [
-        {
-            "title": "チャプター名：限のタイトル",
-            "content": {
-                "introduction": "導入部分の具体的な文章（生徒の興味を引く具体的な例や問いかけを含める）",
-                "mainContent": "本題の具体的な説明（具体例を交えながら分かりやすく説明）",
-                "examples": ["具体例1（実際の数値や図を含む）", "具体例2（実際の数値や図を含む）"],
-                "exercises": ["演習問題1（具体的な数値や条件を含む）", "演習問題2（具体的な数値や条件を含む）"],
-                "summary": "まとめの文章（その授業の重要なポイントを簡潔にまとめる）",
-                "nextPreview": "次回の予告（生徒の興味を引くような形で次の授業の内容を紹介）"
-            },
-            "chapter": "チャプター番号",
-            "type": "導入/基本/応用"
-        }
-    ]
-}
+---
+lessons:
+  - title: チャプター名：限のタイトル
+    content:
+      introduction: |
+        導入部分の具体的な文章
+        （生徒の興味を引く具体的な例や問いかけを含める）
+      mainContent: |
+        本題の具体的な説明
+        （具体例を交えながら分かりやすく説明）
+      examples:
+        - 具体例1（実際の数値や図を含む）
+        - 具体例2（実際の数値や図を含む）
+      exercises:
+        - 演習問題1（具体的な数値や条件を含む）
+        - 演習問題2（具体的な数値や条件を含む）
+      summary: |
+        まとめの文章
+        （その授業の重要なポイントを簡潔にまとめる）
+      nextPreview: |
+        次回の予告
+        （生徒の興味を引くような形で次の授業の内容を紹介）
+    chapter: チャプター番号
+    type: 導入/基本/応用
+---
 
 注意点：
 - 各セクションは実際の授業でそのまま使える具体的な文章を生成してください
@@ -269,61 +175,21 @@ ${chapter.keyPoints.map(point => `- ${point}`).join('\\n')}
 - 数式は以下の形式で記述してください：
   - インライン数式: \\(数式\\)
   - ディスプレイ数式: \\[数式\\]
-- 改行は "\\n" を使用してください
-- 特殊文字は適切にエスケープしてください
-- 各チャプターは独立した完結した内容を持つようにしてください
-- チャプター間の関連性と学習の流れを考慮してください
-- プロパティ名には制御文字を使用しないでください
-- JSONの形式を厳密に守ってください
 
-JSON形式で出力してください。`;
+YAML形式で出力してください。`;
 
                 try {
                     const lessonResponse = await this.callGemini(lessonPrompt);
-                    const lessonMatch = lessonResponse.match(/\{[\s\S]*\}/);
+                    const lessonMatch = lessonResponse.match(/---\n([\s\S]*?)\n---/);
                     if (!lessonMatch) {
                         throw new Error(`「${chapter.title}」の授業内容生成に失敗しました。AIからの応答が不正な形式です。`);
                     }
 
-                    // 文字列のサニタイズ
-                    let jsonStr = lessonMatch[0];
-                    
-                    // 数式の部分を一時的に置換
-                    const mathExpressions = [];
-                    jsonStr = jsonStr.replace(/\\\(.*?\\\)|\\\[.*?\\\]/g, (match) => {
-                        mathExpressions.push(match);
-                        return `__MATH_${mathExpressions.length - 1}__`;
-                    });
-
-                    // 基本的なサニタイズ
-                    jsonStr = sanitizeString(jsonStr);
-
-                    // 数式を元に戻す
-                    jsonStr = jsonStr.replace(/__MATH_(\d+)__/g, (_, index) => {
-                        return mathExpressions[parseInt(index)];
-                    });
-
-                    // JSONの検証
-                    const validation = validateJSON(jsonStr);
-                    if (!validation.valid) {
-                        throw new Error(`「${chapter.title}」の授業内容のJSONが不正です: ${validation.error}`);
-                    }
-                    const lessonContent = validation.data;
-
+                    // YAMLをパース
+                    const lessonContent = this.parseYAML(lessonMatch[1]);
                     if (!lessonContent.lessons || !Array.isArray(lessonContent.lessons)) {
                         throw new Error(`「${chapter.title}」の授業内容の形式が不正です。lessons配列が見つかりません。`);
                     }
-
-                    // 文字列のデサニタイズ
-                    lessonContent.lessons.forEach(lesson => {
-                        if (lesson.content) {
-                            Object.keys(lesson.content).forEach(key => {
-                                if (typeof lesson.content[key] === 'string') {
-                                    lesson.content[key] = desanitizeString(lesson.content[key]);
-                                }
-                            });
-                        }
-                    });
 
                     lessons.push(...lessonContent.lessons);
                 } catch (error) {
@@ -399,6 +265,70 @@ JSON形式で出力してください。`;
                 lessons: this.lessons 
             });
         }
+    }
+
+    // YAMLをパースする関数
+    parseYAML(yamlStr) {
+        const lines = yamlStr.split('\n');
+        const result = {};
+        let currentKey = null;
+        let currentArray = null;
+        let currentIndent = 0;
+        let buffer = [];
+
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+            const indent = line.search(/\S|$/);
+            const content = line.trim();
+
+            if (!content || content.startsWith('#')) continue;
+
+            if (content.startsWith('- ')) {
+                // 配列要素の開始
+                if (currentArray === null) {
+                    currentArray = [];
+                    result[currentKey] = currentArray;
+                }
+                if (buffer.length > 0) {
+                    currentArray.push(buffer.join('\n'));
+                    buffer = [];
+                }
+                currentArray.push(content.substring(2));
+            } else if (content.endsWith(':')) {
+                // 新しいキーの開始
+                if (buffer.length > 0) {
+                    if (currentArray !== null) {
+                        currentArray.push(buffer.join('\n'));
+                    } else if (currentKey !== null) {
+                        result[currentKey] = buffer.join('\n');
+                    }
+                    buffer = [];
+                }
+                currentKey = content.slice(0, -1);
+                currentArray = null;
+            } else if (content === '|') {
+                // 複数行の文字列の開始
+                buffer = [];
+            } else if (content) {
+                // 通常の行
+                if (currentArray !== null) {
+                    currentArray.push(content);
+                } else {
+                    buffer.push(content);
+                }
+            }
+        }
+
+        // 最後のバッファを処理
+        if (buffer.length > 0) {
+            if (currentArray !== null) {
+                currentArray.push(buffer.join('\n'));
+            } else if (currentKey !== null) {
+                result[currentKey] = buffer.join('\n');
+            }
+        }
+
+        return result;
     }
 
     async callGemini(message) {
