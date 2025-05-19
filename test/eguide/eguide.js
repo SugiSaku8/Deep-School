@@ -52,25 +52,83 @@ class EGuide {
     }
 
     async generateScenario(subject, unit) {
-        // 13限の授業シナリオを生成
-        const lessons = [
-            { title: '導入', content: `${unit}について、身近な例から学んでいきましょう。` },
-            { title: '基本概念1', content: 'まずは基本的な考え方を理解していきましょう。' },
-            { title: '基本概念2', content: 'もう少し詳しく見ていきましょう。' },
-            { title: '例題1', content: '簡単な例題で理解を深めましょう。' },
-            { title: '練習1', content: '一緒に解いてみましょう。' },
-            { title: '応用1', content: '少し難しい問題に挑戦してみましょう。' },
-            { title: '基本概念3', content: '新しい考え方を学びましょう。' },
-            { title: '例題2', content: 'もう一つの例題を見てみましょう。' },
-            { title: '練習2', content: '理解を確認しましょう。' },
-            { title: '応用2', content: 'さらに難しい問題に挑戦しましょう。' },
-            { title: 'まとめ1', content: 'ここまでの内容を整理しましょう。' },
-            { title: '応用3', content: '総合的な問題に挑戦しましょう。' },
-            { title: 'まとめ2', content: '全体の復習をしましょう。' }
-        ];
+        const prompt = `
+以下の条件に従って、${subject}の「${unit}」についての13限の授業シナリオを生成してください：
 
-        this.lessons = lessons;
-        this.originalScenario = JSON.stringify(lessons);
+1. 各限のタイトルと内容を含めてください
+2. 身近な例から始めて、徐々に難しい内容に進んでください
+3. 生徒がその単元について何も知らないと仮定してください
+4. 各限の内容は具体的で、実践的な例を含めてください
+5. 以下の形式で出力してください：
+{
+    "lessons": [
+        {
+            "title": "限のタイトル",
+            "content": "具体的な内容"
+        }
+    ]
+}
+
+JSON形式で出力してください。`;
+
+        try {
+            const response = await this.callGemini(prompt);
+            const scenario = JSON.parse(response);
+            this.lessons = scenario.lessons;
+            this.originalScenario = JSON.stringify(scenario);
+        } catch (error) {
+            console.error('シナリオ生成エラー:', error);
+            alert('シナリオの生成に失敗しました。もう一度お試しください。');
+        }
+    }
+
+    async callGemini(message) {
+        const systemPrompt = `あなたは教育の専門家として、効果的な授業シナリオを作成するAIアシスタントです。
+以下の点に注意してシナリオを作成してください：
+- 生徒の理解を深めるための段階的なアプローチ
+- 具体的な例や実践的な演習の組み込み
+- 生徒の興味を引く導入部
+- 明確な学習目標の設定
+- 適切な難易度の設定`;
+
+        const fullMessage = `${systemPrompt}\n\nSystem: ${message}`;
+
+        const requestBody = {
+            contents: [
+                {
+                    parts: [
+                        {
+                            text: fullMessage,
+                        },
+                    ],
+                },
+            ],
+            generationConfig: CONFIG.GENERATION_CONFIG,
+            safetySettings: CONFIG.SAFETY_SETTINGS,
+        };
+
+        try {
+            const response = await fetch(
+                `${CONFIG.API_URL}?key=${CONFIG.API_KEY}`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(requestBody),
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error(`API Error: ${response.status}`);
+            }
+
+            const data = await response.json();
+            return data.candidates[0].content.parts[0].text;
+        } catch (error) {
+            console.error("Gemini API Error:", error);
+            throw error;
+        }
     }
 
     displayCurrentStep() {
@@ -148,7 +206,7 @@ class EGuide {
         this.questionText.value = '';
         this.questionInput.classList.add('hidden');
 
-        // 質問に対する回答を生成（実際の実装ではAIを使用）
+        // 質問に対する回答を生成
         const answer = await this.generateAnswer(question);
         
         // 回答を表示
@@ -161,8 +219,24 @@ class EGuide {
     }
 
     async generateAnswer(question) {
-        // 実際の実装ではAIを使用して回答を生成
-        return "この質問に対する回答を生成中です...";
+        const prompt = `
+現在の授業内容：${this.lessons[this.currentStep].content}
+
+以下の質問に対する回答を生成してください：
+${question}
+
+回答は以下の点に注意して生成してください：
+- 現在の授業内容に関連付けて回答する
+- 具体的な例を含める
+- 生徒の理解を深めるための説明を心がける
+- 必要に応じて、関連する概念や応用例も含める`;
+
+        try {
+            return await this.callGemini(prompt);
+        } catch (error) {
+            console.error('回答生成エラー:', error);
+            return '申し訳ありません。回答の生成に失敗しました。もう一度お試しください。';
+        }
     }
 }
 
