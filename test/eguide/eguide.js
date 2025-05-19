@@ -74,11 +74,30 @@ JSON形式で出力してください。`;
         try {
             const response = await this.callGemini(prompt);
             const scenario = JSON.parse(response);
+            if (!scenario.lessons || !Array.isArray(scenario.lessons)) {
+                throw new Error('Invalid scenario format');
+            }
             this.lessons = scenario.lessons;
             this.originalScenario = JSON.stringify(scenario);
         } catch (error) {
             console.error('シナリオ生成エラー:', error);
-            alert('シナリオの生成に失敗しました。もう一度お試しください。');
+            // エラー時のフォールバックシナリオ
+            this.lessons = [
+                { title: '導入', content: `${unit}について、身近な例から学んでいきましょう。` },
+                { title: '基本概念1', content: 'まずは基本的な考え方を理解していきましょう。' },
+                { title: '基本概念2', content: 'もう少し詳しく見ていきましょう。' },
+                { title: '例題1', content: '簡単な例題で理解を深めましょう。' },
+                { title: '練習1', content: '一緒に解いてみましょう。' },
+                { title: '応用1', content: '少し難しい問題に挑戦してみましょう。' },
+                { title: '基本概念3', content: '新しい考え方を学びましょう。' },
+                { title: '例題2', content: 'もう一つの例題を見てみましょう。' },
+                { title: '練習2', content: '理解を確認しましょう。' },
+                { title: '応用2', content: 'さらに難しい問題に挑戦しましょう。' },
+                { title: 'まとめ1', content: 'ここまでの内容を整理しましょう。' },
+                { title: '応用3', content: '総合的な問題に挑戦しましょう。' },
+                { title: 'まとめ2', content: '全体の復習をしましょう。' }
+            ];
+            this.originalScenario = JSON.stringify({ lessons: this.lessons });
         }
     }
 
@@ -91,20 +110,14 @@ JSON形式で出力してください。`;
 - 明確な学習目標の設定
 - 適切な難易度の設定`;
 
-        const fullMessage = `${systemPrompt}\n\nSystem: ${message}`;
-
         const requestBody = {
-            contents: [
-                {
-                    parts: [
-                        {
-                            text: fullMessage,
-                        },
-                    ],
-                },
-            ],
+            contents: [{
+                parts: [{
+                    text: systemPrompt + "\n\n" + message
+                }]
+            }],
             generationConfig: CONFIG.GENERATION_CONFIG,
-            safetySettings: CONFIG.SAFETY_SETTINGS,
+            safetySettings: CONFIG.SAFETY_SETTINGS
         };
 
         try {
@@ -120,10 +133,15 @@ JSON形式で出力してください。`;
             );
 
             if (!response.ok) {
-                throw new Error(`API Error: ${response.status}`);
+                const errorText = await response.text();
+                throw new Error(`API Error: ${response.status} - ${errorText}`);
             }
 
             const data = await response.json();
+            if (!data.candidates || !data.candidates[0] || !data.candidates[0].content || !data.candidates[0].content.parts || !data.candidates[0].content.parts[0]) {
+                throw new Error('Invalid API response structure');
+            }
+
             return data.candidates[0].content.parts[0].text;
         } catch (error) {
             console.error("Gemini API Error:", error);
