@@ -1148,3 +1148,17 @@ body::-webkit-scrollbar {
   left: 20px;
   z-index: 1000;
 }
+
+#persistent-popout {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 10px 15px;
+  border-radius: 10px;
+  z-index: 1000;
+  font-size: 0.9em;
+  max-width: 300px;
+  word-wrap: break-word;
+}
