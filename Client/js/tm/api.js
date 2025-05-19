@@ -308,13 +308,16 @@ class GeminiAPI {
   }
     */
   static async sendMessage(message, history) {
+    const conversationContext = this.buildConversationContext(history, message);
     // モデルを使った処理に変更
-    if(!IsSessionOn){
+    if(!IsSessionOn){ // セッションが開始されていない場合
+      // 最初の質問として処理
       const modelResponse = await cs.startSession(message);
       IsSessionOn = true;
       return modelResponse;
-    }else{
-      const modelResponse = await cs.handleResponse(message);
+    }else{ // セッション中の場合
+      // 会話履歴と現在のメッセージを渡して処理
+      const modelResponse = await cs.handleResponse(conversationContext);
       return modelResponse;
     }     
    
