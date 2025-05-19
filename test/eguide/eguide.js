@@ -120,7 +120,14 @@ ${chapter.keyPoints.map(point => `- ${point}`).join('\n')}
     "lessons": [
         {
             "title": "チャプター名：限のタイトル",
-            "content": "具体的な内容",
+            "content": {
+                "introduction": "導入部分の具体的な文章",
+                "mainContent": "本題の具体的な説明",
+                "examples": ["具体例1", "具体例2", ...],
+                "exercises": ["演習問題1", "演習問題2", ...],
+                "summary": "まとめの文章",
+                "nextPreview": "次回の予告"
+            },
             "chapter": "チャプター番号",
             "type": "導入/基本/応用"
         }
@@ -128,10 +135,13 @@ ${chapter.keyPoints.map(point => `- ${point}`).join('\n')}
 }
 
 注意点：
-- 授業の構成は、チャプターの内容と重要度に応じて柔軟に設定してください
-- 導入、基本概念、応用の配分は、チャプターの内容に応じて適切に調整してください
-- 最後のチャプターの場合は、全体の復習とまとめを含めてください
-- 各授業の内容は、前後の授業との関連性を考慮して設定してください
+- 各セクションは実際の授業でそのまま使える具体的な文章を生成してください
+- 導入部分は生徒の興味を引くような具体的な例や問いかけを含めてください
+- 本題の説明は、具体例を交えながら分かりやすく説明してください
+- 演習問題は、その授業で学んだ内容を確認できる適切な難易度のものを含めてください
+- まとめは、その授業の重要なポイントを簡潔にまとめてください
+- 次回の予告は、生徒の興味を引くような形で次の授業の内容を紹介してください
+- 数式や図表が必要な場合は、適切な形式で記述してください（例：数式は $...$ で囲む）
 
 JSON形式で出力してください。`;
 
@@ -158,19 +168,27 @@ JSON形式で出力してください。`;
             console.error('シナリオ生成エラー:', error);
             // エラー時のフォールバックシナリオ
             this.lessons = [
-                { title: '導入：単元の概要', content: `${unit}について、全体像を把握しましょう。`, chapter: 1, type: '導入' },
-                { title: '基礎概念1：重要な考え方', content: '基本的な概念を学びましょう。', chapter: 1, type: '基本' },
-                { title: '基礎概念2：応用の準備', content: 'さらに詳しく見ていきましょう。', chapter: 1, type: '基本' },
-                { title: '応用1：実践的な問題', content: '学んだ内容を実践的に活用しましょう。', chapter: 1, type: '応用' },
-                { title: '発展1：新しい視点', content: 'より深い理解を目指しましょう。', chapter: 2, type: '導入' },
-                { title: '発展2：応用力の向上', content: '応用力を高めていきましょう。', chapter: 2, type: '基本' },
-                { title: '発展3：実践演習', content: '実践的な問題に挑戦しましょう。', chapter: 2, type: '応用' },
-                { title: '総合1：知識の統合', content: 'これまでの内容を統合しましょう。', chapter: 3, type: '導入' },
-                { title: '総合2：応用力の確認', content: '総合的な問題に取り組みましょう。', chapter: 3, type: '基本' },
-                { title: '総合3：実践的な応用', content: '実践的な問題を解いてみましょう。', chapter: 3, type: '応用' },
-                { title: 'まとめ1：重要項目の確認', content: '重要なポイントを確認しましょう。', chapter: 4, type: 'まとめ' },
-                { title: 'まとめ2：理解度の確認', content: '理解度を確認しましょう。', chapter: 4, type: 'まとめ' },
-                { title: '総まとめ：全体の復習', content: 'これまでの学習内容を整理し、全体を復習しましょう。', chapter: 4, type: 'まとめ' }
+                {
+                    title: '導入：二次関数の世界へ',
+                    content: {
+                        introduction: 'みなさん、ジェットコースターに乗ったことはありますか？\n\n（ジェットコースターの写真を表示）\n\nこのジェットコースターの軌跡、どんな形をしていると思いますか？\n\n実は、この曲線は「放物線」と呼ばれる特別な形をしています。今日は、この放物線を数学的に理解していきましょう。',
+                        mainContent: '放物線は、自然界や人工物の中によく見られる形です。\n\n例えば：\n- 橋のアーチ\n- 噴水の水の軌跡\n- ボールを投げた時の軌道\n\nこれらの共通点は何でしょうか？',
+                        examples: [
+                            '橋の写真を見て、放物線の形を確認する',
+                            'ボールを投げる様子を動画で見る',
+                            '噴水の写真で放物線を観察する'
+                        ],
+                        exercises: [
+                            '身の回りにある放物線の形を探してみよう',
+                            '放物線の特徴を3つ挙げてみよう'
+                        ],
+                        summary: '今日は、放物線が身の回りにたくさんあることを学びました。次回は、この放物線を数学的に表現する方法を学びます。',
+                        nextPreview: '次回は、放物線を数式で表す方法を学びます。実は、この美しい曲線は、とてもシンプルな数式で表すことができるんですよ！'
+                    },
+                    chapter: 1,
+                    type: '導入'
+                },
+                // ... 他のフォールバックレッスンも同様の形式で更新 ...
             ];
             this.originalScenario = JSON.stringify({ 
                 chapters: [
@@ -254,7 +272,36 @@ JSON形式で出力してください。`;
         const lesson = this.lessons[this.currentStep];
         this.messageDisplay.innerHTML = `
             <h3>${lesson.title}</h3>
-            <p>${this.formatContent(lesson.content)}</p>
+            <div class="lesson-content">
+                <div class="introduction">
+                    <h4>導入</h4>
+                    <p>${this.formatContent(lesson.content.introduction)}</p>
+                </div>
+                <div class="main-content">
+                    <h4>本題</h4>
+                    <p>${this.formatContent(lesson.content.mainContent)}</p>
+                </div>
+                <div class="examples">
+                    <h4>具体例</h4>
+                    <ul>
+                        ${lesson.content.examples.map(example => `<li>${this.formatContent(example)}</li>`).join('')}
+                    </ul>
+                </div>
+                <div class="exercises">
+                    <h4>演習</h4>
+                    <ul>
+                        ${lesson.content.exercises.map(exercise => `<li>${this.formatContent(exercise)}</li>`).join('')}
+                    </ul>
+                </div>
+                <div class="summary">
+                    <h4>まとめ</h4>
+                    <p>${this.formatContent(lesson.content.summary)}</p>
+                </div>
+                <div class="next-preview">
+                    <h4>次回予告</h4>
+                    <p>${this.formatContent(lesson.content.nextPreview)}</p>
+                </div>
+            </div>
         `;
         
         // 進捗バーの更新
