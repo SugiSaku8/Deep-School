@@ -1145,6 +1145,6 @@ body::-webkit-scrollbar {
 #scr_app .auto-btn {
   position: fixed;
   top: 80px;
-  right: 20px;
+  left: 20px;
   z-index: 1000;
 }
