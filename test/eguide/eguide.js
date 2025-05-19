@@ -52,6 +52,46 @@ class EGuide {
     }
 
     async generateScenario(subject, unit) {
+        // 文字列をサニタイズする関数
+        const sanitizeString = (str) => {
+            return str
+                // 制御文字を除去
+                .replace(/[\x00-\x1F\x7F-\x9F]/g, '')
+                // 改行を適切に処理
+                .replace(/\n/g, '\\n')
+                // 数式のエスケープ
+                .replace(/\\\(/g, '\\\\(')
+                .replace(/\\\)/g, '\\\\)')
+                .replace(/\\\[/g, '\\\\[')
+                .replace(/\\\]/g, '\\\\]')
+                // その他の特殊文字をエスケープ
+                .replace(/\\/g, '\\\\')
+                .replace(/"/g, '\\"')
+                .replace(/\t/g, '\\t')
+                .replace(/\r/g, '\\r')
+                .replace(/\f/g, '\\f')
+                .replace(/\b/g, '\\b');
+        };
+
+        // 文字列をデサニタイズする関数
+        const desanitizeString = (str) => {
+            return str
+                // 改行を復元
+                .replace(/\\n/g, '\n')
+                // 数式のエスケープを復元
+                .replace(/\\\\\(/g, '\\(')
+                .replace(/\\\\\)/g, '\\)')
+                .replace(/\\\\\[/g, '\\[')
+                .replace(/\\\\\]/g, '\\]')
+                // その他の特殊文字を復元
+                .replace(/\\\\/g, '\\')
+                .replace(/\\"/g, '"')
+                .replace(/\\t/g, '\t')
+                .replace(/\\r/g, '\r')
+                .replace(/\\f/g, '\f')
+                .replace(/\\b/g, '\b');
+        };
+
         // まずチャプター構造を生成
         const chapterPrompt = `
 以下の条件に従って、${subject}の「${unit}」についてのチャプター構成を生成してください：
@@ -170,26 +210,23 @@ JSON形式で出力してください。`;
                         throw new Error(`「${chapter.title}」の授業内容生成に失敗しました。AIからの応答が不正な形式です。`);
                     }
 
-                    // 文字列のサニタイズとエスケープ処理
-                    let jsonStr = lessonMatch[0]
-                        // 制御文字の除去
-                        .replace(/[\x00-\x1F\x7F-\x9F]/g, '')
-                        // 二重エスケープを単一エスケープに
-                        .replace(/\\\\/g, '\\')
-                        // エスケープされた引用符を通常の引用符に
-                        .replace(/\\"/g, '"')
-                        // 改行を実際の改行に
-                        .replace(/\\n/g, '\n')
-                        // 数式の開始・終了
-                        .replace(/\\\\\(/g, '\\(')
-                        .replace(/\\\\\)/g, '\\)')
-                        .replace(/\\\\\[/g, '\\[')
-                        .replace(/\\\\\]/g, '\\]')
-                        // その他の特殊文字のエスケープ
-                        .replace(/\\t/g, '\t')
-                        .replace(/\\r/g, '\r')
-                        .replace(/\\f/g, '\f')
-                        .replace(/\\b/g, '\b');
+                    // 文字列のサニタイズ
+                    let jsonStr = lessonMatch[0];
+                    
+                    // 数式の部分を一時的に置換
+                    const mathExpressions = [];
+                    jsonStr = jsonStr.replace(/\\\(.*?\\\)|\\\[.*?\\\]/g, (match) => {
+                        mathExpressions.push(match);
+                        return `__MATH_${mathExpressions.length - 1}__`;
+                    });
+
+                    // 基本的なサニタイズ
+                    jsonStr = sanitizeString(jsonStr);
+
+                    // 数式を元に戻す
+                    jsonStr = jsonStr.replace(/__MATH_(\d+)__/g, (_, index) => {
+                        return mathExpressions[parseInt(index)];
+                    });
 
                     try {
                         const lessonContent = JSON.parse(jsonStr);
@@ -198,19 +235,12 @@ JSON形式で出力してください。`;
                             throw new Error(`「${chapter.title}」の授業内容の形式が不正です。lessons配列が見つかりません。`);
                         }
 
-                        // 改行文字を適切に処理
+                        // 文字列のデサニタイズ
                         lessonContent.lessons.forEach(lesson => {
                             if (lesson.content) {
                                 Object.keys(lesson.content).forEach(key => {
                                     if (typeof lesson.content[key] === 'string') {
-                                        lesson.content[key] = lesson.content[key]
-                                            .replace(/\\n/g, '\n')
-                                            .replace(/\\\(/g, '(')
-                                            .replace(/\\\)/g, ')')
-                                            .replace(/\\\[/g, '[')
-                                            .replace(/\\\]/g, ']')
-                                            // 制御文字の除去
-                                            .replace(/[\x00-\x1F\x7F-\x9F]/g, '');
+                                        lesson.content[key] = desanitizeString(lesson.content[key]);
                                     }
                                 });
                             }
