@@ -1,6 +1,6 @@
 const CONFIG = {
     API_KEY: "AIzaSyDo7xQq1dIHy1j4xNCmZh2vyzX3rE74PF0",
-    API_URL: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
+    API_URL: 'https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent',
     GENERATION_CONFIG: {
         temperature: 0.7,
         topK: 40,
