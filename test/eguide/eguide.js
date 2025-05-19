@@ -54,7 +54,6 @@ class EGuide {
     async generateScenario(subject, unit) {
         // 文字列をサニタイズする関数
         const sanitizeString = (str) => {
-            // 制御文字を除去
             return str.replace(/[\x00-\x1F\x7F-\x9F]/g, '');
         };
 
@@ -78,17 +77,27 @@ class EGuide {
    - まとめ：知識の確認と統合（1-2回）
 
 以下の形式で出力してください：
----
-chapters:
-  - title: チャプターのタイトル
-    objectives:
-      - 具体的な学習目標1
-      - 具体的な学習目標2
-    lessons: 2
-    keyPoints:
-      - 具体的な項目1
-      - 具体的な項目2
----
+
+# チャプター構成
+## チャプター1
+タイトル: チャプターのタイトル
+目標:
+- 具体的な学習目標1
+- 具体的な学習目標2
+授業回数: 2
+重要項目:
+- 具体的な項目1
+- 具体的な項目2
+
+## チャプター2
+タイトル: 次のチャプターのタイトル
+目標:
+- 次の学習目標1
+- 次の学習目標2
+授業回数: 3
+重要項目:
+- 次の項目1
+- 次の項目2
 
 注意点：
 - 各チャプターは独立した完結した内容を持つようにしてください
@@ -104,18 +113,12 @@ chapters:
   - インライン数式: \\(数式\\)
   - ディスプレイ数式: \\[数式\\]
 
-YAML形式で出力してください。`;
+マークダウン形式で出力してください。`;
 
         try {
             // チャプター構造の生成
             const chapterResponse = await this.callGemini(chapterPrompt);
-            const chapterMatch = chapterResponse.match(/---\n([\s\S]*?)\n---/);
-            if (!chapterMatch) {
-                throw new Error('チャプター構造の生成に失敗しました。AIからの応答が不正な形式です。');
-            }
-
-            // YAMLをパース
-            const chapterStructure = this.parseYAML(chapterMatch[1]);
+            const chapterStructure = this.parseMarkdown(chapterResponse);
             if (!chapterStructure.chapters || !Array.isArray(chapterStructure.chapters)) {
                 throw new Error('チャプター構造の形式が不正です。chapters配列が見つかりません。');
             }
@@ -139,31 +142,36 @@ ${chapter.objectives.map(obj => `- ${obj}`).join('\n')}
 ${chapter.keyPoints.map(point => `- ${point}`).join('\n')}
 
 以下の形式で出力してください：
----
-lessons:
-  - title: チャプター名：限のタイトル
-    content:
-      introduction: |
-        導入部分の具体的な文章
-        （生徒の興味を引く具体的な例や問いかけを含める）
-      mainContent: |
-        本題の具体的な説明
-        （具体例を交えながら分かりやすく説明）
-      examples:
-        - 具体例1（実際の数値や図を含む）
-        - 具体例2（実際の数値や図を含む）
-      exercises:
-        - 演習問題1（具体的な数値や条件を含む）
-        - 演習問題2（具体的な数値や条件を含む）
-      summary: |
-        まとめの文章
-        （その授業の重要なポイントを簡潔にまとめる）
-      nextPreview: |
-        次回の予告
-        （生徒の興味を引くような形で次の授業の内容を紹介）
-    chapter: チャプター番号
-    type: 導入/基本/応用
----
+
+# 授業内容
+## 授業1
+タイトル: チャプター名：限のタイトル
+導入:
+導入部分の具体的な文章
+（生徒の興味を引く具体的な例や問いかけを含める）
+
+本題:
+本題の具体的な説明
+（具体例を交えながら分かりやすく説明）
+
+具体例:
+- 具体例1（実際の数値や図を含む）
+- 具体例2（実際の数値や図を含む）
+
+演習:
+- 演習問題1（具体的な数値や条件を含む）
+- 演習問題2（具体的な数値や条件を含む）
+
+まとめ:
+まとめの文章
+（その授業の重要なポイントを簡潔にまとめる）
+
+次回予告:
+次回の予告
+（生徒の興味を引くような形で次の授業の内容を紹介）
+
+チャプター: チャプター番号
+タイプ: 導入/基本/応用
 
 注意点：
 - 各セクションは実際の授業でそのまま使える具体的な文章を生成してください
@@ -176,17 +184,11 @@ lessons:
   - インライン数式: \\(数式\\)
   - ディスプレイ数式: \\[数式\\]
 
-YAML形式で出力してください。`;
+マークダウン形式で出力してください。`;
 
                 try {
                     const lessonResponse = await this.callGemini(lessonPrompt);
-                    const lessonMatch = lessonResponse.match(/---\n([\s\S]*?)\n---/);
-                    if (!lessonMatch) {
-                        throw new Error(`「${chapter.title}」の授業内容生成に失敗しました。AIからの応答が不正な形式です。`);
-                    }
-
-                    // YAMLをパース
-                    const lessonContent = this.parseYAML(lessonMatch[1]);
+                    const lessonContent = this.parseMarkdown(lessonResponse);
                     if (!lessonContent.lessons || !Array.isArray(lessonContent.lessons)) {
                         throw new Error(`「${chapter.title}」の授業内容の形式が不正です。lessons配列が見つかりません。`);
                     }
@@ -267,64 +269,129 @@ YAML形式で出力してください。`;
         }
     }
 
-    // YAMLをパースする関数
-    parseYAML(yamlStr) {
-        const lines = yamlStr.split('\n');
-        const result = {};
-        let currentKey = null;
-        let currentArray = null;
-        let currentIndent = 0;
+    // マークダウンをパースする関数
+    parseMarkdown(markdown) {
+        const lines = markdown.split('\n');
+        const result = { chapters: [], lessons: [] };
+        let currentChapter = null;
+        let currentLesson = null;
+        let currentSection = null;
         let buffer = [];
 
         for (let i = 0; i < lines.length; i++) {
-            const line = lines[i];
-            const indent = line.search(/\S|$/);
-            const content = line.trim();
+            const line = lines[i].trim();
+            if (!line) continue;
 
-            if (!content || content.startsWith('#')) continue;
-
-            if (content.startsWith('- ')) {
-                // 配列要素の開始
-                if (currentArray === null) {
-                    currentArray = [];
-                    result[currentKey] = currentArray;
-                }
+            if (line.startsWith('# ')) {
+                // メインタイトル
+                continue;
+            } else if (line.startsWith('## ')) {
+                // チャプターまたはレッスンの開始
                 if (buffer.length > 0) {
-                    currentArray.push(buffer.join('\n'));
-                    buffer = [];
-                }
-                currentArray.push(content.substring(2));
-            } else if (content.endsWith(':')) {
-                // 新しいキーの開始
-                if (buffer.length > 0) {
-                    if (currentArray !== null) {
-                        currentArray.push(buffer.join('\n'));
-                    } else if (currentKey !== null) {
-                        result[currentKey] = buffer.join('\n');
+                    if (currentLesson) {
+                        if (currentSection) {
+                            currentLesson.content[currentSection] = buffer.join('\n');
+                        }
+                    } else if (currentChapter) {
+                        if (currentSection) {
+                            currentChapter[currentSection] = buffer.join('\n');
+                        }
                     }
                     buffer = [];
                 }
-                currentKey = content.slice(0, -1);
-                currentArray = null;
-            } else if (content === '|') {
-                // 複数行の文字列の開始
-                buffer = [];
-            } else if (content) {
-                // 通常の行
-                if (currentArray !== null) {
-                    currentArray.push(content);
-                } else {
-                    buffer.push(content);
+
+                const title = line.substring(3);
+                if (title.startsWith('チャプター')) {
+                    currentChapter = {
+                        title: '',
+                        objectives: [],
+                        lessons: 0,
+                        keyPoints: []
+                    };
+                    result.chapters.push(currentChapter);
+                    currentLesson = null;
+                } else if (title.startsWith('授業')) {
+                    currentLesson = {
+                        title: '',
+                        content: {
+                            introduction: '',
+                            mainContent: '',
+                            examples: [],
+                            exercises: [],
+                            summary: '',
+                            nextPreview: ''
+                        },
+                        chapter: '',
+                        type: ''
+                    };
+                    result.lessons.push(currentLesson);
                 }
+                currentSection = null;
+            } else if (line.includes(':')) {
+                // セクションの開始
+                if (buffer.length > 0) {
+                    if (currentLesson) {
+                        if (currentSection) {
+                            currentLesson.content[currentSection] = buffer.join('\n');
+                        }
+                    } else if (currentChapter) {
+                        if (currentSection) {
+                            currentChapter[currentSection] = buffer.join('\n');
+                        }
+                    }
+                    buffer = [];
+                }
+
+                const [key, value] = line.split(':').map(s => s.trim());
+                currentSection = key.toLowerCase();
+                
+                if (currentLesson) {
+                    if (currentSection === 'タイトル') {
+                        currentLesson.title = value;
+                    } else if (currentSection === 'チャプター') {
+                        currentLesson.chapter = value;
+                    } else if (currentSection === 'タイプ') {
+                        currentLesson.type = value;
+                    } else if (currentSection === '具体例' || currentSection === '演習') {
+                        currentLesson.content[currentSection] = [];
+                    }
+                } else if (currentChapter) {
+                    if (currentSection === 'タイトル') {
+                        currentChapter.title = value;
+                    } else if (currentSection === '授業回数') {
+                        currentChapter.lessons = parseInt(value);
+                    }
+                }
+            } else if (line.startsWith('- ')) {
+                // リストアイテム
+                const item = line.substring(2);
+                if (currentLesson) {
+                    if (currentSection === '具体例' || currentSection === '演習') {
+                        currentLesson.content[currentSection].push(item);
+                    }
+                } else if (currentChapter) {
+                    if (currentSection === '目標') {
+                        currentChapter.objectives.push(item);
+                    } else if (currentSection === '重要項目') {
+                        currentChapter.keyPoints.push(item);
+                    }
+                }
+            } else {
+                // 通常のテキスト
+                buffer.push(line);
             }
         }
 
         // 最後のバッファを処理
         if (buffer.length > 0) {
-            if (currentArray !== null) {
-                currentArray.push(buffer.join('\n'));
-            } else if (currentKey !== null) {
-                result[currentKey] = buffer.join('\n');
+            if (currentLesson) {
+                if (currentSection) {
+                    currentLesson.content[currentSection] = buffer.join('\n');
+                }
+            } else if (currentChapter) {
+                if (currentSection) {
+                    currentChapter[currentSection] = buffer.join('\n');
+                }
             }
         }
 
