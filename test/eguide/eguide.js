@@ -441,8 +441,15 @@ ${section === '具体例' || section === '演習' ? '- 項目1\n- 項目2' : '�
             return this.formatContent(content);
         };
 
+        // リストアイテムを安全に取得
+        const getListItems = (section) => {
+            const content = lesson.content[section];
+            if (!Array.isArray(content) || content.length === 0) return '';
+            return content.map(item => `<li>${this.formatContent(item)}</li>`).join('');
+        };
+
         this.messageDisplay.innerHTML = `
-            <h3>${lesson.title}</h3>
+            <h3>${lesson.title || ''}</h3>
             <div class="lesson-content">
                 <div class="introduction">
                     <h4>導入</h4>
@@ -455,19 +462,13 @@ ${section === '具体例' || section === '演習' ? '- 項目1\n- 項目2' : '�
                 <div class="examples">
                     <h4>具体例</h4>
                     <ul>
-                        ${Array.isArray(lesson.content['具体例']) 
-                            ? lesson.content['具体例'].map(example => 
-                                `<li>${this.formatContent(example)}</li>`).join('')
-                            : ''}
+                        ${getListItems('具体例')}
                     </ul>
                 </div>
                 <div class="exercises">
                     <h4>演習</h4>
                     <ul>
-                        ${Array.isArray(lesson.content['演習'])
-                            ? lesson.content['演習'].map(exercise => 
-                                `<li>${this.formatContent(exercise)}</li>`).join('')
-                            : ''}
+                        ${getListItems('演習')}
                     </ul>
                 </div>
                 <div class="summary">
@@ -494,17 +495,31 @@ ${section === '具体例' || section === '演習' ? '- 項目1\n- 項目2' : '�
     }
 
     formatContent(content) {
-        if (!content) return '';
-        
-        const subject = this.subjectSelect.value;
-        let formattedContent = String(content);
+        // 入力値の検証
+        if (content === null || content === undefined) {
+            return '';
+        }
 
-        if (subject === 'math') {
-            // MathJaxの数式を処理
-            formattedContent = formattedContent.replace(/\$(.*?)\$/g, '\\\\($1\\\\)');
-        } else if (subject === 'japanese') {
-            // 国語の文章を明朝体で表示
-            formattedContent = `<span class="japanese-content">${formattedContent}</span>`;
+        // 文字列に変換
+        let formattedContent = String(content).trim();
+        if (!formattedContent) {
+            return '';
+        }
+
+        // 科目に応じた処理
+        const subject = this.subjectSelect?.value || 'math';
+        
+        try {
+            if (subject === 'math') {
+                // MathJaxの数式を処理
+                formattedContent = formattedContent.replace(/\$(.*?)\$/g, '\\\\($1\\\\)');
+            } else if (subject === 'japanese') {
+                // 国語の文章を明朝体で表示
+                formattedContent = `<span class="japanese-content">${formattedContent}</span>`;
+            }
+        } catch (error) {
+            console.error('Content formatting error:', error);
+            return formattedContent; // エラー時は元の内容を返す
         }
 
         return formattedContent;
