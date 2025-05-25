@@ -1,4 +1,16 @@
 // Pickramu/API/compile.n.js
+/**
+ * カスタムマークアップテキストをHTMLに変換する
+ * @param {string} inputText - 変換するカスタムマークアップテキスト
+ * @returns {string|null} 変換されたHTML、エラーの場合はnull
+ * @description
+ * 以下のカスタムタグをサポート:
+ * - @tag: div要素の作成
+ * - @input: 入力フォームの作成
+ * - @btn: ボタンの作成
+ * - @script: JavaScriptの追加
+ * - @futter: フッター要素の作成
+ */
 function convertToHtml(inputText) {
   let outputHtml = "";
   // Remove lines starting with //

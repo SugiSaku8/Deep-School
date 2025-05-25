@@ -1,7 +1,21 @@
 // convert.js
 const fs = require('fs');
 
-// テキストファイルを読み込んでJSON形式に変換
+/**
+ * テキストファイルをJSON形式に変換する
+ * @param {string} inputFile - 入力テキストファイルのパス
+ * @returns {Promise<void>}
+ * @description
+ * テキストファイルの各行を読み込み、以下の形式のJSONに変換します:
+ * [
+ *   {
+ *     "text": "テキスト行の内容",
+ *     "label": 1
+ *   },
+ *   ...
+ * ]
+ * 変換結果はoutput.jsonに保存されます。
+ */
 async function convertFile(inputFile) {
     try {
         // ファイルを読み込む

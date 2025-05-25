@@ -2,7 +2,11 @@
 const tf = require("@tensorflow/tfjs-node");
 const fs = require('fs');
 
-// テキストを数値ベクトルに変換する関数
+/**
+ * テキストを数値ベクトルに変換する関数
+ * @param {string} text - 入力テキスト
+ * @returns {number[]} 100次元の数値ベクトル
+ */
 function textToVector(text) {
     const uniqueChars = Array.from(new Set(text.split(''))); // Get unique characters
     const vector = new Array(100).fill(0); // Initialize vector with fixed length of 100
@@ -16,7 +20,11 @@ function textToVector(text) {
     return vector;
 }
 
-// データセットの読み込み
+/**
+ * データセットの読み込み
+ * @param {string} filePath - データセットファイルのパス
+ * @returns {Promise<Object[]|null>} データセット配列またはnull
+ */
 async function loadDataset(filePath) {
     try {
         const data = fs.readFileSync(filePath, 'utf8');
@@ -27,7 +35,10 @@ async function loadDataset(filePath) {
     }
 }
 
-// モデルの定義
+/**
+ * モデルの定義
+ * @returns {tf.Sequential} 構築されたモデル
+ */
 function createModel() {
     const model = tf.sequential();
 
@@ -50,7 +61,10 @@ function createModel() {
     return model;
 }
 
-// モデルのコンパイル
+/**
+ * モデルのコンパイル
+ * @param {tf.Sequential} model - モデル
+ */
 function compileModel(model) {
     model.compile({
         optimizer: tf.train.adam(0.001), // Adjusted learning rate
@@ -59,7 +73,12 @@ function compileModel(model) {
     });
 }
 
-// モデルのトレーニング
+/**
+ * モデルのトレーニング
+ * @param {tf.Sequential} model - モデル
+ * @param {Object[]} trainingData - トレーニングデータ
+ * @returns {Promise<tf.History|undefined>} トレーニング履歴またはundefined
+ */
 async function trainModel(model, trainingData) {
     // トレーニングデータの準備
     if (!trainingData || trainingData.length === 0) {
@@ -91,7 +110,11 @@ async function trainModel(model, trainingData) {
     return history;
 }
 
-// モデルの評価
+/**
+ * モデルの評価
+ * @param {tf.Sequential} model - モデル
+ * @param {Object[]} testingData - テストデータ
+ */
 function evaluateModel(model, testingData) {
     if (!testingData || testingData.length === 0 || !testingData[0] || !testingData[0].input) {
         console.error("テストデータが無効です:", testingData);
@@ -106,13 +129,22 @@ function evaluateModel(model, testingData) {
     console.log("評価精度:", results[1].dataSync()[0].toFixed(4));
 }
 
-// モデルの保存
+/**
+ * モデルの保存
+ * @param {tf.Sequential} model - モデル
+ * @param {string} filePath - 保存先パス
+ * @returns {Promise<void>}
+ */
 async function saveModel(model, filePath) {
     await model.save(`file://${filePath}`);
     console.log("モデルを保存しました:", filePath);
 }
 
-// モデルの読み込み
+/**
+ * モデルの読み込み
+ * @param {string} filePath - モデルのパス
+ * @returns {Promise<tf.LayersModel|null>} モデルまたはnull
+ */
 async function loadModel(filePath) {
     try {
         const model = await tf.loadLayersModel(`file://${filePath}/model.json`);
@@ -124,7 +156,12 @@ async function loadModel(filePath) {
     }
 }
 
-// 新しいテキストに対する予測
+/**
+ * 新しいテキストに対する予測
+ * @param {tf.LayersModel|tf.Sequential} model - モデル
+ * @param {string} inputText - 入力テキスト
+ * @returns {number} BADな確率
+ */
 function predict(model, inputText) {
     // テキストを数値ベクトルに変換
     const inputVector = textToVector(inputText);
@@ -139,7 +176,10 @@ function predict(model, inputText) {
     return probability;
 }
 
-// メイン関数
+/**
+ * メイン関数
+ * @returns {Promise<void>}
+ */
 async function main() {
     // データセットのパス
     const datasetPath = 'dataset.json';
