@@ -139,6 +139,7 @@ ${chapter.objectives.map(obj => `- ${obj}`).join('\n')}
 ${chapter.keyPoints.map(point => `- ${point}`).join('\n')}
 
 セクションの種類：${section}
+授業回数：${chapter.lessons}回
 
 以下の形式で出力してください：
 
@@ -154,7 +155,8 @@ ${section === '具体例' || section === '演習' ? '- 項目1\n- 項目2' : '�
   - ディスプレイ数式: \\[数式\\]
 - 必ず上記の形式で出力してください
 - セクションの内容は必ず存在するようにしてください
-- 具体例と演習は必ずリスト形式で出力してください`;
+- 具体例と演習は必ずリスト形式で出力してください
+- 授業回数に応じた適切な量の内容を生成してください`;
 
                     try {
                         const sectionResponse = await this.callGemini(sectionPrompt);
@@ -205,19 +207,19 @@ ${section === '具体例' || section === '演習' ? '- 項目1\n- 項目2' : '�
                 {
                     title: '導入：二次関数の世界へ',
                     content: {
-                        introduction: 'みなさん、ジェットコースターに乗ったことはありますか？\n\n（ジェットコースターの写真を表示）\n\nこのジェットコースターの軌跡、どんな形をしていると思いますか？\n\n実は、この曲線は「放物線」と呼ばれる特別な形をしています。今日は、この放物線を数学的に理解していきましょう。',
-                        mainContent: '放物線は、自然界や人工物の中によく見られる形です。\n\n例えば：\n- 橋のアーチ\n- 噴水の水の軌跡\n- ボールを投げた時の軌道\n\nこれらの共通点は何でしょうか？',
-                        examples: [
+                        '導入': 'みなさん、ジェットコースターに乗ったことはありますか？\n\n（ジェットコースターの写真を表示）\n\nこのジェットコースターの軌跡、どんな形をしていると思いますか？\n\n実は、この曲線は「放物線」と呼ばれる特別な形をしています。今日は、この放物線を数学的に理解していきましょう。',
+                        '本題': '放物線は、自然界や人工物の中によく見られる形です。\n\n例えば：\n- 橋のアーチ\n- 噴水の水の軌跡\n- ボールを投げた時の軌道\n\nこれらの共通点は何でしょうか？',
+                        '具体例': [
                             '橋の写真を見て、放物線の形を確認する',
                             'ボールを投げる様子を動画で見る',
                             '噴水の写真で放物線を観察する'
                         ],
-                        exercises: [
+                        '演習': [
                             '身の回りにある放物線の形を探してみよう',
                             '放物線の特徴を3つ挙げてみよう'
                         ],
-                        summary: '今日は、放物線が身の回りにたくさんあることを学びました。次回は、この放物線を数学的に表現する方法を学びます。',
-                        nextPreview: '次回は、放物線を数式で表す方法を学びます。実は、この美しい曲線は、とてもシンプルな数式で表すことができるんですよ！'
+                        'まとめ': '今日は、放物線が身の回りにたくさんあることを学びました。次回は、この放物線を数学的に表現する方法を学びます。',
+                        '次回予告': '次回は、放物線を数式で表す方法を学びます。実は、この美しい曲線は、とてもシンプルな数式で表すことができるんですよ！'
                     },
                     chapter: 1,
                     type: '導入'
@@ -424,36 +426,57 @@ ${section === '具体例' || section === '演習' ? '- 項目1\n- 項目2' : '�
 
     displayCurrentStep() {
         const lesson = this.lessons[this.currentStep];
+        if (!lesson || !lesson.content) {
+            console.error('Invalid lesson data:', lesson);
+            return;
+        }
+
+        // 各セクションの内容を安全に取得
+        const getContent = (section) => {
+            const content = lesson.content[section];
+            if (!content) return '';
+            if (Array.isArray(content)) {
+                return content.map(item => this.formatContent(item)).join('');
+            }
+            return this.formatContent(content);
+        };
+
         this.messageDisplay.innerHTML = `
             <h3>${lesson.title}</h3>
             <div class="lesson-content">
                 <div class="introduction">
                     <h4>導入</h4>
-                    <p>${this.formatContent(lesson.content.introduction)}</p>
+                    <p>${getContent('導入')}</p>
                 </div>
                 <div class="main-content">
                     <h4>本題</h4>
-                    <p>${this.formatContent(lesson.content.mainContent)}</p>
+                    <p>${getContent('本題')}</p>
                 </div>
                 <div class="examples">
                     <h4>具体例</h4>
                     <ul>
-                        ${lesson.content.examples.map(example => `<li>${this.formatContent(example)}</li>`).join('')}
+                        ${Array.isArray(lesson.content['具体例']) 
+                            ? lesson.content['具体例'].map(example => 
+                                `<li>${this.formatContent(example)}</li>`).join('')
+                            : ''}
                     </ul>
                 </div>
                 <div class="exercises">
                     <h4>演習</h4>
                     <ul>
-                        ${lesson.content.exercises.map(exercise => `<li>${this.formatContent(exercise)}</li>`).join('')}
+                        ${Array.isArray(lesson.content['演習'])
+                            ? lesson.content['演習'].map(exercise => 
+                                `<li>${this.formatContent(exercise)}</li>`).join('')
+                            : ''}
                     </ul>
                 </div>
                 <div class="summary">
                     <h4>まとめ</h4>
-                    <p>${this.formatContent(lesson.content.summary)}</p>
+                    <p>${getContent('まとめ')}</p>
                 </div>
                 <div class="next-preview">
                     <h4>次回予告</h4>
-                    <p>${this.formatContent(lesson.content.nextPreview)}</p>
+                    <p>${getContent('次回予告')}</p>
                 </div>
             </div>
         `;
@@ -471,15 +494,20 @@ ${section === '具体例' || section === '演習' ? '- 項目1\n- 項目2' : '�
     }
 
     formatContent(content) {
+        if (!content) return '';
+        
         const subject = this.subjectSelect.value;
+        let formattedContent = String(content);
+
         if (subject === 'math') {
             // MathJaxの数式を処理
-            return content.replace(/\$(.*?)\$/g, '\\\\($1\\\\)');
+            formattedContent = formattedContent.replace(/\$(.*?)\$/g, '\\\\($1\\\\)');
         } else if (subject === 'japanese') {
             // 国語の文章を明朝体で表示
-            return `<span class="japanese-content">${content}</span>`;
+            formattedContent = `<span class="japanese-content">${formattedContent}</span>`;
         }
-        return content;
+
+        return formattedContent;
     }
 
     applySubjectStyle() {
