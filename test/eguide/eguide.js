@@ -239,68 +239,92 @@ ${section === '具体例' || section === '演習' ? '- 項目1\n- 項目2' : '�
         const chapters = [];
         const lines = text.split('\n');
         let currentChapter = null;
+        let currentSection = null;
 
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i].trim();
             if (!line) continue;
 
-            if (line.startsWith('タイトル:')) {
+            // タイトル行の処理
+            if (line.startsWith('タイトル:') || line.startsWith('タイトル：')) {
                 if (currentChapter) {
                     // 必須フィールドの確認
-                    if (currentChapter.title && 
-                        Array.isArray(currentChapter.objectives) && currentChapter.objectives.length > 0 &&
-                        typeof currentChapter.lessons === 'number' && currentChapter.lessons > 0 &&
-                        Array.isArray(currentChapter.keyPoints) && currentChapter.keyPoints.length > 0) {
+                    if (this.isValidChapter(currentChapter)) {
                         chapters.push(currentChapter);
                     }
                 }
                 currentChapter = {
-                    title: line.substring(7).trim(),
+                    title: line.substring(line.indexOf(':') + 1).trim(),
                     objectives: [],
                     lessons: 0,
                     keyPoints: []
                 };
-            } else if (line === '目標:') {
+                currentSection = null;
+            }
+            // 目標セクションの処理
+            else if (line === '目標:' || line === '目標：') {
                 if (!currentChapter) continue;
-                // 次の行から目標を読み込む
-                while (i + 1 < lines.length && lines[i + 1].trim().startsWith('- ')) {
-                    i++;
-                    const objective = lines[i].trim().substring(2);
-                    if (objective) {
-                        currentChapter.objectives.push(objective);
-                    }
-                }
-            } else if (line.startsWith('授業回数:')) {
+                currentSection = 'objectives';
+            }
+            // 授業回数の処理
+            else if (line.startsWith('授業回数:') || line.startsWith('授業回数：')) {
                 if (!currentChapter) continue;
-                const lessons = parseInt(line.substring(7).trim());
+                const lessons = parseInt(line.substring(line.indexOf(':') + 1).trim());
                 if (!isNaN(lessons) && lessons > 0) {
                     currentChapter.lessons = lessons;
                 }
-            } else if (line === '重要項目:') {
+            }
+            // 重要項目セクションの処理
+            else if (line === '重要項目:' || line === '重要項目：') {
                 if (!currentChapter) continue;
-                // 次の行から重要項目を読み込む
-                while (i + 1 < lines.length && lines[i + 1].trim().startsWith('- ')) {
-                    i++;
-                    const keyPoint = lines[i].trim().substring(2);
-                    if (keyPoint) {
-                        currentChapter.keyPoints.push(keyPoint);
+                currentSection = 'keyPoints';
+            }
+            // リストアイテムの処理
+            else if (line.startsWith('- ')) {
+                if (!currentChapter || !currentSection) continue;
+                const item = line.substring(2).trim();
+                if (item) {
+                    if (currentSection === 'objectives') {
+                        currentChapter.objectives.push(item);
+                    } else if (currentSection === 'keyPoints') {
+                        currentChapter.keyPoints.push(item);
                     }
                 }
             }
         }
 
         // 最後のチャプターを追加
-        if (currentChapter) {
-            // 必須フィールドの確認
-            if (currentChapter.title && 
-                Array.isArray(currentChapter.objectives) && currentChapter.objectives.length > 0 &&
-                typeof currentChapter.lessons === 'number' && currentChapter.lessons > 0 &&
-                Array.isArray(currentChapter.keyPoints) && currentChapter.keyPoints.length > 0) {
-                chapters.push(currentChapter);
-            }
+        if (currentChapter && this.isValidChapter(currentChapter)) {
+            chapters.push(currentChapter);
+        }
+
+        // チャプターが存在しない場合、デフォルトのチャプターを生成
+        if (chapters.length === 0) {
+            chapters.push({
+                title: "導入：基本概念の理解",
+                objectives: ["基本的な概念の理解", "重要な用語の習得"],
+                lessons: 1,
+                keyPoints: ["基本概念", "重要用語"]
+            });
         }
 
         return chapters;
+    }
+
+    // チャプターの妥当性をチェックする関数
+    isValidChapter(chapter) {
+        return (
+            chapter &&
+            typeof chapter === 'object' &&
+            typeof chapter.title === 'string' &&
+            chapter.title.length > 0 &&
+            Array.isArray(chapter.objectives) &&
+            chapter.objectives.length > 0 &&
+            typeof chapter.lessons === 'number' &&
+            chapter.lessons > 0 &&
+            Array.isArray(chapter.keyPoints) &&
+            chapter.keyPoints.length > 0
+        );
     }
 
     // セクションをパースする関数
@@ -312,35 +336,39 @@ ${section === '具体例' || section === '演習' ? '- 項目1\n- 項目2' : '�
         const lines = text.split('\n');
         let content = '';
         let items = [];
+        let currentSection = null;
 
         for (let i = 0; i < lines.length; i++) {
             const line = lines[i].trim();
             if (!line) continue;
 
-            if (line.startsWith(`${sectionType}:`)) {
-                // セクションの内容を読み込む
+            // セクション開始の検出
+            if (line.startsWith(`${sectionType}:`) || line.startsWith(`${sectionType}：`)) {
+                currentSection = sectionType;
+                continue;
+            }
+
+            // セクション内容の処理
+            if (currentSection === sectionType) {
                 if (sectionType === '具体例' || sectionType === '演習') {
-                    // リストアイテムを読み込む
-                    while (i + 1 < lines.length && lines[i + 1].trim().startsWith('- ')) {
-                        i++;
-                        const item = lines[i].trim().substring(2);
+                    if (line.startsWith('- ')) {
+                        const item = line.substring(2).trim();
                         if (item) {
                             items.push(item);
                         }
                     }
-                    return items.length > 0 ? items : [];
                 } else {
-                    // 通常のテキストを読み込む
-                    while (i + 1 < lines.length && !lines[i + 1].trim().includes(':')) {
-                        i++;
-                        content += lines[i] + '\n';
-                    }
-                    return content.trim() || '';
+                    content += line + '\n';
                 }
             }
         }
 
-        return sectionType === '具体例' || sectionType === '演習' ? [] : '';
+        // 結果の返却
+        if (sectionType === '具体例' || sectionType === '演習') {
+            return items.length > 0 ? items : ['デフォルトの例'];
+        } else {
+            return content.trim() || 'デフォルトの内容';
+        }
     }
 
     async callGemini(message) {
