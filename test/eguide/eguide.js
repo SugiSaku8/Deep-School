@@ -54,6 +54,7 @@ class EGuide {
     async generateScenario(subject, unit) {
         // 文字列をサニタイズする関数
         const sanitizeString = (str) => {
+            if (!str) return '';
             return str.replace(/[\x00-\x1F\x7F-\x9F]/g, '');
         };
 
@@ -84,14 +85,33 @@ class EGuide {
 - 各チャプターは独立した完結した内容を持つようにしてください
 - チャプター間の関連性と学習の流れを考慮してください
 - 全授業回数の合計が13回になるように調整してください
-- 各チャプターのタイトルは具体的で魅力的なものにしてください`;
+- 各チャプターのタイトルは具体的で魅力的なものにしてください
+- 必ず上記の形式で出力してください
+- 各セクションは必ず存在するようにしてください
+- 授業回数は必ず数値で指定してください`;
 
             // チャプター構造の生成
             const chapterResponse = await this.callGemini(chapterPrompt);
+            if (!chapterResponse) {
+                throw new Error('チャプター構造の生成に失敗しました。');
+            }
+
             const chapters = this.parseChapters(chapterResponse);
+            if (!chapters || !Array.isArray(chapters) || chapters.length === 0) {
+                throw new Error('チャプター構造の解析に失敗しました。');
+            }
+
+            // 各チャプターの必須フィールドを確認
+            for (const chapter of chapters) {
+                if (!chapter.title || !chapter.objectives || !Array.isArray(chapter.objectives) || 
+                    !chapter.lessons || typeof chapter.lessons !== 'number' || 
+                    !chapter.keyPoints || !Array.isArray(chapter.keyPoints)) {
+                    throw new Error('チャプター構造に必須フィールドが不足しています。');
+                }
+            }
 
             // 授業回数の合計を確認
-            const totalLessons = chapters.reduce((sum, chapter) => sum + chapter.lessons, 0);
+            const totalLessons = chapters.reduce((sum, chapter) => sum + (chapter.lessons || 0), 0);
             if (totalLessons !== 13) {
                 throw new Error(`授業回数の合計（${totalLessons}回）が要件（13回）と一致しません。`);
             }
@@ -126,11 +146,25 @@ ${section === '具体例' || section === '演習' ? '- 項目1\n- 項目2' : '�
 - そのセクションの目的に合った内容を生成してください
 - 数式は以下の形式で記述してください：
   - インライン数式: \\(数式\\)
-  - ディスプレイ数式: \\[数式\\]`;
+  - ディスプレイ数式: \\[数式\\]
+- 必ず上記の形式で出力してください
+- セクションの内容は必ず存在するようにしてください
+- 具体例と演習は必ずリスト形式で出力してください`;
 
                     try {
                         const sectionResponse = await this.callGemini(sectionPrompt);
+                        if (!sectionResponse) {
+                            throw new Error(`${section}セクションの生成に失敗しました。`);
+                        }
+
                         const content = this.parseSection(sectionResponse, section);
+                        if (section === '具体例' || section === '演習') {
+                            if (!Array.isArray(content) || content.length === 0) {
+                                throw new Error(`${section}セクションの内容が不正です。`);
+                            }
+                        } else if (!content || typeof content !== 'string') {
+                            throw new Error(`${section}セクションの内容が不正です。`);
+                        }
                         lessonContent[section] = content;
                     } catch (error) {
                         console.error(`${section}セクションの生成エラー:`, error);
@@ -147,6 +181,10 @@ ${section === '具体例' || section === '演習' ? '- 項目1\n- 項目2' : '�
                 };
 
                 lessons.push(lesson);
+            }
+
+            if (!lessons || lessons.length === 0) {
+                throw new Error('授業内容の生成に失敗しました。');
             }
 
             this.lessons = lessons;
@@ -196,6 +234,8 @@ ${section === '具体例' || section === '演習' ? '- 項目1\n- 項目2' : '�
 
     // チャプターをパースする関数
     parseChapters(text) {
+        if (!text) return [];
+        
         const chapters = [];
         const lines = text.split('\n');
         let currentChapter = null;
@@ -206,7 +246,13 @@ ${section === '具体例' || section === '演習' ? '- 項目1\n- 項目2' : '�
 
             if (line.startsWith('タイトル:')) {
                 if (currentChapter) {
-                    chapters.push(currentChapter);
+                    // 必須フィールドの確認
+                    if (currentChapter.title && 
+                        Array.isArray(currentChapter.objectives) && currentChapter.objectives.length > 0 &&
+                        typeof currentChapter.lessons === 'number' && currentChapter.lessons > 0 &&
+                        Array.isArray(currentChapter.keyPoints) && currentChapter.keyPoints.length > 0) {
+                        chapters.push(currentChapter);
+                    }
                 }
                 currentChapter = {
                     title: line.substring(7).trim(),
@@ -215,25 +261,43 @@ ${section === '具体例' || section === '演習' ? '- 項目1\n- 項目2' : '�
                     keyPoints: []
                 };
             } else if (line === '目標:') {
+                if (!currentChapter) continue;
                 // 次の行から目標を読み込む
                 while (i + 1 < lines.length && lines[i + 1].trim().startsWith('- ')) {
                     i++;
-                    currentChapter.objectives.push(lines[i].trim().substring(2));
+                    const objective = lines[i].trim().substring(2);
+                    if (objective) {
+                        currentChapter.objectives.push(objective);
+                    }
                 }
             } else if (line.startsWith('授業回数:')) {
-                currentChapter.lessons = parseInt(line.substring(7).trim());
+                if (!currentChapter) continue;
+                const lessons = parseInt(line.substring(7).trim());
+                if (!isNaN(lessons) && lessons > 0) {
+                    currentChapter.lessons = lessons;
+                }
             } else if (line === '重要項目:') {
+                if (!currentChapter) continue;
                 // 次の行から重要項目を読み込む
                 while (i + 1 < lines.length && lines[i + 1].trim().startsWith('- ')) {
                     i++;
-                    currentChapter.keyPoints.push(lines[i].trim().substring(2));
+                    const keyPoint = lines[i].trim().substring(2);
+                    if (keyPoint) {
+                        currentChapter.keyPoints.push(keyPoint);
+                    }
                 }
             }
         }
 
         // 最後のチャプターを追加
         if (currentChapter) {
-            chapters.push(currentChapter);
+            // 必須フィールドの確認
+            if (currentChapter.title && 
+                Array.isArray(currentChapter.objectives) && currentChapter.objectives.length > 0 &&
+                typeof currentChapter.lessons === 'number' && currentChapter.lessons > 0 &&
+                Array.isArray(currentChapter.keyPoints) && currentChapter.keyPoints.length > 0) {
+                chapters.push(currentChapter);
+            }
         }
 
         return chapters;
@@ -241,6 +305,10 @@ ${section === '具体例' || section === '演習' ? '- 項目1\n- 項目2' : '�
 
     // セクションをパースする関数
     parseSection(text, sectionType) {
+        if (!text || !sectionType) {
+            return sectionType === '具体例' || sectionType === '演習' ? [] : '';
+        }
+
         const lines = text.split('\n');
         let content = '';
         let items = [];
@@ -255,21 +323,24 @@ ${section === '具体例' || section === '演習' ? '- 項目1\n- 項目2' : '�
                     // リストアイテムを読み込む
                     while (i + 1 < lines.length && lines[i + 1].trim().startsWith('- ')) {
                         i++;
-                        items.push(lines[i].trim().substring(2));
+                        const item = lines[i].trim().substring(2);
+                        if (item) {
+                            items.push(item);
+                        }
                     }
-                    return items;
+                    return items.length > 0 ? items : [];
                 } else {
                     // 通常のテキストを読み込む
                     while (i + 1 < lines.length && !lines[i + 1].trim().includes(':')) {
                         i++;
                         content += lines[i] + '\n';
                     }
-                    return content.trim();
+                    return content.trim() || '';
                 }
             }
         }
 
-        return sectionType === '具体例' || sectionType === '演習' ? items : content;
+        return sectionType === '具体例' || sectionType === '演習' ? [] : '';
     }
 
     async callGemini(message) {
