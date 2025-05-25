@@ -512,19 +512,16 @@ ${section === '具体例' || section === '演習' ? '- 項目1<br>- 項目2' : '
         const subject = this.subjectSelect?.value || 'math';
         
         try {
-            // 太字の処理
-            formattedContent = formattedContent.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            // Markdownの処理
+            formattedContent = marked.parse(formattedContent);
 
             if (subject === 'math') {
-                // MathJaxの数式を処理（太字の後に処理）
+                // MathJaxの数式を処理（Markdownの後に処理）
                 formattedContent = formattedContent.replace(/\$(.*?)\$/g, '\\\\($1\\\\)');
             } else if (subject === 'japanese') {
                 // 国語の文章を明朝体で表示
                 formattedContent = `<span class="japanese-content">${formattedContent}</span>`;
             }
-
-            // 改行タグの処理
-            formattedContent = formattedContent.replace(/\n/g, '<br>');
         } catch (error) {
             console.error('Content formatting error:', error);
             return formattedContent; // エラー時は元の内容を返す
