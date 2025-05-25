@@ -1,4 +1,10 @@
+/**
+ * EGuide - 教育用ガイドクラス。レッスンの生成・進行・表示・質問応答などを管理する。
+ */
 class EGuide {
+    /**
+     * EGuideのインスタンスを初期化する。
+     */
     constructor() {
         this.currentStep = 0;
         this.lessons = [];
@@ -10,6 +16,9 @@ class EGuide {
         this.attachEventListeners();
     }
 
+    /**
+     * 画面上の主要なDOM要素を初期化する。
+     */
     initializeElements() {
         this.setupSection = document.getElementById('setup-section');
         this.lessonSection = document.getElementById('lesson-section');
@@ -26,6 +35,9 @@ class EGuide {
         this.currentUnitTitle = document.getElementById('current-unit');
     }
 
+    /**
+     * イベントリスナーを各ボタンに設定する。
+     */
     attachEventListeners() {
         this.startButton.addEventListener('click', () => this.startLesson());
         this.nextButton.addEventListener('click', () => this.nextStep());
@@ -33,6 +45,10 @@ class EGuide {
         this.submitQuestion.addEventListener('click', () => this.handleQuestion());
     }
 
+    /**
+     * レッスンを開始し、シナリオを生成する。
+     * @returns {Promise<void>}
+     */
     async startLesson() {
         const subject = this.subjectSelect.value;
         const unit = this.unitInput.value.trim();
@@ -51,6 +67,12 @@ class EGuide {
         this.displayCurrentStep();
     }
 
+    /**
+     * Gemini APIを使ってシナリオを生成する。
+     * @param {string} subject - 科目名
+     * @param {string} unit - 単元名
+     * @returns {Promise<void>}
+     */
     async generateScenario(subject, unit) {
         // 文字列をサニタイズする関数
         const sanitizeString = (str) => {
@@ -241,7 +263,11 @@ ${section === '具体例' || section === '演習' ? '- 項目1<br>- 項目2' : '
         }
     }
 
-    // チャプターをパースする関数
+    /**
+     * チャプター構造テキストをパースして配列に変換する。
+     * @param {string} text - チャプター構造テキスト
+     * @returns {Array<Object>} パース結果
+     */
     parseChapters(text) {
         if (!text) return [];
         
