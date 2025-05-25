@@ -512,8 +512,11 @@ ${section === '具体例' || section === '演習' ? '- 項目1<br>- 項目2' : '
         const subject = this.subjectSelect?.value || 'math';
         
         try {
+            // 太字の処理
+            formattedContent = formattedContent.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
             if (subject === 'math') {
-                // MathJaxの数式を処理
+                // MathJaxの数式を処理（太字の後に処理）
                 formattedContent = formattedContent.replace(/\$(.*?)\$/g, '\\\\($1\\\\)');
             } else if (subject === 'japanese') {
                 // 国語の文章を明朝体で表示
