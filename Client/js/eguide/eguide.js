@@ -346,7 +346,11 @@ ${section === '具体例' || section === '演習' ? '- 項目1<br>- 項目2' : '
         return chapters;
     }
 
-    // チャプターの妥当性をチェックする関数
+    /**
+     * チャプターオブジェクトの妥当性をチェックする。
+     * @param {Object} chapter - チャプターオブジェクト
+     * @returns {boolean} 妥当ならtrue
+     */
     isValidChapter(chapter) {
         return (
             chapter &&
@@ -362,7 +366,12 @@ ${section === '具体例' || section === '演習' ? '- 項目1<br>- 項目2' : '
         );
     }
 
-    // セクションをパースする関数
+    /**
+     * セクションテキストをパースして内容を抽出する。
+     * @param {string} text - セクションテキスト
+     * @param {string} sectionType - セクションの種類
+     * @returns {string|Array<string>} パース結果
+     */
     parseSection(text, sectionType) {
         if (!text || !sectionType) {
             return sectionType === '具体例' || sectionType === '演習' ? [] : '';
@@ -406,6 +415,11 @@ ${section === '具体例' || section === '演習' ? '- 項目1<br>- 項目2' : '
         }
     }
 
+    /**
+     * Gemini APIにメッセージを送信し、応答を取得する。
+     * @param {string} message - 送信メッセージ
+     * @returns {Promise<string>} Geminiからの応答
+     */
     async callGemini(message) {
         const systemPrompt = `あなたは教育の専門家として、効果的な授業シナリオを作成するAIアシスタントです。
 以下の点に注意してシナリオを作成してください：
@@ -452,6 +466,9 @@ ${section === '具体例' || section === '演習' ? '- 項目1<br>- 項目2' : '
         }
     }
 
+    /**
+     * 現在のステップのレッスン内容を画面に表示する。
+     */
     displayCurrentStep() {
         const lesson = this.lessons[this.currentStep];
         if (!lesson || !lesson.content) {
@@ -522,6 +539,11 @@ ${section === '具体例' || section === '演習' ? '- 項目1<br>- 項目2' : '
         this.applySubjectStyle();
     }
 
+    /**
+     * レッスン内容を科目に応じて整形する。
+     * @param {*} content - 整形対象の内容
+     * @returns {string} 整形済みHTML
+     */
     formatContent(content) {
         // 入力値の検証
         if (content === null || content === undefined) {
@@ -556,6 +578,9 @@ ${section === '具体例' || section === '演習' ? '- 項目1<br>- 項目2' : '
         return formattedContent;
     }
 
+    /**
+     * 科目に応じたスタイルを適用する。
+     */
     applySubjectStyle() {
         const subject = this.subjectSelect.value;
         this.messageDisplay.className = '';
@@ -571,6 +596,9 @@ ${section === '具体例' || section === '演習' ? '- 項目1<br>- 項目2' : '
         }
     }
 
+    /**
+     * 次のステップに進む。
+     */
     nextStep() {
         if (this.currentStep < this.lessons.length - 1) {
             this.currentStep++;
@@ -578,6 +606,9 @@ ${section === '具体例' || section === '演習' ? '- 項目1<br>- 項目2' : '
         }
     }
 
+    /**
+     * 前のステップに戻る。
+     */
     previousStep() {
         if (this.currentStep > 0) {
             this.currentStep--;
@@ -585,6 +616,10 @@ ${section === '具体例' || section === '演習' ? '- 項目1<br>- 項目2' : '
         }
     }
 
+    /**
+     * 質問の送信・処理を行う。
+     * @returns {Promise<void>}
+     */
     async handleQuestion() {
         const question = this.questionText.value.trim();
         if (!question) return;
@@ -612,6 +647,11 @@ ${section === '具体例' || section === '演習' ? '- 項目1<br>- 項目2' : '
         `;
     }
 
+    /**
+     * Gemini APIを使って質問に対する回答を生成する。
+     * @param {string} question - 質問内容
+     * @returns {Promise<string>} 回答
+     */
     async generateAnswer(question) {
         const prompt = `
 現在の授業内容：${this.lessons[this.currentStep].content}
@@ -633,7 +673,12 @@ ${question}
         }
     }
 
-    // 授業回数を調整する関数
+    /**
+     * チャプターの授業回数を調整する。
+     * @param {Array<Object>} chapters - チャプター配列
+     * @param {number} currentTotal - 現在の合計授業回数
+     * @returns {Array<Object>} 調整後のチャプター配列
+     */
     adjustLessonCount(chapters, currentTotal) {
         const targetTotal = 13;
         const defaultDistribution = {
