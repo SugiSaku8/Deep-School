@@ -89,29 +89,11 @@ class EGuide {
 - 具体的な項目1
 - 具体的な項目2
 
-## チャプター2
-タイトル: 次のチャプターのタイトル
-目標:
-- 次の学習目標1
-- 次の学習目標2
-授業回数: 3
-重要項目:
-- 次の項目1
-- 次の項目2
-
 注意点：
 - 各チャプターは独立した完結した内容を持つようにしてください
 - チャプター間の関連性と学習の流れを考慮してください
 - 全授業回数の合計が13回になるように調整してください
 - 各チャプターのタイトルは具体的で魅力的なものにしてください
-- 導入チャプターは生徒の興味を引く内容にしてください
-- 本題チャプターは段階的に理解を深められるようにしてください
-- 具体例チャプターは実践的な例を含めてください
-- 演習チャプターは適切な難易度の問題を含めてください
-- まとめチャプターは重要ポイントを整理してください
-- 数式は以下の形式で記述してください：
-  - インライン数式: \\(数式\\)
-  - ディスプレイ数式: \\[数式\\]
 
 マークダウン形式で出力してください。`;
 
@@ -132,8 +114,13 @@ class EGuide {
             // 各チャプターの授業内容を生成
             const lessons = [];
             for (const chapter of chapterStructure.chapters) {
-                const lessonPrompt = `
-以下の条件に従って、${subject}の「${unit}」の「${chapter.title}」についての${chapter.lessons}回分の授業内容を生成してください：
+                // 各セクションを個別に生成
+                const sections = ['導入', '本題', '具体例', '演習', 'まとめ', '次回予告'];
+                const lessonContent = {};
+
+                for (const section of sections) {
+                    const sectionPrompt = `
+以下の条件に従って、${subject}の「${unit}」の「${chapter.title}」の「${section}」セクションの内容を生成してください：
 
 学習目標：
 ${chapter.objectives.map(obj => `- ${obj}`).join('\n')}
@@ -141,81 +128,42 @@ ${chapter.objectives.map(obj => `- ${obj}`).join('\n')}
 重要な学習項目：
 ${chapter.keyPoints.map(point => `- ${point}`).join('\n')}
 
-以下の形式で出力してください。各セクションには必ず具体的な内容を含めてください：
+セクションの種類：${section}
 
-# 授業内容
-## 授業1
-タイトル: グラフのジェットコースター！二次関数ってどんな形？
-
-導入:
-みなさん、ジェットコースターに乗ったことはありますか？
-（ジェットコースターの写真を表示）
-このジェットコースターの軌跡、どんな形をしていると思いますか？
-実は、この曲線は「放物線」と呼ばれる特別な形をしています。
-今日は、この放物線を数学的に理解していきましょう。
-
-本題:
-放物線は、自然界や人工物の中によく見られる形です。
-例えば：
-- 橋のアーチ
-- 噴水の水の軌跡
-- ボールを投げた時の軌道
-これらの共通点は何でしょうか？
-放物線の特徴を詳しく見ていきましょう。
-
-具体例:
-- 橋の写真を見て、放物線の形を確認する
-- ボールを投げる様子を動画で見る
-- 噴水の写真で放物線を観察する
-- 実際のジェットコースターの設計図を見る
-
-演習:
-- 身の回りにある放物線の形を探してみよう
-- 放物線の特徴を3つ挙げてみよう
-- ジェットコースターの設計図から放物線を見つけよう
-- 放物線の形を紙に描いてみよう
-
-まとめ:
-今日は、放物線が身の回りにたくさんあることを学びました。
-特に、ジェットコースターの軌跡が放物線になっていることを確認しました。
-次回は、この放物線を数学的に表現する方法を学びます。
-
-次回予告:
-次回は、放物線を数式で表す方法を学びます。
-実は、この美しい曲線は、とてもシンプルな数式で表すことができるんですよ！
-ジェットコースターの設計にも使われている、その数式の秘密に迫ります。
-
-チャプター: 1
-タイプ: 導入
-
-注意点：
-- 各セクションは実際の授業でそのまま使える具体的な文章を生成してください
-- 導入部分は生徒の興味を引くような具体的な例や問いかけを含めてください
-- 本題の説明は、具体例を交えながら分かりやすく説明してください
-- 演習問題は、その授業で学んだ内容を確認できる適切な難易度のものを含めてください
-- まとめは、その授業の重要なポイントを簡潔にまとめてください
-- 次回の予告は、生徒の興味を引くような形で次の授業の内容を紹介してください
+以下の点に注意して内容を生成してください：
+- 具体的で分かりやすい説明を心がけてください
+- 生徒の興味を引くような例や問いかけを含めてください
+- そのセクションの目的に合った内容を生成してください
 - 数式は以下の形式で記述してください：
   - インライン数式: \\(数式\\)
   - ディスプレイ数式: \\[数式\\]
-- 各セクションには必ず具体的な内容を含めてください
-- 空のセクションは避けてください
-- 生徒の興味を引くような具体的な例を多く含めてください
 
 マークダウン形式で出力してください。`;
 
-                try {
-                    const lessonResponse = await this.callGemini(lessonPrompt);
-                    const lessonContent = this.parseMarkdown(lessonResponse);
-                    if (!lessonContent.lessons || !Array.isArray(lessonContent.lessons)) {
-                        throw new Error(`「${chapter.title}」の授業内容の形式が不正です。lessons配列が見つかりません。`);
+                    try {
+                        const sectionResponse = await this.callGemini(sectionPrompt);
+                        const sectionContent = this.parseMarkdown(sectionResponse);
+                        
+                        if (section === '具体例' || section === '演習') {
+                            lessonContent[section] = sectionContent.lessons[0].content[section] || [];
+                        } else {
+                            lessonContent[section] = sectionContent.lessons[0].content[section] || '';
+                        }
+                    } catch (error) {
+                        console.error(`${section}セクションの生成エラー:`, error);
+                        throw new Error(`${section}セクションの生成中にエラーが発生しました: ${error.message}`);
                     }
-
-                    lessons.push(...lessonContent.lessons);
-                } catch (error) {
-                    console.error(`「${chapter.title}」の授業内容生成エラー:`, error);
-                    throw new Error(`「${chapter.title}」の授業内容生成中にエラーが発生しました: ${error.message}`);
                 }
+
+                // レッスンオブジェクトを作成
+                const lesson = {
+                    title: chapter.title,
+                    content: lessonContent,
+                    chapter: chapter.title,
+                    type: '導入'
+                };
+
+                lessons.push(lesson);
             }
 
             this.lessons = lessons;
@@ -256,30 +204,6 @@ ${chapter.keyPoints.map(point => `- ${point}`).join('\n')}
                         objectives: ["放物線の概念の理解", "身近な例の認識"],
                         lessons: 1,
                         keyPoints: ["放物線の定義", "身近な例"]
-                    },
-                    {
-                        title: "本題：二次関数の基本",
-                        objectives: ["二次関数の定義の理解", "基本的な形の把握"],
-                        lessons: 3,
-                        keyPoints: ["二次関数の定義", "基本的な形", "係数の意味"]
-                    },
-                    {
-                        title: "具体例：放物線の特徴",
-                        objectives: ["具体例を通じた理解", "特徴の把握"],
-                        lessons: 3,
-                        keyPoints: ["具体例", "特徴", "応用例"]
-                    },
-                    {
-                        title: "演習：実践的な問題",
-                        objectives: ["問題解決能力の向上", "理解度の確認"],
-                        lessons: 4,
-                        keyPoints: ["基礎問題", "応用問題", "実践問題"]
-                    },
-                    {
-                        title: "まとめ：知識の確認",
-                        objectives: ["重要項目の確認", "理解度の確認"],
-                        lessons: 2,
-                        keyPoints: ["重要ポイント", "理解度確認"]
                     }
                 ],
                 lessons: this.lessons 
