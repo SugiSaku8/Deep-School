@@ -308,7 +308,14 @@ ${chapter.keyPoints.map(point => `- ${point}`).join('\n')}
                 if (buffer.length > 0) {
                     if (currentLesson) {
                         if (currentSection) {
-                            currentLesson.content[currentSection] = buffer.join('\n');
+                            if (currentSection === '具体例' || currentSection === '演習') {
+                                if (!Array.isArray(currentLesson.content[currentSection])) {
+                                    currentLesson.content[currentSection] = [];
+                                }
+                                currentLesson.content[currentSection].push(buffer.join('\n'));
+                            } else {
+                                currentLesson.content[currentSection] = buffer.join('\n');
+                            }
                         }
                     } else if (currentChapter) {
                         if (currentSection) {
@@ -350,7 +357,14 @@ ${chapter.keyPoints.map(point => `- ${point}`).join('\n')}
                 if (buffer.length > 0) {
                     if (currentLesson) {
                         if (currentSection) {
-                            currentLesson.content[currentSection] = buffer.join('\n');
+                            if (currentSection === '具体例' || currentSection === '演習') {
+                                if (!Array.isArray(currentLesson.content[currentSection])) {
+                                    currentLesson.content[currentSection] = [];
+                                }
+                                currentLesson.content[currentSection].push(buffer.join('\n'));
+                            } else {
+                                currentLesson.content[currentSection] = buffer.join('\n');
+                            }
                         }
                     } else if (currentChapter) {
                         if (currentSection) {
@@ -371,7 +385,9 @@ ${chapter.keyPoints.map(point => `- ${point}`).join('\n')}
                     } else if (currentSection === 'タイプ') {
                         currentLesson.type = value;
                     } else if (currentSection === '具体例' || currentSection === '演習') {
-                        currentLesson.content[currentSection] = [];
+                        if (!Array.isArray(currentLesson.content[currentSection])) {
+                            currentLesson.content[currentSection] = [];
+                        }
                     }
                 } else if (currentChapter) {
                     if (currentSection === 'タイトル') {
@@ -385,6 +401,9 @@ ${chapter.keyPoints.map(point => `- ${point}`).join('\n')}
                 const item = line.substring(2);
                 if (currentLesson) {
                     if (currentSection === '具体例' || currentSection === '演習') {
+                        if (!Array.isArray(currentLesson.content[currentSection])) {
+                            currentLesson.content[currentSection] = [];
+                        }
                         currentLesson.content[currentSection].push(item);
                     }
                 } else if (currentChapter) {
@@ -404,7 +423,14 @@ ${chapter.keyPoints.map(point => `- ${point}`).join('\n')}
         if (buffer.length > 0) {
             if (currentLesson) {
                 if (currentSection) {
-                    currentLesson.content[currentSection] = buffer.join('\n');
+                    if (currentSection === '具体例' || currentSection === '演習') {
+                        if (!Array.isArray(currentLesson.content[currentSection])) {
+                            currentLesson.content[currentSection] = [];
+                        }
+                        currentLesson.content[currentSection].push(buffer.join('\n'));
+                    } else {
+                        currentLesson.content[currentSection] = buffer.join('\n');
+                    }
                 }
             } else if (currentChapter) {
                 if (currentSection) {
