@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eGuide - インタラクティブ学習システム</title>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="./re/eguide.style.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+</head>
+<body>
+    <div class="container">
+        <div id="setup-section" class="section">
+            <h1>eGuide</h1>
+            <div class="input-group">
+                <label for="subject">科目:</label>
+                <select id="subject">
+                    <option value="math">数学</option>
+                    <option value="japanese">国語</option>
+                    <option value="science">理科</option>
+                    <option value="social">社会</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="unit">単元名:</label>
+                <input type="text" id="unit" placeholder="例: 二次関数">
+            </div>
+            <button id="start-lesson">授業を開始</button>
+        </div>
+
+        <div id="lesson-section" class="section hidden">
+            <div class="lesson-header">
+                <h2 id="current-unit"></h2>
+                <div class="progress-bar">
+                    <div id="progress"></div>
+                </div>
+            </div>
+            
+            <div class="lesson-content">
+                <div id="message-display"></div>
+                <div id="question-input" class="hidden">
+                    <textarea id="question-text" placeholder="質問を入力してください..."></textarea>
+                    <button id="submit-question">質問を送信</button>
+                </div>
+            </div>
+
+            <div class="lesson-controls">
+                <button id="prev-btn" disabled>前へ</button>
+                <button id="next-btn">次へ</button>
+            </div>
+        </div>
+    </div>
+    <script src="./js/eauth/config.js"></script>
+    <script src="./js/eguide/eguide.js"></script>
+</body>
+</html> 
