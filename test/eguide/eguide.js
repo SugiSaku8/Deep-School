@@ -88,7 +88,13 @@ class EGuide {
 - 各チャプターのタイトルは具体的で魅力的なものにしてください
 - 必ず上記の形式で出力してください
 - 各セクションは必ず存在するようにしてください
-- 授業回数は必ず数値で指定してください`;
+- 授業回数は必ず数値で指定してください
+- 授業回数の配分例：
+  - 導入：2回
+  - 本題：4回
+  - 具体例：3回
+  - 演習：3回
+  - まとめ：1回`;
 
             // チャプター構造の生成
             const chapterResponse = await this.callGemini(chapterPrompt);
@@ -96,24 +102,23 @@ class EGuide {
                 throw new Error('チャプター構造の生成に失敗しました。');
             }
 
-            const chapters = this.parseChapters(chapterResponse);
+            let chapters = this.parseChapters(chapterResponse);
             if (!chapters || !Array.isArray(chapters) || chapters.length === 0) {
                 throw new Error('チャプター構造の解析に失敗しました。');
             }
 
-            // 各チャプターの必須フィールドを確認
-            for (const chapter of chapters) {
-                if (!chapter.title || !chapter.objectives || !Array.isArray(chapter.objectives) || 
-                    !chapter.lessons || typeof chapter.lessons !== 'number' || 
-                    !chapter.keyPoints || !Array.isArray(chapter.keyPoints)) {
-                    throw new Error('チャプター構造に必須フィールドが不足しています。');
-                }
-            }
-
-            // 授業回数の合計を確認
+            // 授業回数の合計を確認し、必要に応じて調整
             const totalLessons = chapters.reduce((sum, chapter) => sum + (chapter.lessons || 0), 0);
             if (totalLessons !== 13) {
-                throw new Error(`授業回数の合計（${totalLessons}回）が要件（13回）と一致しません。`);
+                // 授業回数を調整
+                chapters = this.adjustLessonCount(chapters, totalLessons);
+            }
+
+            // 各チャプターの必須フィールドを確認
+            for (const chapter of chapters) {
+                if (!this.isValidChapter(chapter)) {
+                    throw new Error('チャプター構造に必須フィールドが不足しています。');
+                }
             }
 
             // 各チャプターの授業内容を生成
@@ -552,6 +557,82 @@ ${question}
             console.error('回答生成エラー:', error);
             return '申し訳ありません。回答の生成に失敗しました。もう一度お試しください。';
         }
+    }
+
+    // 授業回数を調整する関数
+    adjustLessonCount(chapters, currentTotal) {
+        const targetTotal = 13;
+        const defaultDistribution = {
+            '導入': 2,
+            '本題': 4,
+            '具体例': 3,
+            '演習': 3,
+            'まとめ': 1
+        };
+
+        // 各チャプターのタイプを判定
+        const chapterTypes = chapters.map(chapter => {
+            const title = chapter.title.toLowerCase();
+            if (title.includes('導入')) return '導入';
+            if (title.includes('本題')) return '本題';
+            if (title.includes('具体例')) return '具体例';
+            if (title.includes('演習')) return '演習';
+            if (title.includes('まとめ')) return 'まとめ';
+            return null;
+        });
+
+        // タイプごとのチャプターをグループ化
+        const groupedChapters = {};
+        chapterTypes.forEach((type, index) => {
+            if (type) {
+                if (!groupedChapters[type]) {
+                    groupedChapters[type] = [];
+                }
+                groupedChapters[type].push(chapters[index]);
+            }
+        });
+
+        // 各タイプの授業回数を調整
+        const adjustedChapters = [];
+        Object.entries(defaultDistribution).forEach(([type, targetCount]) => {
+            const typeChapters = groupedChapters[type] || [];
+            if (typeChapters.length > 0) {
+                // 既存のチャプターの授業回数を調整
+                typeChapters.forEach(chapter => {
+                    chapter.lessons = Math.max(1, Math.floor(targetCount / typeChapters.length));
+                    adjustedChapters.push(chapter);
+                });
+            } else {
+                // 新しいチャプターを作成
+                adjustedChapters.push({
+                    title: `${type}：${unit}の理解を深める`,
+                    objectives: [`${type}の基本的な理解`, `${type}の応用`],
+                    lessons: targetCount,
+                    keyPoints: [`${type}の基本概念`, `${type}の重要ポイント`]
+                });
+            }
+        });
+
+        // 合計が13になるように微調整
+        const finalTotal = adjustedChapters.reduce((sum, chapter) => sum + chapter.lessons, 0);
+        if (finalTotal !== targetTotal) {
+            const diff = targetTotal - finalTotal;
+            if (diff > 0) {
+                // 本題の授業回数を増やす
+                const mainChapter = adjustedChapters.find(ch => ch.title.includes('本題'));
+                if (mainChapter) {
+                    mainChapter.lessons += diff;
+                }
+            } else if (diff < 0) {
+                // 本題の授業回数を減らす
+                const mainChapter = adjustedChapters.find(ch => ch.title.includes('本題'));
+                if (mainChapter) {
+                    mainChapter.lessons = Math.max(1, mainChapter.lessons + diff);
+                }
+            }
+        }
+
+        return adjustedChapters;
     }
 }
 
