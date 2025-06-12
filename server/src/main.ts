@@ -6,10 +6,11 @@ import { PostsService } from './posts/posts.service';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
-  // CORSを有効化
+  // Enable CORS
   app.enableCors({
-    origin: true,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    origin: ['http://localhost:8080', 'http://127.0.0.1:8080', 'http://localhost:5500', 'http://127.0.0.1:5500'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   });
 
