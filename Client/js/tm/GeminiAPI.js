@@ -12,28 +12,57 @@ class GeminiAPI {
 必要に応じて、ユーザーに役立つ最新の情報や効果的な学習アプローチを組み込んでください。
 あなたの役割は、ユーザーのポテンシャルを最大限に引き出し、自律的な学習を促す最高の学習パートナーであることです。`;
 
-      const contents = conversationHistory.map(msg => ({
-        role: msg.role === 'user' ? 'user' : 'model',
-        parts: [{ text: msg.content }]
-      }));
+      const contents = [
+        {
+          role: "user",
+          parts: [{ text: systemPrompt }]
+        }
+      ];
 
-      contents.push({ role: 'user', parts: [{ text: message }] });
+      // Add conversation history
+      conversationHistory.forEach(msg => {
+        contents.push({
+          role: msg.role === 'user' ? 'user' : 'model',
+          parts: [{ text: msg.content }]
+        });
+      });
+
+      // Add current message
+      contents.push({
+        role: 'user',
+        parts: [{ text: message }]
+      });
 
       const requestBody = {
-        contents: [
+        contents: contents,
+        generationConfig: {
+          temperature: 0.7,
+          topK: 40,
+          topP: 0.95,
+          maxOutputTokens: 1024,
+        },
+        safetySettings: [
           {
-            parts: [
-              {
-                text: systemPrompt
-              }
-            ]
+            category: "HARM_CATEGORY_HARASSMENT",
+            threshold: "BLOCK_MEDIUM_AND_ABOVE"
           },
-          ...contents
+          {
+            category: "HARM_CATEGORY_HATE_SPEECH",
+            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+          },
+          {
+            category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+          },
+          {
+            category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+            threshold: "BLOCK_MEDIUM_AND_ABOVE"
+          }
         ]
       };
 
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${CONFIG.API_KEY}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${CONFIG.API_KEY}`,
         {
           method: 'POST',
           headers: {
@@ -44,11 +73,13 @@ class GeminiAPI {
       );
 
       if (!response.ok) {
-        throw new Error('API request failed');
+        const errorData = await response.json();
+        throw new Error(`API request failed: ${errorData.error?.message || response.statusText}`);
       }
 
       const data = await response.json();
-      if (!data.candidates || !data.candidates[0] || !data.candidates[0].content || !data.candidates[0].content.parts || !data.candidates[0].content.parts[0]) {
+      
+      if (!data.candidates?.[0]?.content?.parts?.[0]?.text) {
         throw new Error('Invalid API response structure');
       }
 
