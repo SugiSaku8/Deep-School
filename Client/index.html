@@ -238,24 +238,6 @@
         <button onclick="closeModal()" class="modal-close-button">✖</button>
       </div>
     </div>
-    <div id="pickramu" style="display: none">
-      <iframe id="PickFrame" width="1200" height="600"></iframe>
-    </div>
-    <div id="setting" style="display: none">
-      <button class="go-back-button" onclick="backtomenu()">←</button>
-      <div class="page-container">
-        <h1 class="page-title">設定</h1>
-        <div class="setting-item">
-          <label for="username-setting">ユーザー名（Googleアカウント）</label>
-          <input type="text" id="username-setting" placeholder="Googleアカウント名" readonly style="max-width: 220px; min-width: 120px; width: 60%;" />
-        </div>
-        <div class="setting-item">
-          <label for="userid-setting">ユーザーID（Google ID）</label>
-          <input type="text" id="userid-setting" placeholder="Google個人ID" readonly style="max-width: 220px; min-width: 120px; width: 60%;" />
-        </div>
-        <button onclick="saveSettings()" class="auto-btn">保存</button>
-      </div>
-    </div>
     <div id="pickramu_app" style="display:none">
       <button class="go-back-button" onclick="backtomenu()">←</button>
       <div class="page-container">
@@ -282,7 +264,7 @@
         document.getElementById("scr_app").style.display = "none";
         document.getElementById("login").style.display = "none";
         document.getElementById("menu").style.display = "block";
-        document.getElementById("pickramu").style.display = "none";
+        document.getElementById("pickramu_app").style.display = "none";
         document.getElementById("estore").style.display = "none";
         document.getElementById("setting").style.display = "none";
       }

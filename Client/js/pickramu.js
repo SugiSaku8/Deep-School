@@ -811,7 +811,6 @@ font-family: "Noto Sans JP", sans-serif;
 window.openPickramuApp = function() {
   document.getElementById('pickramu_app').style.display = 'block';
   document.getElementById('menu').style.display = 'none';
-  document.getElementById('pickramu').style.display = 'none';
   document.getElementById('estore').style.display = 'none';
   document.getElementById('toaster_chat').style.display = 'none';
   document.getElementById('scr_app').style.display = 'none';
