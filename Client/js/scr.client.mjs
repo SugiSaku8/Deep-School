@@ -97,12 +97,12 @@ async function getPost(file) {
  */
 function addfeed(postValue) {
   let div = document.createElement("div");
-  div.className = "feed-item";
+  div.className = "feed-item chalk-text";
   div.innerHTML = `
-            <strong>${postValue.UserName.value} (${postValue.UserId.value})</strong>
-            <p>${postValue.PostName.value}</p>
-            <p>${postValue.PostData.value}</p>
-            <small>${postValue.PostTime.value}</small>
+            <strong class="chalk-text">${postValue.UserName.value} (${postValue.UserId.value})</strong>
+            <p class="chalk-text">${postValue.PostName.value}</p>
+            <p class="chalk-text">${postValue.PostData.value}</p>
+            <small class="chalk-text">${postValue.PostTime.value}</small>
         `;
   feedContent.appendChild(div);
 }
@@ -120,11 +120,11 @@ function createReplyHTML(postValue) {
 
   let html = '<div class="replies">';
   html += `
-    <div class="reply">
-      <strong>${postValue.UserName.value} (${postValue.UserId.value})</strong>
-      <p>${postValue.PostData.value}</p>
-      <small>${postValue.PostTime.value}</small>
-      <p>返信先: ${replyedPostId}</p>
+    <div class="reply chalk-text">
+      <strong class="chalk-text">${postValue.UserName.value} (${postValue.UserId.value})</strong>
+      <p class="chalk-text">${postValue.PostData.value}</p>
+      <small class="chalk-text">${postValue.PostTime.value}</small>
+      <p class="chalk-text">返信先: ${replyedPostId}</p>
     </div>
   `;
   html += "</div>";
@@ -185,7 +185,7 @@ export default async function loadFeed() {
       loadedPosts.push(postValue.PostId.value);
 
       let div = document.createElement("div");
-      div.className = "feed-item";
+      div.className = "feed-item chalk-text";
 
       // リプライの場合、親投稿を探してその下に表示
       if (
@@ -202,11 +202,11 @@ export default async function loadFeed() {
         if (parentPost) {
           // 親投稿が存在する場合、その下にリプライを表示
           div.innerHTML = `
-            <div class="reply">
-              <strong>${postValue.UserName.value} (${postValue.UserId.value})</strong>
-              <p>${postValue.PostData.value}</p>
-              <small>${postValue.PostTime.value}</small>
-              <p>返信先: ${replyedPostId}</p>
+            <div class="reply chalk-text">
+              <strong class="chalk-text">${postValue.UserName.value} (${postValue.UserId.value})</strong>
+              <p class="chalk-text">${postValue.PostData.value}</p>
+              <small class="chalk-text">${postValue.PostTime.value}</small>
+              <p class="chalk-text">返信先: ${replyedPostId}</p>
             </div>
           `;
           // 親投稿の要素を取得して、その下に追加
@@ -222,14 +222,14 @@ export default async function loadFeed() {
 
       // リプライでない場合は、通常のフィードに投稿を表示
       div.innerHTML = `
-        <strong>${postValue.UserName.value} (${postValue.UserId.value})</strong>
-        <p>${postValue.PostName.value}</p>
-        <p>${postValue.PostData.value}</p>
-        <small>${postValue.PostTime.value}</small>
-        <button class="reply-button auto-btn" data-post-id="${postValue.PostId.value}">Reply</button>
+        <strong class="chalk-text">${postValue.UserName.value} (${postValue.UserId.value})</strong>
+        <p class="chalk-text">${postValue.PostName.value}</p>
+        <p class="chalk-text">${postValue.PostData.value}</p>
+        <small class="chalk-text">${postValue.PostTime.value}</small>
+        <button class="reply-button auto-btn button-chalk" data-post-id="${postValue.PostId.value}">Reply</button>
         <div class="reply-form" style="display:none;">
-          <textarea class="reply-text"></textarea>
-          <button class="submit-reply auto-btn" data-post-id="${postValue.PostId.value}">Submit Reply</button>
+          <textarea class="reply-text chalk-text"></textarea>
+          <button class="submit-reply auto-btn button-chalk" data-post-id="${postValue.PostId.value}">Submit Reply</button>
         </div>
         <div class="replies"></div>
       `;
