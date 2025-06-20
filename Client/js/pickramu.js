@@ -1,4 +1,4 @@
-import { convertToHtml } from '../../Pickramu/API/compile.n.js';
+import { convertToHtml } from 'compile.n.js';
 
 window.openPickramuApp = function() {
   document.getElementById('pickramu_app').style.display = 'block';
