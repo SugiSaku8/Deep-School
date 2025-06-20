@@ -162,7 +162,9 @@ html, body {
   scroll-behavior: smooth;
 }
 .scr-icon, .setting-icon {
-  background: #fff !important;
+  background: rgba(255,255,255,0.85) !important;
   padding: 10px;
   border-radius: 16px;
+  box-shadow: 0 2px 8px #0002;
+  transition: background 0.2s;
 } 
