@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     static displayMessage(message, role) {
       const messageDiv = document.createElement("div");
-      messageDiv.className = `message ${role}`;
+      messageDiv.className = `message ${role} chalk-text`;
       messageDiv.textContent = message;
       this.elements.messagesContainer.appendChild(messageDiv);
       messageDiv.scrollIntoView({ behavior: "smooth" });

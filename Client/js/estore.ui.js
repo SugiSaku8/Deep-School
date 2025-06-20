@@ -7,27 +7,28 @@ function openModal(type) {
     switch (type) {
       case 'toaster':
         html = `
-          <h2>ToasterMachine Plus</h2>
-          <p>これはToasterMachine Plusの詳細情報です。</p>
+          <h2 class="chalk-text">ToasterMachine Plus</h2>
+          <p class="chalk-text">これはToasterMachine Plusの詳細情報です。</p>
           <img src="placeholder1.png" alt="Detail Image" style="width: 100%; border-radius: 12px;">
         `;
         break;
       case 'math':
         html = `
-          <h2>f(x) Math Kit</h2>
-          <p>これはMath Kitの詳細情報です。</p>
+          <h2 class="chalk-text">f(x) Math Kit</h2>
+          <p class="chalk-text">これはMath Kitの詳細情報です。</p>
         `;
         break;
       case 'room':
         html = `
-          <h2>Room</h2>
-          <p>これはRoomの詳細情報です。</p>
+          <h2 class="chalk-text">Room</h2>
+          <p class="chalk-text">これはRoomの詳細情報です。</p>
         `;
         break;
     }
   
     content.innerHTML = html;
     modal.classList.remove('hidden');
+    modal.classList.add('popup');
     setTimeout(() => modal.classList.add('show'), 10);
   }
   
