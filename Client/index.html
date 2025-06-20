@@ -175,6 +175,16 @@
       >
         New
       </button>
+      <button class="auto-btn" onclick="document.getElementById('scr-search-window').style.display = 'block';">Search</button>
+      <div id="scr-search-window" style="display:none; max-width: 500px; margin: 30px auto 0 auto; background: #173c2b; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); padding: 24px 20px 16px 20px;">
+        <span class="batsu" onclick="document.getElementById('scr-search-window').style.display = 'none';"></span>
+        <div class="scr-form-group">
+          <label for="scr-search-input">キーワード検索</label>
+          <input type="text" id="scr-search-input" placeholder="キーワードを入力" style="width: 80%; max-width: 300px;" />
+        </div>
+        <button class="auto-btn" id="scr-search-btn">検索</button>
+        <div id="scr-search-result" style="margin-top: 18px;"></div>
+      </div>
       <div id="post-form" style="display: none; max-width: 400px; margin: 0 auto;">
         <span
           class="batsu"
