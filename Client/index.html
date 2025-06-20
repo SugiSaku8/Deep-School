@@ -242,14 +242,23 @@
       <button class="go-back-button" onclick="backtomenu()">←</button>
       <div class="page-container">
         <h1 class="page-title">Pickramu ワーク</h1>
-        <div class="pickramu-select" style="margin-bottom: 20px;">
-          <label for="pickramu-unit-select">教材選択：</label>
-          <select id="pickramu-unit-select">
-            <option value="jla/math/式の計算/1節/1.用語/1.md">数学: 式の計算・用語</option>
-          </select>
-          <button class="auto-btn" id="pickramu-load-btn">読み込み</button>
+        <div class="pickramu-tabs" style="margin-bottom: 20px; display: flex; gap: 12px;">
+          <button class="auto-btn" id="tab-pickramu" onclick="showPickramuTab()">教材ワーク</button>
+          <button class="auto-btn" id="tab-eguide" onclick="showEguideTab()">eGuide</button>
         </div>
-        <div id="pickramu-content" class="pickramu-content" style="background:#173c2b; border-radius:12px; min-height:300px; padding:24px; color:#fff;"></div>
+        <div id="pickramu-work-area">
+          <div class="pickramu-select" style="margin-bottom: 20px;">
+            <label for="pickramu-unit-select">教材選択：</label>
+            <select id="pickramu-unit-select">
+              <option value="jla/math/式の計算/1節/1.用語/1.md">数学: 式の計算・用語</option>
+            </select>
+            <button class="auto-btn" id="pickramu-load-btn">読み込み</button>
+          </div>
+          <div id="pickramu-content" class="pickramu-content" style="background:#173c2b; border-radius:12px; min-height:300px; padding:24px; color:#fff;"></div>
+        </div>
+        <div id="pickramu-eguide-area" style="display:none;">
+          <iframe src="eguide.html" style="width:100%; min-height:600px; border:none; border-radius:12px; background:#173c2b;"></iframe>
+        </div>
       </div>
     </div>
     <script>
@@ -283,6 +292,18 @@
           });
       }
       IninterDom();
+      function showPickramuTab() {
+        document.getElementById('pickramu-work-area').style.display = 'block';
+        document.getElementById('pickramu-eguide-area').style.display = 'none';
+        document.getElementById('tab-pickramu').classList.add('active');
+        document.getElementById('tab-eguide').classList.remove('active');
+      }
+      function showEguideTab() {
+        document.getElementById('pickramu-work-area').style.display = 'none';
+        document.getElementById('pickramu-eguide-area').style.display = 'block';
+        document.getElementById('tab-pickramu').classList.remove('active');
+        document.getElementById('tab-eguide').classList.add('active');
+      }
     </script>
     <div style="display:none" id="persistent-popout"></div>
   </body>
