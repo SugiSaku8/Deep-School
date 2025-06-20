@@ -79,9 +79,9 @@ body, html {
   align-items: center;
   gap: 15px;
 }
-.menu-icon {
-  width: 100px;
-  height: 100px;
+.menu-icon, .scr-icon, .setting-icon {
+  width: 100px !important;
+  height: 100px !important;
   object-fit: contain;
   background: rgba(255,255,255,0.08);
   border-radius: 18px;
