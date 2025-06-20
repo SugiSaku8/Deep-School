@@ -50,31 +50,31 @@
       <p>3日</p>
     </div>
     <div class="container_top" id="login">
-      <h1 class="title" id="itisttitle">Deep-School</h1>
+      <h1 class="title chalk-text" id="itisttitle">Deep-School</h1>
       <p>&nbsp;</p>
       <br />
-      <div class="login-form" id="loginForm">
+      <div class="login-form popup" id="loginForm">
         <form>
-          <label for="schoolId">学校ID</label>
+          <label for="schoolId" class="chalk-text">学校ID</label>
           <p>&nbsp;</p>
           <input type="text" id="schoolId" placeholder="学校ID" />
           <p>&nbsp;</p>
-          <button type="button" class="submit-button" id="school_login_btn">
+          <button type="button" class="submit-button button-chalk" id="school_login_btn">
             ログイン
           </button>
           <p>&nbsp;</p>
           <p>学校IDは、pL:2^4,5,101 のような形式の文字列です。</p>
         </form>
       </div>
-      <div id="openLoginButton" class="login-button"></div>
-      <p class="copyright">(c) 2022-2025 Carnation Studio v0.0.2</p>
+      <div id="openLoginButton" class="login-button button-chalk"></div>
+      <p class="copyright chalk-text">(c) 2022-2025 Carnation Studio v0.0.2</p>
     </div>
-    <div id="menu">
+    <div id="menu" class="popup">
       <div class="menu-content">
         <div class="menu-item">
           <img src="re/ico/tm.png" alt="ToasterMachineアイコン" class="menu-icon" />
           <div
-            class="menu-label"
+            class="menu-label chalk-text"
             style="cursor: pointer"
             onclick="InitToasterChat();"
           >
@@ -84,30 +84,30 @@
         <div class="menu-item" id="scr_menu_icon">
           <img src="re/ico/SCR.png" alt="SCRアイコン" class="menu-icon scr-icon" />
           <span class="notification-badge">25</span>
-          <div class="menu-label" style="cursor: pointer" onclick="InitSCRwindow()">
+          <div class="menu-label chalk-text" style="cursor: pointer" onclick="InitSCRwindow()">
             SCR
           </div>
         </div>
         <div class="menu-item">
           <img src="re/ico/Setting.png" alt="設定アイコン" class="menu-icon" />
-          <div class="menu-label" style="cursor: pointer" onclick="openSetting()">設定</div>
+          <div class="menu-label chalk-text" style="cursor: pointer" onclick="openSetting()">設定</div>
         </div>
         <div class="menu-item">
           <img src="re/ico/note.svg" alt="Pickramuアイコン" class="menu-icon" />
-          <div class="menu-label" style="cursor: pointer" onclick="openPickramuApp()">Pickramu</div>
+          <div class="menu-label chalk-text" style="cursor: pointer" onclick="openPickramuApp()">Pickramu</div>
         </div>
       </div>
     </div>
-    <div id="toaster_chat" id="toaster_chat" style="display: none">
-      <button class="go-back-button" onclick="backtomenu()">←</button>
+    <div id="toaster_chat" class="popup" style="display: none">
+      <button class="go-back-button button-chalk" onclick="backtomenu()">←</button>
       <div class="splash-container" id="splash">
         <div class="card">
-          <div class="title_t">ToasterMachine</div>
+          <div class="title_t chalk-text">ToasterMachine</div>
           <img src="re/ico/tm.cb.png" alt="ロゴ" class="logo-img" />
           <div class="version">v0.0.1-Demo</div>
           <div class="input-group">
             <input id="user-input" type="text" placeholder="ここに質問を入力" />
-            <button id="submit-btn">
+            <button id="submit-btn" class="button-chalk">
               <svg
                 width="24"
                 height="24"
@@ -134,12 +134,12 @@
         </div>
       </div>
       <div id="chat-container" class="chat-container">
-        <button id="new-chat-btn" class="new-chat-btn">新規チャット</button>
+        <button id="new-chat-btn" class="new-chat-btn button-chalk">新規チャット</button>
         <div id="messages-container" class="messages-container"></div>
         <div class="chat-input-container">
           <div class="input-group">
             <input id="chat-input" type="text" placeholder="メッセージを入力" />
-            <button id="chat-submit-btn">
+            <button id="chat-submit-btn" class="button-chalk">
               <svg
                 width="24"
                 height="24"
@@ -166,36 +166,36 @@
         </div>
       </div>
     </div>
-    <div id="scr_app" style="display: none">
-      <button class="go-back-button" onclick="backtomenu()">←</button>
+    <div id="scr_app" class="popup" style="display: none">
+      <button class="go-back-button button-chalk" onclick="backtomenu()">←</button>
       <button
-        class="auto-btn"
+        class="auto-btn button-chalk"
         onclick="document.getElementById('post-form').style.display = 'block';"
       >
         New
       </button>
-      <button class="auto-btn" onclick="document.getElementById('scr-search-window').style.display = 'block';">Search</button>
-      <div id="scr-search-window" style="display:none; max-width: 500px; margin: 30px auto 0 auto; background: #173c2b; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); padding: 24px 20px 16px 20px;">
+      <button class="auto-btn button-chalk" onclick="document.getElementById('scr-search-window').style.display = 'block';">Search</button>
+      <div id="scr-search-window" class="popup" style="display:none; max-width: 500px; margin: 30px auto 0 auto; background: #173c2b; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); padding: 24px 20px 16px 20px;">
         <span class="batsu" onclick="document.getElementById('scr-search-window').style.display = 'none';"></span>
         <div class="scr-form-group">
-          <label for="scr-search-input">キーワード検索</label>
+          <label for="scr-search-input" class="chalk-text">キーワード検索</label>
           <input type="text" id="scr-search-input" placeholder="キーワードを入力" style="width: 80%; max-width: 300px;" />
         </div>
-        <button class="auto-btn" id="scr-search-btn">検索</button>
+        <button class="auto-btn button-chalk" id="scr-search-btn">検索</button>
         <div id="scr-search-result" style="margin-top: 18px;"></div>
       </div>
-      <div id="post-form" style="display: none; max-width: 400px; margin: 0 auto;">
+      <div id="post-form" class="popup" style="display: none; max-width: 400px; margin: 0 auto;">
         <span
           class="batsu"
           onclick="document.getElementById('post-form').style.display = 'none';"
         ></span>
         <div class="scr-form-card">
           <div class="scr-form-group">
-            <label for="postname">タイトル</label>
+            <label for="postname" class="chalk-text">タイトル</label>
             <input type="text" id="postname" placeholder="タイトル" required />
           </div>
           <div class="scr-form-group">
-            <label for="postdata">内容</label>
+            <label for="postdata" class="chalk-text">内容</label>
             <textarea id="postdata" placeholder="内容を入力" required></textarea>
           </div>
           <button id="post-button" class="auto-btn">ポストする</button>
