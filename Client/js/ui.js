@@ -69,4 +69,44 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
   });
+
+  // メニュー表示時のアイコンアニメーション
+  function animateMenuIconsIn() {
+    const icons = document.querySelectorAll('.menu-icon');
+    icons.forEach((icon, i) => {
+      icon.animate([
+        { opacity: 0, transform: 'scale(0.7)' },
+        { opacity: 1, transform: 'scale(1.08)' },
+        { opacity: 1, transform: 'scale(1)' }
+      ], {
+        duration: 520,
+        delay: i * 80,
+        easing: 'cubic-bezier(.23,1.01,.32,1)',
+        fill: 'forwards'
+      });
+    });
+  }
+  // メニューが表示されるたびにアニメーション
+  const menu = document.getElementById('menu');
+  if (menu) {
+    const observer = new MutationObserver(() => {
+      if (menu.style.display === 'block' || menu.style.display === 'flex') {
+        animateMenuIconsIn();
+      }
+    });
+    observer.observe(menu, { attributes: true, attributeFilter: ['style'] });
+  }
+
+  document.querySelectorAll('.menu-label.icon-anim').forEach(label => {
+    label.addEventListener('click', () => {
+      label.animate([
+        { transform: 'scale(1)', boxShadow: '0 2px 8px #0004' },
+        { transform: 'scale(1.12)', boxShadow: '0 4px 16px #00b89488' },
+        { transform: 'scale(1)', boxShadow: '0 2px 8px #0004' }
+      ], {
+        duration: 320,
+        easing: 'cubic-bezier(.23,1.01,.32,1)'
+      });
+    });
+  });
 });
