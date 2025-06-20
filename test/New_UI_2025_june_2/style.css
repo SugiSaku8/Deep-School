@@ -79,7 +79,7 @@ body, html {
   align-items: center;
   gap: 15px;
 }
-.menu-icon, .scr-icon, .setting-icon {
+.menu-icon, .scr-icon, .setting-icon, .toaster-icon, .pickramu-icon {
   width: 100px !important;
   height: 100px !important;
   object-fit: contain;
