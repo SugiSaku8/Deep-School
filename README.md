@@ -84,3 +84,4 @@ Please do not do anything yet, as we will release it soon (fork, use of code, ci
 
 ___________________________________
 
+(C) 2022-2025 Carnation Studio All Rights Reserved.
