@@ -233,17 +233,13 @@
         <h1 class="page-title">設定</h1>
         <div class="setting-item">
           <label for="username-setting">ユーザー名（Googleアカウント）</label>
-          <input type="text" id="username-setting" placeholder="Googleアカウント名" readonly />
+          <input type="text" id="username-setting" placeholder="Googleアカウント名" readonly style="max-width: 220px; min-width: 120px; width: 60%;" />
         </div>
         <div class="setting-item">
           <label for="userid-setting">ユーザーID（Google ID）</label>
-          <input type="text" id="userid-setting" placeholder="Google個人ID" readonly />
+          <input type="text" id="userid-setting" placeholder="Google個人ID" readonly style="max-width: 220px; min-width: 120px; width: 60%;" />
         </div>
-        <div class="setting-item">
-          <label for="darkmode-toggle">ダークモード</label>
-          <input type="checkbox" id="darkmode-toggle" class="styled-checkbox" />
-        </div>
-        <button onclick="saveSettings()">保存</button>
+        <button onclick="saveSettings()" class="auto-btn">保存</button>
       </div>
     </div>
     <script>
