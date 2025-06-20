@@ -29,10 +29,16 @@
     <script src="js/tm/GeminiAPI.js"></script>
     <script src="js/tm/chat.js"></script>
     <script src="js/tm/main.js"></script>
+    <script type="module" src="js/setting.js"></script>
     <script type="module">
       import { updatePopout } from './js/utils.mjs';
       import { initializeApp } from './js/auth.mjs';
+      import { openSetting, saveSettings, backtomenu, initSettingDarkmode } from './js/setting.js';
       window.addEventListener('load', initializeApp);
+      window.openSetting = openSetting;
+      window.saveSettings = saveSettings;
+      window.backtomenu = backtomenu;
+      window.addEventListener('DOMContentLoaded', initSettingDarkmode);
       // Example usage:
       // updatePopout('これはポップアウトのテストメッセージです。');
     </script>
@@ -261,38 +267,6 @@
           });
       }
       IninterDom();
-      function openSetting() {
-        document.getElementById('setting').style.display = 'block';
-        document.getElementById('menu').style.display = 'none';
-        document.getElementById('pickramu').style.display = 'none';
-        document.getElementById('estore').style.display = 'none';
-        document.getElementById('toaster_chat').style.display = 'none';
-        document.getElementById('scr_app').style.display = 'none';
-        // 設定値を反映
-        const username = localStorage.getItem('username') || '';
-        const darkmode = localStorage.getItem('darkmode') === 'true';
-        document.getElementById('username-setting').value = username;
-        document.getElementById('darkmode-toggle').checked = darkmode;
-      }
-      function saveSettings() {
-        const username = document.getElementById('username-setting').value;
-        const darkmode = document.getElementById('darkmode-toggle').checked;
-        localStorage.setItem('username', username);
-        localStorage.setItem('darkmode', darkmode);
-        if (darkmode) {
-          document.body.classList.add('darkmode');
-        } else {
-          document.body.classList.remove('darkmode');
-        }
-        backtomenu();
-      }
-      // ページ初期化時にダークモード反映
-      window.addEventListener('DOMContentLoaded', () => {
-        const darkmode = localStorage.getItem('darkmode') === 'true';
-        if (darkmode) {
-          document.body.classList.add('darkmode');
-        }
-      });
     </script>
     <div style="display:none" id="persistent-popout"></div>
   </body>
