@@ -87,6 +87,10 @@
             SCR
           </div>
         </div>
+        <div class="menu-item">
+          <img src="re/ico/Setting.png" alt="設定アイコン" class="menu-icon" />
+          <div class="menu-label" style="cursor: pointer" onclick="openSettingModal()">設定</div>
+        </div>
       </div>
     </div>
     <div id="toaster_chat" id="toaster_chat" style="display: none">
@@ -211,6 +215,21 @@
     <div id="pickramu" style="display: none">
       <iframe id="PickFrame" width="1200" height="600"></iframe>
     </div>
+    <div id="settingModal" class="product-modal hidden">
+      <div class="modal-content" id="settingModalContent">
+        <h2>設定</h2>
+        <div class="setting-item">
+          <label for="username-setting">ユーザー名</label>
+          <input type="text" id="username-setting" placeholder="ユーザー名" />
+        </div>
+        <div class="setting-item">
+          <label for="darkmode-toggle">ダークモード</label>
+          <input type="checkbox" id="darkmode-toggle" />
+        </div>
+        <button onclick="saveSettings()">保存</button>
+        <button onclick="closeSettingModal()" class="modal-close-button">✖</button>
+      </div>
+    </div>
     <script>
       function InitToasterChat() {
         document.getElementById("toaster_chat").style.display = "block";
@@ -239,6 +258,34 @@
           });
       }
       IninterDom();
+      function openSettingModal() {
+        document.getElementById('settingModal').classList.remove('hidden');
+      }
+      function closeSettingModal() {
+        document.getElementById('settingModal').classList.add('hidden');
+      }
+      function saveSettings() {
+        const username = document.getElementById('username-setting').value;
+        const darkmode = document.getElementById('darkmode-toggle').checked;
+        localStorage.setItem('username', username);
+        localStorage.setItem('darkmode', darkmode);
+        if (darkmode) {
+          document.body.classList.add('darkmode');
+        } else {
+          document.body.classList.remove('darkmode');
+        }
+        closeSettingModal();
+      }
+      // 初期化: 設定値を反映
+      window.addEventListener('DOMContentLoaded', () => {
+        const username = localStorage.getItem('username') || '';
+        const darkmode = localStorage.getItem('darkmode') === 'true';
+        document.getElementById('username-setting').value = username;
+        document.getElementById('darkmode-toggle').checked = darkmode;
+        if (darkmode) {
+          document.body.classList.add('darkmode');
+        }
+      });
     </script>
     <div style="display:none" id="persistent-popout"></div>
   </body>
