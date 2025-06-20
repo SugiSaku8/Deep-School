@@ -1,68 +1,111 @@
+@font-face {
+  font-family: "tanuki";
+  src: url("../../Client/re/font/TanukiMagic.ttf") format("truetype");
+  font-display: swap;
+}
+@font-face {
+  font-family: "anka";
+  src: url("../../Client/re/font/AnkaCoder-r.ttf") format("truetype");
+  font-display: swap;
+}
 body, html {
   height: 100%;
   margin: 0;
-  font-family: 'Helvetica Neue', Arial, 'Hiragino Sans', 'Meiryo', sans-serif;
-  background: #222;
+  font-family: 'anka', 'Helvetica Neue', Arial, 'Hiragino Sans', 'Meiryo', sans-serif;
+  background: linear-gradient(135deg, #1a3a1a 0%, #005f30 60%, #2d3436 100%);
+  color: #fff;
   overflow-x: hidden;
 }
-.chalkboard-bg {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 0;
-}
-header {
-  width: 100%;
-  padding: 2rem 0 1rem 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: rgba(30, 30, 30, 0.7);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-header h1 {
-  color: #fff;
-  font-size: 2.2rem;
-  letter-spacing: 0.1em;
-  margin: 0 0 0.5rem 0;
+.date {
+  position: absolute;
+  right: 32px;
+  top: 24px;
+  text-align: right;
+  font-size: 1.5rem;
+  line-height: 1.6;
+  color: #ffd700;
   text-shadow: 0 2px 8px #0008;
 }
-nav {
+.container_top {
   display: flex;
-  gap: 1.5rem;
-}
-.icon-btn {
-  background: rgba(255,255,255,0.15);
-  border: none;
-  border-radius: 50%;
-  width: 48px;
-  height: 48px;
-  font-size: 1.5rem;
-  color: #fff;
-  box-shadow: 0 2px 8px #0004;
-  transition: background 0.2s, transform 0.2s;
-  cursor: pointer;
-  outline: none;
-}
-.icon-btn:active {
-  background: rgba(255,255,255,0.3);
-  transform: scale(0.95);
-}
-main {
-  width: 100%;
-  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  align-items: flex-start;
-  margin-top: 3rem;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+.title {
+  font-size: 3.2rem;
+  font-weight: bold;
+  margin-top: 40px;
+  font-family: "anka";
+  color: #fff;
+  text-shadow: 0 2px 8px #000a, 0 0 2px #ffd700;
+  letter-spacing: 0.08em;
+  margin-bottom: 1.2rem;
+}
+.chalk-text {
+  font-family: "tanuki", "anka", sans-serif;
+  text-shadow: 0 1px 2px #0008, 0 0 2px #fff8;
+}
+.ui-concept {
+  font-size: 1.1rem;
+  color: #ffd700;
+  margin: 0.2em 0;
+  text-shadow: 0 1px 2px #0008;
+}
+.menu-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  width: 100%;
+  margin: 2.5rem 0 2.5rem 0;
+}
+.menu-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+.menu-icon {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  background: rgba(255,255,255,0.08);
+  border-radius: 18px;
+  box-shadow: 0 2px 12px #0004;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.menu-label {
+  background-color: #007bff;
+  color: white;
+  font-family: "anka";
+  font-size: 1.3rem;
+  padding: 8px 20px;
+  border-radius: 12px;
+  text-align: center;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px #0002;
+  margin-top: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.menu-label.icon-anim:active {
+  background: #00b894;
+  transform: scale(0.97);
+}
+.menu-icon:active {
+  box-shadow: 0 4px 24px #00b89488;
+  transform: scale(1.08);
 }
 .glass-card {
-  background: rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.13);
   border-radius: 24px;
-  box-shadow: 0 8px 32px 0 rgba(31,38,135,0.37);
+  box-shadow: 0 8px 32px 0 rgba(31,38,135,0.27);
   backdrop-filter: blur(12px) saturate(180%);
   -webkit-backdrop-filter: blur(12px) saturate(180%);
   border: 1px solid rgba(255,255,255,0.18);
@@ -71,6 +114,7 @@ main {
   color: #fff;
   text-align: center;
   animation: fadeInUp 1.2s cubic-bezier(.23,1.01,.32,1) both;
+  margin-bottom: 2.5rem;
 }
 .action-btn {
   margin-top: 2rem;
@@ -87,6 +131,12 @@ main {
 .action-btn:active {
   background: linear-gradient(90deg, #00cec9 0%, #00b894 100%);
   transform: scale(0.97);
+}
+.copyright {
+  margin-top: 2rem;
+  color: #fff;
+  font-size: 1.1rem;
+  text-shadow: 0 1px 2px #0008;
 }
 @keyframes fadeInUp {
   0% {
