@@ -494,35 +494,31 @@ ${section === '具体例' || section === '演習' ? '- 項目1<br>- 項目2' : '
         };
 
         this.messageDisplay.innerHTML = `
-            <h3 class="chalk-text">${lesson.title || ''}</h3>
+            <h3>${lesson.title || ''}</h3>
             <div class="lesson-content">
                 <div class="introduction">
-                    <h4 class="chalk-text">導入</h4>
-                    <p class="chalk-text">${getContent('導入')}</p>
+                    <h4>導入</h4>
+                    <p>${getContent('導入')}</p>
                 </div>
                 <div class="main-content">
-                    <h4 class="chalk-text">本題</h4>
-                    <p class="chalk-text">${getContent('本題')}</p>
+                    <h4>本題</h4>
+                    <p>${getContent('本題')}</p>
                 </div>
                 <div class="examples">
-                    <h4 class="chalk-text">具体例</h4>
-                    <ul class="chalk-text">
-                        ${getListItems('具体例')}
-                    </ul>
+                    <h4>具体例</h4>
+                    <ul>${getListItems('具体例')}</ul>
                 </div>
                 <div class="exercises">
-                    <h4 class="chalk-text">演習</h4>
-                    <ul class="chalk-text">
-                        ${getListItems('演習')}
-                    </ul>
+                    <h4>演習</h4>
+                    <ul>${getListItems('演習')}</ul>
                 </div>
                 <div class="summary">
-                    <h4 class="chalk-text">まとめ</h4>
-                    <p class="chalk-text">${getContent('まとめ')}</p>
+                    <h4>まとめ</h4>
+                    <p>${getContent('まとめ')}</p>
                 </div>
                 <div class="next-preview">
-                    <h4 class="chalk-text">次回予告</h4>
-                    <p class="chalk-text">${getContent('次回予告')}</p>
+                    <h4>次回予告</h4>
+                    <p>${getContent('次回予告')}</p>
                 </div>
             </div>
         `;
@@ -641,8 +637,8 @@ ${section === '具体例' || section === '演習' ? '- 項目1<br>- 項目2' : '
         // 回答を表示
         this.messageDisplay.innerHTML += `
             <div class="question-answer">
-                <p class="chalk-text"><strong>質問:</strong> ${question}</p>
-                <p class="chalk-text"><strong>回答:</strong> ${answer}</p>
+                <p><strong>質問:</strong> ${question}</p>
+                <p><strong>回答:</strong> ${answer}</p>
             </div>
         `;
     }
