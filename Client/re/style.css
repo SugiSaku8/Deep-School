@@ -1326,3 +1326,57 @@ body::-webkit-scrollbar {
     padding: 12px 4vw 10px 4vw;
   }
 }
+
+#pickramu_app {
+  display: block;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  background: none;
+  border-radius: 24px;
+  box-shadow: none;
+}
+.page-container {
+  padding: 32px 16px 32px 16px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.pickramu-tabs {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.pickramu-select {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+#pickramu-content {
+  background: #173c2b;
+  border-radius: 12px;
+  min-height: 300px;
+  padding: 24px;
+  color: #fff;
+  width: 100%;
+  box-sizing: border-box;
+  word-break: break-word;
+}
+#pickramu-eguide-area {
+  width: 100%;
+  min-height: 600px;
+  border-radius: 12px;
+  background: #173c2b;
+  overflow: hidden;
+}
+@media (max-width: 700px) {
+  #pickramu_app, .page-container {
+    max-width: 98vw;
+    padding: 8px 2vw;
+  }
+  #pickramu-content, #pickramu-eguide-area {
+    min-width: 0;
+    padding: 12px 4vw;
+  }
+}
