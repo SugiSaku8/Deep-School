@@ -8,33 +8,14 @@
   src: url("font/AnkaCoder-r.ttf") format("truetype");
   font-display: swap;
 }
-@font-face {
-  font-family: "Schoolbell";
-  src: url("https://fonts.googleapis.com/css2?family=Schoolbell&display=swap");
-  font-display: swap;
-}
-
-:root {
-  --chalkboard-green: #2d3a2e;
-  --chalk-white: #f8f8f2;
-  --chalk-yellow: #ffe066;
-  --chalk-pink: #ffb3c6;
-  --chalk-blue: #aee9f5;
-  --chalkboard-dark: #1a221b;
-  --focus-ring: #ffe066;
-}
 
 /* General Styling */
 body {
   margin: 0;
   padding: 0;
-  font-family: "anka", "Schoolbell", cursive, sans-serif;
-  background: var(--chalkboard-green);
-  color: var(--chalk-white);
-  min-height: 100vh;
-  /* SVGノイズ背景 */
-  background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4"/></filter><rect width="100" height="100" filter="url(%23noise)"/></svg>');
-  background-size: 300px 300px;
+  font-family: "anka";
+  background-color: #005f30;
+  color: #ffffff;
 }
 
 /* Container */
@@ -45,10 +26,6 @@ body {
   justify-content: center;
   height: 100vh;
   position: relative;
-  background: var(--chalkboard-dark);
-  color: var(--chalk-white);
-  border-radius: 18px;
-  box-shadow: 0 2px 12px #0006;
 }
 .container {
   width: 100px;
@@ -66,10 +43,8 @@ body {
   font-size: 3rem;
   font-weight: bold;
   margin-top: -100px;
-  font-family: "anka", "Schoolbell", cursive;
+  font-family: "anka";
   cursor: pointer;
-  color: var(--chalk-yellow);
-  text-shadow: 0 2px 8px #fff8;
 }
 
 /* Login Form */
@@ -100,10 +75,6 @@ body {
   border-radius: 6px;
   outline: none;
   margin: auto;
-  background: var(--chalkboard-dark);
-  color: var(--chalk-white);
-  border: 1.5px solid var(--chalk-white);
-  font-family: 'anka', 'Schoolbell', cursive;
 }
 
 .submit-button {
@@ -115,16 +86,10 @@ body {
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  background: var(--chalkboard-green);
-  color: var(--chalk-white);
-  border: 2px solid var(--chalk-white);
-  font-family: 'anka', 'Schoolbell', cursive;
 }
 
 .submit-button:hover {
   background-color: #0e2640;
-  background: var(--chalkboard-dark);
-  color: var(--chalk-yellow);
 }
 
 /* Initial Login Button */
@@ -138,16 +103,10 @@ body {
   cursor: pointer;
   margin-bottom: 20px;
   transition: background-color 0.3s ease;
-  background: var(--chalkboard-green);
-  color: var(--chalk-white);
-  border: 2px solid var(--chalk-white);
-  font-family: 'anka', 'Schoolbell', cursive;
 }
 
 .login-button:hover {
   background-color: #0056b3;
-  background: var(--chalkboard-dark);
-  color: var(--chalk-yellow);
 }
 .contalex {
   display: flex;
@@ -407,10 +366,6 @@ body {
   background-color: white;
   transition: all 0.3s ease;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  background: var(--chalkboard-dark);
-  color: var(--chalk-white);
-  border: 1.5px solid var(--chalk-white);
-  font-family: 'anka', 'Schoolbell', cursive;
 }
 
 .input-group input:focus {
@@ -1298,100 +1253,4 @@ body::-webkit-scrollbar {
   .scr-form-card {
     padding: 12px 4vw 10px 4vw;
   }
-}
-
-/* チョーク風ボタン */
-.button-chalk {
-  background: var(--chalkboard-green);
-  color: var(--chalk-white);
-  border: 2px dashed var(--chalk-white);
-  border-radius: 16px;
-  font-family: 'anka', 'Schoolbell', cursive;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  transition: box-shadow 0.2s, filter 0.2s;
-  padding: 0.75em 2em;
-  font-size: 1.2rem;
-  outline: none;
-}
-.button-chalk:hover, .button-chalk:focus {
-  box-shadow: 0 4px 16px var(--chalk-yellow);
-  filter: brightness(1.1) blur(0.5px);
-}
-.button-chalk:focus {
-  outline: 3px solid var(--focus-ring);
-  outline-offset: 2px;
-}
-
-/* プロジェクター風ポップアップ */
-.popup {
-  background: rgba(248,248,242,0.92);
-  border-radius: 24px;
-  box-shadow: 0 0 32px 8px #fff8, 0 0 0 4px var(--chalk-yellow);
-  backdrop-filter: blur(4px);
-  padding: 2em;
-  color: var(--chalkboard-green);
-  font-family: 'anka', 'Schoolbell', cursive;
-}
-
-/* フォーカスリング強化 */
-:focus-visible {
-  outline: 3px solid var(--focus-ring);
-  outline-offset: 2px;
-}
-
-/* チョークテキスト */
-.chalk-text {
-  font-family: 'anka', 'Schoolbell', cursive;
-  text-shadow: 0 1px 0 #fff8, 0 2px 2px #0004;
-}
-
-/* 既存のボタンやフォームにも新色を適用（例） */
-button, .submit-button, .login-button {
-  background: var(--chalkboard-green);
-  color: var(--chalk-white);
-  border: 2px solid var(--chalk-white);
-  border-radius: 12px;
-  font-family: 'anka', 'Schoolbell', cursive;
-  transition: box-shadow 0.2s, filter 0.2s;
-}
-button:hover, .submit-button:hover, .login-button:hover {
-  background: var(--chalkboard-dark);
-  color: var(--chalk-yellow);
-  box-shadow: 0 4px 16px var(--chalk-yellow);
-}
-
-/* 既存のフォームや入力欄もアクセシビリティ配慮 */
-input, textarea {
-  background: var(--chalkboard-dark);
-  color: var(--chalk-white);
-  border: 1.5px solid var(--chalk-white);
-  border-radius: 6px;
-  font-family: 'anka', 'Schoolbell', cursive;
-}
-input:focus, textarea:focus {
-  outline: 3px solid var(--focus-ring);
-  outline-offset: 2px;
-}
-
-/* スクロールバーも黒板風に */
-body::-webkit-scrollbar {
-  width: 12px;
-  background: var(--chalkboard-dark);
-}
-body::-webkit-scrollbar-thumb {
-  background: var(--chalk-yellow);
-  border-radius: 6px;
-}
-
-/* 既存の .container, .title なども新色・新フォントに */
-.container, .container_top {
-  background: var(--chalkboard-dark);
-  color: var(--chalk-white);
-  border-radius: 18px;
-  box-shadow: 0 2px 12px #0006;
-}
-.title, .title_t {
-  font-family: 'anka', 'Schoolbell', cursive;
-  color: var(--chalk-yellow);
-  text-shadow: 0 2px 8px #fff8;
 }
