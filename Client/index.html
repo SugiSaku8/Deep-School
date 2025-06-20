@@ -89,7 +89,7 @@
         </div>
         <div class="menu-item">
           <img src="re/ico/Setting.png" alt="設定アイコン" class="menu-icon" />
-          <div class="menu-label" style="cursor: pointer" onclick="openSettingModal()">設定</div>
+          <div class="menu-label" style="cursor: pointer" onclick="openSetting()">設定</div>
         </div>
       </div>
     </div>
@@ -215,9 +215,10 @@
     <div id="pickramu" style="display: none">
       <iframe id="PickFrame" width="1200" height="600"></iframe>
     </div>
-    <div id="settingModal" class="product-modal hidden">
-      <div class="modal-content" id="settingModalContent">
-        <h2>設定</h2>
+    <div id="setting" style="display: none">
+      <button class="go-back-button" onclick="backtomenu()">←</button>
+      <div class="page-container">
+        <h1 class="page-title">設定</h1>
         <div class="setting-item">
           <label for="username-setting">ユーザー名</label>
           <input type="text" id="username-setting" placeholder="ユーザー名" />
@@ -227,7 +228,6 @@
           <input type="checkbox" id="darkmode-toggle" />
         </div>
         <button onclick="saveSettings()">保存</button>
-        <button onclick="closeSettingModal()" class="modal-close-button">✖</button>
       </div>
     </div>
     <script>
@@ -242,6 +242,9 @@
         document.getElementById("scr_app").style.display = "none";
         document.getElementById("login").style.display = "none";
         document.getElementById("menu").style.display = "block";
+        document.getElementById("pickramu").style.display = "none";
+        document.getElementById("estore").style.display = "none";
+        document.getElementById("setting").style.display = "none";
       }
       function InitSCRwindow() {
         document.getElementById("toaster_chat").style.display = "none";
@@ -258,11 +261,18 @@
           });
       }
       IninterDom();
-      function openSettingModal() {
-        document.getElementById('settingModal').classList.remove('hidden');
-      }
-      function closeSettingModal() {
-        document.getElementById('settingModal').classList.add('hidden');
+      function openSetting() {
+        document.getElementById('setting').style.display = 'block';
+        document.getElementById('menu').style.display = 'none';
+        document.getElementById('pickramu').style.display = 'none';
+        document.getElementById('estore').style.display = 'none';
+        document.getElementById('toaster_chat').style.display = 'none';
+        document.getElementById('scr_app').style.display = 'none';
+        // 設定値を反映
+        const username = localStorage.getItem('username') || '';
+        const darkmode = localStorage.getItem('darkmode') === 'true';
+        document.getElementById('username-setting').value = username;
+        document.getElementById('darkmode-toggle').checked = darkmode;
       }
       function saveSettings() {
         const username = document.getElementById('username-setting').value;
@@ -274,14 +284,11 @@
         } else {
           document.body.classList.remove('darkmode');
         }
-        closeSettingModal();
+        backtomenu();
       }
-      // 初期化: 設定値を反映
+      // ページ初期化時にダークモード反映
       window.addEventListener('DOMContentLoaded', () => {
-        const username = localStorage.getItem('username') || '';
         const darkmode = localStorage.getItem('darkmode') === 'true';
-        document.getElementById('username-setting').value = username;
-        document.getElementById('darkmode-toggle').checked = darkmode;
         if (darkmode) {
           document.body.classList.add('darkmode');
         }
