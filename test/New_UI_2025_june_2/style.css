@@ -12,7 +12,7 @@ body, html {
   height: 100%;
   margin: 0;
   font-family: 'anka', 'Helvetica Neue', Arial, 'Hiragino Sans', 'Meiryo', sans-serif;
-  background: linear-gradient(135deg, #1a3a1a 0%, #005f30 60%, #2d3436 100%);
+  background: linear-gradient(120deg, #1a3a1a 0%, #005f30 18%, #1e4d36 32%, #2e7d32 45%, #3e8e41 55%, #2d3436 65%, #1b5e20 75%, #0d261a 85%, #2d3436 100%);
   color: #fff;
   overflow-x: hidden;
 }
