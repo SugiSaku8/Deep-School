@@ -12,9 +12,9 @@ if (actionBtn) {
     });
   });
 }
-// アイコン起点の動きデモ
-const navBtns = document.querySelectorAll('.icon-btn');
-navBtns.forEach(btn => {
+// アイコン起点の動きデモ（全アイコンに適用）
+const iconBtns = document.querySelectorAll('.menu-icon.icon-anim');
+iconBtns.forEach(btn => {
   btn.addEventListener('click', () => {
     btn.animate([
       { transform: 'scale(1)', boxShadow: '0 2px 8px #0004' },
