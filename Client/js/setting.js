@@ -6,10 +6,13 @@ export function openSetting() {
   document.getElementById('estore').style.display = 'none';
   document.getElementById('toaster_chat').style.display = 'none';
   document.getElementById('scr_app').style.display = 'none';
-  // Googleユーザー名を反映
+  // Googleユーザー名・IDを反映
   const username = (window.deepsys && window.deepsys.username) || window.googleUserName || '';
+  const userid = (window.deepsys && window.deepsys.userid) || window.googleUserId || '';
   document.getElementById('username-setting').value = username;
   document.getElementById('username-setting').readOnly = true;
+  document.getElementById('userid-setting').value = userid;
+  document.getElementById('userid-setting').readOnly = true;
   const darkmode = localStorage.getItem('darkmode') === 'true';
   document.getElementById('darkmode-toggle').checked = darkmode;
 }
@@ -44,6 +47,7 @@ export function backtomenu() {
 export function initSettingDarkmode() {
   if (!window.deepsys) window.deepsys = {};
   window.deepsys.username = window.googleUserName || '';
+  window.deepsys.userid = window.googleUserId || '';
   const darkmode = localStorage.getItem('darkmode') === 'true';
   if (darkmode) {
     document.body.classList.add('darkmode');
