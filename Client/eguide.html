@@ -9,11 +9,11 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
-    <div class="container">
+    <div class="container popup">
         <div id="setup-section" class="section">
-            <h1>eGuide</h1>
+            <h1 class="chalk-text">eGuide</h1>
             <div class="input-group">
-                <label for="subject">科目:</label>
+                <label for="subject" class="chalk-text">科目:</label>
                 <select id="subject">
                     <option value="math">数学</option>
                     <option value="japanese">国語</option>
@@ -22,31 +22,31 @@
                 </select>
             </div>
             <div class="input-group">
-                <label for="unit">単元名:</label>
+                <label for="unit" class="chalk-text">単元名:</label>
                 <input type="text" id="unit" placeholder="例: 二次関数">
             </div>
-            <button id="start-lesson">授業を開始</button>
+            <button id="start-lesson" class="button-chalk">授業を開始</button>
         </div>
 
         <div id="lesson-section" class="section hidden">
             <div class="lesson-header">
-                <h2 id="current-unit"></h2>
+                <h2 id="current-unit" class="chalk-text"></h2>
                 <div class="progress-bar">
                     <div id="progress"></div>
                 </div>
             </div>
             
             <div class="lesson-content">
-                <div id="message-display"></div>
+                <div id="message-display" class="chalk-text"></div>
                 <div id="question-input" class="hidden">
                     <textarea id="question-text" placeholder="質問を入力してください..."></textarea>
-                    <button id="submit-question">質問を送信</button>
+                    <button id="submit-question" class="button-chalk">質問を送信</button>
                 </div>
             </div>
 
             <div class="lesson-controls">
-                <button id="prev-btn" disabled>前へ</button>
-                <button id="next-btn">次へ</button>
+                <button id="prev-btn" class="button-chalk" disabled>前へ</button>
+                <button id="next-btn" class="button-chalk">次へ</button>
             </div>
         </div>
     </div>
