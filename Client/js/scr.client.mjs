@@ -15,8 +15,8 @@ const feedContent = document.getElementById("feed-content");
  * 投稿ボタンクリック時のイベントリスナー
  */
 postButton.addEventListener("click", async () => {
-  const username = document.getElementById("username").value;
-  const userid = document.getElementById("userid").value;
+  const username = window.deepsys && window.deepsys.username ? window.deepsys.username : '';
+  const userid = window.deepsys && window.deepsys.userid ? window.deepsys.userid : '';
   const postname = document.getElementById("postname").value;
   const postdata = document.getElementById("postdata").value;
 
