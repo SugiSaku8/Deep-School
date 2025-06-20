@@ -23,7 +23,7 @@ class ChatManager {
 
   displayMessage(message, role) {
     const messageDiv = document.createElement("div");
-    messageDiv.className = `message ${role}`;
+    messageDiv.className = `message ${role} chalk-text`;
 
     if (role === "bot") {
       // マークダウンをHTMLに変換
@@ -44,7 +44,7 @@ class ChatManager {
       // コードブロックにコピーボタンを追加
       messageDiv.querySelectorAll("pre code").forEach((block) => {
         const copyButton = document.createElement("button");
-        copyButton.className = "copy-code-btn";
+        copyButton.className = "copy-code-btn button-chalk";
         copyButton.textContent = "コピー";
         copyButton.onclick = () => {
           navigator.clipboard.writeText(block.textContent);
