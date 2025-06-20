@@ -12,7 +12,7 @@ body, html {
   height: 100%;
   margin: 0;
   font-family: 'anka', 'Helvetica Neue', Arial, 'Hiragino Sans', 'Meiryo', sans-serif;
-  background: linear-gradient(135deg, #1a3a1a 0%, #005f30 60%, #2d3436 100%);
+  background: linear-gradient(135deg, #1a3a1a 0%, #0c4026 30%,#005f30 60%,#003d1f 70%,#002915 80%, #2d3436 100%);
   color: #fff;
   overflow-x: hidden;
 }
@@ -95,11 +95,11 @@ body, html {
   transition: background 0.2s, transform 0.2s;
 }
 .menu-label.icon-anim:active {
-  background: #00b894;
+  background: #4e6e8e;
   transform: scale(0.97);
 }
 .menu-icon:active {
-  box-shadow: 0 4px 24px #00b89488;
+  box-shadow: 0 4px 24px #4e6e6288;
   transform: scale(1.08);
 }
 .glass-card {
@@ -129,7 +129,7 @@ body, html {
   transition: background 0.2s, transform 0.2s;
 }
 .action-btn:active {
-  background: linear-gradient(90deg, #00cec9 0%, #00b894 100%);
+  background: linear-gradient(90deg, #4e6e62 0%, #4e7e7e 100%);
   transform: scale(0.97);
 }
 .copyright {
