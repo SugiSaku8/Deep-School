@@ -97,6 +97,10 @@
           <img src="re/ico/Setting.png" alt="設定アイコン" class="menu-icon" />
           <div class="menu-label" style="cursor: pointer" onclick="openSetting()">設定</div>
         </div>
+        <div class="menu-item">
+          <img src="re/ico/note.svg" alt="Pickramuアイコン" class="menu-icon" />
+          <div class="menu-label" style="cursor: pointer" onclick="openPickramuApp()">Pickramu</div>
+        </div>
       </div>
     </div>
     <div id="toaster_chat" id="toaster_chat" style="display: none">
@@ -250,6 +254,20 @@
           <input type="text" id="userid-setting" placeholder="Google個人ID" readonly style="max-width: 220px; min-width: 120px; width: 60%;" />
         </div>
         <button onclick="saveSettings()" class="auto-btn">保存</button>
+      </div>
+    </div>
+    <div id="pickramu_app" style="display:none">
+      <button class="go-back-button" onclick="backtomenu()">←</button>
+      <div class="page-container">
+        <h1 class="page-title">Pickramu ワーク</h1>
+        <div class="pickramu-select" style="margin-bottom: 20px;">
+          <label for="pickramu-unit-select">教材選択：</label>
+          <select id="pickramu-unit-select">
+            <option value="jla/math/式の計算/1節/1.用語/1.md">数学: 式の計算・用語</option>
+          </select>
+          <button class="auto-btn" id="pickramu-load-btn">読み込み</button>
+        </div>
+        <div id="pickramu-content" class="pickramu-content" style="background:#173c2b; border-radius:12px; min-height:300px; padding:24px; color:#fff;"></div>
       </div>
     </div>
     <script>

@@ -1,3 +1,5 @@
+import { convertToHtml } from '../../Pickramu/API/compile.n.js';
+
 function convertToHtml(inputText) {
   let outputHtml = "";
   const lines = inputText.split("\n");
@@ -805,3 +807,29 @@ font-family: "Noto Sans JP", sans-serif;
     })
     .catch((error) => console.error("Error loading markdown:", error));
 }
+
+window.openPickramuApp = function() {
+  document.getElementById('pickramu_app').style.display = 'block';
+  document.getElementById('menu').style.display = 'none';
+  document.getElementById('pickramu').style.display = 'none';
+  document.getElementById('estore').style.display = 'none';
+  document.getElementById('toaster_chat').style.display = 'none';
+  document.getElementById('scr_app').style.display = 'none';
+  document.getElementById('setting').style.display = 'none';
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const loadBtn = document.getElementById('pickramu-load-btn');
+  if (loadBtn) {
+    loadBtn.addEventListener('click', async () => {
+      const select = document.getElementById('pickramu-unit-select');
+      const value = select.value;
+      // fetch教材データ
+      const res = await fetch(`/Pickramu/data/${value}`);
+      const text = await res.text();
+      // 変換
+      const html = convertToHtml(text);
+      document.getElementById('pickramu-content').innerHTML = html;
+    });
+  }
+});
