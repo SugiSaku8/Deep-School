@@ -1,0 +1,105 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: 'Helvetica Neue', Arial, 'Hiragino Sans', 'Meiryo', sans-serif;
+  background: #222;
+  overflow-x: hidden;
+}
+.chalkboard-bg {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0;
+}
+header {
+  width: 100%;
+  padding: 2rem 0 1rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(30, 30, 30, 0.7);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+header h1 {
+  color: #fff;
+  font-size: 2.2rem;
+  letter-spacing: 0.1em;
+  margin: 0 0 0.5rem 0;
+  text-shadow: 0 2px 8px #0008;
+}
+nav {
+  display: flex;
+  gap: 1.5rem;
+}
+.icon-btn {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 1.5rem;
+  color: #fff;
+  box-shadow: 0 2px 8px #0004;
+  transition: background 0.2s, transform 0.2s;
+  cursor: pointer;
+  outline: none;
+}
+.icon-btn:active {
+  background: rgba(255,255,255,0.3);
+  transform: scale(0.95);
+}
+main {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 3rem;
+}
+.glass-card {
+  background: rgba(255,255,255,0.18);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px 0 rgba(31,38,135,0.37);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.18);
+  padding: 2.5rem 2rem;
+  max-width: 420px;
+  color: #fff;
+  text-align: center;
+  animation: fadeInUp 1.2s cubic-bezier(.23,1.01,.32,1) both;
+}
+.action-btn {
+  margin-top: 2rem;
+  padding: 0.8rem 2.2rem;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 2rem;
+  background: linear-gradient(90deg, #00b894 0%, #00cec9 100%);
+  color: #fff;
+  box-shadow: 0 2px 8px #00b89444;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.action-btn:active {
+  background: linear-gradient(90deg, #00cec9 0%, #00b894 100%);
+  transform: scale(0.97);
+}
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* ラバーバンドスクロール（iOS風） */
+html, body {
+  overscroll-behavior-y: contain;
+  scroll-behavior: smooth;
+} 
