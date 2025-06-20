@@ -27,4 +27,9 @@ export class PostsController {
   async getPostByQuery(@Query('text') query: string) {
     return await this.postsService.getPostByQuery(query);
   }
+
+  @Get('search')
+  async searchPosts(@Query('query') query: string) {
+    return await this.postsService.searchPosts(query);
+  }
 }

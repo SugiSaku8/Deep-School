@@ -50,4 +50,14 @@ export class PostsService {
       }
     }
   }
+
+  async searchPosts(query: string): Promise<Post[]> {
+    const regex = new RegExp(query, 'i');
+    return await this.postModel.find({
+      $or: [
+        { PostName: regex },
+        { PostData: regex }
+      ]
+    }).exec();
+  }
 }
