@@ -83,10 +83,14 @@ body, html {
   width: 100px !important;
   height: 100px !important;
   object-fit: contain;
-  background: rgba(255,255,255,0.08);
-  border-radius: 18px;
-  box-shadow: 0 2px 12px #0004;
-  transition: box-shadow 0.2s, transform 0.2s;
+  background: transparent !important;
+}
+.scr-icon, .setting-icon, .toaster-icon, .pickramu-icon {
+  background: rgba(255,255,255,0.85) !important;
+  padding: 10px;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px #0002;
+  transition: background 0.2s;
 }
 .menu-label {
   background-color: #007bff;
@@ -160,11 +164,4 @@ body, html {
 html, body {
   overscroll-behavior-y: contain;
   scroll-behavior: smooth;
-}
-.scr-icon, .setting-icon {
-  background: rgba(255,255,255,0.85) !important;
-  padding: 10px;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px #0002;
-  transition: background 0.2s;
 } 
