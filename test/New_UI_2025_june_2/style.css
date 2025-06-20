@@ -31,7 +31,7 @@ body, html {
   text-align: right;
   font-size: 1.5rem;
   line-height: 1.6;
-  color: #ffd700;
+  color: #fff;
   text-shadow: 0 2px 8px #0008;
 }
 .container_top {
@@ -59,7 +59,7 @@ body, html {
 }
 .ui-concept {
   font-size: 1.1rem;
-  color: #ffd700;
+  color: #fff;
   margin: 0.2em 0;
   text-shadow: 0 1px 2px #0008;
 }
@@ -160,4 +160,9 @@ body, html {
 html, body {
   overscroll-behavior-y: contain;
   scroll-behavior: smooth;
+}
+.scr-icon, .setting-icon {
+  background: #fff !important;
+  padding: 10px;
+  border-radius: 16px;
 } 
