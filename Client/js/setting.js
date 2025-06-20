@@ -13,21 +13,12 @@ export function openSetting() {
   document.getElementById('username-setting').readOnly = true;
   document.getElementById('userid-setting').value = userid;
   document.getElementById('userid-setting').readOnly = true;
-  const darkmode = localStorage.getItem('darkmode') === 'true';
-  document.getElementById('darkmode-toggle').checked = darkmode;
 }
 
 // 設定の保存
 export function saveSettings() {
   // ユーザー名はGoogleアカウント名を利用
-  const username = (window.deepsys && window.deepsys.username) || window.googleUserName || '';
-  const darkmode = document.getElementById('darkmode-toggle').checked;
-  localStorage.setItem('darkmode', darkmode);
-  if (darkmode) {
-    document.body.classList.add('darkmode');
-  } else {
-    document.body.classList.remove('darkmode');
-  }
+  // 保存処理は現状不要
   backtomenu();
 }
 
@@ -48,8 +39,4 @@ export function initSettingDarkmode() {
   if (!window.deepsys) window.deepsys = {};
   window.deepsys.username = window.googleUserName || '';
   window.deepsys.userid = window.googleUserId || '';
-  const darkmode = localStorage.getItem('darkmode') === 'true';
-  if (darkmode) {
-    document.body.classList.add('darkmode');
-  }
 } 
