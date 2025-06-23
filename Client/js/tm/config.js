@@ -1,3 +1,6 @@
+import { GEMINI_CONFIG } from '../config.js';
+export default GEMINI_CONFIG;
+
 /**
  * Gemini API設定オブジェクト。
  * @typedef {Object} CONFIG
