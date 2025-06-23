@@ -63,4 +63,7 @@ export let SCR_TYPE = null;
 export function setSCRUrl(url) { SCR_URL = url; }
 export function setSCRType(type) { SCR_TYPE = type; }
 
+// --- 多言語対応 ---
+export const CURRENT_LANG = 'ja'; // 'en'などに切り替え可能
+
 // 必要に応じて他の設定もここに追加 
