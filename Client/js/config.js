@@ -60,5 +60,7 @@ export const EGUIDE_GEMINI_CONFIG = {
 // --- SCRサーバー情報 ---
 export let SCR_URL = null;
 export let SCR_TYPE = null;
+export function setSCRUrl(url) { SCR_URL = url; }
+export function setSCRType(type) { SCR_TYPE = type; }
 
 // 必要に応じて他の設定もここに追加 
