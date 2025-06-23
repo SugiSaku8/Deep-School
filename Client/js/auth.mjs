@@ -1,16 +1,10 @@
 import loadFeed from "./scr.client.mjs";
+import { GOOGLE_CLIENT_ID, GOOGLE_SCOPES } from './config.js';
+
 function getQueryParam(name) {
   const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get(name);
 }
-// Google APIのクライアントID
-const CLIENT_ID =
-  "54111871338-nv4bn99r48cohhverg3l9oicirthmtpp.apps.googleusercontent.com";
-// Google Drive APIのスコープ
-const SCOPES = [
-  "https://www.googleapis.com/auth/drive.file",
-  "https://www.googleapis.com/auth/drive.appdata",
-];
 
 /**
  * Google認証を管理するクラス
@@ -127,7 +121,7 @@ class GoogleAuthManager {
 
     try {
       google.accounts.id.initialize({
-        client_id: CLIENT_ID,
+        client_id: GOOGLE_CLIENT_ID,
         callback: (response) => this.handleCredentialResponse(response),
         auto_select: false,
         cancel_on_tap_outside: false,
@@ -194,8 +188,8 @@ class GoogleAuthManager {
     try {
       const tokenResponse = await new Promise((resolve, reject) => {
         this.tokenClient = google.accounts.oauth2.initTokenClient({
-          client_id: CLIENT_ID,
-          scope: SCOPES.join(" "),
+          client_id: GOOGLE_CLIENT_ID,
+          scope: GOOGLE_SCOPES.join(" "),
           callback: (response) => {
             if (response.error) {
               reject(response);
