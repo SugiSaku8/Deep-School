@@ -1,3 +1,5 @@
+import { GoogleAuthManager } from '../auth/auth.mjs';
+
 export const appMeta = {
   name: "login",
   title: "ログイン",
@@ -21,11 +23,17 @@ export const appHtml = `
 `;
 
 export function appInit(shell) {
-  // ログインボタンのクリックイベント例
-  document.getElementById('school_login_btn').onclick = () => {
-    // ここで認証処理を呼び出し、成功時にshell.loadApp('menu')など
-    alert('ログイン処理（ダミー）: shell.loadApp(\'menu\') でメニューへ遷移');
+  // Google認証マネージャーの初期化
+  const authManager = new GoogleAuthManager();
+  authManager.initialize();
+
+  // Google認証後にメニューへ遷移するため、showMenuを上書き
+  authManager.showMenu = function() {
     shell.loadApp('menu');
   };
-  // Googleログインボタンの初期化などもここで実装可能
+
+  // SchoolIDログインボタンは無効化または非表示にしてもよい
+  document.getElementById('school_login_btn').onclick = () => {
+    alert('Googleログインをご利用ください。');
+  };
 } 
