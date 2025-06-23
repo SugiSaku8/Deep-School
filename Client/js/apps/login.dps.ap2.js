@@ -1,4 +1,4 @@
-import { GoogleAuthManager } from '../auth/auth.mjs';
+import { GoogleAuthManager, AuthServer } from '../auth/auth.mjs';
 
 export const appMeta = {
   name: "login",
@@ -23,17 +23,32 @@ export const appHtml = `
 `;
 
 export function appInit(shell) {
-  // Google認証マネージャーの初期化
+  // 1. Google認証マネージャーの初期化
   const authManager = new GoogleAuthManager();
   authManager.initialize();
 
-  // Google認証後にメニューへ遷移するため、showMenuを上書き
+  // 2. Google認証後にSchoolIDフォームを表示する
   authManager.showMenu = function() {
-    shell.loadApp('menu');
+    // Google認証が終わったらSchoolIDフォームを表示
+    document.getElementById('loginForm').style.display = 'block';
+    document.getElementById('openLoginButton').style.display = 'none';
+    // Google認証済みの印をwindowなどにセットしてもよい
   };
 
-  // SchoolIDログインボタンは無効化または非表示にしてもよい
-  document.getElementById('school_login_btn').onclick = () => {
-    alert('Googleログインをご利用ください。');
+  // 3. SchoolIDログインボタンのクリックイベント
+  document.getElementById('school_login_btn').onclick = async () => {
+    const schoolId = document.getElementById('schoolId').value;
+    if (!schoolId) {
+      alert('学校IDを入力してください');
+      return;
+    }
+    const authServer = new AuthServer(schoolId);
+    // サーバー接続テスト
+    const ok = await authServer.TestFetch(authServer.url, false);
+    if (ok) {
+      shell.loadApp('menu');
+    } else {
+      alert('ログインに失敗しました。学校IDまたはネットワークを確認してください。');
+    }
   };
 } 
