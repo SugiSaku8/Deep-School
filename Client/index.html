@@ -17,33 +17,6 @@
       async
       src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
     ></script>
-    <script src="js/auth.mjs" type="module"></script>
-    <script src="js/ui.js"></script>
-    <script src="js/tm/config.js"></script>
-    <script src="js/tm/api.mjs" type="module"></script>
-    <script src="js/console.mjs" type="module"></script>
-    <script src="js/eauth/geo.mjs" type="module"></script>
-    <script src="js/scr.client.mjs" type="module"></script>
-    <script src="js/tm/model.mjs" type="module"></script>
-    <script src="js/pickramu.js" type="module"></script>
-    <script src="js/tm/GeminiAPI.js"></script>
-    <script src="js/tm/chat.js"></script>
-    <script src="js/tm/main.js"></script>
-    <script type="module" src="js/setting.js"></script>
-    <script type="module">
-      import { updatePopout } from './js/utils.mjs';
-      import { initializeApp } from './js/auth.mjs';
-      import { openSetting, saveSettings, backtomenu, initSettingDarkmode } from './js/setting.js';
-      window.addEventListener('load', initializeApp);
-      window.openSetting = openSetting;
-      window.saveSettings = saveSettings;
-      window.backtomenu = backtomenu;
-      window.addEventListener('DOMContentLoaded', initSettingDarkmode);
-      // Example usage:
-      // updatePopout('これはポップアウトのテストメッセージです。');
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/jsencrypt@3.3.2/bin/jsencrypt.min.js"></script>
-    <script type="module" src="js/security.js"></script>
     <script type="module" src="js/shell.js"></script>
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; font-src 'self' https://cdn.jsdelivr.net; img-src 'self' data:; connect-src 'self';">
   </head>
