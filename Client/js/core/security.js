@@ -98,3 +98,34 @@ export function safeLog(...args) {
 // --- サードパーティ脆弱性チェック・サーバー協調 ---
 // 依存ライブラリは定期的にnpm audit推奨
 // サーバー側でも同様のセキュリティ対策を徹底すること 
+
+import { t } from './lang.js';
+
+// セキュリティの弱い接続を検出し、強制ログアウト・再ログイン・警告表示
+export function enforceSecureConnectionAndLogout() {
+  // 1. HTTPかどうか
+  if (location.protocol === 'http:') {
+    forceLogoutWithWarning('insecure_connection');
+    return;
+  }
+  // 2. 公衆Wi-Fiなど（navigator.connection情報やUser-Agentで判定も可、ここでは例示のみ）
+  if (navigator.connection && navigator.connection.type === 'wifi' && navigator.connection.downlink < 5) {
+    // 低速Wi-Fiを公衆とみなす例
+    forceLogoutWithWarning('public_wifi');
+    return;
+  }
+  // 3. その他の判定ロジックは必要に応じて追加
+}
+
+function forceLogoutWithWarning(type) {
+  // セッション・トークン削除
+  localStorage.clear();
+  sessionStorage.clear();
+  // 警告表示
+  let msg = t('security_warning_default');
+  if (type === 'insecure_connection') msg = t('security_warning_insecure');
+  if (type === 'public_wifi') msg = t('security_warning_public_wifi');
+  alert(msg);
+  // ログイン画面に遷移（例: location.reload() で再ログインを促す）
+  location.reload();
+} 

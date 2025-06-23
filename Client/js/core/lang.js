@@ -52,7 +52,10 @@ export const LANG_DATA = {
     next_preview: "次回予告",
     question: "質問",
     answer: "回答",
-    question_fail: "申し訳ありません。回答の生成に失敗しました。もう一度お試しください。"
+    question_fail: "申し訳ありません。回答の生成に失敗しました。もう一度お試しください。",
+    security_warning_insecure: "セキュリティの弱い接続（http）です。安全なネットワークで再度ログインしてください。",
+    security_warning_public_wifi: "公衆Wi-Fiなどセキュリティの弱いネットワークが検出されました。安全な環境で再度ログインしてください。",
+    security_warning_default: "セキュリティ上の理由でログアウトしました。安全な環境で再度ログインしてください。"
   },
   en: {
     greeting: "Hello",
@@ -106,7 +109,10 @@ export const LANG_DATA = {
     next_preview: "Next Preview",
     question: "Question",
     answer: "Answer",
-    question_fail: "Sorry, failed to generate answer. Please try again."
+    question_fail: "Sorry, failed to generate answer. Please try again.",
+    security_warning_insecure: "You are on an insecure connection (http). Please log in again on a secure network.",
+    security_warning_public_wifi: "A public Wi-Fi or insecure network was detected. Please log in again in a secure environment.",
+    security_warning_default: "You have been logged out for security reasons. Please log in again in a secure environment."
   },
   ko: {
     greeting: "안녕하세요",
@@ -160,7 +166,10 @@ export const LANG_DATA = {
     next_preview: "다음 예고",
     question: "질문",
     answer: "답변",
-    question_fail: "죄송합니다. 답변 생성에 실패했습니다. 다시 시도해 주세요."
+    question_fail: "죄송합니다. 답변 생성에 실패했습니다. 다시 시도해 주세요.",
+    security_warning_insecure: "보안이 약한 연결(http)입니다. 안전한 네트워크에서 다시 로그인해 주세요.",
+    security_warning_public_wifi: "공용 Wi-Fi 등 보안이 약한 네트워크가 감지되었습니다. 안전한 환경에서 다시 로그인해 주세요.",
+    security_warning_default: "보안상의 이유로 로그아웃되었습니다. 안전한 환경에서 다시 로그인해 주세요."
   },
   zh: {
     greeting: "你好",
@@ -214,7 +223,10 @@ export const LANG_DATA = {
     next_preview: "下次预告",
     question: "问题",
     answer: "回答",
-    question_fail: "很抱歉，生成回答失败。请重试。"
+    question_fail: "很抱歉，生成回答失败。请重试。",
+    security_warning_insecure: "您正在使用不安全的连接（http）。请在安全的网络环境下重新登录。",
+    security_warning_public_wifi: "检测到公共Wi-Fi等不安全网络。请在安全环境下重新登录。",
+    security_warning_default: "出于安全原因，您已被登出。请在安全环境下重新登录。"
   }
 };
 
