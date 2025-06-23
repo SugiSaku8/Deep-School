@@ -1,4 +1,4 @@
-import { GEMINI_CONFIG } from '../config.js';
+import { GEMINI_CONFIG } from '../../core/config.js';
 export default GEMINI_CONFIG;
 
 /**

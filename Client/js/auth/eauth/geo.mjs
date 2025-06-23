@@ -1,4 +1,4 @@
-import { consta } from "../console.mjs";
+import { consta } from "../../core/console.mjs";
 
 /**
  * ブラウザの種類を判定する関数
