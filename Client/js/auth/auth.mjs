@@ -1,5 +1,6 @@
 import loadFeed from "../data/scr.client.mjs";
 import { GOOGLE_CLIENT_ID, GOOGLE_SCOPES } from '../core/config.js';
+import { enforceSecureConnectionAndLogout } from '../core/security.js';
 
 function getQueryParam(name) {
   const urlParams = new URLSearchParams(window.location.search);
@@ -26,6 +27,7 @@ class GoogleAuthManager {
    * @returns {Promise<void>}
    */
   async initialize() {
+    enforceSecureConnectionAndLogout();
     try {
       console.log("Initializing auth manager...");
 
