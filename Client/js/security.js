@@ -59,4 +59,42 @@ export function getDecryptedItem(key) {
   const decrypted = crypt.decrypt(encrypted);
   if (decrypted === false) throw new Error('復号化に失敗しました');
   return decrypted;
-} 
+}
+
+// --- 入力値バリデーション ---
+export function validateInput(value, { type = 'string', minLength = 0, maxLength = 255, pattern = null } = {}) {
+  if (typeof value !== type) return false;
+  if (value.length < minLength || value.length > maxLength) return false;
+  if (pattern && !pattern.test(value)) return false;
+  return true;
+}
+
+// --- セッション管理 ---
+export function clearSession() {
+  localStorage.clear();
+  sessionStorage.clear();
+}
+
+// --- エラーメッセージ抑制（config.js連携） ---
+import { SHOW_ERROR_DETAIL } from './config.js';
+export function showError(error) {
+  if (SHOW_ERROR_DETAIL) {
+    alert(error.message || error);
+  } else {
+    alert('エラーが発生しました。');
+  }
+}
+
+// --- console.log抑制 ---
+export function safeLog(...args) {
+  if (window.SHOW_LOG) {
+    console.log(...args);
+  }
+}
+
+// --- パスワードinput注意 ---
+// パスワードは必ず<input type="password">で扱い、絶対に平文で保存しないこと！
+
+// --- サードパーティ脆弱性チェック・サーバー協調 ---
+// 依存ライブラリは定期的にnpm audit推奨
+// サーバー側でも同様のセキュリティ対策を徹底すること 

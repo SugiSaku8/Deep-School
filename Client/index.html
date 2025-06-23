@@ -44,6 +44,8 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/jsencrypt@3.3.2/bin/jsencrypt.min.js"></script>
     <script type="module" src="js/security.js"></script>
+    <meta http-equiv="Content-Security-Policy" content="frame-ancestors 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data:; connect-src 'self';">
   </head>
   <body>
     <div class="date">
