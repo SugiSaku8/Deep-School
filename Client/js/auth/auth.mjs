@@ -13,12 +13,14 @@ export class GoogleAuthManager {
   /**
    * コンストラクタ
    */
-  constructor() {
+  constructor(buttonContainerId, onAuthSuccess) {
     this.tokenClient = null;
     this.accessToken = null;
     this.tokenTimestamp = null;
     this.TOKEN_VALIDITY_MS = 104 * 24 * 60 * 60 * 1000; // 104日
     this.initialized = false;
+    this.buttonContainerId = buttonContainerId;
+    this.onAuthSuccess = onAuthSuccess;
   }
 
   /**
@@ -130,7 +132,7 @@ export class GoogleAuthManager {
       });
       console.log("Google login initialized");
 
-      const buttonContainer = document.getElementById("openLoginButton");
+      const buttonContainer = document.getElementById(this.buttonContainerId);
       if (!buttonContainer) {
         console.error("Login button container not found");
         return;
@@ -174,7 +176,9 @@ export class GoogleAuthManager {
       // Google Drive APIの認証を実行
       await this.initializeGoogleDriveAuth();
 
-      this.showMenu();
+      if(this.onAuthSuccess) {
+        this.onAuthSuccess();
+      }
     } catch (error) {
       console.error("Google認証エラー:", error);
       this.showLoginForm();

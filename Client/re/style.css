@@ -31,12 +31,18 @@ body, html {
 .container_top {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   min-height: 100vh;
-  position: relative;
-  z-index: 1;
+  text-align: center;
 }
+
+#google-signin-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
 .container {
   width: 100px;
   height: 100px;
@@ -62,13 +68,12 @@ body, html {
 
 /* Login Form */
 .login-form {
-  display: none;
-  flex-direction: column;
-  background-color: #007bff;
   padding: 30px;
-  border-radius: 12px;
-  gap: 15px;
-  text-align: center;
+  background: #1e4d32;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  width: 90%;
+  max-width: 400px;
 }
 
 #schoolId {

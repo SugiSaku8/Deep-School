@@ -23,32 +23,32 @@ export const appHtml = `
 `;
 
 export function appInit(shell) {
-  // 1. Google認証マネージャーの初期化
-  const authManager = new GoogleAuthManager();
-  authManager.initialize();
-
-  // 2. Google認証後にSchoolIDフォームを表示する
-  authManager.showMenu = function() {
-    // Google認証が終わったらSchoolIDフォームを表示
+  const authManager = new GoogleAuthManager('openLoginButton', () => {
     document.getElementById('loginForm').style.display = 'block';
     document.getElementById('openLoginButton').style.display = 'none';
-    // Google認証済みの印をwindowなどにセットしてもよい
-  };
+  });
+  authManager.initialize();
 
-  // 3. SchoolIDログインボタンのクリックイベント
-  document.getElementById('school_login_btn').onclick = async () => {
-    const schoolId = document.getElementById('schoolId').value;
-    if (!schoolId) {
-      alert('学校IDを入力してください');
-      return;
-    }
-    const authServer = new AuthServer(schoolId);
-    // サーバー接続テスト
-    const ok = await authServer.TestFetch(authServer.url, false);
-    if (ok) {
-      shell.loadApp('menu');
-    } else {
-      alert('ログインに失敗しました。学校IDまたはネットワークを確認してください。');
-    }
-  };
+  const loginButton = document.getElementById('school_login_btn');
+  if (loginButton) {
+    loginButton.onclick = async () => {
+      const schoolId = document.getElementById('schoolId').value;
+      if (!schoolId) {
+        alert('学校IDを入力してください');
+        return;
+      }
+      const authServer = new AuthServer(schoolId);
+      const ok = await authServer.TestFetch(authServer.url, false);
+      if (ok) {
+        shell.loadApp('menu');
+      } else {
+        alert('ログインに失敗しました。学校IDまたはネットワークを確認してください。');
+      }
+    };
+  }
+  
+  window.showLoginForm = () => {
+      document.getElementById('loginForm').style.display = 'block';
+      document.getElementById('openLoginButton').style.display = 'none';
+  }
 } 
