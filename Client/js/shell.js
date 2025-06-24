@@ -1,38 +1,70 @@
-// Deep-School-Shellシステム雛形
-export class DeepSchoolShell {
-  constructor(rootId = 'app-root') {
-    this.root = document.getElementById(rootId) || this._createRoot(rootId);
+// Deep-School-Shell: 全アプリの初期化・表示制御ハブ
+import * as chatApp from './apps/chat.dps.ap2.js';
+import * as scrApp from './apps/scr.dps.ap2.js';
+import * as settingApp from './apps/setting.dps.ap2.js';
+import * as pickramuApp from './apps/pickramu.dps.ap2.js';
+import * as loginApp from './apps/login.dps.ap2.js';
+import * as menuApp from './apps/menu.dps.ap2.js';
+import * as estoreApp from './apps/estore.dps.ap2.js';
+import * as eguideApp from './apps/eguide.dps.ap2.js';
+
+const appModules = {
+  chat: chatApp,
+  scr: scrApp,
+  setting: settingApp,
+  pickramu: pickramuApp,
+  login: loginApp,
+  menu: menuApp,
+  estore: estoreApp,
+  eguide: eguideApp,
+};
+
+class DeepSchoolShell {
+  constructor() {
     this.currentApp = null;
-    // 最初にmenuアプリを読み込む
-    this.loadApp('menu');
+    this.initAllApps();
+    this.showApp('login');
   }
 
-  async loadApp(appName) {
-    try {
-      // アプリファイルをapps/から動的import
-      const appModule = await import(`./apps/${appName}.dps.ap2.js`);
-      // HTMLを挿入
-      this.root.innerHTML = appModule.appHtml;
-      // 初期化関数を呼び出し
-      if (typeof appModule.appInit === 'function') {
-        appModule.appInit(this);
+  initAllApps() {
+    // 各アプリの初期化関数があれば呼ぶ
+    Object.entries(appModules).forEach(([name, mod]) => {
+      if (typeof mod.appInit === 'function') {
+        mod.appInit(this);
       }
-      this.currentApp = appName;
-    } catch (e) {
-      this.root.innerHTML = `<div style='color:red'>アプリ「${appName}」の読み込みに失敗しました。</div>`;
-      console.error(e);
-    }
+    });
   }
 
-  _createRoot(rootId) {
-    const div = document.createElement('div');
-    div.id = rootId;
-    document.body.appendChild(div);
-    return div;
+  showApp(appName) {
+    // すべての主要セクションを非表示
+    const sections = ['login', 'menu', 'toaster_chat', 'scr_app', 'estore', 'pickramu_app', 'setting'];
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+    // 対象アプリのセクションを表示
+    let showId = appName;
+    if (appName === 'chat') showId = 'toaster_chat';
+    if (appName === 'scr') showId = 'scr_app';
+    if (appName === 'pickramu') showId = 'pickramu_app';
+    if (appName === 'setting') showId = 'setting';
+    if (appName === 'estore') showId = 'estore';
+    if (appName === 'menu') showId = 'menu';
+    if (appName === 'login') showId = 'login';
+    const showEl = document.getElementById(showId);
+    if (showEl) showEl.style.display = 'block';
+    this.currentApp = appName;
+  }
+
+  loadApp(appName) {
+    this.showApp(appName);
+    // 必要なら初期化も再実行
+    if (appModules[appName] && typeof appModules[appName].appInit === 'function') {
+      appModules[appName].appInit(this);
+    }
   }
 }
 
-// window.shell = new DeepSchoolShell(); で自動起動
 if (typeof window !== 'undefined') {
   window.shell = new DeepSchoolShell();
 }
