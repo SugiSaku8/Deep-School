@@ -10,7 +10,7 @@ function getQueryParam(name) {
 /**
  * Google認証を管理するクラス
  */
-class GoogleAuthManager {
+export class GoogleAuthManager {
   /**
    * コンストラクタ
    */
@@ -367,158 +367,22 @@ class KOREGAUIManagerDAZE {
   }
 }
 
-/**
- * サーバー認証・URL変換を管理するクラス
- */
-class AuthServer {
-  /**
-   * AuthServerの初期化
-   * @param {string} serverUrl 教師などから提供され、ユーザーによって入力された変換ずみサーバーのURL
-   */
-  constructor(serverUrl) {
-    console.log(serverUrl);
-    this.url = this.decodeURL(serverUrl);
-    console.log("SCRのURL:" + this.url);
-    window.scr_url = this.url;
-    this.ServerStatus = null;
-    localStorage.setItem(this.url);
-    localStorage.getItem(new Date());
-  }
-  /**
-   * 初期化時に呼び出される変換システムの呼び出しポイント
-   * @param {string} serverUrl 入力されたサーバーのURL
-   * @param {boolean} ctype 変換するか、複合するかのパラメーター。 trueで変換、falseで複合。
-   */
-  convert(serverUrl, ctype) {
-    if (ctype) {
-      this.encodeURL(serverUrl);
-    } else if (!ctype) {
-      this.decodeURL(serverUrl);
-    }
-  }
-  /**
-   * 素因数分解（指数表記）を返す
-   * @param {number|string} n 分解したい整数
-   * @returns {string} 指数表記の素因数分解（例: "2^4,5,101"）
-   */
-  primeFactorize(n) {
-    let num = Number(n);
-    let factors = {};
-    for (let i = 2; i * i <= num; i++) {
-      while (num % i === 0) {
-        factors[i] = (factors[i] || 0) + 1;
-        num /= i;
-      }
-    }
-    if (num > 1) factors[num] = (factors[num] || 0) + 1;
-    return Object.entries(factors)
-      .map(([prime, exp]) => (exp > 1 ? `${prime}^${exp}` : prime))
-      .join(",");
-  }
-  /**
-   * 素因数分解の指数表記から元の数値に戻す
-   * @param {string} factorStr 指数表記の素因数分解（例: "2^4,5,101"）
-   * @returns {number} 元の数値
-   */
-  primeFactorsToNumber(factorStr) {
-    return factorStr.split(",").reduce((acc, part) => {
-      if (part.includes("^")) {
-        const [base, exp] = part.split("^").map(Number);
-        return acc * Math.pow(base, exp);
-      } else {
-        return acc * Number(part);
-      }
-    }, 1);
-  }
-  /**
-   * 変換済みのテキストから元のURLに戻す
-   * @param {string} text 変換済みのテキスト
-   * @returns {string} 元のURLに戻したテキスト
-   */
-  decodeURL(text) {
-    return text.replace(
-      /([ps])([a-zA-Z0-9\.\-]+|L)(:([0-9\^,]+))?/g,
-      (match, proto, host, _, portFactors) => {
-        let protocol = proto === "s" ? "https://" : "http://";
-        let hostPart = host === "L" ? "localhost" : host;
-        let portPart = "";
-        if (portFactors) {
-          let portNum = this.primeFactorsToNumber(portFactors);
-          portPart = ":" + portNum;
-        }
-        return protocol + hostPart + portPart;
-      }
-    );
-  }
-  /**
-   * テキスト中のURLを指定ルールで変換する
-   * @param {string} text 変換したいテキスト
-   * @returns {string} 変換後のテキスト
-   */
-  encodeURL(text) {
-    return text.replace(
-      /https?:\/\/([a-zA-Z0-9\.\-]+)(:\d+)?/g,
-      (match, host, port) => {
-        let prefix = match.startsWith("https://") ? "s" : "p";
-        let hostPart = host === "localhost" ? "L" : host;
-        let portPart = "";
-        if (port) {
-          let portNum = port.slice(1);
-          portPart = ":" + this.primeFactorize(portNum);
-        }
-        return prefix + hostPart + portPart;
-      }
-    );
+export class AuthServer {
+  constructor(schoolId) {
+    const p = new URL(location.href);
+    this.url = `${p.protocol}//${p.host}/api/auth?schoolId=${schoolId}`;
+    this.schoolId = schoolId;
   }
 
-  // --- 使用例 ---
-  // const original = "http://localhost:8080 と https://example.com:3000 を変換";
-  // const encoded = encodeURL(original);
-  // console.log(encoded); // pL:2^4,5,101 と sexample.com:2^2,3,5^3 を変換
-  // const decoded = decodeURL(encoded);
-  // console.log(decoded); // http://localhost:8080 と https://example.com:3000 を変換
-  /*
-   * 変換されたサーバーのURLが存在するかどうか試す関数。
-   * @param {string} url 元の形態に`this.convert(:string:,false)`によって変換されたURL
-   * @param {boolean} sumsu 詳細な情報を要求するかの引数。trueで必要として、falseで不要とする。
-   * @returns {Promise<boolean>} サーバーが存在するかどうか
-   */
-  async TestFetch(url, sumsu) {
+  async TestFetch(url, isJson) {
     try {
-      console.log("TestFetch attempts to communicate with " + url);
-      const response = await fetch(url);
-      const statuscode = response.status;
-      if (!response.ok) {
-        if (statuscode === 404) {
-          if (sumsu) {
-            console.log(response);
-          }
-          return false;
-        } else {
-          return false;
-        }
-      } else {
-        document.getElementById("login").style.display = "none";
-        document.getElementById("scr_app").style.display = "none";
-
-        document.getElementById("menu").style.display = "block";
-        return true;
+      const res = await fetch(url);
+      if (isJson) {
+        return await res.json();
       }
-    } catch (error) {
-      console.error("SCRは利用できません。");
-      console.log("ログ:" + statuscode);
-    }
-  }
-  /**
-   * `TestFetch`を実行するための関数
-   * @returns {Promise<void>}
-   */
-  async callTest() {
-    this.ServerStatus = await this.TestFetch(this.url, false);
-    if (this.ServerStatus) {
-      return;
-    } else {
-      console.log("ana šumšu ḫašāḳu, šumšu ša ḫāzīrū ḫašāḳu lā šumšu.");
+      return res.ok;
+    } catch (e) {
+      return false;
     }
   }
 }
