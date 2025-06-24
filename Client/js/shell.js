@@ -8,6 +8,19 @@ window.coreLang = coreLang;
 window.coreSecurity = coreSecurity;
 window.coreUtils = coreUtils;
 
+function applyLangToDOM() {
+  const { t } = window.coreLang;
+  document.querySelectorAll('[data-lang-key]').forEach(el => {
+    const key = el.getAttribute('data-lang-key');
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+      el.placeholder = t(key);
+    } else {
+      el.textContent = t(key);
+    }
+  });
+}
+window.applyLangToDOM = applyLangToDOM;
+
 // Deep-School-Shell: 全アプリの初期化・表示制御ハブ
 import * as chatApp from './apps/chat.dps.ap2.js';
 import * as scrApp from './apps/scr.dps.ap2.js';
@@ -32,17 +45,13 @@ const appModules = {
 class DeepSchoolShell {
   constructor() {
     this.currentApp = null;
-    this.initAllApps();
-    this.showApp('login');
+    this.initializedApps = new Set();
+    applyLangToDOM();
+    this.loadApp('login');
   }
 
   initAllApps() {
-    // 各アプリの初期化関数があれば呼ぶ
-    Object.entries(appModules).forEach(([name, mod]) => {
-      if (typeof mod.appInit === 'function') {
-        mod.appInit(this);
-      }
-    });
+    // この関数はもう使いません。互換性のため残置。
   }
 
   showApp(appName) {
@@ -68,9 +77,12 @@ class DeepSchoolShell {
 
   loadApp(appName) {
     this.showApp(appName);
-    // 必要なら初期化も再実行
-    if (appModules[appName] && typeof appModules[appName].appInit === 'function') {
-      appModules[appName].appInit(this);
+    if (!this.initializedApps.has(appName)) {
+      const appModule = appModules[appName];
+      if (appModule && typeof appModule.appInit === 'function') {
+        appModule.appInit(this);
+        this.initializedApps.add(appName);
+      }
     }
   }
 }

@@ -40,19 +40,19 @@
       <br />
       <div class="login-form popup" id="loginForm">
         <form>
-          <label for="schoolId" class="chalk-text">学校ID</label>
+          <label for="schoolId" class="chalk-text" data-lang-key="school_id">学校ID</label>
           <p>&nbsp;</p>
-          <input type="text" id="schoolId" placeholder="学校ID" />
+          <input type="text" id="schoolId" placeholder="学校ID" data-lang-key="school_id_placeholder" />
           <p>&nbsp;</p>
-          <button type="button" class="submit-button button-chalk" id="school_login_btn">
+          <button type="button" class="submit-button button-chalk" id="school_login_btn" data-lang-key="login_button">
             ログイン
           </button>
           <p>&nbsp;</p>
-          <p>学校IDは、pL:2^4,5,101 のような形式の文字列です。</p>
+          <p data-lang-key="login_id_hint">学校IDは、pL:2^4,5,101 のような形式の文字列です。</p>
         </form>
       </div>
       <div id="openLoginButton" class="login-button button-chalk"></div>
-      <p class="copyright chalk-text">(c) 2022-2025 Carnation Studio v0.1.1</p>
+      <p class="copyright chalk-text" data-lang-key="copyright">(c) 2022-2025 Carnation Studio v0.1.1</p>
     </div>
     <div id="menu" class="popup">
       <div class="menu-content">
@@ -62,6 +62,7 @@
             class="menu-label chalk-text icon-anim"
             style="cursor: pointer"
             onclick="InitToasterChat();"
+            data-lang-key="menu_toaster"
           >
             ToasterMachine
           </div>
@@ -69,30 +70,30 @@
         <div class="menu-item" id="scr_menu_icon">
           <img src="re/ico/SCR.png" alt="SCRアイコン" class="menu-icon scr-icon icon-anim" />
           <span class="notification-badge">25</span>
-          <div class="menu-label chalk-text icon-anim" style="cursor: pointer" onclick="InitSCRwindow()">
+          <div class="menu-label chalk-text icon-anim" style="cursor: pointer" onclick="InitSCRwindow()" data-lang-key="menu_scr">
             SCR
           </div>
         </div>
         <div class="menu-item">
           <img src="re/ico/Setting.png" alt="設定アイコン" class="menu-icon setting-icon icon-anim" />
-          <div class="menu-label chalk-text icon-anim" style="cursor: pointer" onclick="openSetting()">設定</div>
+          <div class="menu-label chalk-text icon-anim" style="cursor: pointer" onclick="openSetting()" data-lang-key="menu_setting">設定</div>
         </div>
         <div class="menu-item">
           <img src="re/ico/note.svg" alt="Pickramuアイコン" class="menu-icon pickramu-icon icon-anim" />
-          <div class="menu-label chalk-text icon-anim" style="cursor: pointer" onclick="openPickramuApp()">Pickramu</div>
+          <div class="menu-label chalk-text icon-anim" style="cursor: pointer" onclick="openPickramuApp()" data-lang-key="menu_pickramu">Pickramu</div>
         </div>
       </div>
     </div>
     <div id="toaster_chat" class="popup" style="display: none">
-      <button class="go-back-button button-chalk" onclick="backtomenu()">←</button>
+      <button class="go-back-button button-chalk" onclick="backtomenu()" data-lang-key="back">←</button>
       <div class="splash-container" id="splash">
         <div class="card">
-          <div class="title_t chalk-text">ToasterMachine</div>
+          <div class="title_t chalk-text" data-lang-key="menu_toaster">ToasterMachine</div>
           <img src="re/ico/tm.cb.png" alt="ロゴ" class="logo-img" />
           <div class="version">v0.0.1-Demo</div>
           <div class="input-group">
-            <input id="user-input" type="text" placeholder="ここに質問を入力" />
-            <button id="submit-btn" class="button-chalk">
+            <input id="user-input" type="text" placeholder="ここに質問を入力" data-lang-key="ask_placeholder" />
+            <button id="submit-btn" class="button-chalk" data-lang-key="send">
               <svg
                 width="24"
                 height="24"
@@ -119,12 +120,12 @@
         </div>
       </div>
       <div id="chat-container" class="chat-container">
-        <button id="new-chat-btn" class="new-chat-btn button-chalk">新規チャット</button>
+        <button id="new-chat-btn" class="new-chat-btn button-chalk" data-lang-key="new_chat">新規チャット</button>
         <div id="messages-container" class="messages-container"></div>
         <div class="chat-input-container">
           <div class="input-group">
-            <input id="chat-input" type="text" placeholder="メッセージを入力" />
-            <button id="chat-submit-btn" class="button-chalk">
+            <input id="chat-input" type="text" placeholder="メッセージを入力" data-lang-key="chat_placeholder" />
+            <button id="chat-submit-btn" class="button-chalk" data-lang-key="send">
               <svg
                 width="24"
                 height="24"
@@ -152,21 +153,22 @@
       </div>
     </div>
     <div id="scr_app" class="popup" style="display: none">
-      <button class="go-back-button button-chalk" onclick="backtomenu()">←</button>
+      <button class="go-back-button button-chalk" onclick="backtomenu()" data-lang-key="back">←</button>
       <button
         class="auto-btn button-chalk"
         onclick="document.getElementById('post-form').style.display = 'block';"
+        data-lang-key="post"
       >
         New
       </button>
-      <button class="auto-btn button-chalk" onclick="document.getElementById('scr-search-window').style.display = 'block';">Search</button>
+      <button class="auto-btn button-chalk" onclick="document.getElementById('scr-search-window').style.display = 'block';" data-lang-key="search">Search</button>
       <div id="scr-search-window" class="popup" style="display:none; max-width: 500px; margin: 30px auto 0 auto; background: #173c2b; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); padding: 24px 20px 16px 20px;">
         <span class="batsu" onclick="document.getElementById('scr-search-window').style.display = 'none';"></span>
         <div class="scr-form-group">
-          <label for="scr-search-input" class="chalk-text">キーワード検索</label>
-          <input type="text" id="scr-search-input" placeholder="キーワードを入力" style="width: 80%; max-width: 300px;" />
+          <label for="scr-search-input" class="chalk-text" data-lang-key="search_keyword">キーワード検索</label>
+          <input type="text" id="scr-search-input" placeholder="キーワードを入力" style="width: 80%; max-width: 300px;" data-lang-key="search_placeholder" />
         </div>
-        <button class="auto-btn button-chalk" id="scr-search-btn">検索</button>
+        <button class="auto-btn button-chalk" id="scr-search-btn" data-lang-key="search">検索</button>
         <div id="scr-search-result" style="margin-top: 18px;"></div>
       </div>
       <div id="post-form" class="popup" style="display: none; max-width: 400px; margin: 0 auto;">
@@ -176,14 +178,14 @@
         ></span>
         <div class="scr-form-card">
           <div class="scr-form-group">
-            <label for="postname" class="chalk-text">タイトル</label>
-            <input type="text" id="postname" placeholder="タイトル" required />
+            <label for="postname" class="chalk-text" data-lang-key="post_title">タイトル</label>
+            <input type="text" id="postname" placeholder="タイトル" required data-lang-key="post_title" />
           </div>
           <div class="scr-form-group">
-            <label for="postdata" class="chalk-text">内容</label>
-            <textarea id="postdata" placeholder="内容を入力" required></textarea>
+            <label for="postdata" class="chalk-text" data-lang-key="post_content">内容</label>
+            <textarea id="postdata" placeholder="内容を入力" required data-lang-key="post_content_placeholder"></textarea>
           </div>
-          <button id="post-button" class="auto-btn">ポストする</button>
+          <button id="post-button" class="auto-btn" data-lang-key="post">ポストする</button>
         </div>
       </div>
       <div id="feed">
@@ -191,9 +193,9 @@
       </div>
     </div>
     <div id="estore" style="display: none">
-      <button class="go-back-button" onclick="backtomenu()">←</button>
+      <button class="go-back-button" onclick="backtomenu()" data-lang-key="back">←</button>
       <div class="page-container">
-        <h1 class="page-title">eStore</h1>
+        <h1 class="page-title" data-lang-key="estore">eStore</h1>
 
         <div
           class="card product-card toaster-card"
@@ -206,10 +208,10 @@
         </div>
         <div class="card-row">
           <div class="card product-card math-card" onclick="openModal('math')">
-            <span><span class="fx">f(x)</span> Math Kit</span>
+            <span><span class="fx">f(x)</span> <span data-lang-key="math_kit">Math Kit</span></span>
           </div>
           <div class="card product-card room-card" onclick="openModal('room')">
-            Room
+            <span data-lang-key="room">Room</span>
           </div>
         </div>
       </div>
@@ -219,20 +221,20 @@
       </div>
     </div>
     <div id="pickramu_app" style="display:none">
-      <button class="go-back-button" onclick="backtomenu()">←</button>
+      <button class="go-back-button" onclick="backtomenu()" data-lang-key="back">←</button>
       <div class="page-container">
-        <h1 class="page-title">Pickramu ワーク</h1>
+        <h1 class="page-title" data-lang-key="pickramu_work">Pickramu ワーク</h1>
         <div class="pickramu-tabs" style="margin-bottom: 20px; display: flex; gap: 12px;">
-          <button class="auto-btn" id="tab-pickramu" onclick="showPickramuTab()">教材ワーク</button>
-          <button class="auto-btn" id="tab-eguide" onclick="showEguideTab()">eGuide</button>
+          <button class="auto-btn" id="tab-pickramu" onclick="showPickramuTab()" data-lang-key="pickramu_tab">教材ワーク</button>
+          <button class="auto-btn" id="tab-eguide" onclick="showEguideTab()" data-lang-key="eguide_tab">eGuide</button>
         </div>
         <div id="pickramu-work-area">
           <div class="pickramu-select" style="margin-bottom: 20px;">
-            <label for="pickramu-unit-select">教材選択：</label>
+            <label for="pickramu-unit-select" data-lang-key="select_material">教材選択：</label>
             <select id="pickramu-unit-select">
               <option value="jla/math/式の計算/1節/1.用語/1.md">数学: 式の計算・用語</option>
             </select>
-            <button class="auto-btn" id="pickramu-load-btn">読み込み</button>
+            <button class="auto-btn" id="pickramu-load-btn" data-lang-key="load">読み込み</button>
           </div>
           <div id="pickramu-content" class="pickramu-content" style="background:#173c2b; border-radius:12px; min-height:300px; padding:24px; color:#fff;"></div>
         </div>
