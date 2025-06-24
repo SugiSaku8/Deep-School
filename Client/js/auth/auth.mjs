@@ -126,11 +126,12 @@ export class GoogleAuthManager {
       google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
         callback: (response) => this.handleCredentialResponse(response),
+        ux_mode: 'redirect',
         auto_select: false,
         cancel_on_tap_outside: false,
         context: "signin",
       });
-      console.log("Google login initialized");
+      console.log("Google login initialized for redirect mode");
 
       const buttonContainer = document.getElementById(this.buttonContainerId);
       if (!buttonContainer) {
