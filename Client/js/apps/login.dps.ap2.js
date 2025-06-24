@@ -37,13 +37,8 @@ export function appInit(shell) {
         alert('学校IDを入力してください');
         return;
       }
-      const authServer = new AuthServer(schoolId);
-      const ok = await authServer.TestFetch(authServer.url, false);
-      if (ok) {
-        shell.loadApp('menu');
-      } else {
-        alert('ログインに失敗しました。学校IDまたはネットワークを確認してください。');
-      }
+      console.log(`学校ID "${schoolId}" でログイン試行（認証スキップ）`);
+      shell.loadApp('menu');
     };
   }
   
