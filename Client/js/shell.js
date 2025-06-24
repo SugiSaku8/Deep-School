@@ -1,3 +1,13 @@
+import * as coreConfig from './core/config.js';
+import * as coreLang from './core/lang.js';
+import * as coreSecurity from './core/security.js';
+import * as coreUtils from './core/utils.mjs';
+
+window.coreConfig = coreConfig;
+window.coreLang = coreLang;
+window.coreSecurity = coreSecurity;
+window.coreUtils = coreUtils;
+
 // Deep-School-Shell: 全アプリの初期化・表示制御ハブ
 import * as chatApp from './apps/chat.dps.ap2.js';
 import * as scrApp from './apps/scr.dps.ap2.js';
