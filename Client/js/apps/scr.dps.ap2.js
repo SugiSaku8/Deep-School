@@ -1,3 +1,5 @@
+import { initializeSCR } from '../data/scr.client.mjs';
+
 export const appMeta = {
   name: "scr",
   title: "SCR",
@@ -39,22 +41,6 @@ export const appHtml = `
 `;
 
 export function appInit(shell) {
-  document.getElementById('scr-back').onclick = () => shell.loadApp('menu');
-  document.getElementById('scr-search-open').onclick = () => {
-    document.getElementById('scr-search-window').style.display = 'block';
-  };
-  document.getElementById('scr-search-close').onclick = () => {
-    document.getElementById('scr-search-window').style.display = 'none';
-  };
-  document.getElementById('scr-new').onclick = () => {
-    document.getElementById('post-form').style.display = 'block';
-  };
-  document.getElementById('scr-post-close').onclick = () => {
-    document.getElementById('post-form').style.display = 'none';
-  };
-  document.getElementById('post-button').onclick = () => {
-    // 投稿処理のダミー
-    alert('投稿しました（ダミー）');
-    document.getElementById('post-form').style.display = 'none';
-  };
+  initializeSCR();
+  window.InitSCRwindow = () => shell.loadApp('scr');
 } 
