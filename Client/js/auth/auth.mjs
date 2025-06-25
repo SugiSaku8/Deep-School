@@ -22,6 +22,11 @@ export class SimpleAuthManager {
       // 既存のトークンを確認
       if (await this.checkExistingTokens()) {
         console.log("SimpleAuthManager: 既存のトークンでログイン済み");
+        // 既存のトークンがある場合も認証成功コールバックを実行
+        if (this.onAuthSuccess) {
+          console.log("SimpleAuthManager: 既存トークンで認証成功コールバック実行");
+          this.onAuthSuccess();
+        }
         return;
       }
 

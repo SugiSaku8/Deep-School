@@ -55,12 +55,20 @@ class DeepSchoolShell {
   }
 
   showApp(appName) {
+    console.log(`Shell: ${appName}アプリを表示中`);
+    
     // すべての主要セクションを非表示
     const sections = ['login', 'menu', 'toaster_chat', 'scr_app', 'estore', 'pickramu_app', 'setting'];
     sections.forEach(id => {
       const el = document.getElementById(id);
-      if (el) el.style.display = 'none';
+      if (el) {
+        el.style.display = 'none';
+        console.log(`Shell: ${id}を非表示`);
+      } else {
+        console.warn(`Shell: ${id}要素が見つかりません`);
+      }
     });
+    
     // 対象アプリのセクションを表示
     let showId = appName;
     if (appName === 'chat') showId = 'toaster_chat';
@@ -70,9 +78,17 @@ class DeepSchoolShell {
     if (appName === 'estore') showId = 'estore';
     if (appName === 'menu') showId = 'menu';
     if (appName === 'login') showId = 'login';
+    
     const showEl = document.getElementById(showId);
-    if (showEl) showEl.style.display = 'block';
+    if (showEl) {
+      showEl.style.display = 'block';
+      console.log(`Shell: ${showId}を表示`);
+    } else {
+      console.error(`Shell: ${showId}要素が見つかりません`);
+    }
+    
     this.currentApp = appName;
+    console.log(`Shell: 現在のアプリ: ${appName}`);
   }
 
   loadApp(appName) {
