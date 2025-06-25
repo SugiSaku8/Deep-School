@@ -4,32 +4,42 @@ export const appMeta = {
   icon: "re/ico/menu.svg"
 };
 
-export const appHtml = `
-  <div id="menu-app" class="popup">
+export function appInit(shell) {
+  console.log("MenuApp: 初期化開始");
+
+  // HTMLを#app-rootに描画
+  const root = document.getElementById('app-root');
+  if (!root) {
+    console.error('MenuApp: #app-rootが見つかりません');
+    return;
+  }
+  root.innerHTML = `
     <div class="menu-content">
       <div class="menu-item">
         <img src="re/ico/tm.png" alt="ToasterMachineアイコン" class="menu-icon toaster-icon icon-anim" />
-        <div class="menu-label chalk-text icon-anim" style="cursor: pointer" id="menu-toaster">ToasterMachine</div>
+        <span class="notification-badge">25</span>
+        <div class="menu-label chalk-text icon-anim" id="menu-toaster" style="cursor: pointer" data-lang-key="menu_toaster">
+          ToasterMachine
+        </div>
       </div>
-      <div class="menu-item">
+      <div class="menu-item" id="scr_menu_icon">
         <img src="re/ico/SCR.png" alt="SCRアイコン" class="menu-icon scr-icon icon-anim" />
-        <div class="menu-label chalk-text icon-anim" style="cursor: pointer" id="menu-scr">SCR</div>
+        <span class="notification-badge">25</span>
+        <div class="menu-label chalk-text icon-anim" id="menu-scr" style="cursor: pointer" data-lang-key="menu_scr">
+          SCR
+        </div>
       </div>
       <div class="menu-item">
         <img src="re/ico/Setting.png" alt="設定アイコン" class="menu-icon setting-icon icon-anim" />
-        <div class="menu-label chalk-text icon-anim" style="cursor: pointer" id="menu-setting">設定</div>
+        <div class="menu-label chalk-text icon-anim" id="menu-setting" style="cursor: pointer" data-lang-key="menu_setting">設定</div>
       </div>
       <div class="menu-item">
         <img src="re/ico/note.svg" alt="Pickramuアイコン" class="menu-icon pickramu-icon icon-anim" />
-        <div class="menu-label chalk-text icon-anim" style="cursor: pointer" id="menu-pickramu">Pickramu</div>
+        <div class="menu-label chalk-text icon-anim" id="menu-pickramu" style="cursor: pointer" data-lang-key="menu_pickramu">Pickramu</div>
       </div>
     </div>
-  </div>
-`;
+  `;
 
-export function appInit(shell) {
-  console.log("MenuApp: 初期化開始");
-  
   // メニューアイテムの設定
   const menuItems = {
     'menu-toaster': () => {
@@ -49,7 +59,7 @@ export function appInit(shell) {
       shell.loadApp('pickramu');
     }
   };
-  
+
   // 各メニューアイテムにクリックイベントを設定
   Object.entries(menuItems).forEach(([id, handler]) => {
     const menuItem = document.getElementById(id);
@@ -60,7 +70,7 @@ export function appInit(shell) {
       console.warn(`MenuApp: ${id}のメニューアイテムが見つかりません`);
     }
   });
-  
+
   // ユーザー情報の表示（ログイン済みの場合）
   if (window.googleUserName) {
     console.log("MenuApp: ユーザー情報", {
@@ -68,6 +78,6 @@ export function appInit(shell) {
       id: window.googleUserId
     });
   }
-  
+
   console.log("MenuApp: 初期化完了");
 } 

@@ -2,45 +2,41 @@ import { initializeSCR } from '../data/scr.client.mjs';
 
 export const appMeta = {
   name: "scr",
-  title: "SCR",
+  title: "SCRノート",
   icon: "re/ico/SCR.png"
 };
 
-export const appHtml = `
-  <div id="scr-app" class="popup">
-    <button class="go-back-button button-chalk" id="scr-back">←</button>
-    <button class="auto-btn button-chalk" id="scr-new">New</button>
-    <button class="auto-btn button-chalk" id="scr-search-open">Search</button>
-    <div id="scr-search-window" class="popup" style="display:none; max-width: 500px; margin: 30px auto 0 auto; background: #173c2b; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); padding: 24px 20px 16px 20px;">
-      <span class="batsu" id="scr-search-close"></span>
-      <div class="scr-form-group">
-        <label for="scr-search-input" class="chalk-text">キーワード検索</label>
-        <input type="text" id="scr-search-input" placeholder="キーワードを入力" style="width: 80%; max-width: 300px;" />
-      </div>
-      <button class="auto-btn button-chalk" id="scr-search-btn">検索</button>
-      <div id="scr-search-result" style="margin-top: 18px;"></div>
-    </div>
-    <div id="post-form" class="popup" style="display: none; max-width: 400px; margin: 0 auto;">
-      <span class="batsu" id="scr-post-close"></span>
-      <div class="scr-form-card">
-        <div class="scr-form-group">
-          <label for="postname" class="chalk-text">タイトル</label>
-          <input type="text" id="postname" placeholder="タイトル" required />
-        </div>
-        <div class="scr-form-group">
-          <label for="postdata" class="chalk-text">内容</label>
-          <textarea id="postdata" placeholder="内容を入力" required></textarea>
-        </div>
-        <button id="post-button" class="auto-btn">ポストする</button>
-      </div>
-    </div>
-    <div id="feed">
-      <div id="feed-content"></div>
-    </div>
-  </div>
-`;
-
 export function appInit(shell) {
-  initializeSCR();
-  window.InitSCRwindow = () => shell.loadApp('scr');
+  const root = document.getElementById('app-root');
+  if (!root) {
+    console.error('SCRApp: #app-rootが見つかりません');
+    return;
+  }
+  root.innerHTML = `
+    <div class="page-container">
+      <button class="go-back-button" id="scr-back-btn" data-lang-key="back">←</button>
+      <h1 class="page-title" data-lang-key="scr_note">SCRノート</h1>
+      <div class="scr-editor-container">
+        <textarea id="scr-editor" placeholder="ノートをここに書いてください" style="width:100%;height:200px;"></textarea>
+        <button id="scr-save-btn" class="button-chalk" data-lang-key="save">保存</button>
+      </div>
+      <div class="scr-preview-container">
+        <h2 data-lang-key="preview">プレビュー</h2>
+        <div id="scr-preview" class="scr-preview" style="background:#173c2b; border-radius:12px; min-height:100px; padding:16px; color:#fff;"></div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('scr-back-btn').onclick = () => shell.loadApp('menu');
+
+  const editor = document.getElementById('scr-editor');
+  const preview = document.getElementById('scr-preview');
+  if (editor && preview) {
+    editor.addEventListener('input', () => {
+      preview.innerHTML = marked.parse(editor.value);
+    });
+  }
+  document.getElementById('scr-save-btn').onclick = () => {
+    alert('ノートを保存しました（ダミー）');
+  };
 } 
