@@ -17,6 +17,7 @@ export function appInit(shell) {
   }
   root.innerHTML = `
     <div class="page-container">
+      <button class="close-btn" id="setting-close-btn" title="閉じる" aria-label="閉じる">×</button>
       <h1 class="page-title" data-lang-key="setting">設定</h1>
       <div class="setting-content">
         <div class="setting-section">
@@ -79,6 +80,11 @@ export function appInit(shell) {
   loadSettings();
   // イベントリスナーの設定
   setupEventListeners(shell);
+
+  // 閉じるボタンでmenuに戻る
+  const closeBtn = document.getElementById('setting-close-btn');
+  if (closeBtn) closeBtn.onclick = () => shell.loadApp('menu');
+
   console.log("SettingApp: 初期化完了");
 }
 
