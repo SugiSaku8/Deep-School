@@ -53,6 +53,7 @@ class DeepSchoolShell {
       '3rdappout','3rdappin','3rdapperr','sysout','sysin','syserr'
     ];
     this.logDisplays.forEach(d => this.logMemory[d] = []);
+    this._activeDisplay = null;
     window.ds = this; // コマンド用
     applyLangToDOM();
     this.loadApp('login');
@@ -65,11 +66,29 @@ class DeepSchoolShell {
     const display = this._detectDisplay(from, level);
     if (!this.logMemory[display]) this.logMemory[display] = [];
     this.logMemory[display].push(logObj);
+    // DevTools表示用: アクティブディスプレイなら即時console出力
+    if (this._activeDisplay === display) {
+      this._printLogToConsole(logObj);
+    }
   }
 
   // ログ取得
   getLogs(displayName) {
     return this.logMemory[displayName] || [];
+  }
+
+  // DevTools用: ディスプレイ切替
+  log_sw(displayName) {
+    if (!this.logDisplays.includes(displayName)) {
+      console.warn('[ds.log.sw] Unknown display:', displayName);
+      return;
+    }
+    this._activeDisplay = displayName;
+    console.clear();
+    const logs = this.getLogs(displayName);
+    logs.forEach(log => this._printLogToConsole(log));
+    // ユーザー向け案内
+    console.info(`[ds.log.sw] Now watching display: ${displayName}`);
   }
 
   // from文字列からディスプレイ名を判定
@@ -100,6 +119,20 @@ class DeepSchoolShell {
     if (level === 'error') return 'stderr';
     if (level === 'warn') return 'stderr';
     return 'stdout';
+  }
+
+  // ログをconsoleに出力
+  _printLogToConsole(log) {
+    const prefix = `[${log.timestamp.split('T')[1].slice(0,8)}] ${log.from}`;
+    if (log.level === 'error') {
+      console.error(prefix, log.message);
+    } else if (log.level === 'warn') {
+      console.warn(prefix, log.message);
+    } else if (log.level === 'info') {
+      console.info(prefix, log.message);
+    } else {
+      console.log(prefix, log.message);
+    }
   }
 
   showApp(appName) {
