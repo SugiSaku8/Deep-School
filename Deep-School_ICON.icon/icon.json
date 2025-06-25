@@ -1,0 +1,103 @@
+{
+  "color-space-for-untagged-svg-colors" : "display-p3",
+  "fill" : {
+    "automatic-gradient" : "display-p3:0.00000,0.39608,0.18431,1.00000"
+  },
+  "groups" : [
+    {
+      "hidden" : true,
+      "layers" : [
+        {
+          "hidden" : true,
+          "image-name" : "mathの背景が削除されました.png",
+          "name" : "mathhhh",
+          "position" : {
+            "scale" : 1.5,
+            "translation-in-points" : [
+              34.67646878061245,
+              -31.319674189062845
+            ]
+          }
+        },
+        {
+          "hidden" : true,
+          "image-name" : "japanの背景が削除されました.png",
+          "name" : "japanese",
+          "position" : {
+            "scale" : 1.5,
+            "translation-in-points" : [
+              39.62578917838559,
+              -77.17504960944049
+            ]
+          }
+        },
+        {
+          "hidden" : true,
+          "image-name" : "engの背景が削除されました.png",
+          "name" : "english",
+          "position" : {
+            "scale" : 1.5,
+            "translation-in-points" : [
+              15.972097056536036,
+              -46.854607298792416
+            ]
+          }
+        }
+      ],
+      "name" : "more",
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    },
+    {
+      "layers" : [
+        {
+          "hidden" : false,
+          "image-name" : "“14”の背景が削除されました.png",
+          "name" : "deep",
+          "position" : {
+            "scale" : 2,
+            "translation-in-points" : [
+              49.3772668855568,
+              -16.88483102941062
+            ]
+          }
+        },
+        {
+          "blend-mode" : "normal",
+          "fill" : "none",
+          "image-name" : "deep-rayer-1.png",
+          "name" : "deep-rayer-1",
+          "opacity" : 1,
+          "position" : {
+            "scale" : 5,
+            "translation-in-points" : [
+              131.7578125,
+              -680.828125
+            ]
+          }
+        }
+      ],
+      "name" : "basic",
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}
