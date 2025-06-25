@@ -38,11 +38,14 @@ export class GoogleAuthManager {
       // 既存のトークンを確認
       const isLoggedIn = await this.checkExistingTokens();
       if (isLoggedIn) {
+        console.log("既存のトークンでログイン済み");
         return;
       }
 
       // Googleログインボタンの初期化
+      console.log("Googleログインボタンを初期化中...");
       await this.initializeGoogleLogin();
+      console.log("Google認証の初期化が完了しました");
     } catch (error) {
       console.error("認証の初期化に失敗しました:", error);
       this.showLoginForm();
@@ -123,6 +126,7 @@ export class GoogleAuthManager {
     }
 
     try {
+      console.log("Google Identity Servicesを初期化中...");
       google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
         callback: (response) => this.handleCredentialResponse(response),
@@ -135,10 +139,11 @@ export class GoogleAuthManager {
 
       const buttonContainer = document.getElementById(this.buttonContainerId);
       if (!buttonContainer) {
-        console.error("Login button container not found");
+        console.error("Login button container not found:", this.buttonContainerId);
         return;
       }
 
+      console.log("Google認証ボタンをレンダリング中...");
       google.accounts.id.renderButton(buttonContainer, {
         type: "standard",
         theme: "outline",
@@ -175,13 +180,19 @@ export class GoogleAuthManager {
       console.log("Google ユーザーID:", window.googleUserId);
 
       // Google Drive APIの認証を実行
+      console.log("Google Drive APIの認証を開始...");
       await this.initializeGoogleDriveAuth();
+      console.log("Google Drive APIの認証が完了しました");
 
       // 認証成功後の処理
-      this.showMenu();
-      
+      console.log("認証成功後の処理を実行中...");
       if(this.onAuthSuccess) {
+        console.log("onAuthSuccessコールバックを実行");
         this.onAuthSuccess();
+      } else {
+        // フォールバック: 直接メニューを表示
+        console.log("フォールバック: 直接メニューを表示");
+        this.showMenu();
       }
     } catch (error) {
       console.error("Google認証エラー:", error);

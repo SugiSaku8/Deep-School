@@ -28,6 +28,7 @@ export function appInit(shell) {
   
   const authManager = new GoogleAuthManager('openLoginButton', () => {
     // Google認証成功後はメニューを表示
+    console.log("Google認証成功、メニューに遷移します");
     shell.loadApp('menu');
   });
   authManager.initialize();
