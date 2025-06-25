@@ -9,7 +9,7 @@ export const appMeta = {
 export function appInit(shell) {
   const root = document.getElementById('app-root');
   if (!root) {
-    console.error('SCRApp: #app-rootが見つかりません');
+    ds.log({from: 'dp.app.scr.out', message: 'SCRApp: #app-rootが見つかりません', level: 'error'});
     return;
   }
   root.innerHTML = `

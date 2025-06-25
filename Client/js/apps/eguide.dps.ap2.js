@@ -14,4 +14,5 @@ export const appHtml = `
 
 export function appInit(shell) {
   document.getElementById('eguide-back').onclick = () => shell.loadApp('menu');
+  ds.log({from: 'dp.app.eguide.out', message: 'EGuideApp: 初期化開始', level: 'info'});
 } 
