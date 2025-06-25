@@ -1511,3 +1511,103 @@ body::-webkit-scrollbar {
   color: #2d3a2e;
   outline: 2px solid #ffe066;
 }
+
+.scr-post-icon-btn {
+  position: absolute;
+  top: 18px;
+  right: 72px;
+  background: #ffe066;
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px #0002;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.scr-post-icon-btn:hover, .scr-post-icon-btn:focus {
+  background: #fff8c6;
+  box-shadow: 0 4px 16px #ffe06688;
+  outline: 2px solid #ffe066;
+}
+
+.scr-post-modal {
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0; right: 0; bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(30, 30, 30, 0.45);
+  backdrop-filter: blur(4px);
+}
+.scr-post-modal-content {
+  background: #f8f8f2;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px 8px #0004, 0 0 0 4px #ffe06644;
+  padding: 2.5em 2em 2em 2em;
+  min-width: 320px;
+  max-width: 95vw;
+  width: 400px;
+  position: relative;
+  color: #222;
+  font-family: 'anka', 'Schoolbell', cursive;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2em;
+}
+.scr-post-modal-content .modal-title {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+  color: #2d3a2e;
+  text-align: center;
+}
+.modal-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+  margin-bottom: 1em;
+}
+.modal-form-group label {
+  font-size: 1.1rem;
+  color: #2d3a2e;
+  margin-bottom: 0.2em;
+}
+.modal-form-group input,
+.modal-form-group textarea {
+  font-size: 1.1rem;
+  padding: 0.7em;
+  border: 1.5px solid #ffe066;
+  border-radius: 10px;
+  background: #fff;
+  color: #222;
+  font-family: inherit;
+  resize: none;
+}
+.modal-form-group textarea {
+  min-height: 80px;
+  max-height: 200px;
+}
+.modal-post-btn {
+  width: 100%;
+  margin-top: 0.5em;
+  font-size: 1.2rem;
+  padding: 0.7em 0;
+}
+@media (max-width: 600px) {
+  .scr-post-modal-content {
+    min-width: 90vw;
+    width: 98vw;
+    padding: 1.2em 0.5em 1em 0.5em;
+  }
+  .scr-post-icon-btn {
+    right: 18px;
+    top: 12px;
+    width: 38px;
+    height: 38px;
+  }
+}
