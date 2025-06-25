@@ -32,32 +32,32 @@ export function appInit(shell) {
   
   // メニューアイテムの設定
   const menuItems = {
-    'toaster': () => {
+    'menu-toaster': () => {
       console.log("MenuApp: ToasterMachineを開く");
       shell.loadApp('chat'); // chatアプリとして開く
     },
-    'scr': () => {
+    'menu-scr': () => {
       console.log("MenuApp: SCRを開く");
       shell.loadApp('scr');
     },
-    'setting': () => {
+    'menu-setting': () => {
       console.log("MenuApp: 設定を開く");
       shell.loadApp('setting');
     },
-    'pickramu': () => {
+    'menu-pickramu': () => {
       console.log("MenuApp: Pickramuを開く");
       shell.loadApp('pickramu');
     }
   };
   
   // 各メニューアイテムにクリックイベントを設定
-  Object.entries(menuItems).forEach(([appName, handler]) => {
-    const menuItem = document.querySelector(`[data-menu-item="${appName}"]`);
+  Object.entries(menuItems).forEach(([id, handler]) => {
+    const menuItem = document.getElementById(id);
     if (menuItem) {
-      menuItem.addEventListener('click', handler);
-      console.log(`MenuApp: ${appName}のイベントリスナーを設定`);
+      menuItem.onclick = handler;
+      console.log(`MenuApp: ${id}のイベントリスナーを設定`);
     } else {
-      console.warn(`MenuApp: ${appName}のメニューアイテムが見つかりません`);
+      console.warn(`MenuApp: ${id}のメニューアイテムが見つかりません`);
     }
   });
   
