@@ -1395,3 +1395,95 @@ body::-webkit-scrollbar {
     padding: 12px 4vw;
   }
 }
+
+/* 設定画面のスタイル */
+.setting-content {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.setting-section {
+  background: #173c2b;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.setting-section h2 {
+  color: #fff;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+  border-bottom: 2px solid #2d5a3d;
+  padding-bottom: 8px;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #2d5a3d;
+}
+
+.setting-item:last-child {
+  border-bottom: none;
+}
+
+.setting-item label {
+  color: #fff;
+  font-weight: 500;
+  flex: 1;
+}
+
+.setting-item span {
+  color: #ccc;
+  flex: 1;
+  text-align: right;
+}
+
+.setting-item input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: #4CAF50;
+}
+
+.setting-item select {
+  background: #2d5a3d;
+  color: #fff;
+  border: 1px solid #4CAF50;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.setting-item select:focus {
+  outline: none;
+  border-color: #66bb6a;
+}
+
+.auto-btn.danger {
+  background: #d32f2f;
+  color: white;
+  border: none;
+}
+
+.auto-btn.danger:hover {
+  background: #b71c1c;
+}
+
+/* ページコンテナのスタイル */
+.page-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-title {
+  color: #fff;
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}

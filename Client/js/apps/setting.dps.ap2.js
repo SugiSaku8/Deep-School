@@ -1,3 +1,5 @@
+import { SimpleAuthManager } from '../auth/auth.mjs';
+
 export const appMeta = {
   name: "setting",
   title: "設定",
@@ -5,24 +7,332 @@ export const appMeta = {
 };
 
 export const appHtml = `
-  <div id="setting-app" class="popup">
-    <h2 class="chalk-text">設定</h2>
-    <div>
-      <label class="chalk-text">ユーザー名</label>
-      <input type="text" id="username-setting" readonly />
+  <div id="setting-app" class="page-container">
+    <h1 class="page-title" data-lang-key="setting">設定</h1>
+    <div class="setting-content">
+      <div class="setting-section">
+        <h2>アカウント設定</h2>
+        <div class="setting-item">
+          <label>ユーザー名:</label>
+          <span id="setting-username">未設定</span>
+        </div>
+        <div class="setting-item">
+          <label>ユーザーID:</label>
+          <span id="setting-userid">未設定</span>
+        </div>
+        <button class="auto-btn" id="logout-btn" data-lang-key="logout">ログアウト</button>
+      </div>
+      
+      <div class="setting-section">
+        <h2>表示設定</h2>
+        <div class="setting-item">
+          <label for="dark-mode-toggle">ダークモード:</label>
+          <input type="checkbox" id="dark-mode-toggle" checked>
+        </div>
+        <div class="setting-item">
+          <label for="font-size-select">フォントサイズ:</label>
+          <select id="font-size-select">
+            <option value="small">小</option>
+            <option value="medium" selected>中</option>
+            <option value="large">大</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="setting-section">
+        <h2>通知設定</h2>
+        <div class="setting-item">
+          <label for="notification-toggle">通知を有効にする:</label>
+          <input type="checkbox" id="notification-toggle" checked>
+        </div>
+        <div class="setting-item">
+          <label for="sound-toggle">サウンド:</label>
+          <input type="checkbox" id="sound-toggle" checked>
+        </div>
+      </div>
+      
+      <div class="setting-section">
+        <h2>データ管理</h2>
+        <div class="setting-item">
+          <button class="auto-btn" id="export-btn" data-lang-key="export_data">データをエクスポート</button>
+        </div>
+        <div class="setting-item">
+          <button class="auto-btn" id="import-btn" data-lang-key="import_data">データをインポート</button>
+        </div>
+        <div class="setting-item">
+          <button class="auto-btn danger" id="clear-btn" data-lang-key="clear_data">データをクリア</button>
+        </div>
+      </div>
     </div>
-    <div>
-      <label class="chalk-text">ユーザーID</label>
-      <input type="text" id="userid-setting" readonly />
-    </div>
-    <button class="button-chalk" id="setting-back">戻る</button>
   </div>
 `;
 
 export function appInit(shell) {
-  // 戻るボタンでメニューに戻る
-  document.getElementById('setting-back').onclick = () => shell.loadApp('menu');
-  // ユーザー名・IDの表示例（本来は認証情報から取得）
-  document.getElementById('username-setting').value = window.googleUserName || '';
-  document.getElementById('userid-setting').value = window.googleUserId || '';
-} 
+  console.log("SettingApp: 初期化開始");
+  
+  // ユーザー情報の表示
+  updateUserInfo();
+  
+  // 設定の読み込み
+  loadSettings();
+  
+  // イベントリスナーの設定
+  setupEventListeners(shell);
+  
+  console.log("SettingApp: 初期化完了");
+}
+
+/**
+ * ユーザー情報を更新
+ */
+function updateUserInfo() {
+  const usernameElement = document.getElementById('setting-username');
+  const useridElement = document.getElementById('setting-userid');
+  
+  if (usernameElement) {
+    usernameElement.textContent = window.googleUserName || '未設定';
+  }
+  
+  if (useridElement) {
+    useridElement.textContent = window.googleUserId || '未設定';
+  }
+}
+
+/**
+ * 設定を読み込み
+ */
+function loadSettings() {
+  try {
+    const settings = JSON.parse(localStorage.getItem('deep-school-settings') || '{}');
+    
+    // ダークモード
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    if (darkModeToggle) {
+      darkModeToggle.checked = settings.darkMode !== false;
+    }
+    
+    // フォントサイズ
+    const fontSizeSelect = document.getElementById('font-size-select');
+    if (fontSizeSelect) {
+      fontSizeSelect.value = settings.fontSize || 'medium';
+    }
+    
+    // 通知設定
+    const notificationToggle = document.getElementById('notification-toggle');
+    if (notificationToggle) {
+      notificationToggle.checked = settings.notifications !== false;
+    }
+    
+    // サウンド設定
+    const soundToggle = document.getElementById('sound-toggle');
+    if (soundToggle) {
+      soundToggle.checked = settings.sound !== false;
+    }
+    
+    console.log("SettingApp: 設定を読み込みました");
+  } catch (error) {
+    console.error("SettingApp: 設定の読み込みエラー", error);
+  }
+}
+
+/**
+ * 設定を保存
+ */
+function saveSettings() {
+  try {
+    const settings = {
+      darkMode: document.getElementById('dark-mode-toggle')?.checked ?? true,
+      fontSize: document.getElementById('font-size-select')?.value ?? 'medium',
+      notifications: document.getElementById('notification-toggle')?.checked ?? true,
+      sound: document.getElementById('sound-toggle')?.checked ?? true
+    };
+    
+    localStorage.setItem('deep-school-settings', JSON.stringify(settings));
+    console.log("SettingApp: 設定を保存しました", settings);
+  } catch (error) {
+    console.error("SettingApp: 設定の保存エラー", error);
+  }
+}
+
+/**
+ * イベントリスナーを設定
+ */
+function setupEventListeners(shell) {
+  // 設定変更時の保存
+  const settingElements = [
+    'dark-mode-toggle',
+    'font-size-select', 
+    'notification-toggle',
+    'sound-toggle'
+  ];
+  
+  settingElements.forEach(id => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.addEventListener('change', saveSettings);
+    }
+  });
+  
+  // ログアウトボタン
+  const logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+      if (confirm('ログアウトしますか？')) {
+        logout();
+        shell.loadApp('login');
+      }
+    });
+  }
+  
+  // データエクスポート
+  const exportBtn = document.getElementById('export-btn');
+  if (exportBtn) {
+    exportBtn.addEventListener('click', exportData);
+  }
+  
+  // データインポート
+  const importBtn = document.getElementById('import-btn');
+  if (importBtn) {
+    importBtn.addEventListener('click', importData);
+  }
+  
+  // データクリア
+  const clearBtn = document.getElementById('clear-btn');
+  if (clearBtn) {
+    clearBtn.addEventListener('click', () => {
+      if (confirm('すべてのデータを削除しますか？この操作は取り消せません。')) {
+        clearData();
+      }
+    });
+  }
+}
+
+/**
+ * ログアウト処理
+ */
+function logout() {
+  try {
+    // Google認証のログアウト
+    if (window.google && window.google.accounts) {
+      window.google.accounts.id.disableAutoSelect();
+    }
+    
+    // ローカルストレージのクリア
+    localStorage.removeItem('google_access_token');
+    localStorage.removeItem('google_token_timestamp');
+    
+    // ユーザー情報のクリア
+    window.googleUserName = null;
+    window.googleUserId = null;
+    
+    console.log("SettingApp: ログアウト完了");
+  } catch (error) {
+    console.error("SettingApp: ログアウトエラー", error);
+  }
+}
+
+/**
+ * データエクスポート
+ */
+function exportData() {
+  try {
+    const data = {
+      settings: JSON.parse(localStorage.getItem('deep-school-settings') || '{}'),
+      userData: JSON.parse(localStorage.getItem('deep-school-user-data') || '{}'),
+      timestamp: new Date().toISOString()
+    };
+    
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `deep-school-backup-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    console.log("SettingApp: データをエクスポートしました");
+  } catch (error) {
+    console.error("SettingApp: データエクスポートエラー", error);
+    alert('データのエクスポートに失敗しました');
+  }
+}
+
+/**
+ * データインポート
+ */
+function importData() {
+  try {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    
+    input.onchange = (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const data = JSON.parse(e.target.result);
+            
+            if (data.settings) {
+              localStorage.setItem('deep-school-settings', JSON.stringify(data.settings));
+            }
+            if (data.userData) {
+              localStorage.setItem('deep-school-user-data', JSON.stringify(data.userData));
+            }
+            
+            // 設定を再読み込み
+            loadSettings();
+            
+            console.log("SettingApp: データをインポートしました");
+            alert('データのインポートが完了しました');
+          } catch (error) {
+            console.error("SettingApp: データインポートエラー", error);
+            alert('データのインポートに失敗しました');
+          }
+        };
+        reader.readAsText(file);
+      }
+    };
+    
+    input.click();
+  } catch (error) {
+    console.error("SettingApp: データインポートエラー", error);
+    alert('データのインポートに失敗しました');
+  }
+}
+
+/**
+ * データクリア
+ */
+function clearData() {
+  try {
+    // 設定以外のデータをクリア
+    const keysToKeep = ['deep-school-settings'];
+    const keysToRemove = [];
+    
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && !keysToKeep.includes(key)) {
+        keysToRemove.push(key);
+      }
+    }
+    
+    keysToRemove.forEach(key => localStorage.removeItem(key));
+    
+    console.log("SettingApp: データをクリアしました");
+    alert('データのクリアが完了しました');
+  } catch (error) {
+    console.error("SettingApp: データクリアエラー", error);
+    alert('データのクリアに失敗しました');
+  }
+}
+
+// グローバル関数として公開
+window.logout = logout;
+window.exportData = exportData;
+window.importData = importData;
+window.clearData = clearData; 

@@ -1,4 +1,4 @@
-import { GoogleAuthManager, AuthServer, initializeApp } from '../auth/auth.mjs';
+import { SimpleAuthManager, SchoolAuthServer } from '../auth/auth.mjs';
 
 export const appMeta = {
   name: "login",
@@ -23,31 +23,72 @@ export const appHtml = `
 `;
 
 export function appInit(shell) {
+  console.log("LoginApp: 初期化開始");
+  
   // Google認証マネージャーの初期化
-  const authManager = new GoogleAuthManager('openLoginButton', () => {
-    // Google認証成功後はメニューを表示
-    console.log("Google認証成功、メニューに遷移します");
+  const authManager = new SimpleAuthManager('openLoginButton', () => {
+    console.log("LoginApp: Google認証成功、メニューに遷移");
     shell.loadApp('menu');
   });
-  authManager.initialize();
+  
+  // 認証マネージャーの初期化
+  authManager.initialize().catch(error => {
+    console.error("LoginApp: 認証マネージャー初期化エラー", error);
+  });
 
+  // 学校IDログインボタンの設定
   const loginButton = document.getElementById('school_login_btn');
   if (loginButton) {
     loginButton.onclick = async () => {
-      const schoolId = document.getElementById('schoolId').value;
+      const schoolIdInput = document.getElementById('schoolId');
+      const schoolId = schoolIdInput ? schoolIdInput.value : "";
+      
       if (!schoolId) {
         alert('学校IDを入力してください');
         return;
       }
-      console.log(`学校ID "${schoolId}" でログイン試行（認証スキップ）`);
-      shell.loadApp('menu');
+      
+      console.log(`LoginApp: 学校ID "${schoolId}" でログイン試行`);
+      
+      try {
+        // 学校認証サーバーのテスト
+        const authServer = new SchoolAuthServer(schoolId);
+        const connectionResult = await authServer.testConnection();
+        
+        if (connectionResult) {
+          console.log("LoginApp: 学校認証サーバー接続成功");
+          window.scr_url = authServer.url;
+          
+          // loadFeed関数が定義されている場合のみ実行
+          if (typeof window.loadFeed === 'function') {
+            await window.loadFeed();
+          }
+        } else {
+          console.log("LoginApp: 学校認証サーバー接続失敗");
+        }
+        
+        // メニューに遷移
+        shell.loadApp('menu');
+        
+      } catch (error) {
+        console.error("LoginApp: 学校IDログインエラー", error);
+        alert('ログインに失敗しました');
+      }
     };
   }
   
+  // グローバル関数の設定
   window.showLoginForm = () => {
-      const loginFormElement = document.getElementById('loginForm');
-      const openLoginButtonElement = document.getElementById('openLoginButton');
-      if (loginFormElement) loginFormElement.style.display = 'block';
-      if (openLoginButtonElement) openLoginButtonElement.style.display = 'none';
-  }
+    const loginFormElement = document.getElementById('loginForm');
+    const openLoginButtonElement = document.getElementById('openLoginButton');
+    
+    if (loginFormElement) {
+      loginFormElement.style.display = 'block';
+    }
+    if (openLoginButtonElement) {
+      openLoginButtonElement.style.display = 'none';
+    }
+  };
+  
+  console.log("LoginApp: 初期化完了");
 } 

@@ -244,44 +244,119 @@
         </div>
       </div>
     </div>
+    <div id="setting" style="display:none">
+      <button class="go-back-button" onclick="backtomenu()" data-lang-key="back">←</button>
+      <div class="page-container">
+        <h1 class="page-title" data-lang-key="setting">設定</h1>
+        <div class="setting-content">
+          <div class="setting-section">
+            <h2>アカウント設定</h2>
+            <div class="setting-item">
+              <label>ユーザー名:</label>
+              <span id="setting-username">未設定</span>
+            </div>
+            <div class="setting-item">
+              <label>ユーザーID:</label>
+              <span id="setting-userid">未設定</span>
+            </div>
+            <button class="auto-btn" onclick="logout()" data-lang-key="logout">ログアウト</button>
+          </div>
+          
+          <div class="setting-section">
+            <h2>表示設定</h2>
+            <div class="setting-item">
+              <label for="dark-mode-toggle">ダークモード:</label>
+              <input type="checkbox" id="dark-mode-toggle" checked>
+            </div>
+            <div class="setting-item">
+              <label for="font-size-select">フォントサイズ:</label>
+              <select id="font-size-select">
+                <option value="small">小</option>
+                <option value="medium" selected>中</option>
+                <option value="large">大</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="setting-section">
+            <h2>通知設定</h2>
+            <div class="setting-item">
+              <label for="notification-toggle">通知を有効にする:</label>
+              <input type="checkbox" id="notification-toggle" checked>
+            </div>
+            <div class="setting-item">
+              <label for="sound-toggle">サウンド:</label>
+              <input type="checkbox" id="sound-toggle" checked>
+            </div>
+          </div>
+          
+          <div class="setting-section">
+            <h2>データ管理</h2>
+            <div class="setting-item">
+              <button class="auto-btn" onclick="exportData()" data-lang-key="export_data">データをエクスポート</button>
+            </div>
+            <div class="setting-item">
+              <button class="auto-btn" onclick="importData()" data-lang-key="import_data">データをインポート</button>
+            </div>
+            <div class="setting-item">
+              <button class="auto-btn danger" onclick="clearData()" data-lang-key="clear_data">データをクリア</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <script>
       function InitToasterChat() {
-        document.getElementById("toaster_chat").style.display = "block";
-        document.getElementById("splash").style.display = "block";
-        document.getElementById("menu").style.display = "none";
+        const toasterChat = document.getElementById("toaster_chat");
+        const splash = document.getElementById("splash");
+        const menu = document.getElementById("menu");
+        
+        if (toasterChat) toasterChat.style.display = "block";
+        if (splash) splash.style.display = "block";
+        if (menu) menu.style.display = "none";
       }
+      
       function backtomenu() {
-        document.getElementById("toaster_chat").style.display = "none";
-        document.getElementById("splash").style.display = "none";
-        document.getElementById("scr_app").style.display = "none";
-        document.getElementById("login").style.display = "none";
-        document.getElementById("menu").style.display = "block";
-        document.getElementById("pickramu_app").style.display = "none";
-        document.getElementById("estore").style.display = "none";
-        document.getElementById("setting").style.display = "none";
+        const sections = [
+          "toaster_chat", "splash", "scr_app", "login", 
+          "pickramu_app", "estore", "setting"
+        ];
+        
+        sections.forEach(id => {
+          const element = document.getElementById(id);
+          if (element) element.style.display = "none";
+        });
+        
+        const menu = document.getElementById("menu");
+        if (menu) menu.style.display = "block";
       }
+      
       function InitSCRwindow() {
-        document.getElementById("toaster_chat").style.display = "none";
-        document.getElementById("splash").style.display = "none";
-        document.getElementById("menu").style.display = "none";
-        document.getElementById("scr_app").style.display = "block";
+        const sections = ["toaster_chat", "splash", "menu"];
+        sections.forEach(id => {
+          const element = document.getElementById(id);
+          if (element) element.style.display = "none";
+        });
+        
+        const scrApp = document.getElementById("scr_app");
+        if (scrApp) scrApp.style.display = "block";
       }
+      
       function IninterDom() {
-        const menuElement = document.getElementById("menu");
-        if (menuElement) {
-          menuElement.style.display = "none";
-        }
+        const menu = document.getElementById("menu");
+        if (menu) menu.style.display = "none";
+        
         const schoolLoginBtn = document.getElementById("school_login_btn");
         if (schoolLoginBtn) {
           schoolLoginBtn.addEventListener("click", () => {
-            const loginFormElement = document.getElementById("loginForm");
-            if (loginFormElement) {
-              loginFormElement.style.display = "none";
-            }
+            const loginForm = document.getElementById("loginForm");
+            if (loginForm) loginForm.style.display = "none";
           });
         }
       }
+      
       IninterDom();
+      
       function showPickramuTab() {
         const workArea = document.getElementById('pickramu-work-area');
         const eguideArea = document.getElementById('pickramu-eguide-area');
@@ -293,6 +368,7 @@
         if (tabPickramu) tabPickramu.classList.add('active');
         if (tabEguide) tabEguide.classList.remove('active');
       }
+      
       function showEguideTab() {
         const workArea = document.getElementById('pickramu-work-area');
         const eguideArea = document.getElementById('pickramu-eguide-area');
@@ -307,12 +383,19 @@
       
       function openSetting() {
         console.log("設定画面を開きます");
-        // 設定画面の実装は別途追加
+        const menu = document.getElementById("menu");
+        const setting = document.getElementById("setting");
+        
+        if (menu) menu.style.display = "none";
+        if (setting) setting.style.display = "block";
       }
       
       function openPickramuApp() {
-        document.getElementById("menu").style.display = "none";
-        document.getElementById("pickramu_app").style.display = "block";
+        const menu = document.getElementById("menu");
+        const pickramuApp = document.getElementById("pickramu_app");
+        
+        if (menu) menu.style.display = "none";
+        if (pickramuApp) pickramuApp.style.display = "block";
       }
       
       function openModal(type) {
@@ -328,6 +411,31 @@
         if (modal) {
           modal.classList.add("hidden");
         }
+      }
+      
+      // グローバル関数のフォールバック（setting.appで定義されていない場合）
+      if (typeof window.logout === 'undefined') {
+        window.logout = function() {
+          console.log("ログアウト機能は設定アプリで実装されています");
+        };
+      }
+      
+      if (typeof window.exportData === 'undefined') {
+        window.exportData = function() {
+          console.log("データエクスポート機能は設定アプリで実装されています");
+        };
+      }
+      
+      if (typeof window.importData === 'undefined') {
+        window.importData = function() {
+          console.log("データインポート機能は設定アプリで実装されています");
+        };
+      }
+      
+      if (typeof window.clearData === 'undefined') {
+        window.clearData = function() {
+          console.log("データクリア機能は設定アプリで実装されています");
+        };
       }
     </script>
     <div style="display:none" id="persistent-popout"></div>
