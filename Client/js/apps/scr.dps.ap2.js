@@ -2,7 +2,7 @@ import { initializeSCR } from '../data/scr.client.mjs';
 
 export const appMeta = {
   name: "scr",
-  title: "SCRノート",
+  title: "SCR",
   icon: "re/ico/icon_top.png"
 };
 
