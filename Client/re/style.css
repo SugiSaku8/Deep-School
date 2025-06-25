@@ -932,7 +932,8 @@ textarea {
 
 .auto-btn:hover,
 .reply-btn:hover {
-  background: #e0e0e0;
+  background: #007bff;
+  color: #fff;
 }
 
 /* フィード全体 */
