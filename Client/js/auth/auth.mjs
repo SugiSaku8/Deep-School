@@ -236,20 +236,47 @@ export class GoogleAuthManager {
   }
 
   showLoginForm() {
-    document.getElementById("loginForm").style.display = "block";
-    document.getElementById("openLoginButton").style.display = "none";
-    document.getElementById("menu").style.display = "none";
+    const loginFormElement = document.getElementById("loginForm");
+    const openLoginButtonElement = document.getElementById("openLoginButton");
+    const menuElement = document.getElementById("menu");
+    
+    if (loginFormElement) {
+      loginFormElement.style.display = "block";
+    }
+    if (openLoginButtonElement) {
+      openLoginButtonElement.style.display = "none";
+    }
+    if (menuElement) {
+      menuElement.style.display = "none";
+    }
   }
 
   showGoogleLogin() {
-    document.getElementById("loginForm").style.display = "none";
-    document.getElementById("openLoginButton").style.display = "block";
-    document.getElementById("menu").style.display = "none";
+    const loginFormElement = document.getElementById("loginForm");
+    const openLoginButtonElement = document.getElementById("openLoginButton");
+    const menuElement = document.getElementById("menu");
+    
+    if (loginFormElement) {
+      loginFormElement.style.display = "none";
+    }
+    if (openLoginButtonElement) {
+      openLoginButtonElement.style.display = "block";
+    }
+    if (menuElement) {
+      menuElement.style.display = "none";
+    }
   }
 
   showMenu() {
-    document.getElementById("login").style.display = "none";
-    document.getElementById("menu").style.display = "block";
+    const loginElement = document.getElementById("login");
+    const menuElement = document.getElementById("menu");
+    
+    if (loginElement) {
+      loginElement.style.display = "none";
+    }
+    if (menuElement) {
+      menuElement.style.display = "block";
+    }
   }
 }
 
@@ -372,6 +399,7 @@ class KOREGAUIManagerDAZE {
    * コンストラクタ
    */
   constructor() {
+    // DOM要素の存在チェックを追加
     this.initializeEventListeners();
   }
 
@@ -379,9 +407,16 @@ class KOREGAUIManagerDAZE {
    * UIイベントリスナーの初期化
    */
   initializeEventListeners() {
-    document.getElementById("menu").style.display = "none";
-    //document.getElementById("kakuninForm").style.display = "flex";
-    document.getElementById("loginForm").style.display = "none";
+    const menuElement = document.getElementById("menu");
+    const loginFormElement = document.getElementById("loginForm");
+    
+    if (menuElement) {
+      menuElement.style.display = "none";
+    }
+    
+    if (loginFormElement) {
+      loginFormElement.style.display = "none";
+    }
   }
 }
 
@@ -419,6 +454,13 @@ export class AuthServer {
 // アプリケーションの初期化
 export function initializeApp() {
   console.log("初期化中.................");
+  
+  // 既に初期化されている場合はスキップ
+  if (window.authManagerInitialized) {
+    console.log("認証マネージャーは既に初期化されています");
+    return;
+  }
+  
   const authManager = new GoogleAuthManager('openLoginButton', () => {
     console.log("Google認証成功");
   });
@@ -427,13 +469,15 @@ export function initializeApp() {
   
   // グローバルにアクセス可能にする
   window.driveManager = driveManager;
+  window.authManagerInitialized = true;
   
   const uiManager = new KOREGAUIManagerDAZE();
 
-  document
-    .getElementById("school_login_btn")
-    .addEventListener("click", async () => {
-      const schoolId = document.getElementById("schoolId").value;
+  const schoolLoginBtn = document.getElementById("school_login_btn");
+  if (schoolLoginBtn) {
+    schoolLoginBtn.addEventListener("click", async () => {
+      const schoolIdInput = document.getElementById("schoolId");
+      const schoolId = schoolIdInput ? schoolIdInput.value : "";
       const schoolId_query = new URLSearchParams(window.location.search).get(
         "schoolId"
       );
@@ -443,10 +487,15 @@ export function initializeApp() {
           "学校IDを入力していません。\n学校に接続せず利用しますか？"
         );
         if (result) {
-          document.getElementById("login").style.display = "none";
-          document.getElementById("scr_menu_icon").style.display = "none";
-          document.getElementById("backicon").style.display = "block";
-          document.getElementById("menu").style.display = "block";
+          const loginElement = document.getElementById("login");
+          const scrMenuIconElement = document.getElementById("scr_menu_icon");
+          const backiconElement = document.getElementById("backicon");
+          const menuElement = document.getElementById("menu");
+          
+          if (loginElement) loginElement.style.display = "none";
+          if (scrMenuIconElement) scrMenuIconElement.style.display = "none";
+          if (backiconElement) backiconElement.style.display = "block";
+          if (menuElement) menuElement.style.display = "block";
         }
         return;
       }
@@ -462,9 +511,14 @@ export function initializeApp() {
       
       window.scr_url = stuth.url;
       console.log("SCRのURLを設定しました。");
-      document.getElementById("menu").style.display = "block";
-      document.getElementById("menu").style.display = "flex";
+      
+      const menuElement = document.getElementById("menu");
+      if (menuElement) {
+        menuElement.style.display = "block";
+        menuElement.style.display = "flex";
+      }
     });
+  }
 }
 
 window.loadData = async function () {

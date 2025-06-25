@@ -267,25 +267,67 @@
         document.getElementById("scr_app").style.display = "block";
       }
       function IninterDom() {
-        document.getElementById("menu").style.display = "none";
-        document
-          .getElementById("school_login_btn")
-          .addEventListener("click", () => {
-            document.getElementById("loginForm").style.display = "none";
+        const menuElement = document.getElementById("menu");
+        if (menuElement) {
+          menuElement.style.display = "none";
+        }
+        const schoolLoginBtn = document.getElementById("school_login_btn");
+        if (schoolLoginBtn) {
+          schoolLoginBtn.addEventListener("click", () => {
+            const loginFormElement = document.getElementById("loginForm");
+            if (loginFormElement) {
+              loginFormElement.style.display = "none";
+            }
           });
+        }
       }
       IninterDom();
       function showPickramuTab() {
-        document.getElementById('pickramu-work-area').style.display = 'block';
-        document.getElementById('pickramu-eguide-area').style.display = 'none';
-        document.getElementById('tab-pickramu').classList.add('active');
-        document.getElementById('tab-eguide').classList.remove('active');
+        const workArea = document.getElementById('pickramu-work-area');
+        const eguideArea = document.getElementById('pickramu-eguide-area');
+        const tabPickramu = document.getElementById('tab-pickramu');
+        const tabEguide = document.getElementById('tab-eguide');
+        
+        if (workArea) workArea.style.display = 'block';
+        if (eguideArea) eguideArea.style.display = 'none';
+        if (tabPickramu) tabPickramu.classList.add('active');
+        if (tabEguide) tabEguide.classList.remove('active');
       }
       function showEguideTab() {
-        document.getElementById('pickramu-work-area').style.display = 'none';
-        document.getElementById('pickramu-eguide-area').style.display = 'block';
-        document.getElementById('tab-pickramu').classList.remove('active');
-        document.getElementById('tab-eguide').classList.add('active');
+        const workArea = document.getElementById('pickramu-work-area');
+        const eguideArea = document.getElementById('pickramu-eguide-area');
+        const tabPickramu = document.getElementById('tab-pickramu');
+        const tabEguide = document.getElementById('tab-eguide');
+        
+        if (workArea) workArea.style.display = 'none';
+        if (eguideArea) eguideArea.style.display = 'block';
+        if (tabPickramu) tabPickramu.classList.remove('active');
+        if (tabEguide) tabEguide.classList.add('active');
+      }
+      
+      function openSetting() {
+        console.log("設定画面を開きます");
+        // 設定画面の実装は別途追加
+      }
+      
+      function openPickramuApp() {
+        document.getElementById("menu").style.display = "none";
+        document.getElementById("pickramu_app").style.display = "block";
+      }
+      
+      function openModal(type) {
+        console.log("モーダルを開きます:", type);
+        const modal = document.getElementById("productModal");
+        if (modal) {
+          modal.classList.remove("hidden");
+        }
+      }
+      
+      function closeModal() {
+        const modal = document.getElementById("productModal");
+        if (modal) {
+          modal.classList.add("hidden");
+        }
       }
     </script>
     <div style="display:none" id="persistent-popout"></div>

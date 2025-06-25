@@ -23,9 +23,7 @@ export const appHtml = `
 `;
 
 export function appInit(shell) {
-  // アプリケーション全体の初期化
-  initializeApp();
-  
+  // Google認証マネージャーの初期化
   const authManager = new GoogleAuthManager('openLoginButton', () => {
     // Google認証成功後はメニューを表示
     console.log("Google認証成功、メニューに遷移します");
@@ -47,7 +45,9 @@ export function appInit(shell) {
   }
   
   window.showLoginForm = () => {
-      document.getElementById('loginForm').style.display = 'block';
-      document.getElementById('openLoginButton').style.display = 'none';
+      const loginFormElement = document.getElementById('loginForm');
+      const openLoginButtonElement = document.getElementById('openLoginButton');
+      if (loginFormElement) loginFormElement.style.display = 'block';
+      if (openLoginButtonElement) openLoginButtonElement.style.display = 'none';
   }
 } 
