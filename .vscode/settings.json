@@ -1,5 +1,5 @@
 {
-    "window.commandCenter": 1,
+    "window.commandCenter": true,
     "explorer.confirmDelete": false,
     "debug.javascript.autoAttachFilter": "disabled",
     "redhat.telemetry.enabled": false,
