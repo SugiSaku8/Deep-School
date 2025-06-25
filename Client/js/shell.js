@@ -54,6 +54,10 @@ class DeepSchoolShell {
     ];
     this.logDisplays.forEach(d => this.logMemory[d] = []);
     this._activeDisplay = null;
+    // ds.log.swで呼べるようにlogにswを生やす
+    const logFunc = this.log.bind(this);
+    logFunc.sw = this.log_sw.bind(this);
+    this.log = logFunc;
     window.ds = this; // コマンド用
     applyLangToDOM();
     this.loadApp('login');
