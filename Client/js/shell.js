@@ -43,19 +43,16 @@ const appModules = {
 };
 
 // Deep-School ログシステム
-const LOG_DISPLAYS = [
-  'stdout','stderr','appout','appin','apperr','oappout','oappin','oapperr',
-  '3rdappout','3rdappin','3rdapperr','sysout','sysin','syserr'
-];
-
 class DeepSchoolShell {
   constructor() {
     this.currentApp = null;
     this.initializedApps = new Set();
     this.logMemory = {};
-    LOG_DISPLAYS.forEach(d => this.logMemory[d] = []);
-    this.currentDisplay = 'stdout';
-    this._setupLogWindow();
+    this.logDisplays = [
+      'stdout','stderr','appout','appin','apperr','oappout','oappin','oapperr',
+      '3rdappout','3rdappin','3rdapperr','sysout','sysin','syserr'
+    ];
+    this.logDisplays.forEach(d => this.logMemory[d] = []);
     window.ds = this; // コマンド用
     applyLangToDOM();
     this.loadApp('login');
@@ -68,17 +65,6 @@ class DeepSchoolShell {
     const display = this._detectDisplay(from, level);
     if (!this.logMemory[display]) this.logMemory[display] = [];
     this.logMemory[display].push(logObj);
-    if (display === this.currentDisplay) this._renderLogWindow();
-  }
-
-  // ディスプレイ切り替え
-  log_sw(displayName) {
-    if (LOG_DISPLAYS.includes(displayName)) {
-      this.currentDisplay = displayName;
-      this._renderLogWindow();
-    } else {
-      alert('Unknown display: ' + displayName);
-    }
   }
 
   // ログ取得
@@ -114,74 +100,6 @@ class DeepSchoolShell {
     if (level === 'error') return 'stderr';
     if (level === 'warn') return 'stderr';
     return 'stdout';
-  }
-
-  // Apple HIG風ログウィンドウUI
-  _setupLogWindow() {
-    let logWin = document.getElementById('ds-log-window');
-    if (!logWin) {
-      logWin = document.createElement('div');
-      logWin.id = 'ds-log-window';
-      logWin.style.position = 'fixed';
-      logWin.style.top = '16px';
-      logWin.style.right = '16px';
-      logWin.style.width = '420px';
-      logWin.style.maxHeight = '40vh';
-      logWin.style.overflowY = 'auto';
-      logWin.style.background = 'rgba(255,255,255,0.92)';
-      logWin.style.borderRadius = '18px';
-      logWin.style.boxShadow = '0 4px 24px #0002';
-      logWin.style.zIndex = 9999;
-      logWin.style.fontFamily = 'system-ui, sans-serif';
-      logWin.style.fontSize = '15px';
-      logWin.style.padding = '18px 18px 8px 18px';
-      logWin.setAttribute('aria-live', 'polite');
-      logWin.setAttribute('role', 'log');
-      // display切替
-      const sel = document.createElement('select');
-      sel.id = 'ds-log-display-select';
-      sel.style.marginBottom = '8px';
-      sel.style.borderRadius = '8px';
-      sel.style.padding = '4px 8px';
-      sel.style.fontSize = '15px';
-      sel.style.boxShadow = '0 1px 4px #0001';
-      LOG_DISPLAYS.forEach(d => {
-        const opt = document.createElement('option');
-        opt.value = d; opt.textContent = d;
-        sel.appendChild(opt);
-      });
-      sel.value = this.currentDisplay;
-      sel.onchange = e => this.log_sw(e.target.value);
-      logWin.appendChild(sel);
-      // log list
-      const logList = document.createElement('div');
-      logList.id = 'ds-log-list';
-      logList.style.maxHeight = '28vh';
-      logList.style.overflowY = 'auto';
-      logWin.appendChild(logList);
-      document.body.appendChild(logWin);
-    }
-    this._renderLogWindow();
-  }
-
-  _renderLogWindow() {
-    const logList = document.getElementById('ds-log-list');
-    if (!logList) return;
-    const logs = this.getLogs(this.currentDisplay);
-    logList.innerHTML = logs.slice(-30).map(log =>
-      `<div style="margin-bottom:6px;line-height:1.5;word-break:break-all;${log.level==='error'? 'color:#c00;font-weight:bold;' : log.level==='warn'? 'color:#b80;' : ''}">
-        <span style='font-size:12px;color:#888;'>[${log.timestamp.split('T')[1].slice(0,8)}]</span>
-        <span style='font-size:12px;color:#888;'>${log.from}</span><br/>
-        <span>${log.message}</span>
-      </div>`
-    ).join('');
-    // selectの値も同期
-    const sel = document.getElementById('ds-log-display-select');
-    if (sel) sel.value = this.currentDisplay;
-  }
-
-  initAllApps() {
-    // この関数はもう使いません。互換性のため残置。
   }
 
   showApp(appName) {
