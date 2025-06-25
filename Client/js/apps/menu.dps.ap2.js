@@ -5,12 +5,12 @@ export const appMeta = {
 };
 
 export function appInit(shell) {
-  console.log("MenuApp: 初期化開始");
+  shell.log({from: 'dp.app.menu.out', message: 'MenuApp: 初期化開始', level: 'info'});
 
   // HTMLを#app-rootに描画
   const root = document.getElementById('app-root');
   if (!root) {
-    console.error('MenuApp: #app-rootが見つかりません');
+    shell.log({from: 'dp.app.menu.err', message: 'MenuApp: #app-rootが見つかりません', level: 'error'});
     return;
   }
   root.innerHTML = `
@@ -43,19 +43,19 @@ export function appInit(shell) {
   // メニューアイテムの設定
   const menuItems = {
     'menu-toaster': () => {
-      console.log("MenuApp: ToasterMachineを開く");
+      shell.log({from: 'dp.app.menu.out', message: 'MenuApp: ToasterMachineを開く', level: 'info'});
       shell.loadApp('chat'); // chatアプリとして開く
     },
     'menu-scr': () => {
-      console.log("MenuApp: SCRを開く");
+      shell.log({from: 'dp.app.menu.out', message: 'MenuApp: SCRを開く', level: 'info'});
       shell.loadApp('scr');
     },
     'menu-setting': () => {
-      console.log("MenuApp: 設定を開く");
+      shell.log({from: 'dp.app.menu.out', message: 'MenuApp: 設定を開く', level: 'info'});
       shell.loadApp('setting');
     },
     'menu-pickramu': () => {
-      console.log("MenuApp: Pickramuを開く");
+      shell.log({from: 'dp.app.menu.out', message: 'MenuApp: Pickramuを開く', level: 'info'});
       shell.loadApp('pickramu');
     }
   };
@@ -65,19 +65,16 @@ export function appInit(shell) {
     const menuItem = document.getElementById(id);
     if (menuItem) {
       menuItem.onclick = handler;
-      console.log(`MenuApp: ${id}のイベントリスナーを設定`);
+      shell.log({from: 'dp.app.menu.out', message: `MenuApp: ${id}のイベントリスナーを設定`, level: 'info'});
     } else {
-      console.warn(`MenuApp: ${id}のメニューアイテムが見つかりません`);
+      shell.log({from: 'dp.app.menu.err', message: `MenuApp: ${id}のメニューアイテムが見つかりません`, level: 'warn'});
     }
   });
 
   // ユーザー情報の表示（ログイン済みの場合）
   if (window.googleUserName) {
-    console.log("MenuApp: ユーザー情報", {
-      name: window.googleUserName,
-      id: window.googleUserId
-    });
+    shell.log({from: 'dp.app.menu.out', message: 'MenuApp: ユーザー情報 ' + JSON.stringify({name: window.googleUserName, id: window.googleUserId}), level: 'info'});
   }
 
-  console.log("MenuApp: 初期化完了");
+  shell.log({from: 'dp.app.menu.out', message: 'MenuApp: 初期化完了', level: 'info'});
 } 

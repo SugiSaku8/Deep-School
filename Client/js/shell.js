@@ -42,12 +42,142 @@ const appModules = {
   eguide: eguideApp,
 };
 
+// Deep-School ログシステム
+const LOG_DISPLAYS = [
+  'stdout','stderr','appout','appin','apperr','oappout','oappin','oapperr',
+  '3rdappout','3rdappin','3rdapperr','sysout','sysin','syserr'
+];
+
 class DeepSchoolShell {
   constructor() {
     this.currentApp = null;
     this.initializedApps = new Set();
+    this.logMemory = {};
+    LOG_DISPLAYS.forEach(d => this.logMemory[d] = []);
+    this.currentDisplay = 'stdout';
+    this._setupLogWindow();
+    window.ds = this; // コマンド用
     applyLangToDOM();
     this.loadApp('login');
+  }
+
+  // ログ出力API
+  log({from = 'dp.sys.unknown', message = '', level = 'info', timestamp = null}) {
+    const ts = timestamp || new Date().toISOString();
+    const logObj = { from, timestamp: ts, message, level };
+    const display = this._detectDisplay(from, level);
+    if (!this.logMemory[display]) this.logMemory[display] = [];
+    this.logMemory[display].push(logObj);
+    if (display === this.currentDisplay) this._renderLogWindow();
+  }
+
+  // ディスプレイ切り替え
+  log_sw(displayName) {
+    if (LOG_DISPLAYS.includes(displayName)) {
+      this.currentDisplay = displayName;
+      this._renderLogWindow();
+    } else {
+      alert('Unknown display: ' + displayName);
+    }
+  }
+
+  // ログ取得
+  getLogs(displayName) {
+    return this.logMemory[displayName] || [];
+  }
+
+  // from文字列からディスプレイ名を判定
+  _detectDisplay(from, level) {
+    if (from.startsWith('dp.sys.')) {
+      if (from.includes('.err') || level === 'error') return 'syserr';
+      if (from.includes('.out') || level === 'log' || level === 'info') return 'sysout';
+      if (from.includes('.in')) return 'sysin';
+      return 'stdout';
+    }
+    if (from.startsWith('dp.app.')) {
+      if (from.includes('.oapp.')) {
+        if (from.includes('.err')) return 'oapperr';
+        if (from.includes('.out')) return 'oappout';
+        if (from.includes('.in')) return 'oappin';
+      } else if (from.includes('.3rd.')) {
+        if (from.includes('.err')) return '3rdapperr';
+        if (from.includes('.out')) return '3rdappout';
+        if (from.includes('.in')) return '3rdappin';
+      } else {
+        if (from.includes('.err') || level === 'error') return 'apperr';
+        if (from.includes('.out') || level === 'log' || level === 'info') return 'appout';
+        if (from.includes('.in')) return 'appin';
+      }
+      return 'appout';
+    }
+    // fallback
+    if (level === 'error') return 'stderr';
+    if (level === 'warn') return 'stderr';
+    return 'stdout';
+  }
+
+  // Apple HIG風ログウィンドウUI
+  _setupLogWindow() {
+    let logWin = document.getElementById('ds-log-window');
+    if (!logWin) {
+      logWin = document.createElement('div');
+      logWin.id = 'ds-log-window';
+      logWin.style.position = 'fixed';
+      logWin.style.top = '16px';
+      logWin.style.right = '16px';
+      logWin.style.width = '420px';
+      logWin.style.maxHeight = '40vh';
+      logWin.style.overflowY = 'auto';
+      logWin.style.background = 'rgba(255,255,255,0.92)';
+      logWin.style.borderRadius = '18px';
+      logWin.style.boxShadow = '0 4px 24px #0002';
+      logWin.style.zIndex = 9999;
+      logWin.style.fontFamily = 'system-ui, sans-serif';
+      logWin.style.fontSize = '15px';
+      logWin.style.padding = '18px 18px 8px 18px';
+      logWin.setAttribute('aria-live', 'polite');
+      logWin.setAttribute('role', 'log');
+      // display切替
+      const sel = document.createElement('select');
+      sel.id = 'ds-log-display-select';
+      sel.style.marginBottom = '8px';
+      sel.style.borderRadius = '8px';
+      sel.style.padding = '4px 8px';
+      sel.style.fontSize = '15px';
+      sel.style.boxShadow = '0 1px 4px #0001';
+      LOG_DISPLAYS.forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d; opt.textContent = d;
+        sel.appendChild(opt);
+      });
+      sel.value = this.currentDisplay;
+      sel.onchange = e => this.log_sw(e.target.value);
+      logWin.appendChild(sel);
+      // log list
+      const logList = document.createElement('div');
+      logList.id = 'ds-log-list';
+      logList.style.maxHeight = '28vh';
+      logList.style.overflowY = 'auto';
+      logWin.appendChild(logList);
+      document.body.appendChild(logWin);
+    }
+    this._renderLogWindow();
+  }
+
+  _renderLogWindow() {
+    const logList = document.getElementById('ds-log-list');
+    if (!logList) return;
+    const logs = this.getLogs(this.currentDisplay);
+    logList.innerHTML = logs.slice(-30).map(log =>
+      `<div style="margin-bottom:6px;line-height:1.5;word-break:break-all;${log.level==='error'? 'color:#c00;font-weight:bold;' : log.level==='warn'? 'color:#b80;' : ''}">
+        <span style='font-size:12px;color:#888;'>[${log.timestamp.split('T')[1].slice(0,8)}]</span>
+        <span style='font-size:12px;color:#888;'>${log.from}</span><br/>
+        <span>${log.message}</span>
+      </div>`
+    ).join('');
+    // selectの値も同期
+    const sel = document.getElementById('ds-log-display-select');
+    if (sel) sel.value = this.currentDisplay;
   }
 
   initAllApps() {
@@ -55,30 +185,25 @@ class DeepSchoolShell {
   }
 
   showApp(appName) {
-    console.log(`Shell: ${appName}アプリを表示中`);
-    // SPA化により、#app-rootの中身は各appInitで上書きされるため、
-    // ここでIDベースのDOM操作は不要。
+    this.log({from: `dp.app.${appName}.out`, message: `${appName}アプリを表示中`, level: 'info'});
     this.currentApp = appName;
-    console.log(`Shell: 現在のアプリ: ${appName}`);
+    this.log({from: `dp.app.${appName}.out`, message: `現在のアプリ: ${appName}`, level: 'info'});
   }
 
   loadApp(appName) {
-    // #app-rootがなければ自動生成
     let appRoot = document.getElementById('app-root');
     if (!appRoot) {
       appRoot = document.createElement('div');
       appRoot.id = 'app-root';
       document.body.appendChild(appRoot);
-      console.warn('#app-root がなかったので自動生成しました');
+      this.log({from: 'dp.sys.shell', message: '#app-root がなかったので自動生成しました', level: 'warn'});
     }
-    // showAppはSPA化により、currentAppの記録とログのみ
     this.showApp(appName);
-    // 各アプリのappInitを毎回呼ぶ（SPA化で状態は都度初期化される設計）
     const appModule = appModules[appName];
     if (appModule && typeof appModule.appInit === 'function') {
       appModule.appInit(this);
     } else {
-      console.warn(`アプリ${appName}の初期化関数が見つかりません`);
+      this.log({from: `dp.app.${appName}.err`, message: `アプリ${appName}の初期化関数が見つかりません`, level: 'warn'});
     }
   }
 }

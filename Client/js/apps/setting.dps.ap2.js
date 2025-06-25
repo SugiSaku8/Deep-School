@@ -7,12 +7,12 @@ export const appMeta = {
 };
 
 export function appInit(shell) {
-  console.log("SettingApp: 初期化開始");
+  shell.log({from: 'dp.app.setting.out', message: 'SettingApp: 初期化開始', level: 'info'});
 
   // HTMLを#app-rootに描画
   const root = document.getElementById('app-root');
   if (!root) {
-    console.error('SettingApp: #app-rootが見つかりません');
+    shell.log({from: 'dp.app.setting.err', message: 'SettingApp: #app-rootが見つかりません', level: 'error'});
     return;
   }
   root.innerHTML = `
@@ -85,7 +85,7 @@ export function appInit(shell) {
   const closeBtn = document.getElementById('setting-close-btn');
   if (closeBtn) closeBtn.onclick = () => shell.loadApp('menu');
 
-  console.log("SettingApp: 初期化完了");
+  shell.log({from: 'dp.app.setting.out', message: 'SettingApp: 初期化完了', level: 'info'});
 }
 
 function updateUserInfo() {
@@ -106,9 +106,9 @@ function loadSettings() {
     if (notificationToggle) notificationToggle.checked = settings.notifications !== false;
     const soundToggle = document.getElementById('sound-toggle');
     if (soundToggle) soundToggle.checked = settings.sound !== false;
-    console.log("SettingApp: 設定を読み込みました");
+    shell.log({from: 'dp.app.setting.out', message: 'SettingApp: 設定を読み込みました', level: 'info'});
   } catch (error) {
-    console.error("SettingApp: 設定の読み込みエラー", error);
+    shell.log({from: 'dp.app.setting.err', message: 'SettingApp: 設定の読み込みエラー ' + error, level: 'error'});
   }
 }
 
@@ -121,9 +121,9 @@ function saveSettings() {
       sound: document.getElementById('sound-toggle')?.checked ?? true
     };
     localStorage.setItem('deep-school-settings', JSON.stringify(settings));
-    console.log("SettingApp: 設定を保存しました", settings);
+    shell.log({from: 'dp.app.setting.out', message: 'SettingApp: 設定を保存しました', level: 'info'});
   } catch (error) {
-    console.error("SettingApp: 設定の保存エラー", error);
+    shell.log({from: 'dp.app.setting.err', message: 'SettingApp: 設定の保存エラー ' + error, level: 'error'});
   }
 }
 
@@ -136,7 +136,7 @@ function setupEventListeners(shell) {
   if (logoutBtn) {
     logoutBtn.addEventListener('click', () => {
       if (confirm('ログアウトしますか？')) {
-        logout();
+        logout(shell);
         shell.loadApp('login');
       }
     });
@@ -149,13 +149,13 @@ function setupEventListeners(shell) {
   if (clearBtn) {
     clearBtn.addEventListener('click', () => {
       if (confirm('すべてのデータを削除しますか？この操作は取り消せません。')) {
-        clearData();
+        clearData(shell);
       }
     });
   }
 }
 
-function logout() {
+function logout(shell) {
   try {
     if (window.google && window.google.accounts) {
       window.google.accounts.id.disableAutoSelect();
@@ -164,9 +164,9 @@ function logout() {
     localStorage.removeItem('google_token_timestamp');
     window.googleUserName = null;
     window.googleUserId = null;
-    console.log("SettingApp: ログアウト完了");
+    shell.log({from: 'dp.app.setting.out', message: 'SettingApp: ログアウト完了', level: 'info'});
   } catch (error) {
-    console.error("SettingApp: ログアウトエラー", error);
+    shell.log({from: 'dp.app.setting.err', message: 'SettingApp: ログアウトエラー ' + error, level: 'error'});
   }
 }
 
@@ -186,9 +186,9 @@ function exportData() {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    console.log("SettingApp: データをエクスポートしました");
+    shell.log({from: 'dp.app.setting.out', message: 'SettingApp: データをエクスポートしました', level: 'info'});
   } catch (error) {
-    console.error("SettingApp: データエクスポートエラー", error);
+    shell.log({from: 'dp.app.setting.err', message: 'SettingApp: データエクスポートエラー ' + error, level: 'error'});
     alert('データのエクスポートに失敗しました');
   }
 }
@@ -208,10 +208,10 @@ function importData() {
             if (data.settings) localStorage.setItem('deep-school-settings', JSON.stringify(data.settings));
             if (data.userData) localStorage.setItem('deep-school-user-data', JSON.stringify(data.userData));
             loadSettings();
-            console.log("SettingApp: データをインポートしました");
+            shell.log({from: 'dp.app.setting.out', message: 'SettingApp: データをインポートしました', level: 'info'});
             alert('データのインポートが完了しました');
           } catch (error) {
-            console.error("SettingApp: データインポートエラー", error);
+            shell.log({from: 'dp.app.setting.err', message: 'SettingApp: データインポートエラー ' + error, level: 'error'});
             alert('データのインポートに失敗しました');
           }
         };
@@ -220,12 +220,12 @@ function importData() {
     };
     input.click();
   } catch (error) {
-    console.error("SettingApp: データインポートエラー", error);
+    shell.log({from: 'dp.app.setting.err', message: 'SettingApp: データインポートエラー ' + error, level: 'error'});
     alert('データのインポートに失敗しました');
   }
 }
 
-function clearData() {
+function clearData(shell) {
   try {
     const keysToKeep = ['deep-school-settings'];
     const keysToRemove = [];
@@ -234,10 +234,10 @@ function clearData() {
       if (key && !keysToKeep.includes(key)) keysToRemove.push(key);
     }
     keysToRemove.forEach(key => localStorage.removeItem(key));
-    console.log("SettingApp: データをクリアしました");
+    shell.log({from: 'dp.app.setting.out', message: 'SettingApp: データをクリアしました', level: 'info'});
     alert('データのクリアが完了しました');
   } catch (error) {
-    console.error("SettingApp: データクリアエラー", error);
+    shell.log({from: 'dp.app.setting.err', message: 'SettingApp: データクリアエラー ' + error, level: 'error'});
     alert('データのクリアに失敗しました');
   }
 }

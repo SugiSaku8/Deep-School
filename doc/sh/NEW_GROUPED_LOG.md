@@ -1,83 +1,90 @@
 # ログ出力システムを一新してください。
+
 ## ログの種類(ディスプレイ)
 
 - stdout
-  (Standart Output)
-  ただのログをすべて表示。
+  (Standart Output) 
+  ただのログをすべて表示。 
 - stderr
-  (Standart Error)
-  エラー出力をすべて表示。
+  (Standart Error) 
+  エラー出力をすべて表示。 
 - appout
-  (Application Output)
-  アプリケーションの出力をすべて表示。
+  (Application Output) 
+  アプリケーションの出力をすべて表示。 
 - appin
-  (Application Input)
-  アプリケーションの入力をすべて表示。
+  (Application Input) 
+  アプリケーションの入力をすべて表示。 
 - apperr
-  (Application Error)
-  アプリケーションのエラーをすべて表示。
+  (Application Error) 
+  アプリケーションのエラーをすべて表示。 
 - oappout
-  (Offical-Application Output)
-  公式アプリケーションの出力をすべて表示。
+  (Offical-Application Output) 
+  公式アプリケーションの出力をすべて表示。 
 - oappin
-  (Offical-Application Input)
-  公式アプリケーションの入力をすべて表示。
+  (Offical-Application Input) 
+  公式アプリケーションの入力をすべて表示。 
 - oapperr
-  (Offical-Application Error)
-  公式アプリケーションのエラーをすべて表示。
+  (Offical-Application Error) 
+  公式アプリケーションのエラーをすべて表示。 
 - 3rdappout
-  (3rd-party-Application Output)
-  3rd アプリケーションの出力をすべて表示。
+  (3rd-party-Application Output) 
+  3rd アプリケーションの出力をすべて表示。 
 - 3rdappin
-  (3rd-party-Application Input)
-  3rd アプリケーションの入力をすべて表示。
+  (3rd-party-Application Input)  
+  3rd アプリケーションの入力をすべて表示。  
 - 3rdapperr
-  (3rd-party-Application Error)
-  3rd アプリケーションのエラーをすべて表示。
-- sysout
-  (System Output)  
-  システムの出力をすべて表示。
+  (3rd-party-Application Error)  
+  3rd アプリケーションのエラーをすべて表示。  
+- sysout  
+  (System Output)   
+  システムの出力をすべて表示。  
 - sysin
-  (System Input)  
-  システムの入力をすべて表示。
+  (System Input)    
+  システムの入力をすべて表示。  
 - syserr
-  (System Error)  
-  システムのエラーをすべて表示。
-- アプリ名in
-(アプリ名-Input)
-アプリ名の入力をすべて表示。
-- アプリ名out
-(アプリ名-Output)
-アプリ名の出力をすべて表示。
-- アプリ名err
-(アプリ名-Error)
-アプリ名のエラーをすべて表示。
+  (System Error)    
+  システムのエラーをすべて表示。  
+- アプリ名 in
+  (アプリ名-Input)  
+  アプリ名の入力をすべて表示。  
+- アプリ名 out  
+  (アプリ名-Output)  
+  アプリ名の出力をすべて表示。  
+- アプリ名 err
+  (アプリ名-Error)  
+  アプリ名のエラーをすべて表示。  
 
-↑これは、すべてのアプリに存在する。
+↑ これは、すべてのアプリに存在する。  
 
 ## ログの仕組み
-console.logだったものを、すべて次のようなフォーマットで保存する。 
-ログの出力は、次のようなフォーマットで行う。 
+
+console.log だったものを、すべて次のようなフォーマットで保存する。  
+ログの出力は、次のようなフォーマットで行う。  
+
 ```json
 {
-    "from": "dp.sys.logtest",
-    "timestamp": "2021-01-01T00:00:00.000Z",
-    "message": "Hello, world!"
+  "from": "dp.sys.logtest",
+  "timestamp": "2021-01-01T00:00:00.000Z",
+  "message": "Hello, world!"
 }
 ```
-fromの種類を検出し、どのディスプレイに保存するか決める。 
-ディスプレイは、すべてメモリに保存されていて、コマンドによって呼び出されるまで保存される。 
-これのコマンドは、 
+
+from の種類を検出し、どのディスプレイに保存するか決める。  
+ディスプレイは、すべてメモリに保存されていて、コマンドによって呼び出されるまで保存される。  
+これのコマンドは、  
+
 ```
 ds.log.sw(ディスプレイ名);
 // ds→ Deep-Shellメインコマンド
 // log→ ログ関連コマンド
 // sw→ ディスプレイの切り替え
 ```
-ディスプレイの切り替えは、ディスプレイ名を引数に取り、ディスプレイを切り替える。 
-これまでshell.jsの中にあった関数を、すべてdsクラスに統一して、window化する。 
 
-## ログのfromの種類
+ディスプレイの切り替えは、ディスプレイ名を引数に取り、ディスプレイを切り替える。  
+これまで shell.js の中にあった関数を、すべて ds クラスに統一して、window 化する。  
+
+## ログの from の種類
+
 ```
 dp.sys.*　→システムのログ
 dp.sys.***.err→システムのエラー

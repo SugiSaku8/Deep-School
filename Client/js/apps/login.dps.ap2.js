@@ -7,12 +7,12 @@ export const appMeta = {
 };
 
 export function appInit(shell) {
-  console.log("LoginApp: 初期化開始");
+  shell.log({from: 'dp.app.login.out', message: 'LoginApp: 初期化開始', level: 'info'});
 
   // HTMLを#app-rootに描画
   const root = document.getElementById('app-root');
   if (!root) {
-    console.error('LoginApp: #app-rootが見つかりません');
+    shell.log({from: 'dp.app.login.err', message: 'LoginApp: #app-rootが見つかりません', level: 'error'});
     return;
   }
   root.innerHTML = `
@@ -35,13 +35,13 @@ export function appInit(shell) {
 
   // Google認証マネージャーの初期化
   const authManager = new SimpleAuthManager('openLoginButton', () => {
-    console.log("LoginApp: Google認証成功、メニューに遷移");
+    shell.log({from: 'dp.app.login.out', message: 'LoginApp: Google認証成功、メニューに遷移', level: 'info'});
     shell.loadApp('menu');
   });
 
   // 認証マネージャーの初期化
   authManager.initialize().catch(error => {
-    console.error("LoginApp: 認証マネージャー初期化エラー", error);
+    shell.log({from: 'dp.app.login.err', message: 'LoginApp: 認証マネージャー初期化エラー ' + error, level: 'error'});
   });
 
   // 学校IDログインボタンの設定
@@ -54,25 +54,25 @@ export function appInit(shell) {
         alert('学校IDを入力してください');
         return;
       }
-      console.log(`LoginApp: 学校ID "${schoolId}" でログイン試行`);
+      shell.log({from: 'dp.app.login.in', message: `LoginApp: 学校ID "${schoolId}" でログイン試行`, level: 'info'});
       try {
         // 学校認証サーバーのテスト
         const authServer = new SchoolAuthServer(schoolId);
         const connectionResult = await authServer.testConnection();
         if (connectionResult) {
-          console.log("LoginApp: 学校認証サーバー接続成功");
+          shell.log({from: 'dp.app.login.out', message: 'LoginApp: 学校認証サーバー接続成功', level: 'info'});
           window.scr_url = authServer.url;
           // loadFeed関数が定義されている場合のみ実行
           if (typeof window.loadFeed === 'function') {
             await window.loadFeed();
           }
         } else {
-          console.log("LoginApp: 学校認証サーバー接続失敗");
+          shell.log({from: 'dp.app.login.err', message: 'LoginApp: 学校認証サーバー接続失敗', level: 'warn'});
         }
         // メニューに遷移
-      shell.loadApp('menu');
+        shell.loadApp('menu');
       } catch (error) {
-        console.error("LoginApp: 学校IDログインエラー", error);
+        shell.log({from: 'dp.app.login.err', message: 'LoginApp: 学校IDログインエラー ' + error, level: 'error'});
         alert('ログインに失敗しました');
       }
     };
@@ -87,8 +87,8 @@ export function appInit(shell) {
     }
     if (openLoginButtonElement) {
       openLoginButtonElement.style.display = 'none';
-  }
+    }
   };
 
-  console.log("LoginApp: 初期化完了");
+  shell.log({from: 'dp.app.login.out', message: 'LoginApp: 初期化完了', level: 'info'});
 } 
