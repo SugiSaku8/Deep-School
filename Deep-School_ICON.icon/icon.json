@@ -7,9 +7,11 @@
     {
       "layers" : [
         {
+          "fill" : "none",
           "hidden" : false,
           "image-name" : "deep.png",
           "name" : "deep",
+          "opacity" : 1,
           "position" : {
             "scale" : 0.4,
             "translation-in-points" : [
