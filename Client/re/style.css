@@ -1041,6 +1041,13 @@ body::-webkit-scrollbar {
   transform: translate(-50%, -50%) rotate(-45deg);
 }
 
+.batsu:hover,
+.modal-close-button:hover {
+  background: #007bff;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
 .copyright {
   position: absolute;
   bottom: 20px;
@@ -1287,19 +1294,12 @@ body::-webkit-scrollbar {
   max-height: 200px;
 }
 #post-form .auto-btn {
-  margin-top: 10px;
-  background: linear-gradient(90deg, #ffd700 60%, #c47f00 100%);
-  color: #222;
-  font-weight: bold;
-  font-size: 1.1rem;
-  border: none;
-  border-radius: 6px;
-  padding: 10px 0;
-  cursor: pointer;
-  transition: background 0.2s;
+  background: #007bff;
+  color: #fff;
 }
 #post-form .auto-btn:hover {
-  background: linear-gradient(90deg, #ffe066 60%, #c47f00 100%);
+  background: #0056b3;
+  color: #fff;
 }
 
 /* SCR フィード UI */
