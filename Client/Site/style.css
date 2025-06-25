@@ -54,6 +54,13 @@ html, body {
   font-weight: 700;
   margin: 0 0 8px 0;
   letter-spacing: -0.02em;
+  color: #0a3a7e;
+  text-shadow: 0 2px 8px rgba(0, 113, 227, 0.08);
+  background: linear-gradient(90deg, #0071e3 30%, #0a3a7e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
 }
 
 .ds-tagline {
@@ -165,12 +172,24 @@ html, body {
   font-size: 1rem;
   margin-top: 48px;
   padding: 24px 0 8px 0;
+  position: relative;
+  padding-top: 48px;
 }
 
 .ds-footer small {
   display: block;
   margin-top: 8px;
-  color: var(--color-muted);
+  color: #444;
+  font-weight: 600;
+  position: absolute;
+  top: -32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-surface);
+  padding: 4px 16px;
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  z-index: 2;
 }
 
 /* Accessibility: Focus outline */
