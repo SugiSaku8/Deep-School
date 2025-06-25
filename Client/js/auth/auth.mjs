@@ -126,12 +126,12 @@ export class GoogleAuthManager {
       google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
         callback: (response) => this.handleCredentialResponse(response),
-        ux_mode: 'redirect',
+        ux_mode: 'popup',
         auto_select: false,
-        cancel_on_tap_outside: false,
+        cancel_on_tap_outside: true,
         context: "signin",
       });
-      console.log("Google login initialized for redirect mode");
+      console.log("Google login initialized for popup mode");
 
       const buttonContainer = document.getElementById(this.buttonContainerId);
       if (!buttonContainer) {
@@ -177,6 +177,9 @@ export class GoogleAuthManager {
       // Google Drive APIの認証を実行
       await this.initializeGoogleDriveAuth();
 
+      // 認証成功後の処理
+      this.showMenu();
+      
       if(this.onAuthSuccess) {
         this.onAuthSuccess();
       }
@@ -389,14 +392,31 @@ export class AuthServer {
       return false;
     }
   }
+
+  async callTest() {
+    try {
+      const result = await this.TestFetch(this.url, false);
+      console.log("Auth server test result:", result);
+      return result;
+    } catch (error) {
+      console.error("Auth server test failed:", error);
+      return false;
+    }
+  }
 }
 
 // アプリケーションの初期化
 export function initializeApp() {
   console.log("初期化中.................");
-  const authManager = new GoogleAuthManager();
+  const authManager = new GoogleAuthManager('openLoginButton', () => {
+    console.log("Google認証成功");
+  });
   authManager.initialize();
   const driveManager = new GoogleDriveManager(authManager);
+  
+  // グローバルにアクセス可能にする
+  window.driveManager = driveManager;
+  
   const uiManager = new KOREGAUIManagerDAZE();
 
   document
@@ -423,7 +443,12 @@ export function initializeApp() {
       const serverUrl = schoolId || schoolId_query;
       const stuth = new AuthServer(serverUrl);
       await stuth.callTest();
-      await loadFeed();
+      
+      // loadFeed関数が定義されている場合のみ実行
+      if (typeof window.loadFeed === 'function') {
+        await window.loadFeed();
+      }
+      
       window.scr_url = stuth.url;
       console.log("SCRのURLを設定しました。");
       document.getElementById("menu").style.display = "block";
@@ -433,11 +458,16 @@ export function initializeApp() {
 
 window.loadData = async function () {
   try {
-    const data = await driveManager.loadAppData("deep-school-user-data.json");
-    console.log("データを読み込みました");
-    return data;
+    if (window.driveManager) {
+      const data = await window.driveManager.loadAppData("deep-school-user-data.json");
+      console.log("データを読み込みました");
+      return data;
+    } else {
+      console.log("DriveManagerが初期化されていません");
+      return null;
+    }
   } catch (error) {
-    console.log("データの読み込みに失敗しました");
+    console.log("データの読み込みに失敗しました:", error);
     return null;
   }
 };

@@ -1,4 +1,4 @@
-import { GoogleAuthManager, AuthServer } from '../auth/auth.mjs';
+import { GoogleAuthManager, AuthServer, initializeApp } from '../auth/auth.mjs';
 
 export const appMeta = {
   name: "login",
@@ -23,9 +23,12 @@ export const appHtml = `
 `;
 
 export function appInit(shell) {
+  // アプリケーション全体の初期化
+  initializeApp();
+  
   const authManager = new GoogleAuthManager('openLoginButton', () => {
-    document.getElementById('loginForm').style.display = 'block';
-    document.getElementById('openLoginButton').style.display = 'none';
+    // Google認証成功後はメニューを表示
+    shell.loadApp('menu');
   });
   authManager.initialize();
 
