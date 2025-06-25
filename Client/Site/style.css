@@ -43,10 +43,7 @@ html, body {
   width: 420px;
   height: 420px;
   object-fit: contain;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
   margin-bottom: 16px;
-  background: var(--color-bg);
 }
 
 .ds-header h1 {
