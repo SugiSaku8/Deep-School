@@ -36,9 +36,9 @@ export function appInit(shell) {
       <div class="menu-item">
         <img src="re/ico/note.svg" alt="Pickramuアイコン" class="menu-icon pickramu-icon icon-anim" />
         <div class="menu-label chalk-text icon-anim" id="menu-pickramu" style="cursor: pointer" data-lang-key="menu_pickramu">Pickramu</div>
-      </div>
     </div>
-  `;
+  </div>
+`;
 
   // メニューアイテムの設定
   const menuItems = {

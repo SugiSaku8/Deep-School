@@ -14,25 +14,25 @@ export function appInit(shell) {
     <div class="page-container">
       <button class="go-back-button" id="pickramu-back-btn" data-lang-key="back">←</button>
       <h1 class="page-title" data-lang-key="pickramu_work">Pickramu ワーク</h1>
-      <div class="pickramu-tabs" style="margin-bottom: 20px; display: flex; gap: 12px;">
+    <div class="pickramu-tabs" style="margin-bottom: 20px; display: flex; gap: 12px;">
         <button class="auto-btn" id="tab-pickramu" data-lang-key="pickramu_tab">教材ワーク</button>
         <button class="auto-btn" id="tab-eguide" data-lang-key="eguide_tab">eGuide</button>
-      </div>
-      <div id="pickramu-work-area">
-        <div class="pickramu-select" style="margin-bottom: 20px;">
-          <label for="pickramu-unit-select" data-lang-key="select_material">教材選択：</label>
-          <select id="pickramu-unit-select">
-            <option value="jla/math/式の計算/1節/1.用語/1.md">数学: 式の計算・用語</option>
-          </select>
-          <button class="auto-btn" id="pickramu-load-btn" data-lang-key="load">読み込み</button>
-        </div>
-        <div id="pickramu-content" class="pickramu-content" style="background:#173c2b; border-radius:12px; min-height:300px; padding:24px; color:#fff;"></div>
-      </div>
-      <div id="pickramu-eguide-area" style="display:none;">
-        <iframe src="eguide.html" style="width:100%; min-height:600px; border:none; border-radius:12px; background:#173c2b;"></iframe>
-      </div>
     </div>
-  `;
+    <div id="pickramu-work-area">
+      <div class="pickramu-select" style="margin-bottom: 20px;">
+          <label for="pickramu-unit-select" data-lang-key="select_material">教材選択：</label>
+        <select id="pickramu-unit-select">
+          <option value="jla/math/式の計算/1節/1.用語/1.md">数学: 式の計算・用語</option>
+        </select>
+          <button class="auto-btn" id="pickramu-load-btn" data-lang-key="load">読み込み</button>
+      </div>
+      <div id="pickramu-content" class="pickramu-content" style="background:#173c2b; border-radius:12px; min-height:300px; padding:24px; color:#fff;"></div>
+    </div>
+    <div id="pickramu-eguide-area" style="display:none;">
+      <iframe src="eguide.html" style="width:100%; min-height:600px; border:none; border-radius:12px; background:#173c2b;"></iframe>
+    </div>
+  </div>
+`;
 
   // 戻るボタン
   document.getElementById('pickramu-back-btn').onclick = () => shell.loadApp('menu');
@@ -59,13 +59,16 @@ export function appInit(shell) {
       const path = select.value;
       content.textContent = '読み込み中...';
       try {
-        // 仮の教材データ読み込み（本番はAPIやfetchで）
-        const res = await fetch(`/Pickramu/data/${path}`);
+        // ローカル or GitHub Pages でパスを切り替え
+        const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+        const basePath = isLocal ? '/Pickramu/data/' : 'https://sugisaku8.github.io/Pickramu/data/';
+        const fetchUrl = basePath + path;
+        const res = await fetch(fetchUrl);
         if (res.ok) {
           const text = await res.text();
           content.textContent = text;
         } else {
-          content.textContent = '教材の読み込みに失敗しました';
+          content.textContent = `教材の読み込みに失敗しました (404 Not Found)\nURL: ${fetchUrl}`;
         }
       } catch (e) {
         content.textContent = '教材の読み込みでエラーが発生しました';

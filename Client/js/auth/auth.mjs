@@ -18,7 +18,7 @@ export class SimpleAuthManager {
   async initialize() {
     try {
       console.log("SimpleAuthManager: 初期化開始");
-      
+
       // 既存のトークンを確認
       if (await this.checkExistingTokens()) {
         console.log("SimpleAuthManager: 既存のトークンでログイン済み");
@@ -161,7 +161,7 @@ export class SimpleAuthManager {
 
       // Google Drive APIの認証
       await this.initializeGoogleDriveAuth();
-      
+
       // 認証成功コールバック
       if (this.onAuthSuccess) {
         console.log("SimpleAuthManager: 認証成功コールバック実行");

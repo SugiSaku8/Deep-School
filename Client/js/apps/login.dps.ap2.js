@@ -17,21 +17,21 @@ export function appInit(shell) {
   }
   root.innerHTML = `
     <div class="container_top" id="login-app">
-      <h1 class="title chalk-text" id="itisttitle">Deep-School</h1>
-      <div class="login-form popup" id="loginForm">
+    <h1 class="title chalk-text" id="itisttitle">Deep-School</h1>
+    <div class="login-form popup" id="loginForm">
         <div class="login-form-inner">
           <label for="schoolId" class="chalk-text" data-lang-key="school_id">学校ID</label>
           <input type="text" id="schoolId" placeholder="学校ID" data-lang-key="school_id_placeholder" />
           <button type="button" class="submit-button button-chalk" id="school_login_btn" data-lang-key="login_button">ログイン</button>
           <p data-lang-key="login_id_hint">学校IDは、pL:2^4,5,101 のような形式の文字列です。</p>
         </div>
-      </div>
+    </div>
       <div id="google-signin-container">
-        <div id="openLoginButton" class="login-button button-chalk"></div>
+    <div id="openLoginButton" class="login-button button-chalk"></div>
       </div>
       <p class="copyright chalk-text" data-lang-key="copyright">(c) 2022-2025 Carnation Studio v0.1.1</p>
-    </div>
-  `;
+  </div>
+`;
 
   // Google認証マネージャーの初期化
   const authManager = new SimpleAuthManager('openLoginButton', () => {
@@ -70,14 +70,14 @@ export function appInit(shell) {
           console.log("LoginApp: 学校認証サーバー接続失敗");
         }
         // メニューに遷移
-        shell.loadApp('menu');
+      shell.loadApp('menu');
       } catch (error) {
         console.error("LoginApp: 学校IDログインエラー", error);
         alert('ログインに失敗しました');
       }
     };
   }
-
+  
   // グローバル関数の設定
   window.showLoginForm = () => {
     const loginFormElement = document.getElementById('loginForm');
@@ -87,7 +87,7 @@ export function appInit(shell) {
     }
     if (openLoginButtonElement) {
       openLoginButtonElement.style.display = 'none';
-    }
+  }
   };
 
   console.log("LoginApp: 初期化完了");

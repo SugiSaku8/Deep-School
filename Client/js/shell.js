@@ -63,6 +63,14 @@ class DeepSchoolShell {
   }
 
   loadApp(appName) {
+    // #app-rootがなければ自動生成
+    let appRoot = document.getElementById('app-root');
+    if (!appRoot) {
+      appRoot = document.createElement('div');
+      appRoot.id = 'app-root';
+      document.body.appendChild(appRoot);
+      console.warn('#app-root がなかったので自動生成しました');
+    }
     // showAppはSPA化により、currentAppの記録とログのみ
     this.showApp(appName);
     // 各アプリのappInitを毎回呼ぶ（SPA化で状態は都度初期化される設計）

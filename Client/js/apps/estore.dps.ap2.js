@@ -30,7 +30,7 @@ export function appInit(shell) {
             <div class="estore-item-desc">AIチャット</div>
             <button class="button-chalk estore-buy-btn" data-item="chat">開く</button>
           </div>
-        </div>
+      </div>
         <div class="estore-item card">
           <img src="re/ico/note.svg" alt="Pickramu" class="estore-item-img" />
           <div class="estore-item-info">
@@ -38,10 +38,10 @@ export function appInit(shell) {
             <div class="estore-item-desc">教材ワーク</div>
             <button class="button-chalk estore-buy-btn" data-item="pickramu">開く</button>
           </div>
-        </div>
       </div>
     </div>
-  `;
+  </div>
+`;
 
   document.getElementById('estore-back-btn').onclick = () => shell.loadApp('menu');
 

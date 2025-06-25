@@ -33,7 +33,7 @@ export function appInit(shell) {
       </div>
     </div>
     <button class="go-back-button button-chalk" id="chat-back-btn" data-lang-key="back">←</button>
-  `;
+`;
 
   // 戻るボタン
   document.getElementById('chat-back-btn').onclick = () => shell.loadApp('menu');
