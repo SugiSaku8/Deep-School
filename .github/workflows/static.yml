@@ -36,6 +36,7 @@ jobs:
       - name: Create rewrite rule
         run: |
           echo "/eguide /eguide.html 200" > Client/_redirects
+          echo "/client /index.html 200" > Client/_redirects
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
