@@ -40,8 +40,8 @@ html, body {
 }
 
 .ds-hero-logo {
-  width: 120px;
-  height: 120px;
+  width: 420px;
+  height: 420px;
   object-fit: contain;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
@@ -125,7 +125,7 @@ html, body {
 }
 
 .ds-hero-image {
-  width: 320px;
+  width: 220px;
   max-width: 90vw;
   height: auto;
   border-radius: var(--radius-lg);
