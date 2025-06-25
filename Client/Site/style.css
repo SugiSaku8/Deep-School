@@ -49,8 +49,9 @@ html, body {
 .mainv {
   object-fit: contain;
   margin-bottom: 16px;
-  width:100%;
+  width:800px;
 }
+
 .ds-header h1 {
   font-size: 2.8rem;
   font-weight: 700;
