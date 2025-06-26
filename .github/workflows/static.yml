@@ -35,7 +35,7 @@ jobs:
         uses: actions/configure-pages@v5
       - name: Create rewrite rule
         run: |
-          echo "/client /client 200" >> ./Client/public/client/_redirects
+          echo "/client 200" >> ./Client/public/client/_redirects
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
