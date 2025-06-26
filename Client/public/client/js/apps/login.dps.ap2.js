@@ -29,7 +29,7 @@ export function appInit(shell) {
       <div id="google-signin-container">
     <div id="openLoginButton" class="login-button button-chalk"></div>
       </div>
-      <p class="copyright chalk-text" data-lang-key="copyright">(c) 2022-2025 Carnation Studio v0.1.1</p>
+      <p class="copyright chalk-text" data-lang-key="copyright">(c) 2022-2025 Carnation Studio v0.1.2</p>
   </div>
 `;
 
