@@ -38,5 +38,10 @@
     <script>
       // ここにグローバルな初期化やフォールバック関数が必要なら記述
     </script>
+    <script>
+      if (location.pathname === "/client" || location.pathname === "/client/") {
+        location.replace("/client/index.html");
+      }
+    </script>
   </body>
 </html>
