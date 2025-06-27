@@ -1,1 +1,0 @@
-// This file is no longer needed as updatePopout has been moved to utils.mjs 
