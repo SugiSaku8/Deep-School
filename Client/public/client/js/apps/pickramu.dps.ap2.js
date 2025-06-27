@@ -943,7 +943,7 @@ export function appInit(shell) {
           </head>
           <body>
           <div id="content">
-          ${htmlOutput}
+          ${html}
           </div>
           </body>
           </html>
@@ -952,7 +952,7 @@ export function appInit(shell) {
         const iframe = document.getElementById("pickramu_iframe");
         const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
         iframeDocument.open();
-        iframeDocument.write(html);
+        iframeDocument.write(fullhtml);
         iframeDocument.close();
         } else {
           content.textContent = `教材の読み込みに失敗しました (404 Not Found)\nURL: ${fetchUrl}`;
