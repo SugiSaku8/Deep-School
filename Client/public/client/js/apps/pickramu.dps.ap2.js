@@ -906,8 +906,74 @@ export function appInit(shell) {
                 height: 20px;
                 background: linear-gradient(to right, #dca10d, #8c5d00);
               }
-              #content #n2 #n3 #n4 #n5 #6 #7 #8 #9 #10 #11 #12 #13 #14 #15 #16 #17 #18 #19 #20{
+              #content #n2{
                 display: none;
+              }
+                #content #n3{
+                display: none;
+              }
+                #content #n4{
+                display: none;
+              }
+                #content #n5{
+                display: none;
+              }
+                #content #n6{
+                display: none;
+              }
+                #content #n7{
+                display: none;
+              }
+                #content #n8{
+                display: none;
+              }
+                #content #n9{
+                display:none;
+              }
+                #content #n10{
+                display:none;
+              }
+                #content #n11{
+                display:none;
+              }
+                #content #n12{
+                display:none;
+              }
+                #content #n13{
+                display:none;
+              }
+                #content #n14{
+                display:none;
+              }
+                #content #n15{
+                display:none;
+              }
+                #content #n16{
+                display:none;
+              }
+                #content #n17{
+                display:none;
+              }
+                #content #n18{
+                display:none; 
+              }
+                #content #n19{
+                display:none;
+              }
+                #content #n20{
+                display:none;
+              }
+                #content #n21{
+                display:none;
+              }
+                #content #n22{
+                display:none;
+              }
+                #content #n23{
+                display:none;
+              }
+                #content #n24{
+                display:none;
               }
             `;
           const script = `
