@@ -1,46 +1,221 @@
-@tag unit-title [open] Jla-1 社会 Unit 2
+@tag unit-title [open] Jla-2 数学 Unit 1
 @tag unit-title [close]
-//ユニットタイトル
-@tag chapter-title [open] 連立方程式の計算 Chapter 23
+@tag chapter-title [open] 式の計算 1節 用語 Chapter 1
 @tag chapter-title [close]
-//チャプタータイトル
+
 @tag n1 [open]
-//n1タグ(はじめの画面)の要素
+
 @tag question [open]
-約 10 万年前ごろのものと見られる人類の痕跡が日本列島から見つかりました。  
-この頃の人類は、動物を狩って生活していました。
+こんにちは！/br
+2年生の最初のやつです！/br
+まあこのくらいのテンションでいいのか？/br
+次へボタンで次進んでー
 @tag question [close]
-//説明文（問題文）
-@tag answer [open]
-@input n1_input [open]
-この時代のことをなんというか答えなさい。
-@input n1_input futter=n1_asnwer_futter [close]
-//入力欄
-@futter n1_asnwer_futter futter=n1_asnwer_futter [open]
-この時代のことは、旧石器時代と言います。
-@futter n1_asnwer_futter futter=n1_asnwer_futter[close]
-//回答した後に表示されるフッター
-//n1_inputがenterされたらn1_asnwer_futterに転送する。
-@tag answer [close]
-@btn id=btn1 次へ
-//次へボタン
+
+@btn id=next1 次へ
 
 @tag n1 [close]
 
+@tag n2 [open]
+
 @tag question [open]
-約 1 万年前、日本列島が大陸から分離しました。
-紀元前 3000 年ごろ、稲作が日本列島に伝わりました。
+まあこの単元は式の計算だから、/br
+文字がたくさんでてくるねーっていうやつ。/br
+今回は用語を覚えようっていう回。
 @tag question [close]
-//説明文
-@btn id=btn2 次へ
-//次へボタン
-@script on=btn1 [open]
-//btn1がonclickした時に発動するscript
+
+@btn id=next2 次へ
+
+@tag n2 [close]
+
+
+@tag n3 [open]
+
+@tag question [open]
+まず、$2$、$x$とかのぼっちや、/br
+$-3x$,$-\frac{4}{3}xy$とかの一つのセットを単項式、/br
+その単項式を$+$か$-$でつないだ、/br
+$-x+15$,$2y+5x-4z$とかは多項式っていう名前！
+@tag question [close]
+
+@btn id=next3 次へ
+
+@tag n3 [close]
+
+@tag n4 [open]
+
+@tag question [open]
+まあ名前そのままだね。/br
+単 か 多か。
+@tag question [close]
+
+@btn id=next4 次へ
+
+@tag n4 [close]
+
+@tag n5 [open]
+
+@tag question [open]
+で、項は覚えてる？一年でやったやつ/br
+まあ$+$とか$-$の前で区切ったやつ。/br
+例えば、$6x - 5y$だったら、$6x$と$-5y$。/br
+$-2x + 5 - 7y$だったら、$-2x$,$+5$,$-7y$が項。/br
+このとき、$+5$の項は、$5$でもOKです。
+@tag question [close]
+
+@btn id=next5 次へ
+
+@tag n5 [close]
+
+@tag n6 [open]
+
+@tag question [open]
+そして、数字だけの項を定数項といって、/br
+$5$とか、$-2$とか。$-x$とかは、違うね。文字あるから。うん。
+@tag question [close]
+
+@btn id=next6 次へ
+
+@tag n6 [close]
+
+@tag n7 [open]
+
+@tag question [open]
+一旦まとめると、ぼっち→単項式、/br
+ぼっちの集まり→多項式、/br
+$+,-$の前で区切る→項、/br
+項で数字だけのやつ→定数項
+@tag question [close]
+
+@btn id=next7 次へ
+
+@tag n7 [close]
+
+@tag n8 [open]
+
+@tag question [open]
+もうちょい頑張って。半分終わったから。/br
+単項式で、文字のかけあわされている個数を、次数という。/br
+例えば、$5xy$なら、文字は、$x$が一個、$y$が一個で/br
+合計2個だから、$5xy$の次数は2!
+
+@tag question [close]
+
+@btn id=next8 次へ
+
+@tag n8 [close]
+
+@tag n9 [open]
+
+@tag question [open]
+次数の問題は、だいだい指数がでてくる。/br
+$5x^3y^2$とかは、$x$が3個、$y$が2個だから、/br
+次数は5ってわかるね。
+@tag question [close]
+
+@btn id=next9 次へ
+
+@tag n9 [close]
+
+@tag n10 [open]
+
+@tag question [open]
+さて、多項式も次数があるんだけど、/br
+項にわけて、それぞれの次数を比べて、一番高いやつを選ぶ。/br
+$3x^2 + 4y^3$なら、$3x^2$は2、$4y^3$は3だから、/br
+多い方をとって、$3x^2 + 4y^3$の次数は3。/br
+多項式の時は、3次式っていうこともあるよ。/br
+次数の合計じゃないから、気を付けてね。
+@tag question [close]
+
+@btn id=next10 次へ
+
+@tag n10 [close]
+
+@tag n11 [open]
+
+@tag question [open]
+最後ー！/br
+文字の部分が「まったく」同じ項を同類項っていうよ。/br
+$3x$と$-4x$は、文字が$x$で同じだから、同類項。/br
+まったく　は重要。/br
+$3a$と$3a^2$は、$a$と$a^2$で違うから、同類項じゃない。
+@tag question [close]
+
+@btn id=next11 次へ
+
+@tag n11 [close]
+
+
+@tag n12 [open]
+
+@tag question [open]
+まとめ！/br
+文字のかけあわされている個数→次数/br
+多項式は、一番高いやつを選ぶ！/br
+文字が全く同じやつ→同類項！/br
+おわる！
+@tag question [close]
+
+@btn id=next12 次へ
+
+@tag n12 [close]
+
+@script on=next1 [open]
 dom.Tag("n1").style.display('none','auto');
 dom.Tag("n2").style.display('block','auto');
 @script [close]
 
-@script on=btn2 [open]
-//btn2がonclickした時に発動するscript
+@script on=next2 [open]
+dom.Tag("n2").style.display('none','auto');
+dom.Tag("n3").style.display('block','auto');
+@script [close]
+
+@script on=next3 [open]
+dom.Tag("n3").style.display('none','auto');
+dom.Tag("n4").style.display('block','auto');
+@script [close]
+
+@script on=next4 [open]
+dom.Tag("n4").style.display('none','auto');
+dom.Tag("n5").style.display('block','auto');
+@script [close]
+
+@script on=next5 [open]
+dom.Tag("n5").style.display('none','auto');
+dom.Tag("n6").style.display('block','auto');
+@script [close]
+
+@script on=next6 [open]
+dom.Tag("n6").style.display('none','auto');
+dom.Tag("n7").style.display('block','auto');
+@script [close]
+
+@script on=next7 [open]
+dom.Tag("n7").style.display('none','auto');
+dom.Tag("n8").style.display('block','auto');
+@script [close]
+
+@script on=next8 [open]
+dom.Tag("n8").style.display('none','auto');
+dom.Tag("n9").style.display('block','auto');
+@script [close]
+
+@script on=next9 [open]
+dom.Tag("n9").style.display('none','auto');
+dom.Tag("n10").style.display('block','auto');
+@script [close]
+
+@script on=next10 [open]
+dom.Tag("n10").style.display('none','auto');
+dom.Tag("n11").style.display('block','auto');
+@script [close]
+
+@script on=next11 [open]
+dom.Tag("n11").style.display('none','auto');
+dom.Tag("n12").style.display('block','auto');
+@script [close]
+
+@script on=next12 [open]
 dom.back();
 @script [close]

@@ -938,13 +938,6 @@ export function appInit(shell) {
           };
         },
       };
-      
-      // Initialize MathJax after a short delay to ensure DOM is ready
-      setTimeout(() => {
-        if (typeof MathJax !== 'undefined') {
-          MathJax.typesetPromise();
-        }
-      }, 100);
       `;
         // Create the full HTML content with styles
         const fullHtml = `
@@ -967,7 +960,18 @@ export function appInit(shell) {
             const mathjaxScript = document.createElement('script');
             mathjaxScript.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
             mathjaxScript.async = true;
+            mathjaxScript.onload = function() {
+              // MathJaxが読み込まれた後に初期化
+              if (window.MathJax && window.MathJax.typesetPromise) {
+                window.MathJax.typesetPromise();
+              }
+            };
             document.head.appendChild(mathjaxScript);
+          } else {
+            // MathJaxが既に存在する場合は直接初期化
+            if (window.MathJax && window.MathJax.typesetPromise) {
+              window.MathJax.typesetPromise();
+            }
           }
           </script>
           <style>

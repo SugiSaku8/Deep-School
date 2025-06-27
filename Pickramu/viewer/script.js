@@ -173,7 +173,7 @@ function convertToHtml(inputText) {
 }
 
 // test.mdをfetchで取得し、変換してiframeに表示
-fetch("test.md")
+fetch("./test.md")
   .then((response) => {
     if (!response.ok) throw new Error("Failed to load test.md");
     return response.text();
@@ -865,6 +865,7 @@ font-family: "Noto Sans JP", sans-serif;
       <!DOCTYPE html>
       <html>
       <head>
+          <script id="MathJax-script"  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       <style>
       ${styles}
       </style>
