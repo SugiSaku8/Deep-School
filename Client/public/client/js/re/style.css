@@ -83,20 +83,32 @@
 
 .fullscreen-btn {
   position: absolute;
-  top: 16px;
+  top: 24px;
   right: 32px;
   background: #222a;
   color: #fff;
   border: none;
   border-radius: 8px;
-  font-size: 1.5em;
-  padding: 4px 12px;
+  font-size: 2em;
+  padding: 8px 18px;
   cursor: pointer;
-  z-index: 10;
-  transition: background 0.2s;
+  z-index: 1000;
+  box-shadow: 0 2px 8px #0004;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+  outline: none;
 }
-.fullscreen-btn:hover {
+.fullscreen-btn:hover, .fullscreen-btn:focus {
   background: #444a;
+  box-shadow: 0 4px 16px #0006;
+  transform: scale(1.08);
+}
+.fullscreen-btn:active {
+  background: #111a;
+  box-shadow: 0 1px 4px #0002;
+  transform: scale(0.97);
+}
+.page-container {
+  position: relative;
 }
 
 /* MathJax styling */
