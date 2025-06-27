@@ -74,51 +74,39 @@ class VersionCLI {
       
       if (component === 'all') {
         let output = '=== Deep-School Family Software Versions ===\n\n';
-        
-        // Deep-School Family
-        const family = version.deepSchoolFamily;
-        output += `🌐 Deep-School Family: ${family.version} (${family.status})\n`;
-        output += `   Last Updated: ${family.lastUpdated}\n`;
-        output += `   Description: ${family.description}\n\n`;
-        
-        // Deep-School Client
-        const client = version.deepSchoolClient;
-        output += `💻 Deep-School Client: v${client.version} (${client.status})\n`;
-        output += `   Cycle: ${client.cycle}, Release: ${client.release}, Revision: ${client.revision}\n`;
-        output += `   Last Updated: ${client.lastUpdated}\n`;
-        output += `   Description: ${client.description}\n\n`;
-        
-        // Deep-School Server
-        const server = version.deepSchoolServer;
-        output += `🖥️  Deep-School Server: v${server.version} (${server.status})\n`;
-        output += `   Cycle: ${server.cycle}, Release: ${server.release}, Revision: ${server.revision}\n`;
-        output += `   Last Updated: ${server.lastUpdated}\n`;
-        output += `   Description: ${server.description}\n\n`;
-        
-        // Pickramu
-        const pickramu = version.pickramu;
-        output += `📚 Pickramu: v${pickramu.version} (${pickramu.status})\n`;
-        output += `   Cycle: ${pickramu.cycle}, Release: ${pickramu.release}, Revision: ${pickramu.revision}\n`;
-        output += `   Last Updated: ${pickramu.lastUpdated}\n`;
-        output += `   Description: ${pickramu.description}\n\n`;
-        
-        // Toaster-Machine
-        const toaster = version.toasterMachine;
-        output += `🍞 Toaster-Machine: v${toaster.version}\n`;
-        output += `   Cycle: ${toaster.cycle}, Release: ${toaster.release}, Revision: ${toaster.revision}\n`;
-        output += `   Last Updated: ${toaster.lastUpdated}\n`;
-        output += `   Description: ${toaster.description}\n\n`;
-        
+        // 全てのキーをループ
+        const skipKeys = ['releaseSchedule'];
+        for (const [key, value] of Object.entries(version)) {
+          if (skipKeys.includes(key)) continue;
+          // アイコンとラベルを決定
+          let icon = '';
+          let label = key;
+          switch (key) {
+            case 'deepSchoolFamily': icon = '🌐'; label = 'Deep-School Family'; break;
+            case 'deepSchoolClient': icon = '💻'; label = 'Deep-School Client'; break;
+            case 'deepSchoolServer': icon = '🖥️'; label = 'Deep-School Server'; break;
+            case 'pickramu': icon = '📚'; label = 'Pickramu'; break;
+            case 'eguide': icon = '📖'; label = 'eGuide'; break;
+            case 'estore': icon = '🛒'; label = 'eStore'; break;
+            case 'login': icon = '🔑'; label = 'Login'; break;
+            case 'menu': icon = '📋'; label = 'Menu'; break;
+            case 'setting': icon = '⚙️'; label = 'Setting'; break;
+            case 'toasterMachine': icon = '🍞'; label = 'Toaster-Machine'; break;
+          }
+          output += `${icon} ${label}: v${value.version} (${value.status})\n`;
+          if (value.cycle !== undefined) output += `   Cycle: ${value.cycle}, Release: ${value.release}, Revision: ${value.revision}\n`;
+          if (value.lastUpdated) output += `   Last Updated: ${value.lastUpdated}\n`;
+          if (value.description) output += `   Description: ${value.description}\n`;
+          output += `\n`;
+        }
         if (version.releaseSchedule) {
           output += '=== Release Schedule ===\n';
           output += `Next Cycle Update: ${version.releaseSchedule.nextCycleUpdate || 'Not specified'}\n`;
         }
-        
         return output;
       } else {
         const comp = version;
         let output = `=== ${component.toUpperCase()} Version ===\n\n`;
-        
         if (comp.version) {
           output += `Version: ${comp.version}\n`;
         }
@@ -136,7 +124,6 @@ class VersionCLI {
         }
         output += `Last Updated: ${comp.lastUpdated}\n`;
         output += `Description: ${comp.description}\n`;
-        
         return output;
       }
     } catch (error) {
