@@ -17,49 +17,7 @@ class VersionManager {
     } catch (error) {
       console.error('Version config load error:', error);
       // フォールバック用のデフォルト設定
-      this.versionConfig = {
-        deepSchoolFamily: {
-          version: "25C0101",
-          status: "stable",
-          lastUpdated: "2025-01-01",
-          description: "Deep-School Family Software - Initial release"
-        },
-        deepSchoolClient: {
-          version: "1.0.1",
-          status: "stable",
-          cycle: 1,
-          release: 0,
-          revision: 1,
-          lastUpdated: "2025-01-01",
-          description: "Deep-School Client - Initial stable release"
-        },
-        deepSchoolServer: {
-          version: "1.0.1",
-          status: "stable",
-          cycle: 1,
-          release: 0,
-          revision: 1,
-          lastUpdated: "2025-01-01",
-          description: "Deep-School Server - Initial stable release"
-        },
-        workMaker: {
-          version: "1.0.1",
-          status: "stable",
-          cycle: 1,
-          release: 0,
-          revision: 1,
-          lastUpdated: "2025-01-01",
-          description: "Work-Maker - Initial stable release"
-        },
-        toasterMachine: {
-          version: "1.0.1",
-          cycle: 1,
-          release: 0,
-          revision: 1,
-          lastUpdated: "2025-01-01",
-          description: "Toaster-Machine - Initial stable release"
-        }
-      };
+      this.versionConfig = "Called Error From version.mjs"
       return this.versionConfig;
     }
   }
@@ -160,7 +118,7 @@ class VersionManager {
       }
       output += `Last Updated: ${comp.lastUpdated}\n`;
       output += `Description: ${comp.description}\n`;
-      
+
       return output;
     }
   }
