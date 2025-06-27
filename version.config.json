@@ -1,6 +1,6 @@
 {
   "deepSchoolFamily": {
-    "version": "25C818X1",
+    "version": "25C827X1",
     "status": "beta",
     "lastUpdated": "2025-06-27",
     "description": "Deep-School Family Software - Initial release"
@@ -24,12 +24,12 @@
     "description": "Deep-School Server - Initial stable release"
   },
   "pickramu": {
-    "version": "1.0.1",
-    "status": "stable",
+    "version": "1.0.2",
+    "status": "beta",
     "cycle": 1,
     "release": 0,
     "revision": 1,
-    "lastUpdated": "2025-01-01",
+    "lastUpdated": "2025-06-27",
     "description": "Pickramu - Initial stable release"
   },
   "eguide": {
