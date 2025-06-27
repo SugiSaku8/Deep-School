@@ -1,0 +1,131 @@
+/* Pickramu Content Styles */
+.pickramu-content {
+  background: #173c2b;
+  border-radius: 12px;
+  min-height: 300px;
+  padding: 24px;
+  color: #fff;
+  width: 100%;
+  box-sizing: border-box;
+  word-break: break-word;
+  line-height: 1.6;
+}
+
+.pickramu-content div {
+  margin-bottom: 16px;
+}
+
+.pickramu-content .unit-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffd700;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.pickramu-content .chapter-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #87ceeb;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.pickramu-content .question {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  border-left: 4px solid #4CAF50;
+}
+
+.pickramu-content button {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin: 8px 0;
+  transition: background-color 0.2s;
+}
+
+.pickramu-content button:hover {
+  background: #45a049;
+}
+
+.pickramu-content button:active {
+  background: #3d8b40;
+}
+
+.pickramu-content .input-container {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 16px;
+  border-radius: 8px;
+  margin: 16px 0;
+}
+
+.pickramu-content .input-box {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  background: #fff;
+  color: #333;
+}
+
+.pickramu-content .button-next {
+  background: #2196F3;
+}
+
+.pickramu-content .button-next:hover {
+  background: #1976D2;
+}
+
+/* Hide all n1-n12 divs initially except n1 */
+.pickramu-content #n1 {
+  display: block;
+}
+
+.pickramu-content #n2,
+.pickramu-content #n3,
+.pickramu-content #n4,
+.pickramu-content #n5,
+.pickramu-content #n6,
+.pickramu-content #n7,
+.pickramu-content #n8,
+.pickramu-content #n9,
+.pickramu-content #n10,
+.pickramu-content #n11,
+.pickramu-content #n12 {
+  display: none;
+}
+
+/* MathJax styling */
+.pickramu-content .MathJax {
+  color: #ffd700;
+}
+
+/* Responsive design */
+@media (max-width: 700px) {
+  .pickramu-content {
+    padding: 16px;
+    font-size: 0.95rem;
+  }
+  
+  .pickramu-content .unit-title {
+    font-size: 1.3rem;
+  }
+  
+  .pickramu-content .chapter-title {
+    font-size: 1.1rem;
+  }
+  
+  .pickramu-content button {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+} 
