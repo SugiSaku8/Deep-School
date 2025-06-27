@@ -26,7 +26,7 @@ Deep-School consists of the following three main software components
 
 # SCR
 
-SCR is the English acronym for “Study Consultation Room”.
+SCR is the English acronym for "Study Consultation Room".
 
 This application allows students to freely discuss their studies.
 
@@ -66,15 +66,114 @@ Therefore, we are planning and developing software that will allow all students 
 
 ToasterMachine is an AI tool customized for the educational field.
 
-ToasterMachine is a custom AI tool for educational use. It was created along the lines of “coaching”.
+ToasterMachine is a custom AI tool for educational use. It was created along the lines of "coaching".
 
-In conventional AI tools, the answer is given as soon as the “Tell me the answer” is pronounced.
+In conventional AI tools, the answer is given as soon as the "Tell me the answer" is pronounced.
 
 Is this really beneficial to the child?
 
-In order to address this problem, a “coaching” = “guiding the answer” method was introduced,
+In order to address this problem, a "coaching" = "guiding the answer" method was introduced,
 
 ToasterMachine.
+
+# Version Management System
+
+Deep-School uses a comprehensive version management system to track versions across all components.
+
+## Version Formats
+
+### Deep-School Client/Server/Work-Maker
+Format: `v.CYCLE.RELEASE.REVISION(.STATUS)`
+- **CYCLE**: 1-year cycle (10/13, 10/03, 4/15, 9/1)
+- **RELEASE**: Irregular releases when features are stable (1, 5, 10, 25, 30)
+- **REVISION**: Security patches and bug fixes
+- **STATUS**: Optional (nightly, beta, pre)
+
+Examples:
+- `v1.3.2` - 1st cycle, 3rd release, revision 2
+- `v3.12.6.nightly` - 3rd cycle, 12th release, revision 6 (nightly)
+
+### Toaster-Machine
+Format: `v.CYCLE.RELEASE.REVISION`
+- **CYCLE**: 1/2-year cycle (10/13, 10/03, 4/15, 9/1, 8/1, 12/26)
+- **RELEASE**: Irregular releases when features are stable
+- **REVISION**: Security patches and bug fixes
+
+Example: `v1.3.2` - 1st cycle, 3rd release, revision 2
+
+### Deep-School Family Software
+Format: `YEAR(FIRST-CODE-RELEASED-YEAR)C[BUILD][RELEASE](.STATUS)`
+- **YEAR**: First code released year (e.g., 2025 → 25)
+- **BUILD**: Build number
+- **RELEASE**: Release number
+- **STATUS**: Optional (nightly, beta, pre)
+
+Example: `25C1205` - 2025, build 12, release 5
+
+## Using Version Management
+
+### Command Line Interface
+
+```bash
+# Show all version information
+npm run version:all
+# or
+node version-cli.js all
+
+# Show specific component version
+npm run version:client
+npm run version:server
+npm run version:workmaker
+npm run version:toaster
+npm run version:family
+
+# List available components
+npm run version:list
+
+# Check for updates
+npm run version:check
+
+# Compare versions
+node version-cli.js compare 1.0.1 1.0.2
+
+# Show help
+npm run version:help
+```
+
+### Deep-Shell Integration
+
+When using Deep-School in the browser, you can access version information through the Deep-Shell:
+
+```javascript
+// Show all version information
+ds.version.all()
+
+// Show specific component version
+ds.version.get('client')
+ds.version.get('server')
+ds.version.get('workmaker')
+ds.version.get('toaster')
+ds.version.get('family')
+
+// List available components
+ds.version.list()
+
+// Check for updates
+ds.version.check()
+
+// Compare versions
+ds.version.compare('1.0.1', '1.0.2')
+
+// Show help
+ds.help.version()
+```
+
+## Release Schedule
+
+- **Deep-School Cycles**: 10/13, 10/03, 4/15, 9/1
+- **Toaster-Machine Cycles**: 10/13, 10/03, 4/15, 9/1, 8/1, 12/26
+- **Release Days**: 1, 5, 10, 25, 30
+- **Family Software Updates**: When cycles align
 
 __________________________________
 

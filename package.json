@@ -1,0 +1,44 @@
+{
+  "name": "deep-school",
+  "version": "1.0.1",
+  "description": "Deep-School Family Software - Educational Platform",
+  "main": "version-cli.js",
+  "scripts": {
+    "version": "node version-cli.js",
+    "version:all": "node version-cli.js all",
+    "version:client": "node version-cli.js get client",
+    "version:server": "node version-cli.js get server",
+    "version:workmaker": "node version-cli.js get workmaker",
+    "version:toaster": "node version-cli.js get toaster",
+    "version:family": "node version-cli.js get family",
+    "version:check": "node version-cli.js check",
+    "version:list": "node version-cli.js list",
+    "version:compare": "node version-cli.js compare",
+    "version:help": "node version-cli.js help",
+    "start:client": "cd Client && python3 -m http.server 8000",
+    "start:server": "cd server && npm run start:dev",
+    "dev": "concurrently \"npm run start:client\" \"npm run start:server\""
+  },
+  "bin": {
+    "deep-school-version": "./version-cli.js"
+  },
+  "keywords": [
+    "deep-school",
+    "education",
+    "learning",
+    "platform",
+    "version-management"
+  ],
+  "author": "Carnation Studio",
+  "license": "MPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sugisaku8/Deep-School.git"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+} 
