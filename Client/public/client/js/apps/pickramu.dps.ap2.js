@@ -1,6 +1,6 @@
 export const appMeta = {
   name: "pickramu",
-  title: "Pickramu ワーク",
+  title: "Pickramu",
   icon: "re/ico/note.svg"
 };
 
@@ -13,7 +13,7 @@ export function appInit(shell) {
   root.innerHTML = `
     <div class="page-container">
       <button class="go-back-button" id="pickramu-back-btn" data-lang-key="back">←</button>
-      <h1 class="page-title" data-lang-key="pickramu_work">Pickramu ワーク</h1>
+      <h1 class="page-title" data-lang-key="pickramu_work">Pickramu/h1>
     <div class="pickramu-tabs" style="margin-bottom: 20px; display: flex; gap: 12px;">
         <button class="auto-btn" id="tab-pickramu" data-lang-key="pickramu_tab">教材ワーク</button>
         <button class="auto-btn" id="tab-eguide" data-lang-key="eguide_tab">eGuide</button>
@@ -22,7 +22,11 @@ export function appInit(shell) {
       <div class="pickramu-select" style="margin-bottom: 20px;">
           <label for="pickramu-unit-select" data-lang-key="select_material">教材選択：</label>
         <select id="pickramu-unit-select">
-          <option value="jla/math/式の計算/1節/1.用語/1.md">数学: 式の計算・用語</option>
+          <option value="jla/math/式の計算/1節/1.用語/1.md">数学: 式の計算・1節・用語 (1)</option>
+          <option value="jla/math/式の計算/1節/1.用語/2.md">数学: 式の計算・1節・用語 (2)</option>
+          <option value="jla/math/式の計算/1節/2.加法・減法/1.md">数学: 式の計算・1節・加法・減法 (1)</option>
+          <option value="jla/math/式の計算/1節/2.加法・減法/2.md">数学: 式の計算・1節・加法・減法 (2)</option>
+          <option value="jla/ss/unit1/chapter1.md">社会: Unit1・Chapter1</option>
         </select>
           <button class="auto-btn" id="pickramu-load-btn" data-lang-key="load">読み込み</button>
       </div>
@@ -61,7 +65,7 @@ export function appInit(shell) {
       try {
         // ローカル or GitHub Pages でパスを切り替え
         const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-        const basePath = isLocal ? '/Pickramu/data/' : 'https://sugisaku8.github.io/Pickramu/data/';
+        const basePath = isLocal ? '/Pickramu/data/' : 'https://sugisaku8.github.io/Deep-School/Pickramu/data/';
         const fetchUrl = basePath + path;
         const res = await fetch(fetchUrl);
         if (res.ok) {
