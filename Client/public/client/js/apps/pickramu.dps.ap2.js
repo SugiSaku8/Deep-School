@@ -893,15 +893,78 @@ export function appInit(shell) {
           height: 20px;
           background: linear-gradient(to right, #dca10d, #8c5d00);
         }
-        #content #n2 {
+        #content #n2{
           display: none;
+        }
+          #content #n3{
+          display: none;
+        }
+          #content #n4{
+          display: none;
+        }
+          #content #n5{
+          display: none;
+        }
+          #content #n6{
+          display: none;
+        }
+          #content #n7{
+          display: none;
+        }
+          #content #n8{
+          display: none;
+        }
+          #content #n9{
+          display:none;
+        }
+          #content #n10{
+          display:none;
+        }
+          #content #n11{
+          display:none;
+        }
+          #content #n12{
+          display:none;
+        }
+          #content #n13{
+          display:none;
+        }
+          #content #n14{
+          display:none;
+        }
+          #content #n15{
+          display:none;
+        }
+          #content #n16{
+          display:none;
+        }
+          #content #n17{
+          display:none;
+        }
+          #content #n18{
+          display:none; 
+        }
+          #content #n19{
+          display:none;
+        }
+          #content #n20{
+          display:none;
+        }
+          #content #n21{
+          display:none;
+        }
+          #content #n22{
+          display:none;
+        }
+          #content #n23{
+          display:none;
+        }
+          #content #n24{
+          display:none;
         }
       `;
         const script = `
-      // Clear any existing MathJax configuration to prevent conflicts
-      if (window.MathJax) {
-        window.MathJax = undefined;
-      }
+
       
       // Clear any existing dom object to prevent redeclaration
       if (window.dom) {
@@ -944,36 +1007,7 @@ export function appInit(shell) {
           <!DOCTYPE html>
           <html>
           <head>
-          <script>
-          // Load MathJax if not already loaded
-          if (!window.MathJax) {
-            window.MathJax = {
-              tex: {
-                inlineMath: [['$', '$'], ['\\\\(', '\\\\)']],
-                displayMath: [['$$', '$$'], ['\\\\[', '\\\\]']]
-              },
-              svg: {
-                fontCache: 'global'
-              }
-            };
-            
-            const mathjaxScript = document.createElement('script');
-            mathjaxScript.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
-            mathjaxScript.async = true;
-            mathjaxScript.onload = function() {
-              // MathJaxが読み込まれた後に初期化
-              if (window.MathJax && window.MathJax.typesetPromise) {
-                window.MathJax.typesetPromise();
-              }
-            };
-            document.head.appendChild(mathjaxScript);
-          } else {
-            // MathJaxが既に存在する場合は直接初期化
-            if (window.MathJax && window.MathJax.typesetPromise) {
-              window.MathJax.typesetPromise();
-            }
-          }
-          </script>
+        <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
           <style>
           ${styles}
           </style>
