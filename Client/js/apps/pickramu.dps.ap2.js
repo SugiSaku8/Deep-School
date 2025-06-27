@@ -1,6 +1,6 @@
 export const appMeta = {
   name: "pickramu",
-  title: "Pickramu ワーク",
+  title: "Pickramu",
   icon: "re/ico/note.svg"
 };
 
@@ -13,7 +13,7 @@ export function appInit(shell) {
   root.innerHTML = `
     <div class="page-container">
       <button class="go-back-button" id="pickramu-back-btn" data-lang-key="back">←</button>
-      <h1 class="page-title" data-lang-key="pickramu_work">Pickramu ワーク</h1>
+      <h1 class="page-title" data-lang-key="pickramu_work">Pickramu/h1>
     <div class="pickramu-tabs" style="margin-bottom: 20px; display: flex; gap: 12px;">
         <button class="auto-btn" id="tab-pickramu" data-lang-key="pickramu_tab">教材ワーク</button>
         <button class="auto-btn" id="tab-eguide" data-lang-key="eguide_tab">eGuide</button>
