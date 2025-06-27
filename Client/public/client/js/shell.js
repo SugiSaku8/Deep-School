@@ -2,11 +2,13 @@ import * as coreConfig from './core/config.js';
 import * as coreLang from './core/lang.js';
 import * as coreSecurity from './core/security.js';
 import * as coreUtils from './core/utils.mjs';
+import { versionManager } from './core/version.mjs';
 
 window.coreConfig = coreConfig;
 window.coreLang = coreLang;
 window.coreSecurity = coreSecurity;
 window.coreUtils = coreUtils;
+window.versionManager = versionManager;
 
 function applyLangToDOM() {
   const { t } = window.coreLang;
@@ -58,9 +60,87 @@ class DeepSchoolShell {
     const logFunc = this.log.bind(this);
     logFunc.sw = this.log_sw.bind(this);
     this.log = logFunc;
+    
+    // バージョン管理機能を初期化
+    this._initVersionCommands();
+    
     window.ds = this; // コマンド用
     applyLangToDOM();
     this.loadApp('login');
+  }
+
+  // バージョン管理コマンドを初期化
+  _initVersionCommands() {
+    // バージョン情報を表示するコマンド
+    this.version = {
+      // 全バージョン情報を表示
+      all: async () => {
+        await versionManager.loadVersionConfig();
+        const formatted = versionManager.formatVersion('all');
+        console.log(formatted);
+        this.log({from: 'dp.sys.version', message: 'Version information displayed', level: 'info'});
+        return formatted;
+      },
+      
+      // 特定コンポーネントのバージョン情報を表示
+      get: async (component = 'client') => {
+        await versionManager.loadVersionConfig();
+        const formatted = versionManager.formatVersion(component);
+        console.log(formatted);
+        this.log({from: 'dp.sys.version', message: `${component} version information displayed`, level: 'info'});
+        return formatted;
+      },
+      
+      // 利用可能なコンポーネント一覧
+      list: () => {
+        const components = ['family', 'client', 'server', 'workmaker', 'toaster'];
+        console.log('Available components:', components.join(', '));
+        this.log({from: 'dp.sys.version', message: 'Available components listed', level: 'info'});
+        return components;
+      },
+      
+      // アップデートチェック
+      check: async () => {
+        await versionManager.loadVersionConfig();
+        const updates = versionManager.checkForUpdates();
+        console.log('Update check results:', updates);
+        this.log({from: 'dp.sys.version', message: 'Update check completed', level: 'info'});
+        return updates;
+      },
+      
+      // バージョン比較
+      compare: (version1, version2) => {
+        const result = versionManager.compareVersions(version1, version2);
+        const comparison = result === 1 ? 'newer' : result === -1 ? 'older' : 'same';
+        console.log(`Version comparison: ${version1} is ${comparison} than ${version2}`);
+        this.log({from: 'dp.sys.version', message: `Version comparison: ${version1} vs ${version2}`, level: 'info'});
+        return { result, comparison };
+      }
+    };
+
+    // ヘルプコマンド
+    this.help = {
+      version: () => {
+        const help = `
+=== Version Management Commands ===
+
+ds.version.all()           - Display all version information
+ds.version.get(component)  - Display specific component version
+ds.version.list()          - List available components
+ds.version.check()         - Check for updates
+ds.version.compare(v1, v2) - Compare two versions
+
+Available components: family, client, server, workmaker, toaster
+
+Examples:
+  ds.version.all()
+  ds.version.get('client')
+  ds.version.compare('1.0.1', '1.0.2')
+        `;
+        console.log(help);
+        return help;
+      }
+    };
   }
 
   // ログ出力API
