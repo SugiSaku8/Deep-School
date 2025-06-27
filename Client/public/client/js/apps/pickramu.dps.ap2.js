@@ -952,7 +952,7 @@ export function appInit(shell) {
         const iframe = document.getElementById("pickramu_iframe");
         const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
         iframeDocument.open();
-        iframeDocument.write(fullhtml);
+        iframeDocument.write(fullHtml);
         iframeDocument.close();
         } else {
           content.textContent = `教材の読み込みに失敗しました (404 Not Found)\nURL: ${fetchUrl}`;
