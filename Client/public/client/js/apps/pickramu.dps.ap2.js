@@ -906,12 +906,9 @@ export function appInit(shell) {
                 height: 20px;
                 background: linear-gradient(to right, #dca10d, #8c5d00);
               }
-              #content #n2 {
+              #content #n2 #n3 #n4 #n5 #6 #7 #8 #9 #10 #11 #12 #13 #14 #15 #16 #17 #18 #19 #20{
                 display: none;
               }
-                #n2 #n3 #n4 #n5 {
-                  display: none;
-                }
             `;
           const script = `
             /**
