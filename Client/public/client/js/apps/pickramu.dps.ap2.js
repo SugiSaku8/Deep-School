@@ -34,7 +34,8 @@ export function appInit(shell) {
           <button class="auto-btn" id="pickramu-load-btn" data-lang-key="load">読み込み</button>
         </div>
         <iframe id="pickramu_iframe" style="width:100%; min-height:600px; border:none; border-radius:12px; background:#173c2b;"></iframe>
-      </div>
+      <div id="pickramu-content"></div>
+        </div>
       <div id="pickramu-eguide-area" style="display:none;">
         <iframe src="eguide.html" style="width:100%; min-height:600px; border:none; border-radius:12px; background:#173c2b;"></iframe>
       </div>
@@ -778,7 +779,6 @@ export function appInit(shell) {
         iframeDocument.open();
         iframeDocument.write(fullHtml);
         iframeDocument.close();
-          content.innerHTML = html;
         } else {
           content.textContent = `教材の読み込みに失敗しました (404 Not Found)\nURL: ${fetchUrl}`;
         }
