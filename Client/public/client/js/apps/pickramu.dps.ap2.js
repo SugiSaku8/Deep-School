@@ -15,30 +15,31 @@ export function appInit(shell) {
   root.innerHTML = `
     <div class="page-container">
       <button class="go-back-button" id="pickramu-back-btn" data-lang-key="back">←</button>
-      <h1 class="page-title" data-lang-key="pickramu_work">Pickramu/h1>
-    <div class="pickramu-tabs" style="margin-bottom: 20px; display: flex; gap: 12px;">
+      <h1 class="page-title" data-lang-key="pickramu_work">Pickramu</h1>
+      <button class="fullscreen-btn" id="pickramu-fullscreen-btn" title="全画面表示">⛶</button>
+      <div class="pickramu-tabs" style="margin-bottom: 20px; display: flex; gap: 12px;">
         <button class="auto-btn" id="tab-pickramu" data-lang-key="pickramu_tab">教材ワーク</button>
         <button class="auto-btn" id="tab-eguide" data-lang-key="eguide_tab">eGuide</button>
-    </div>
-    <div id="pickramu-work-area">
-      <div class="pickramu-select" style="margin-bottom: 20px;">
-          <label for="pickramu-unit-select" data-lang-key="select_material">教材選択：</label>
-        <select id="pickramu-unit-select">
-          <option value="jla/math/式の計算/1節/1.用語/1.md">数学: 式の計算・1節・用語 (1)</option>
-          <option value="jla/math/式の計算/1節/1.用語/2.md">数学: 式の計算・1節・用語 (2)</option>
-          <option value="jla/math/式の計算/1節/2.加法・減法/1.md">数学: 式の計算・1節・加法・減法 (1)</option>
-          <option value="jla/math/式の計算/1節/2.加法・減法/2.md">数学: 式の計算・1節・加法・減法 (2)</option>
-          <option value="jla/ss/unit1/chapter1.md">社会: Unit1・Chapter1</option>
-        </select>
-          <button class="auto-btn" id="pickramu-load-btn" data-lang-key="load">読み込み</button>
       </div>
-      <div id="pickramu-content" class="pickramu-content" style="background:#173c2b; border-radius:12px; min-height:300px; padding:24px; color:#fff;"></div>
+      <div id="pickramu-work-area">
+        <div class="pickramu-select" style="margin-bottom: 20px;">
+          <label for="pickramu-unit-select" data-lang-key="select_material">教材選択：</label>
+          <select id="pickramu-unit-select">
+            <option value="jla/math/式の計算/1節/1.用語/1.md">数学: 式の計算・1節・用語 (1)</option>
+            <option value="jla/math/式の計算/1節/1.用語/2.md">数学: 式の計算・1節・用語 (2)</option>
+            <option value="jla/math/式の計算/1節/2.加法・減法/1.md">数学: 式の計算・1節・加法・減法 (1)</option>
+            <option value="jla/math/式の計算/1節/2.加法・減法/2.md">数学: 式の計算・1節・加法・減法 (2)</option>
+            <option value="jla/ss/unit1/chapter1.md">社会: Unit1・Chapter1</option>
+          </select>
+          <button class="auto-btn" id="pickramu-load-btn" data-lang-key="load">読み込み</button>
+        </div>
+        <div id="pickramu-content" class="pickramu-content" tabindex="0"></div>
+      </div>
+      <div id="pickramu-eguide-area" style="display:none;">
+        <iframe src="eguide.html" style="width:100%; min-height:600px; border:none; border-radius:12px; background:#173c2b;"></iframe>
+      </div>
     </div>
-    <div id="pickramu-eguide-area" style="display:none;">
-      <iframe src="eguide.html" style="width:100%; min-height:600px; border:none; border-radius:12px; background:#173c2b;"></iframe>
-    </div>
-  </div>
-`;
+  `;
 
   // 戻るボタン
   document.getElementById('pickramu-back-btn').onclick = () => shell.loadApp('menu');
@@ -65,7 +66,6 @@ export function appInit(shell) {
       const path = select.value;
       content.textContent = '読み込み中...';
       try {
-        // ローカル or GitHub Pages でパスを切り替え
         const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
         const basePath = isLocal ? '/Pickramu/data/' : 'https://sugisaku8.github.io/Deep-School/client/Pickramu/data/';
         const fetchUrl = basePath + path;
@@ -80,6 +80,16 @@ export function appInit(shell) {
       } catch (e) {
         content.textContent = '教材の読み込みでエラーが発生しました';
       }
+    }
+  };
+
+  // フルスクリーンボタン
+  document.getElementById('pickramu-fullscreen-btn').onclick = () => {
+    const content = document.getElementById('pickramu-content');
+    if (!document.fullscreenElement) {
+      content.requestFullscreen();
+    } else {
+      document.exitFullscreen();
     }
   };
 } 
