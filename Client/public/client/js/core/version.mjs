@@ -2,7 +2,7 @@
 class VersionManager {
   constructor() {
     this.versionConfig = null;
-    this.configPath = './version.config.json';
+    this.configPath = '/version.config.json';
   }
 
   // バージョン設定を読み込み
