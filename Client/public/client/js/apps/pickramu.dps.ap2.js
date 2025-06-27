@@ -254,7 +254,7 @@ export function appInit(shell) {
     const styles = `
     body{
     font-family: "Noto Sans JP", sans-serif;
-      color: black;
+      color: white;
       text-align: center;
       display: flex;
       flex-direction: column;
@@ -964,17 +964,10 @@ export function appInit(shell) {
               }
             };
             
-            const script = document.createElement('script');
-            script.src = 'https://polyfill.io/v3/polyfill.min.js?features=es6';
-            script.async = true;
-            document.head.appendChild(script);
-            
-            script.onload = function() {
-              const mathjaxScript = document.createElement('script');
-              mathjaxScript.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
-              mathjaxScript.async = true;
-              document.head.appendChild(mathjaxScript);
-            };
+            const mathjaxScript = document.createElement('script');
+            mathjaxScript.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+            mathjaxScript.async = true;
+            document.head.appendChild(mathjaxScript);
           }
           </script>
           <style>
