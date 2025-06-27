@@ -909,6 +909,9 @@ export function appInit(shell) {
               #content #n2 {
                 display: none;
               }
+                #n2 #n3 #n4 #n5 {
+                  display: none;
+                }
             `;
           const script = `
             /**
