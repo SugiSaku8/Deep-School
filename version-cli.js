@@ -55,7 +55,7 @@ class VersionCLI {
       'family': 'deepSchoolFamily',
       'client': 'deepSchoolClient',
       'server': 'deepSchoolServer',
-      'workmaker': 'workMaker',
+      'pickramu': 'pickramu',
       'toaster': 'toasterMachine'
     };
 
@@ -95,12 +95,12 @@ class VersionCLI {
         output += `   Last Updated: ${server.lastUpdated}\n`;
         output += `   Description: ${server.description}\n\n`;
         
-        // Work-Maker
-        const workmaker = version.workMaker;
-        output += `🔧 Work-Maker: v${workmaker.version} (${workmaker.status})\n`;
-        output += `   Cycle: ${workmaker.cycle}, Release: ${workmaker.release}, Revision: ${workmaker.revision}\n`;
-        output += `   Last Updated: ${workmaker.lastUpdated}\n`;
-        output += `   Description: ${workmaker.description}\n\n`;
+        // Pickramu
+        const pickramu = version.pickramu;
+        output += `📚 Pickramu: v${pickramu.version} (${pickramu.status})\n`;
+        output += `   Cycle: ${pickramu.cycle}, Release: ${pickramu.release}, Revision: ${pickramu.revision}\n`;
+        output += `   Last Updated: ${pickramu.lastUpdated}\n`;
+        output += `   Description: ${pickramu.description}\n\n`;
         
         // Toaster-Machine
         const toaster = version.toasterMachine;
@@ -181,7 +181,7 @@ class VersionCLI {
 
     const currentClient = this.versionConfig.deepSchoolClient;
     const currentServer = this.versionConfig.deepSchoolServer;
-    const currentWorkMaker = this.versionConfig.workMaker;
+    const currentPickramu = this.versionConfig.pickramu;
     const currentToaster = this.versionConfig.toasterMachine;
 
     // 実際のアップデートチェックロジックはここに実装
@@ -189,7 +189,7 @@ class VersionCLI {
     return {
       client: { hasUpdate: false, current: currentClient.version, latest: currentClient.version },
       server: { hasUpdate: false, current: currentServer.version, latest: currentServer.version },
-      workMaker: { hasUpdate: false, current: workMaker.version, latest: workMaker.version },
+      pickramu: { hasUpdate: false, current: currentPickramu.version, latest: currentPickramu.version },
       toaster: { hasUpdate: false, current: currentToaster.version, latest: currentToaster.version }
     };
   }
@@ -210,7 +210,7 @@ Commands:
   compare <v1> <v2>      - Compare two versions
   help                   - Show this help information
 
-Available components: family, client, server, workmaker, toaster
+Available components: family, client, server, pickramu, toaster
 
 Examples:
   node version-cli.js all
@@ -253,7 +253,7 @@ Examples:
           break;
 
         case 'list':
-          const components = ['family', 'client', 'server', 'workmaker', 'toaster'];
+          const components = ['family', 'client', 'server', 'pickramu', 'toaster'];
           console.log('Available components:', components.join(', '));
           break;
 

@@ -93,7 +93,7 @@ class DeepSchoolShell {
       
       // 利用可能なコンポーネント一覧
       list: () => {
-        const components = ['family', 'client', 'server', 'workmaker', 'toaster'];
+        const components = ['family', 'client', 'server', 'pickramu', 'toaster'];
         console.log('Available components:', components.join(', '));
         this.log({from: 'dp.sys.version', message: 'Available components listed', level: 'info'});
         return components;
@@ -130,7 +130,7 @@ ds.version.list()          - List available components
 ds.version.check()         - Check for updates
 ds.version.compare(v1, v2) - Compare two versions
 
-Available components: family, client, server, workmaker, toaster
+Available components: family, client, server, pickramu, toaster
 
 Examples:
   ds.version.all()

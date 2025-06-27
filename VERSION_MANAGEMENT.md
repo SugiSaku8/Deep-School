@@ -6,7 +6,7 @@ Deep-School Version Management Systemは、Deep-Schoolファミリーソフト�
 
 ## バージョンフォーマット
 
-### Deep-School CLIENT/SERVER/WORK-MAKER
+### Deep-School CLIENT/SERVER/PICKRAMU
 ```
 v.CYCLE-NUMBER.RELEASE-NUMBER.REVISION(.STATUS=OPTION)
                                                                                      [NIGHTLY,BETA,PRE]
@@ -39,7 +39,7 @@ YEAR(FIRST-CODE-RELEASED-YEAR,EXAMPLE 2025 TO 25)C[BUILD-NUMBER][RELEASE-NUMBER]
 
 Deep-Schoolは、基本的に次のようにリリースする。
 
-- **基本的に1サイクル1年**で行う。(SERVERは同じ、WORK-MAKERは3年周期)
+- **基本的に1サイクル1年**で行う。(SERVERは同じ、PICKRAMUは3年周期)
 - **サイクル更新日**: 10/13, 10/03, 4/15, 9/1のいずれか
 - **リリース**: 不定期で行い、新機能が安定したらリリースする
 - **リリース日**: 1, 5, 10, 25, 30のいずれかの日
@@ -102,7 +102,7 @@ npm run version:help
 - `family` - Deep-School Family Software
 - `client` - Deep-School Client
 - `server` - Deep-School Server
-- `workmaker` - Work-Maker
+- `pickramu` - Pickramu
 - `toaster` - Toaster-Machine
 
 #### 使用例
@@ -132,7 +132,7 @@ ds.version.all()
 // 特定コンポーネントのバージョン情報を表示
 ds.version.get('client')
 ds.version.get('server')
-ds.version.get('workmaker')
+ds.version.get('pickramu')
 ds.version.get('toaster')
 ds.version.get('family')
 
@@ -195,14 +195,14 @@ console.log(comparison); // { result: -1, comparison: 'older' }
     "lastUpdated": "2025-01-01",
     "description": "Deep-School Server - Initial stable release"
   },
-  "workMaker": {
+  "pickramu": {
     "version": "1.0.1",
     "status": "stable",
     "cycle": 1,
     "release": 0,
     "revision": 1,
     "lastUpdated": "2025-01-01",
-    "description": "Work-Maker - Initial stable release"
+    "description": "Pickramu - Initial stable release"
   },
   "toasterMachine": {
     "version": "1.0.1",
@@ -242,10 +242,10 @@ console.log(comparison); // { result: -1, comparison: 'older' }
    Last Updated: 2025-01-01
    Description: Deep-School Server - Initial stable release
 
-🔧 Work-Maker: v1.0.1 (stable)
+📚 Pickramu: v1.0.1 (stable)
    Cycle: 1, Release: 0, Revision: 1
    Last Updated: 2025-01-01
-   Description: Work-Maker - Initial stable release
+   Description: Pickramu - Initial stable release
 
 🍞 Toaster-Machine: v1.0.1
    Cycle: 1, Release: 0, Revision: 1

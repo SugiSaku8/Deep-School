@@ -82,7 +82,7 @@ Deep-School uses a comprehensive version management system to track versions acr
 
 ## Version Formats
 
-### Deep-School Client/Server/Work-Maker
+### Deep-School Client/Server/Pickramu
 Format: `v.CYCLE.RELEASE.REVISION(.STATUS)`
 - **CYCLE**: 1-year cycle (10/13, 10/03, 4/15, 9/1)
 - **RELEASE**: Irregular releases when features are stable (1, 5, 10, 25, 30)
@@ -123,7 +123,7 @@ node version-cli.js all
 # Show specific component version
 npm run version:client
 npm run version:server
-npm run version:workmaker
+npm run version:pickramu
 npm run version:toaster
 npm run version:family
 
@@ -151,7 +151,7 @@ ds.version.all()
 // Show specific component version
 ds.version.get('client')
 ds.version.get('server')
-ds.version.get('workmaker')
+ds.version.get('pickramu')
 ds.version.get('toaster')
 ds.version.get('family')
 

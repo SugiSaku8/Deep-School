@@ -65,7 +65,7 @@ export function appInit(shell) {
       try {
         // ローカル or GitHub Pages でパスを切り替え
         const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-        const basePath = isLocal ? '/Pickramu/data/' : 'https://sugisaku8.github.io/Deep-School/Pickramu/data/';
+        const basePath = isLocal ? '/Pickramu/data/' : 'https://sugisaku8.github.io/Deep-School/client/Pickramu/data/';
         const fetchUrl = basePath + path;
         const res = await fetch(fetchUrl);
         if (res.ok) {

@@ -8,7 +8,7 @@
     "version:all": "node version-cli.js all",
     "version:client": "node version-cli.js get client",
     "version:server": "node version-cli.js get server",
-    "version:workmaker": "node version-cli.js get workmaker",
+    "version:pickramu": "node version-cli.js get pickramu",
     "version:toaster": "node version-cli.js get toaster",
     "version:family": "node version-cli.js get family",
     "version:check": "node version-cli.js check",

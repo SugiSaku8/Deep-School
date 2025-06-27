@@ -42,14 +42,14 @@ class VersionManager {
           lastUpdated: "2025-01-01",
           description: "Deep-School Server - Initial stable release"
         },
-        workMaker: {
+        pickramu: {
           version: "1.0.1",
           status: "stable",
           cycle: 1,
           release: 0,
           revision: 1,
           lastUpdated: "2025-01-01",
-          description: "Work-Maker - Initial stable release"
+          description: "Pickramu - Initial stable release"
         },
         toasterMachine: {
           version: "1.0.1",
@@ -78,7 +78,7 @@ class VersionManager {
       'family': 'deepSchoolFamily',
       'client': 'deepSchoolClient',
       'server': 'deepSchoolServer',
-      'workmaker': 'workMaker',
+      'pickramu': 'pickramu',
       'toaster': 'toasterMachine'
     };
 
@@ -121,12 +121,12 @@ class VersionManager {
       output += `   Last Updated: ${server.lastUpdated}\n`;
       output += `   Description: ${server.description}\n\n`;
       
-      // Work-Maker
-      const workmaker = version.workMaker;
-      output += `🔧 Work-Maker: v${workmaker.version} (${workmaker.status})\n`;
-      output += `   Cycle: ${workmaker.cycle}, Release: ${workmaker.release}, Revision: ${workmaker.revision}\n`;
-      output += `   Last Updated: ${workmaker.lastUpdated}\n`;
-      output += `   Description: ${workmaker.description}\n\n`;
+      // Pickramu
+      const pickramu = version.pickramu;
+      output += `📚 Pickramu: v${pickramu.version} (${pickramu.status})\n`;
+      output += `   Cycle: ${pickramu.cycle}, Release: ${pickramu.release}, Revision: ${pickramu.revision}\n`;
+      output += `   Last Updated: ${pickramu.lastUpdated}\n`;
+      output += `   Description: ${pickramu.description}\n\n`;
       
       // Toaster-Machine
       const toaster = version.toasterMachine;
@@ -202,7 +202,7 @@ class VersionManager {
 
     const currentClient = this.versionConfig.deepSchoolClient;
     const currentServer = this.versionConfig.deepSchoolServer;
-    const currentWorkMaker = this.versionConfig.workMaker;
+    const currentPickramu = this.versionConfig.pickramu;
     const currentToaster = this.versionConfig.toasterMachine;
 
     // 実際のアップデートチェックロジックはここに実装
@@ -210,7 +210,7 @@ class VersionManager {
     return {
       client: { hasUpdate: false, current: currentClient.version, latest: currentClient.version },
       server: { hasUpdate: false, current: currentServer.version, latest: currentServer.version },
-      workMaker: { hasUpdate: false, current: workMaker.version, latest: workMaker.version },
+      pickramu: { hasUpdate: false, current: currentPickramu.version, latest: currentPickramu.version },
       toaster: { hasUpdate: false, current: currentToaster.version, latest: currentToaster.version }
     };
   }

@@ -23,14 +23,14 @@
     "lastUpdated": "2025-04-015",
     "description": "Deep-School Server - Initial stable release"
   },
-  "workMaker": {
-    "version": "1.0.0",
+  "pickramu": {
+    "version": "1.0.1",
     "status": "stable",
     "cycle": 1,
     "release": 0,
     "revision": 1,
-    "lastUpdated": "2025-05-020",
-    "description": "Work-Maker - Initial stable release"
+    "lastUpdated": "2025-01-01",
+    "description": "Pickramu - Initial stable release"
   },
   "toasterMachine": {
     "version": "0.4.1",
