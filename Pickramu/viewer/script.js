@@ -171,35 +171,18 @@ function convertToHtml(inputText) {
 
   return outputHtml;
 }
-const inputText = `
-@tag n1 class=unit [open]
-@tag question [open]
-約10万年前ごろのものと見られる人類の痕跡が日本列島から見つかりました。
-この頃の人類は、動物を狩って生活していました。
-@tag question [close]
-@btn id=btn1 class=button-next 次へ
-@tag n1 class=unit [close]
-@tag n2 class=unit [open]
-@tag question [open]
-約 1 万年前、日本列島が大陸から分離しました。
-紀元前 3000 年ごろ、稲作が日本列島に伝わりました。
-@tag question [close]
-@btn id=btn2 class=button-next 次へ
-@tag n2 class=unit [close]
-@script on=btn1 [open]
-dom.Tag("n1").style.display('none','auto');
-dom.Tag("n2").style.display('block','auto');
-@script [close]
-@script on=btn2 [open]
-dom.back();
-@script [close]
-`;
 
-const htmlOutput = convertToHtml(inputText);
+// test.mdをfetchで取得し、変換してiframeに表示
+fetch("test.md")
+  .then((response) => {
+    if (!response.ok) throw new Error("Failed to load test.md");
+    return response.text();
+  })
+  .then((inputText) => {
+    const htmlOutput = convertToHtml(inputText);
 
-// Define the CSS styles
-const styles = `
-
+    // Define the CSS styles
+    const styles = `
 body{
 font-family: "Noto Sans JP", sans-serif;
   color: black;
@@ -845,7 +828,7 @@ font-family: "Noto Sans JP", sans-serif;
       display: none;
     }
   `;
-const script = `
+    const script = `
   /**
    * dom - DOM操作を簡単にするためのオブジェクト
    * @namespace dom
@@ -877,30 +860,32 @@ const script = `
     },
   };
   `;
-// Create the full HTML content with styles
-const fullHtml = `
-  <!DOCTYPE html>
-  <html>
-  <head>
-  <style>
-  ${styles}
-  </style>
-  <script>
-  ${script}
-  </script>
-  </head>
-  <body>
-  <div id="content">
-  ${htmlOutput}
-  </div>
-  </body>
-  </html>
-`;
+    // Create the full HTML content with styles
+    const fullHtml = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+      <style>
+      ${styles}
+      </style>
+      <script>
+      ${script}
+      </script>
+      </head>
+      <body>
+      <div id="content">
+      ${htmlOutput}
+      </div>
+      </body>
+      </html>
+    `;
 
-console.log(fullHtml);
-
-const iframe = document.getElementById("myIframe");
-const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-iframeDocument.open();
-iframeDocument.write(fullHtml);
-iframeDocument.close();
+    const iframe = document.getElementById("myIframe");
+    const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+    iframeDocument.open();
+    iframeDocument.write(fullHtml);
+    iframeDocument.close();
+  })
+  .catch((err) => {
+    console.error("Error loading or compiling test.md:", err);
+  });
