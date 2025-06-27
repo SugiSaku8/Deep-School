@@ -22,7 +22,11 @@ export function appInit(shell) {
       <div class="pickramu-select" style="margin-bottom: 20px;">
           <label for="pickramu-unit-select" data-lang-key="select_material">教材選択：</label>
         <select id="pickramu-unit-select">
-          <option value="jla/math/式の計算/1節/1.用語/1.md">数学: 式の計算・用語</option>
+          <option value="jla/math/式の計算/1節/1.用語/1.md">数学: 式の計算・1節・用語 (1)</option>
+          <option value="jla/math/式の計算/1節/1.用語/2.md">数学: 式の計算・1節・用語 (2)</option>
+          <option value="jla/math/式の計算/1節/2.加法・減法/1.md">数学: 式の計算・1節・加法・減法 (1)</option>
+          <option value="jla/math/式の計算/1節/2.加法・減法/2.md">数学: 式の計算・1節・加法・減法 (2)</option>
+          <option value="jla/ss/unit1/chapter1.md">社会: Unit1・Chapter1</option>
         </select>
           <button class="auto-btn" id="pickramu-load-btn" data-lang-key="load">読み込み</button>
       </div>
