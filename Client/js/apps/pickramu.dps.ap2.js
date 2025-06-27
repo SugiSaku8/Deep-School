@@ -1,3 +1,5 @@
+import { convertToHtml } from '../learning/compile.n.js';
+
 export const appMeta = {
   name: "pickramu",
   title: "Pickramu",
@@ -70,7 +72,8 @@ export function appInit(shell) {
         const res = await fetch(fetchUrl);
         if (res.ok) {
           const text = await res.text();
-          content.textContent = text;
+          const html = convertToHtml(text);
+          content.innerHTML = html;
         } else {
           content.textContent = `教材の読み込みに失敗しました (404 Not Found)\nURL: ${fetchUrl}`;
         }
