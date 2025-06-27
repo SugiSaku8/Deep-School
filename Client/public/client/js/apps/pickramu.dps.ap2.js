@@ -1,7 +1,7 @@
 /* 
 Pickramu
 The Pickramu is a language for creating teaching materials for Deep-School.
-version:0.0.4
+version:1.0.7
 Development:Carnaion Studio
 License:MPL-2.0
 */
@@ -248,6 +248,7 @@ export function appInit(shell) {
         if (res.ok) {
           const text = await res.text();
           const html = convertToHtml(text);
+          shell.log({from: 'dp.app.menu.out', message: `Pickramu-Compiler:Complied html:\n${html}`, level: 'info'});
 
     // Define the CSS styles
     const styles = `
