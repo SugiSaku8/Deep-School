@@ -267,7 +267,7 @@ export function appInit(shell) {
           const styles = `
           body{
           font-family: "Noto Sans JP", sans-serif;
-            color: black;
+            color: white;
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -1013,7 +1013,7 @@ export function appInit(shell) {
           <!DOCTYPE html>
           <html>
           <head>
-          <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+          <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
           <style>
           ${styles}
           </style>
