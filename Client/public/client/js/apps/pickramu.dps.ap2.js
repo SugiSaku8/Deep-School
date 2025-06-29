@@ -1035,6 +1035,4 @@ export function appInit(shell) {
       }
     }
   };
-
-
 } 
