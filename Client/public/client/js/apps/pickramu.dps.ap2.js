@@ -96,13 +96,24 @@ export function convertToHtml(inputText) {
         outputHtml += `  function checkAnswer() {\n`;
         outputHtml += `    const userAnswer = input.value.trim();\n`;
         outputHtml += `    const futterElement = document.getElementById("${futterId}");\n`;
-        outputHtml += `    const futterText = futterElement.textContent || futterElement.innerText;\n`;
         outputHtml += `    \n`;
-        outputHtml += `    // Extract expected answer from futter content\n`;
+        outputHtml += `    // Get the answer content that was stored during compilation\n`;
+        outputHtml += `    const answerContent = ${JSON.stringify(answers[futterId] || "")};\n`;
+        outputHtml += `    \n`;
+        outputHtml += `    // Extract expected answer from the stored content\n`;
         outputHtml += `    let expectedAnswer = "";\n`;
-        outputHtml += `    const answerMatch = futterText.match(/正解は「([^」]+)」/);\n`;
-        outputHtml += `    if (answerMatch) {\n`;
-        outputHtml += `      expectedAnswer = answerMatch[1].trim();\n`;
+        outputHtml += `    if (answerContent) {\n`;
+        outputHtml += `      const answerMatch = answerContent.match(/正解は「([^」]+)」/);\n`;
+        outputHtml += `      if (answerMatch) {\n`;
+        outputHtml += `        expectedAnswer = answerMatch[1].trim();\n`;
+        outputHtml += `      }\n`;
+        outputHtml += `    }\n`;
+        outputHtml += `    \n`;
+        outputHtml += `    // If no expected answer found, just show the answer\n`;
+        outputHtml += `    if (!expectedAnswer) {\n`;
+        outputHtml += `      document.getElementById("${inputId}").style.display = "none";\n`;
+        outputHtml += `      document.getElementById("${futterId}").style.display = "block";\n`;
+        outputHtml += `      return;\n`;
         outputHtml += `    }\n`;
         outputHtml += `    \n`;
         outputHtml += `    // Check if answer is correct (case-insensitive, trim whitespace)\n`;
@@ -345,38 +356,38 @@ export function appInit(shell) {
         background: linear-gradient(90deg, #00b894 0%, #00cec9 100%);
         color: #fff;
         font-family: "anka", 'Helvetica Neue', Arial, 'Hiragino Sans', 'Meiryo', sans-serif;
-        font-size: 1.2rem;
+        font-size: 1rem;
         font-weight: bold;
-        padding: 1rem 2rem;
+        padding: 0.7rem 1.5rem;
         border: none;
-        border-radius: 2rem;
+        border-radius: 1.5rem;
         cursor: pointer;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 15px #00b89444;
+        box-shadow: 0 3px 12px #00b89444;
         display: flex;
         align-items: center;
-        gap: 0.8rem;
-        min-width: 200px;
+        gap: 0.6rem;
+        min-width: 160px;
         justify-content: center;
       }
       
       .pickramu-load-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px #00b89466;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 16px #00b89466;
         background: linear-gradient(90deg, #00cec9 0%, #00b894 100%);
       }
       
       .pickramu-load-button:active {
         transform: translateY(0);
-        box-shadow: 0 2px 10px #00b89444;
+        box-shadow: 0 2px 8px #00b89444;
       }
       
       .button-text {
-        font-size: 1.1rem;
+        font-size: 0.95rem;
       }
       
       .button-icon {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
         filter: drop-shadow(0 1px 2px #0008);
       }
       
@@ -404,8 +415,17 @@ export function appInit(shell) {
         }
         
         .pickramu-load-button {
+          font-size: 0.9rem;
+          padding: 0.6rem 1.2rem;
+          min-width: 140px;
+        }
+        
+        .button-text {
+          font-size: 0.85rem;
+        }
+        
+        .button-icon {
           font-size: 1rem;
-          padding: 0.8rem 1.5rem;
         }
         
         .pickramu-select-title {
