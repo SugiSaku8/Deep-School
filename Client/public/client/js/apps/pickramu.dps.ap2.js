@@ -190,7 +190,6 @@ export function appInit(shell) {
     <div class="page-container">
       <button class="go-back-button" id="pickramu-back-btn" data-lang-key="back">←</button>
       <h1 class="page-title" data-lang-key="pickramu_work">Pickramu</h1>
-      <button class="fullscreen-btn" id="pickramu-fullscreen-btn" title="全画面表示">⛶</button>
       <div class="pickramu-tabs" style="margin-bottom: 20px; display: flex; gap: 12px;">
         <button class="auto-btn" id="tab-pickramu" data-lang-key="pickramu_tab">教材ワーク</button>
         <button class="auto-btn" id="tab-eguide" data-lang-key="eguide_tab">eGuide</button>
@@ -1037,13 +1036,5 @@ export function appInit(shell) {
     }
   };
 
-  // フルスクリーンボタン
-  document.getElementById('pickramu-fullscreen-btn').onclick = () => {
-    const content = document.getElementById('pickramu-content');
-    if (!document.fullscreenElement) {
-      content.requestFullscreen();
-    } else {
-      document.exitFullscreen();
-    }
-  };
+
 } 
