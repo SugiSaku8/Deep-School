@@ -234,16 +234,24 @@ export function appInit(shell) {
         <button class="auto-btn" id="tab-eguide" data-lang-key="eguide_tab">eGuide</button>
       </div>
       <div id="pickramu-work-area">
-        <div class="pickramu-select" style="margin-bottom: 20px;">
-          <label for="pickramu-unit-select" data-lang-key="select_material">教材選択：</label>
-          <select id="pickramu-unit-select">
-            <option value="jla/math/式の計算/1節/1.用語/1.md">数学: 式の計算・1節・用語 (1)</option>
-            <option value="jla/math/式の計算/1節/1.用語/2.md">数学: 式の計算・1節・用語 (2)</option>
-            <option value="jla/math/式の計算/1節/2.加法・減法/1.md">数学: 式の計算・1節・加法・減法 (1)</option>
-            <option value="jla/math/式の計算/1節/2.加法・減法/2.md">数学: 式の計算・1節・加法・減法 (2)</option>
-            <option value="jla/ss/unit1/chapter1.md">社会: Unit1・Chapter1</option>
-          </select>
-          <button class="auto-btn" id="pickramu-load-btn" data-lang-key="load">読み込み</button>
+        <div class="pickramu-select-container">
+          <div class="pickramu-select-card">
+            <h3 class="pickramu-select-title">教材選択</h3>
+            <div class="pickramu-select-group">
+              <label for="pickramu-unit-select" class="pickramu-select-label">学習する教材を選択してください：</label>
+              <select id="pickramu-unit-select" class="pickramu-select-dropdown">
+                <option value="jla/math/式の計算/1節/1.用語/1.md">数学: 式の計算・1節・用語 (1)</option>
+                <option value="jla/math/式の計算/1節/1.用語/2.md">数学: 式の計算・1節・用語 (2)</option>
+                <option value="jla/math/式の計算/1節/2.加法・減法/1.md">数学: 式の計算・1節・加法・減法 (1)</option>
+                <option value="jla/math/式の計算/1節/2.加法・減法/2.md">数学: 式の計算・1節・加法・減法 (2)</option>
+                <option value="jla/ss/unit1/chapter1.md">社会: Unit1・Chapter1</option>
+              </select>
+              <button class="pickramu-load-button" id="pickramu-load-btn" data-lang-key="load">
+                <span class="button-text">教材を読み込む</span>
+                <span class="button-icon">📚</span>
+              </button>
+            </div>
+          </div>
         </div>
         <iframe id="pickramu_iframe" style="width:100%; min-height:600px; border:none; border-radius:12px; background:#173c2b;"></iframe>
         <div id="pickramu-content"></div>
@@ -252,6 +260,159 @@ export function appInit(shell) {
         <iframe src="eguide.html" style="width:100%; min-height:600px; border:none; border-radius:12px; background:#173c2b;"></iframe>
       </div>
     </div>
+    
+    <style>
+      .pickramu-select-container {
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: center;
+      }
+      
+      .pickramu-select-card {
+        background: rgba(255, 255, 255, 0.13);
+        border-radius: 24px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.27);
+        backdrop-filter: blur(12px) saturate(180%);
+        -webkit-backdrop-filter: blur(12px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        padding: 2rem;
+        max-width: 600px;
+        width: 100%;
+        color: #fff;
+        text-align: center;
+        animation: fadeInUp 1.2s cubic-bezier(.23,1.01,.32,1) both;
+      }
+      
+      .pickramu-select-title {
+        font-family: "anka", 'Helvetica Neue', Arial, 'Hiragino Sans', 'Meiryo', sans-serif;
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin: 0 0 1.5rem 0;
+        color: #ffe066;
+        text-shadow: 0 2px 8px #0008;
+        letter-spacing: 0.05em;
+      }
+      
+      .pickramu-select-group {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+        align-items: center;
+      }
+      
+      .pickramu-select-label {
+        font-family: "anka", 'Helvetica Neue', Arial, 'Hiragino Sans', 'Meiryo', sans-serif;
+        font-size: 1.1rem;
+        color: #f8f8f2;
+        text-shadow: 0 1px 2px #0008;
+        margin-bottom: 0.5rem;
+      }
+      
+      .pickramu-select-dropdown {
+        background: rgba(45, 58, 46, 0.8);
+        border: 2px dashed #f8f8f2;
+        border-radius: 16px;
+        padding: 0.8rem 1.2rem;
+        font-size: 1rem;
+        color: #f8f8f2;
+        font-family: "anka", 'Helvetica Neue', Arial, 'Hiragino Sans', 'Meiryo', sans-serif;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        min-width: 300px;
+        text-align: center;
+      }
+      
+      .pickramu-select-dropdown:focus {
+        outline: none;
+        border-color: #ffe066;
+        box-shadow: 0 4px 16px #ffe06688;
+        background: rgba(45, 58, 46, 0.9);
+      }
+      
+      .pickramu-select-dropdown:hover {
+        border-color: #aee9f5;
+        box-shadow: 0 4px 16px #aee9f588;
+      }
+      
+      .pickramu-select-dropdown option {
+        background: #2d3a2e;
+        color: #f8f8f2;
+        padding: 0.5rem;
+      }
+      
+      .pickramu-load-button {
+        background: linear-gradient(90deg, #00b894 0%, #00cec9 100%);
+        color: #fff;
+        font-family: "anka", 'Helvetica Neue', Arial, 'Hiragino Sans', 'Meiryo', sans-serif;
+        font-size: 1.2rem;
+        font-weight: bold;
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 2rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px #00b89444;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        min-width: 200px;
+        justify-content: center;
+      }
+      
+      .pickramu-load-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px #00b89466;
+        background: linear-gradient(90deg, #00cec9 0%, #00b894 100%);
+      }
+      
+      .pickramu-load-button:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 10px #00b89444;
+      }
+      
+      .button-text {
+        font-size: 1.1rem;
+      }
+      
+      .button-icon {
+        font-size: 1.3rem;
+        filter: drop-shadow(0 1px 2px #0008);
+      }
+      
+      @keyframes fadeInUp {
+        0% {
+          opacity: 0;
+          transform: translateY(40px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      /* Responsive design */
+      @media (max-width: 700px) {
+        .pickramu-select-card {
+          margin: 0 1rem;
+          padding: 1.5rem;
+        }
+        
+        .pickramu-select-dropdown {
+          min-width: 250px;
+          font-size: 0.9rem;
+        }
+        
+        .pickramu-load-button {
+          font-size: 1rem;
+          padding: 0.8rem 1.5rem;
+        }
+        
+        .pickramu-select-title {
+          font-size: 1.5rem;
+        }
+      }
+    </style>
   `;
 
   // 戻るボタン

@@ -45,13 +45,13 @@ I believe that real learning is when students learn and think from each other.
 
 This is what this application is all about.
 
-# Work
+# Pickramu
 
-Work is a free software application that allows students to use all the teaching materials for all subjects.
+Pickramu is a free software application that allows students to use all the teaching materials for all subjects.
 
 The work provided in this application is authored by teachers.
 
-Work is also built on a number of networks, so that work can be made available on a school-by-school basis or nationwide.
+Pickramu is also built on a number of networks, so that work can be made available on a school-by-school basis or nationwide.
 The work can be made public by school or by the whole country.
 
 In addition, by connecting with a service that shares teaching materials (e.g., Sensei Ichiba), teachers can get ideas for teaching materials that they can use.
