@@ -206,7 +206,8 @@ export function appInit(shell) {
           </select>
           <button class="auto-btn" id="pickramu-load-btn" data-lang-key="load">読み込み</button>
         </div>
-        <div id="pickramu-content" style="width:100%; min-height:600px; border-radius:12px; background:#173c2b; padding: 20px; color: white; font-family: 'Noto Sans JP', sans-serif;"></div>
+        <iframe id="pickramu_iframe" style="width:100%; min-height:600px; border:none; border-radius:12px; background:#173c2b;"></iframe>
+        <div id="pickramu-content"></div>
       </div>
       <div id="pickramu-eguide-area" style="display:none;">
         <iframe src="eguide.html" style="width:100%; min-height:600px; border:none; border-radius:12px; background:#173c2b;"></iframe>
@@ -248,9 +249,9 @@ export function appInit(shell) {
           const html = convertToHtml(text);
           shell.log({from: 'dp.app.menu.out', message: `Pickramu-Compiler:Complied html:\n${html}`, level: 'info'});
 
-          // スタイルを定義
+          // Define the CSS styles
           const styles = `
-            body {
+            body{
               font-family: "Noto Sans JP", sans-serif;
               color: white;
               text-align: center;
@@ -265,8 +266,11 @@ export function appInit(shell) {
             #testB {
               display: none;
             }
-            #content {
-              font-size: 1.6em;
+            #content{
+              font-size:1.6em;
+            }
+            #content .red {
+              color: red;
             }
             #content .red {
               color: red;
@@ -740,79 +744,77 @@ export function appInit(shell) {
               height: 20px;
               background: linear-gradient(to right, #dca10d, #8c5d00);
             }
-            #content #n2 {
+            #content #n2{
               display: none;
             }
-            #content #n3 {
+            #content #n3{
               display: none;
             }
-            #content #n4 {
+            #content #n4{
               display: none;
             }
-            #content #n5 {
+            #content #n5{
               display: none;
             }
-            #content #n6 {
+            #content #n6{
               display: none;
             }
-            #content #n7 {
+            #content #n7{
               display: none;
             }
-            #content #n8 {
+            #content #n8{
               display: none;
             }
-            #content #n9 {
-              display: none;
+            #content #n9{
+              display:none;
             }
-            #content #n10 {
-              display: none;
+            #content #n10{
+              display:none;
             }
-            #content #n11 {
-              display: none;
+            #content #n11{
+              display:none;
             }
-            #content #n12 {
-              display: none;
+            #content #n12{
+              display:none;
             }
-            #content #n13 {
-              display: none;
+            #content #n13{
+              display:none;
             }
-            #content #n14 {
-              display: none;
+            #content #n14{
+              display:none;
             }
-            #content #n15 {
-              display: none;
+            #content #n15{
+              display:none;
             }
-            #content #n16 {
-              display: none;
+            #content #n16{
+              display:none;
             }
-            #content #n17 {
-              display: none;
+            #content #n17{
+              display:none;
             }
-            #content #n18 {
-              display: none;
+            #content #n18{
+              display:none; 
             }
-            #content #n19 {
-              display: none;
+            #content #n19{
+              display:none;
             }
-            #content #n20 {
-              display: none;
+            #content #n20{
+              display:none;
             }
-            #content #n21 {
-              display: none;
+            #content #n21{
+              display:none;
             }
-            #content #n22 {
-              display: none;
+            #content #n22{
+              display:none;
             }
-            #content #n23 {
-              display: none;
+            #content #n23{
+              display:none;
             }
-            #content #n24 {
-              display: none;
+            #content #n24{
+              display:none;
             }
           `;
-
-          // domオブジェクトを定義
-          const domScript = `
+          const script = `
             // Clear any existing dom object to prevent redeclaration
             if (window.dom) {
               delete window.dom;
@@ -849,80 +851,48 @@ export function appInit(shell) {
               },
             };
           `;
-
-          // MathJaxスクリプトが既に読み込まれているかチェック
-          if (!document.getElementById('MathJax-script')) {
-            const mathJaxScript = document.createElement('script');
-            mathJaxScript.id = 'MathJax-script';
-            mathJaxScript.type = 'text/javascript';
-            mathJaxScript.async = true;
-            mathJaxScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML';
-            document.head.appendChild(mathJaxScript);
-          }
-
-          // MathJax設定を追加
-          if (!window.MathJax) {
-            const configScript = document.createElement('script');
-            configScript.textContent = `
-              // MathJax設定
-              window.MathJax = {
-                tex: {
-                  inlineMath: [['$', '$'], ['\\\\(', '\\\\)']],
-                  displayMath: [['$$', '$$'], ['\\\\[', '\\\\]']],
-                  processEscapes: true,
-                  processEnvironments: true
-                },
-                options: {
-                  ignoreHtmlClass: 'tex2jax_ignore',
-                  processHtmlClass: 'tex2jax_process'
-                }
-              };
-            `;
-            document.head.appendChild(configScript);
-          }
-
-          // スタイルを追加
-          const styleElement = document.createElement('style');
-          styleElement.textContent = styles;
-          document.head.appendChild(styleElement);
-
-          // domスクリプトを追加
-          const domScriptElement = document.createElement('script');
-          domScriptElement.textContent = domScript;
-          document.head.appendChild(domScriptElement);
-
-          // 動的なMathJax処理関数を追加
-          const updateMathJax = () => {
-            if (window.MathJax && window.MathJax.Hub) {
-              MathJax.Hub.Queue(["Typeset", MathJax.Hub, "pickramu-content"]);
-              console.log('MathJax updated for dynamic content');
-            }
-          };
-
-          // グローバル関数として公開
-          window.updateMathJax = updateMathJax;
-
-          // コンテンツを挿入
-          content.innerHTML = `<div id="pickramu-content">${html}</div>`;
-
-          // MathJaxの初期化を待ってからtypesetを実行
-          const initMathJaxContent = () => {
-            if (window.MathJax && window.MathJax.Hub) {
-              // MathJax v2.7.5の動的処理方法
-              MathJax.Hub.Queue(["Typeset", MathJax.Hub, "pickramu-content"]);
-              console.log('MathJax typesetting completed for content');
-            } else {
-              setTimeout(initMathJaxContent, 100);
-            }
-          };
-
-          // MathJaxスクリプトの読み込み完了を待つ
-          const mathJaxScript = document.getElementById('MathJax-script');
-          if (mathJaxScript.complete) {
-            initMathJaxContent();
-          } else {
-            mathJaxScript.onload = initMathJaxContent;
-          }
+          // Create the full HTML content with styles
+          const fullHtml = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+              <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+              <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+              <style>
+              ${styles}
+              </style>
+              <script>
+              ${script}
+              
+              // KaTeX auto-render configuration
+              document.addEventListener("DOMContentLoaded", function() {
+                renderMathInElement(document.body, {
+                  delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "$", right: "$", display: true},
+                    {left: "\\(", right: "\\)", display: true},
+                    {left: "\\[", right: "\\]", display: true}
+                  ],
+                  throwOnError: false,
+                  errorColor: '#cc0000'
+                });
+              });
+              </script>
+            </head>
+            <body>
+              <div id="content">
+              ${html}
+              </div>
+            </body>
+            </html>
+          `;
+      
+          const iframe = document.getElementById("pickramu_iframe");
+          const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+          iframeDocument.open();
+          iframeDocument.write(fullHtml);
+          iframeDocument.close();
         } else {
           content.textContent = `教材の読み込みに失敗しました (404 Not Found)\nURL: ${fetchUrl}`;
         }
