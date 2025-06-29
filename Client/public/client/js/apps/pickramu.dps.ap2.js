@@ -12,6 +12,9 @@ export function convertToHtml(inputText) {
     .split("\n")
     .filter((line) => !line.trim().startsWith("//"));
   let i = 0;
+  
+  // Store answers for dynamic checking
+  const answers = {};
 
   while (i < lines.length) {
     const line = lines[i].trim();
@@ -59,7 +62,6 @@ export function convertToHtml(inputText) {
       let inputContent = "";
       let hasButton = false;
       let buttonId = "";
-      let expectedAnswer = "";
 
       // Collect input content until close tag
       while (i < lines.length && !lines[i].match(/@input.*\[close\]/)) {
@@ -79,26 +81,53 @@ export function convertToHtml(inputText) {
       // Create input container with content and button
       outputHtml += `<div class="input-container">\n`;
       outputHtml += `<div id="${inputId}">\n`;
-      outputHtml += `<input type="text" class="input-box" placeholder="答えを入力">\n`;
+      outputHtml += `<input type="text" class="input-box" placeholder="答えを入力" id="${inputId}_input">\n`;
       outputHtml += inputContent;
       outputHtml += `</div>\n`;
       outputHtml += `</div>\n`;
 
-      // Add script for button click handler
+      // Add script for button click handler and Enter key support
       if (hasButton && futterId) {
         outputHtml += `<script>\n`;
-        outputHtml += `document.getElementById("${buttonId}").onclick = function() {\n`;
-        outputHtml += `  const input = document.querySelector("#${inputId} input");\n`;
-        outputHtml += `  const userAnswer = input.value.trim();\n`;
-        outputHtml += `  const expectedAnswer = "$$ \\\\frac{39}{10} $$";\n`;
-        outputHtml += `  const isCorrect = userAnswer === expectedAnswer;\n`;
-        outputHtml += `  if (isCorrect) {\n`;
-        outputHtml += `    document.getElementById("${inputId}").style.display = "none";\n`;
-        outputHtml += `    document.getElementById("${futterId}").style.display = "block";\n`;
-        outputHtml += `  } else {\n`;
-        outputHtml += `    alert("不正解です。もう一度試してください。");\n`;
+        outputHtml += `(function() {\n`;
+        outputHtml += `  const input = document.getElementById("${inputId}_input");\n`;
+        outputHtml += `  const button = document.getElementById("${buttonId}");\n`;
+        outputHtml += `  \n`;
+        outputHtml += `  function checkAnswer() {\n`;
+        outputHtml += `    const userAnswer = input.value.trim();\n`;
+        outputHtml += `    const futterElement = document.getElementById("${futterId}");\n`;
+        outputHtml += `    const futterText = futterElement.textContent || futterElement.innerText;\n`;
+        outputHtml += `    \n`;
+        outputHtml += `    // Extract expected answer from futter content\n`;
+        outputHtml += `    let expectedAnswer = "";\n`;
+        outputHtml += `    const answerMatch = futterText.match(/正解は「([^」]+)」/);\n`;
+        outputHtml += `    if (answerMatch) {\n`;
+        outputHtml += `      expectedAnswer = answerMatch[1].trim();\n`;
+        outputHtml += `    }\n`;
+        outputHtml += `    \n`;
+        outputHtml += `    // Check if answer is correct (case-insensitive, trim whitespace)\n`;
+        outputHtml += `    const isCorrect = userAnswer.toLowerCase().trim() === expectedAnswer.toLowerCase().trim();\n`;
+        outputHtml += `    \n`;
+        outputHtml += `    if (isCorrect || userAnswer === "") {\n`;
+        outputHtml += `      // Show correct answer\n`;
+        outputHtml += `      document.getElementById("${inputId}").style.display = "none";\n`;
+        outputHtml += `      document.getElementById("${futterId}").style.display = "block";\n`;
+        outputHtml += `    } else {\n`;
+        outputHtml += `      // Show error message\n`;
+        outputHtml += `      alert("不正解です。もう一度試してください。\\n\\n正解: " + expectedAnswer);\n`;
+        outputHtml += `    }\n`;
         outputHtml += `  }\n`;
-        outputHtml += `}\n`;
+        outputHtml += `  \n`;
+        outputHtml += `  // Button click handler\n`;
+        outputHtml += `  button.onclick = checkAnswer;\n`;
+        outputHtml += `  \n`;
+        outputHtml += `  // Enter key handler\n`;
+        outputHtml += `  input.addEventListener("keypress", function(e) {\n`;
+        outputHtml += `    if (e.key === "Enter") {\n`;
+        outputHtml += `      checkAnswer();\n`;
+        outputHtml += `    }\n`;
+        outputHtml += `  });\n`;
+        outputHtml += `})();\n`;
         outputHtml += `</script>\n`;
       }
 
@@ -114,6 +143,16 @@ export function convertToHtml(inputText) {
       const futterId = futterMatch[1];
       if (futterMatch[3] === "open") {
         outputHtml += `<div id="${futterId}" style="display: none;">\n`;
+        // Collect answer content for this futter
+        i++;
+        let answerContent = "";
+        while (i < lines.length && !lines[i].match(/@futter.*\[close\]/)) {
+          answerContent += lines[i] + "\n";
+          i++;
+        }
+        // Store the answer content
+        answers[futterId] = answerContent.trim();
+        outputHtml += answerContent;
       } else {
         outputHtml += `</div>\n`;
       }
@@ -716,26 +755,55 @@ export function appInit(shell) {
             }
             #content .input-container {
               display: flex;
+              flex-direction: column;
+              align-items: center;
               margin-top: 2em;
               gap: 1em;
+              padding: 1em;
+              background: rgba(255, 255, 255, 0.1);
+              border-radius: 12px;
+              backdrop-filter: blur(10px);
             }
             #content .input-box {
-              background-color: #a3b1a6;
+              background-color: rgba(163, 177, 166, 0.8);
               border-radius: 25px;
               padding: 0.8em 2em;
               font-size: 1.6em;
               color: white;
-              border: none;
+              border: 2px solid rgba(255, 255, 255, 0.2);
               width: 300px;
+              text-align: center;
+              transition: all 0.3s ease;
+            }
+            #content .input-box:focus {
+              outline: none;
+              border-color: #33aaff;
+              box-shadow: 0 0 10px rgba(51, 170, 255, 0.3);
+              background-color: rgba(163, 177, 166, 0.9);
+            }
+            #content .input-box::placeholder {
+              color: rgba(255, 255, 255, 0.7);
             }
             #content .button-next {
-              background-color: #33aaff;
+              background: linear-gradient(135deg, #33aaff, #2288cc);
               border: none;
               border-radius: 25px;
-              padding: 0.5em 0.8em;
-              font-size: 1.0em;
+              padding: 0.8em 2em;
+              font-size: 1.2em;
               color: white;
               cursor: pointer;
+              transition: all 0.3s ease;
+              box-shadow: 0 4px 15px rgba(51, 170, 255, 0.3);
+              font-weight: bold;
+            }
+            #content .button-next:hover {
+              transform: translateY(-2px);
+              box-shadow: 0 6px 20px rgba(51, 170, 255, 0.4);
+              background: linear-gradient(135deg, #44bbff, #3399dd);
+            }
+            #content .button-next:active {
+              transform: translateY(0);
+              box-shadow: 0 2px 10px rgba(51, 170, 255, 0.3);
             }
             #content .footer-bar {
               position: absolute;
