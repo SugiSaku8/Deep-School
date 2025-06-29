@@ -206,9 +206,8 @@ export function appInit(shell) {
           </select>
           <button class="auto-btn" id="pickramu-load-btn" data-lang-key="load">読み込み</button>
         </div>
-        <iframe id="pickramu_iframe" style="width:100%; min-height:600px; border:none; border-radius:12px; background:#173c2b;"></iframe>
-      <div id="pickramu-content"></div>
-        </div>
+        <div id="pickramu-content" style="width:100%; min-height:600px; border-radius:12px; background:#173c2b; padding: 20px; color: white; font-family: 'Noto Sans JP', sans-serif;"></div>
+      </div>
       <div id="pickramu-eguide-area" style="display:none;">
         <iframe src="eguide.html" style="width:100%; min-height:600px; border:none; border-radius:12px; background:#173c2b;"></iframe>
       </div>
@@ -249,928 +248,670 @@ export function appInit(shell) {
           const html = convertToHtml(text);
           shell.log({from: 'dp.app.menu.out', message: `Pickramu-Compiler:Complied html:\n${html}`, level: 'info'});
 
-    // Define the CSS styles
-    const styles = `
-    body{
-    font-family: "Noto Sans JP", sans-serif;
-      color: white;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-        #red {
-          color: red;
-        }
-        #testB {
-          display: none;
-        }
-          #content{
-          font-size:1.6em;
-          }
-        #content .red {
-          color: red;
-        }
-        #content .red {
-          color: red;
-        }
-        #content .aliceblue {
-          color: aliceblue;
-        }
-    
-        #content .antiquewhite {
-          color: antiquewhite;
-        }
-    
-        #content .aqua {
-          color: aqua;
-        }
-    
-        #content .aquamarine {
-          color: aquamarine;
-        }
-    
-        #content .azure {
-          color: azure;
-        }
-    
-        #content .beige {
-          color: beige;
-        }
-    
-        #content .bisque {
-          color: bisque;
-        }
-    
-        #content .black {
-          color: black;
-        }
-    
-        #content .blanchedalmond {
-          color: blanchedalmond;
-        }
-    
-        #content .blue {
-          color: blue;
-        }
-    
-        #content .blueviolet {
-          color: blueviolet;
-        }
-    
-        #content .brown {
-          color: brown;
-        }
-    
-        #content .burlywood {
-          color: burlywood;
-        }
-    
-        #content .cadetblue {
-          color: cadetblue;
-        }
-    
-        #content .chartreuse {
-          color: chartreuse;
-        }
-    
-        #content .chocolate {
-          color: chocolate;
-        }
-    
-        #content .coral {
-          color: coral;
-        }
-    
-        #content .cornflowerblue {
-          color: cornflowerblue;
-        }
-    
-        #content .cornsilk {
-          color: cornsilk;
-        }
-    
-        #content .crimson {
-          color: crimson;
-        }
-    
-        #content .cyan {
-          color: cyan;
-        }
-    
-        #content .darkblue {
-          color: darkblue;
-        }
-    
-        #content .darkcyan {
-          color: darkcyan;
-        }
-    
-        #content .darkgoldenrod {
-          color: darkgoldenrod;
-        }
-    
-        #content .darkgray {
-          color: darkgray;
-        }
-    
-        #content .darkgreen {
-          color: darkgreen;
-        }
-    
-        #content .darkkhaki {
-          color: darkkhaki;
-        }
-    
-        #content .darkmagenta {
-          color: darkmagenta;
-        }
-    
-        #content .darkolivegreen {
-          color: darkolivegreen;
-        }
-    
-        #content .darkorange {
-          color: darkorange;
-        }
-    
-        #content .darkorchid {
-          color: darkorchid;
-        }
-    
-        #content .darkred {
-          color: darkred;
-        }
-    
-        #content .darksalmon {
-          color: darksalmon;
-        }
-    
-        #content .darkseagreen {
-          color: darkseagreen;
-        }
-    
-        #content .darkslateblue {
-          color: darkslateblue;
-        }
-    
-        #content .darkslategray {
-          color: darkslategray;
-        }
-    
-        #content .darkturquoise {
-          color: darkturquoise;
-        }
-    
-        #content .darkviolet {
-          color: darkviolet;
-        }
-    
-        #content .deeppink {
-          color: deeppink;
-        }
-    
-        #content .deepskyblue {
-          color: deepskyblue;
-        }
-    
-        #content .dimgray {
-          color: dimgray;
-        }
-    
-        #content .dodgerblue {
-          color: dodgerblue;
-        }
-    
-        #content .firebrick {
-          color: firebrick;
-        }
-    
-        #content .floralwhite {
-          color: floralwhite;
-        }
-    
-        #content .forestgreen {
-          color: forestgreen;
-        }
-    
-        #content .fuchsia {
-          color: fuchsia;
-        }
-    
-        #content .gainsboro {
-          color: gainsboro;
-        }
-    
-        #content .ghostwhite {
-          color: ghostwhite;
-        }
-    
-        #content .gold {
-          color: gold;
-        }
-    
-        #content .goldenrod {
-          color: goldenrod;
-        }
-    
-        #content .gray {
-          color: gray;
-        }
-    
-        #content .green {
-          color: green;
-        }
-    
-        #content .greenyellow {
-          color: greenyellow;
-        }
-    
-        #content .honeydew {
-          color: honeydew;
-        }
-    
-        #content .hotpink {
-          color: hotpink;
-        }
-    
-        #content .indianred {
-          color: indianred;
-        }
-    
-        #content .indigo {
-          color: indigo;
-        }
-    
-        #content .ivory {
-          color: ivory;
-        }
-    
-        #content .khaki {
-          color: khaki;
-        }
-    
-        #content .lavender {
-          color: lavender;
-        }
-    
-        #content .lavenderblush {
-          color: lavenderblush;
-        }
-    
-        #content .lawngreen {
-          color: lawngreen;
-        }
-    
-        #content .lemonchiffon {
-          color: lemonchiffon;
-        }
-    
-        #content .lightblue {
-          color: lightblue;
-        }
-    
-        #content .lightcoral {
-          color: lightcoral;
-        }
-    
-        #content .lightcyan {
-          color: lightcyan;
-        }
-    
-        #content .lightgoldenrodyellow {
-          color: lightgoldenrodyellow;
-        }
-    
-        #content .lightgray {
-          color: lightgray;
-        }
-    
-        #content .lightgreen {
-          color: lightgreen;
-        }
-    
-        #content .lightpink {
-          color: lightpink;
-        }
-    
-        #content .lightsalmon {
-          color: lightsalmon;
-        }
-    
-        #content .lightseagreen {
-          color: lightseagreen;
-        }
-    
-        #content .lightskyblue {
-          color: lightskyblue;
-        }
-    
-        #content .lightslategray {
-          color: lightslategray;
-        }
-    
-        #content .lightsteelblue {
-          color: lightsteelblue;
-        }
-    
-        #content .lightyellow {
-          color: lightyellow;
-        }
-    
-        #content .lime {
-          color: lime;
-        }
-    
-        #content .limegreen {
-          color: limegreen;
-        }
-    
-        #content .linen {
-          color: linen;
-        }
-    
-        #content .magenta {
-          color: magenta;
-        }
-    
-        #content .maroon {
-          color: maroon;
-        }
-    
-        #content .mediumaquamarine {
-          color: mediumaquamarine;
-        }
-    
-        #content .mediumblue {
-          color: mediumblue;
-        }
-    
-        #content .mediumorchid {
-          color: mediumorchid;
-        }
-    
-        #content .mediumpurple {
-          color: mediumpurple;
-        }
-    
-        #content .mediumseagreen {
-          color: mediumseagreen;
-        }
-    
-        #content .mediumslateblue {
-          color: mediumslateblue;
-        }
-    
-        #content .mediumspringgreen {
-          color: mediumspringgreen;
-        }
-    
-        #content .mediumturquoise {
-          color: mediumturquoise;
-        }
-    
-        #content .mediumvioletred {
-          color: mediumvioletred;
-        }
-    
-        #content .midnightblue {
-          color: midnightblue;
-        }
-    
-        #content .mintcream {
-          color: mintcream;
-        }
-    
-        #content .mistyrose {
-          color: mistyrose;
-        }
-    
-        #content .moccasin {
-          color: moccasin;
-        }
-    
-        #content .navajowhite {
-          color: navajowhite;
-        }
-    
-        #content .navy {
-          color: navy;
-        }
-    
-        #content .oldlace {
-          color: oldlace;
-        }
-    
-        #content .olive {
-          color: olive;
-        }
-    
-        #content .olivedrab {
-          color: olivedrab;
-        }
-    
-        #content .orange {
-          color: orange;
-        }
-    
-        #content .orangered {
-          color: orangered;
-        }
-    
-        #content .orchid {
-          color: orchid;
-        }
-    
-        #content .palegoldenrod {
-          color: palegoldenrod;
-        }
-    
-        #content .palegreen {
-          color: palegreen;
-        }
-    
-        #content .paleturquoise {
-          color: paleturquoise;
-        }
-    
-        #content .palevioletred {
-          color: palevioletred;
-        }
-    
-        #content .papayawhip {
-          color: papayawhip;
-        }
-    
-        #content .peachpuff {
-          color: peachpuff;
-        }
-    
-        #content .peru {
-          color: peru;
-        }
-    
-        #content .pink {
-          color: pink;
-        }
-    
-        #content .plum {
-          color: plum;
-        }
-    
-        #content .powderblue {
-          color: powderblue;
-        }
-    
-        #content .purple {
-          color: purple;
-        }
-    
-        #content .rebeccapurple {
-          color: rebeccapurple;
-        }
-    
-        #content .rosybrown {
-          color: rosybrown;
-        }
-    
-        #content .royalblue {
-          color: royalblue;
-        }
-    
-        #content .saddlebrown {
-          color: saddlebrown;
-        }
-    
-        #content .salmon {
-          color: salmon;
-        }
-    
-        #content .sandybrown {
-          color: sandybrown;
-        }
-    
-        #content .seagreen {
-          color: seagreen;
-        }
-    
-        #content .seashell {
-          color: seashell;
-        }
-    
-        #content .sienna {
-          color: sienna;
-        }
-    
-        #content .silver {
-          color: silver;
-        }
-    
-        #content .skyblue {
-          color: skyblue;
-        }
-    
-        #content .slateblue {
-          color: slateblue;
-        }
-    
-        #content .slategray {
-          color: slategray;
-        }
-    
-        #content .snow {
-          color: snow;
-        }
-    
-        #content .springgreen {
-          color: springgreen;
-        }
-    
-        #content .steelblue {
-          color: steelblue;
-        }
-    
-        #content .tan {
-          color: tan;
-        }
-    
-        #content .teal {
-          color: teal;
-        }
-    
-        #content .thistle {
-          color: thistle;
-        }
-    
-        #content .tomato {
-          color: tomato;
-        }
-    
-        #content .turquoise {
-          color: turquoise;
-        }
-    
-        #content .violet {
-          color: violet;
-        }
-    
-        #content .wheat {
-          color: wheat;
-        }
-    
-        #content .white {
-          color: white;
-        }
-    
-        #content .whitesmoke {
-          color: whitesmoke;
-        }
-    
-        #content .yellow {
-          color: yellow;
-        }
-    
-        #content .yellowgreen {
-          color: yellowgreen;
-        }
-    
-        #content h1 {
-          font-size: 2em;
-          margin: 0.2em 0;
-        }
-    
-        #content .unit-title {
-          font-weight: bold;
-          font-size: 1.5em;
-        }
-    
-        #content .chapter-title {
-          font-size: 2em;
-        }
-    
-        #content .question {
-          font-size: 1.7em;
-          margin: 0.5em 0;
-        }
-    
-        #content .equations {
-          font-size: 1.6em;
-          line-height: 1.6;
-        }
-    
-        #content .input-container {
-          display: flex;
-          margin-top: 2em;
-          gap: 1em;
-        }
-    
-        #content .input-box {
-          background-color: #a3b1a6;
-          border-radius: 25px;
-          padding: 0.8em 2em;
-          font-size: 1.6em;
-          color: white;
-          border: none;
-          width: 300px;
-        }
-    
-        #content .button-next {
-          background-color: #33aaff;
-          border: none;
-          border-radius: 25px;
-          padding: 0.5em 0.8em;
-          font-size: 1.0em;
-          color: white;
-          cursor: pointer;
-        }
-    
-        #content .footer-bar {
-          position: absolute;
-          bottom: 0;
-          width: 100%;
-          height: 20px;
-          background: linear-gradient(to right, #dca10d, #8c5d00);
-        }
-        #content #n2{
-          display: none;
-        }
-          #content #n3{
-          display: none;
-        }
-          #content #n4{
-          display: none;
-        }
-          #content #n5{
-          display: none;
-        }
-          #content #n6{
-          display: none;
-        }
-          #content #n7{
-          display: none;
-        }
-          #content #n8{
-          display: none;
-        }
-          #content #n9{
-          display:none;
-        }
-          #content #n10{
-          display:none;
-        }
-          #content #n11{
-          display:none;
-        }
-          #content #n12{
-          display:none;
-        }
-          #content #n13{
-          display:none;
-        }
-          #content #n14{
-          display:none;
-        }
-          #content #n15{
-          display:none;
-        }
-          #content #n16{
-          display:none;
-        }
-          #content #n17{
-          display:none;
-        }
-          #content #n18{
-          display:none; 
-        }
-          #content #n19{
-          display:none;
-        }
-          #content #n20{
-          display:none;
-        }
-          #content #n21{
-          display:none;
-        }
-          #content #n22{
-          display:none;
-        }
-          #content #n23{
-          display:none;
-        }
-          #content #n24{
-          display:none;
-        }
-      `;
-        const script = `
+          // スタイルを定義
+          const styles = `
+            body {
+              font-family: "Noto Sans JP", sans-serif;
+              color: white;
+              text-align: center;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+            }
+            #red {
+              color: red;
+            }
+            #testB {
+              display: none;
+            }
+            #content {
+              font-size: 1.6em;
+            }
+            #content .red {
+              color: red;
+            }
+            #content .aliceblue {
+              color: aliceblue;
+            }
+            #content .antiquewhite {
+              color: antiquewhite;
+            }
+            #content .aqua {
+              color: aqua;
+            }
+            #content .aquamarine {
+              color: aquamarine;
+            }
+            #content .azure {
+              color: azure;
+            }
+            #content .beige {
+              color: beige;
+            }
+            #content .bisque {
+              color: bisque;
+            }
+            #content .black {
+              color: black;
+            }
+            #content .blanchedalmond {
+              color: blanchedalmond;
+            }
+            #content .blue {
+              color: blue;
+            }
+            #content .blueviolet {
+              color: blueviolet;
+            }
+            #content .brown {
+              color: brown;
+            }
+            #content .burlywood {
+              color: burlywood;
+            }
+            #content .cadetblue {
+              color: cadetblue;
+            }
+            #content .chartreuse {
+              color: chartreuse;
+            }
+            #content .chocolate {
+              color: chocolate;
+            }
+            #content .coral {
+              color: coral;
+            }
+            #content .cornflowerblue {
+              color: cornflowerblue;
+            }
+            #content .cornsilk {
+              color: cornsilk;
+            }
+            #content .crimson {
+              color: crimson;
+            }
+            #content .cyan {
+              color: cyan;
+            }
+            #content .darkblue {
+              color: darkblue;
+            }
+            #content .darkcyan {
+              color: darkcyan;
+            }
+            #content .darkgoldenrod {
+              color: darkgoldenrod;
+            }
+            #content .darkgray {
+              color: darkgray;
+            }
+            #content .darkgreen {
+              color: darkgreen;
+            }
+            #content .darkkhaki {
+              color: darkkhaki;
+            }
+            #content .darkmagenta {
+              color: darkmagenta;
+            }
+            #content .darkolivegreen {
+              color: darkolivegreen;
+            }
+            #content .darkorange {
+              color: darkorange;
+            }
+            #content .darkorchid {
+              color: darkorchid;
+            }
+            #content .darkred {
+              color: darkred;
+            }
+            #content .darksalmon {
+              color: darksalmon;
+            }
+            #content .darkseagreen {
+              color: darkseagreen;
+            }
+            #content .darkslateblue {
+              color: darkslateblue;
+            }
+            #content .darkslategray {
+              color: darkslategray;
+            }
+            #content .darkturquoise {
+              color: darkturquoise;
+            }
+            #content .darkviolet {
+              color: darkviolet;
+            }
+            #content .deeppink {
+              color: deeppink;
+            }
+            #content .deepskyblue {
+              color: deepskyblue;
+            }
+            #content .dimgray {
+              color: dimgray;
+            }
+            #content .dodgerblue {
+              color: dodgerblue;
+            }
+            #content .firebrick {
+              color: firebrick;
+            }
+            #content .floralwhite {
+              color: floralwhite;
+            }
+            #content .forestgreen {
+              color: forestgreen;
+            }
+            #content .fuchsia {
+              color: fuchsia;
+            }
+            #content .gainsboro {
+              color: gainsboro;
+            }
+            #content .ghostwhite {
+              color: ghostwhite;
+            }
+            #content .gold {
+              color: gold;
+            }
+            #content .goldenrod {
+              color: goldenrod;
+            }
+            #content .gray {
+              color: gray;
+            }
+            #content .green {
+              color: green;
+            }
+            #content .greenyellow {
+              color: greenyellow;
+            }
+            #content .honeydew {
+              color: honeydew;
+            }
+            #content .hotpink {
+              color: hotpink;
+            }
+            #content .indianred {
+              color: indianred;
+            }
+            #content .indigo {
+              color: indigo;
+            }
+            #content .ivory {
+              color: ivory;
+            }
+            #content .khaki {
+              color: khaki;
+            }
+            #content .lavender {
+              color: lavender;
+            }
+            #content .lavenderblush {
+              color: lavenderblush;
+            }
+            #content .lawngreen {
+              color: lawngreen;
+            }
+            #content .lemonchiffon {
+              color: lemonchiffon;
+            }
+            #content .lightblue {
+              color: lightblue;
+            }
+            #content .lightcoral {
+              color: lightcoral;
+            }
+            #content .lightcyan {
+              color: lightcyan;
+            }
+            #content .lightgoldenrodyellow {
+              color: lightgoldenrodyellow;
+            }
+            #content .lightgray {
+              color: lightgray;
+            }
+            #content .lightgreen {
+              color: lightgreen;
+            }
+            #content .lightpink {
+              color: lightpink;
+            }
+            #content .lightsalmon {
+              color: lightsalmon;
+            }
+            #content .lightseagreen {
+              color: lightseagreen;
+            }
+            #content .lightskyblue {
+              color: lightskyblue;
+            }
+            #content .lightslategray {
+              color: lightslategray;
+            }
+            #content .lightsteelblue {
+              color: lightsteelblue;
+            }
+            #content .lightyellow {
+              color: lightyellow;
+            }
+            #content .lime {
+              color: lime;
+            }
+            #content .limegreen {
+              color: limegreen;
+            }
+            #content .linen {
+              color: linen;
+            }
+            #content .magenta {
+              color: magenta;
+            }
+            #content .maroon {
+              color: maroon;
+            }
+            #content .mediumaquamarine {
+              color: mediumaquamarine;
+            }
+            #content .mediumblue {
+              color: mediumblue;
+            }
+            #content .mediumorchid {
+              color: mediumorchid;
+            }
+            #content .mediumpurple {
+              color: mediumpurple;
+            }
+            #content .mediumseagreen {
+              color: mediumseagreen;
+            }
+            #content .mediumslateblue {
+              color: mediumslateblue;
+            }
+            #content .mediumspringgreen {
+              color: mediumspringgreen;
+            }
+            #content .mediumturquoise {
+              color: mediumturquoise;
+            }
+            #content .mediumvioletred {
+              color: mediumvioletred;
+            }
+            #content .midnightblue {
+              color: midnightblue;
+            }
+            #content .mintcream {
+              color: mintcream;
+            }
+            #content .mistyrose {
+              color: mistyrose;
+            }
+            #content .moccasin {
+              color: moccasin;
+            }
+            #content .navajowhite {
+              color: navajowhite;
+            }
+            #content .navy {
+              color: navy;
+            }
+            #content .oldlace {
+              color: oldlace;
+            }
+            #content .olive {
+              color: olive;
+            }
+            #content .olivedrab {
+              color: olivedrab;
+            }
+            #content .orange {
+              color: orange;
+            }
+            #content .orangered {
+              color: orangered;
+            }
+            #content .orchid {
+              color: orchid;
+            }
+            #content .palegoldenrod {
+              color: palegoldenrod;
+            }
+            #content .palegreen {
+              color: palegreen;
+            }
+            #content .paleturquoise {
+              color: paleturquoise;
+            }
+            #content .palevioletred {
+              color: palevioletred;
+            }
+            #content .papayawhip {
+              color: papayawhip;
+            }
+            #content .peachpuff {
+              color: peachpuff;
+            }
+            #content .peru {
+              color: peru;
+            }
+            #content .pink {
+              color: pink;
+            }
+            #content .plum {
+              color: plum;
+            }
+            #content .powderblue {
+              color: powderblue;
+            }
+            #content .purple {
+              color: purple;
+            }
+            #content .rebeccapurple {
+              color: rebeccapurple;
+            }
+            #content .rosybrown {
+              color: rosybrown;
+            }
+            #content .royalblue {
+              color: royalblue;
+            }
+            #content .saddlebrown {
+              color: saddlebrown;
+            }
+            #content .salmon {
+              color: salmon;
+            }
+            #content .sandybrown {
+              color: sandybrown;
+            }
+            #content .seagreen {
+              color: seagreen;
+            }
+            #content .seashell {
+              color: seashell;
+            }
+            #content .sienna {
+              color: sienna;
+            }
+            #content .silver {
+              color: silver;
+            }
+            #content .skyblue {
+              color: skyblue;
+            }
+            #content .slateblue {
+              color: slateblue;
+            }
+            #content .slategray {
+              color: slategray;
+            }
+            #content .snow {
+              color: snow;
+            }
+            #content .springgreen {
+              color: springgreen;
+            }
+            #content .steelblue {
+              color: steelblue;
+            }
+            #content .tan {
+              color: tan;
+            }
+            #content .teal {
+              color: teal;
+            }
+            #content .thistle {
+              color: thistle;
+            }
+            #content .tomato {
+              color: tomato;
+            }
+            #content .turquoise {
+              color: turquoise;
+            }
+            #content .violet {
+              color: violet;
+            }
+            #content .wheat {
+              color: wheat;
+            }
+            #content .white {
+              color: white;
+            }
+            #content .whitesmoke {
+              color: whitesmoke;
+            }
+            #content .yellow {
+              color: yellow;
+            }
+            #content .yellowgreen {
+              color: yellowgreen;
+            }
+            #content h1 {
+              font-size: 2em;
+              margin: 0.2em 0;
+            }
+            #content .unit-title {
+              font-weight: bold;
+              font-size: 1.5em;
+            }
+            #content .chapter-title {
+              font-size: 2em;
+            }
+            #content .question {
+              font-size: 1.7em;
+              margin: 0.5em 0;
+            }
+            #content .equations {
+              font-size: 1.6em;
+              line-height: 1.6;
+            }
+            #content .input-container {
+              display: flex;
+              margin-top: 2em;
+              gap: 1em;
+            }
+            #content .input-box {
+              background-color: #a3b1a6;
+              border-radius: 25px;
+              padding: 0.8em 2em;
+              font-size: 1.6em;
+              color: white;
+              border: none;
+              width: 300px;
+            }
+            #content .button-next {
+              background-color: #33aaff;
+              border: none;
+              border-radius: 25px;
+              padding: 0.5em 0.8em;
+              font-size: 1.0em;
+              color: white;
+              cursor: pointer;
+            }
+            #content .footer-bar {
+              position: absolute;
+              bottom: 0;
+              width: 100%;
+              height: 20px;
+              background: linear-gradient(to right, #dca10d, #8c5d00);
+            }
+            #content #n2 {
+              display: none;
+            }
+            #content #n3 {
+              display: none;
+            }
+            #content #n4 {
+              display: none;
+            }
+            #content #n5 {
+              display: none;
+            }
+            #content #n6 {
+              display: none;
+            }
+            #content #n7 {
+              display: none;
+            }
+            #content #n8 {
+              display: none;
+            }
+            #content #n9 {
+              display: none;
+            }
+            #content #n10 {
+              display: none;
+            }
+            #content #n11 {
+              display: none;
+            }
+            #content #n12 {
+              display: none;
+            }
+            #content #n13 {
+              display: none;
+            }
+            #content #n14 {
+              display: none;
+            }
+            #content #n15 {
+              display: none;
+            }
+            #content #n16 {
+              display: none;
+            }
+            #content #n17 {
+              display: none;
+            }
+            #content #n18 {
+              display: none;
+            }
+            #content #n19 {
+              display: none;
+            }
+            #content #n20 {
+              display: none;
+            }
+            #content #n21 {
+              display: none;
+            }
+            #content #n22 {
+              display: none;
+            }
+            #content #n23 {
+              display: none;
+            }
+            #content #n24 {
+              display: none;
+            }
+          `;
 
-      
-      // Clear any existing dom object to prevent redeclaration
-      if (window.dom) {
-        delete window.dom;
-      }
-      
-      /**
-       * dom - DOM操作を簡単にするためのオブジェクト
-       * @namespace dom
-       */
-      const dom = {
-        /**
-         * Tag - 指定されたIDを持つ要素を取得し、その要素のスタイルを操作するための関数を提供する。
-         * @param {string} tagName - 取得する要素のID
-         * @returns {{style: {display: Function}}} - スタイル操作関数を持つオブジェクト
-         */
-        Tag: function (tagName) {
-          const element = document.getElementById(tagName);
-          return {
-            style: {
+          // domオブジェクトを定義
+          const domScript = `
+            // Clear any existing dom object to prevent redeclaration
+            if (window.dom) {
+              delete window.dom;
+            }
+            
+            /**
+             * dom - DOM操作を簡単にするためのオブジェクト
+             * @namespace dom
+             */
+            const dom = {
               /**
-               * display - 要素のdisplayスタイルを変更する。
-               * @param {string} displayValue - 設定するdisplayの値
-               * @param {string} important - 'auto'の場合、!importantを設定する
-               * @returns {void}
+               * Tag - 指定されたIDを持つ要素を取得し、その要素のスタイルを操作するための関数を提供する。
+               * @param {string} tagName - 取得する要素のID
+               * @returns {{style: {display: Function}}} - スタイル操作関数を持つオブジェクト
                */
-              display: function (displayValue, important) {
-                element.style.display = displayValue;
-                if (important === "auto") {
-                  element.style.setProperty("display", displayValue, "important");
-                }
-              },
-            },
-          };
-        },
-      };
-      `;
-        // Create the full HTML content with styles
-        const mathJaxConfig = `
-          // MathJax設定
-          window.MathJax = {
-            tex: {
-              inlineMath: [['$', '$'], ['\\\\(', '\\\\)']],
-              displayMath: [['$$', '$$'], ['\\\\[', '\\\\]']],
-              processEscapes: true,
-              processEnvironments: true
-            },
-            options: {
-              ignoreHtmlClass: 'tex2jax_ignore',
-              processHtmlClass: 'tex2jax_process'
-            },
-            startup: {
-              pageReady: () => {
-                console.log('MathJax pageReady called');
-                return MathJax.startup.defaultPageReady().then(() => {
-                  console.log('MathJax startup completed');
-                });
-              }
-            }
-          };
-          
-          // MathJaxスクリプトの読み込み完了を待つ
-          document.getElementById('MathJax-script').onload = function() {
-            console.log('MathJax script loaded');
-          };
-        `;
-        
-        const mathJaxBodyScript = `
-          // iframe内でのDOMContentLoadedイベント処理
-          document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOMContentLoaded fired');
-            
-            // MathJaxの初期化完了を待つ関数
-            function waitForMathJax() {
-              return new Promise((resolve, reject) => {
-                let attempts = 0;
-                const maxAttempts = 100; // 最大100回試行（10秒）
-                
-                const checkMathJax = () => {
-                  attempts++;
-                  console.log('MathJax check attempt ' + attempts);
-                  
-                  if (window.MathJax && window.MathJax.typesetPromise) {
-                    console.log('MathJax typesetPromise available');
-                    resolve();
-                  } else if (attempts >= maxAttempts) {
-                    console.error('MathJax initialization timeout');
-                    reject(new Error('MathJax initialization timeout'));
-                  } else {
-                    setTimeout(checkMathJax, 100);
-                  }
+              Tag: function (tagName) {
+                const element = document.getElementById(tagName);
+                return {
+                  style: {
+                    /**
+                     * display - 要素のdisplayスタイルを変更する。
+                     * @param {string} displayValue - 設定するdisplayの値
+                     * @param {string} important - 'auto'の場合、!importantを設定する
+                     * @returns {void}
+                     */
+                    display: function (displayValue, important) {
+                      element.style.display = displayValue;
+                      if (important === "auto") {
+                        element.style.setProperty("display", displayValue, "important");
+                      }
+                    },
+                  },
                 };
-                checkMathJax();
-              });
-            }
-            
-            // MathJaxの準備が完了したらtypesetを実行
-            waitForMathJax().then(() => {
-              window.MathJax.typesetPromise().then(() => {
-                console.log('MathJax typesetting completed');
-              }).catch((err) => {
-                console.error('MathJax typesetting error:', err);
-              });
-            }).catch((err) => {
-              console.error('Error waiting for MathJax:', err);
-            });
-          });
-          
-          // 追加の初期化処理
-          function initMathJax() {
+              },
+            };
+          `;
+
+          // MathJaxスクリプトが既に読み込まれているかチェック
+          if (!document.getElementById('MathJax-script')) {
+            const mathJaxScript = document.createElement('script');
+            mathJaxScript.id = 'MathJax-script';
+            mathJaxScript.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+            document.head.appendChild(mathJaxScript);
+          }
+
+          // MathJax設定を追加
+          if (!window.MathJax) {
+            const configScript = document.createElement('script');
+            configScript.textContent = `
+              // MathJax設定
+              window.MathJax = {
+                tex: {
+                  inlineMath: [['$', '$'], ['\\\\(', '\\\\)']],
+                  displayMath: [['$$', '$$'], ['\\\\[', '\\\\]']],
+                  processEscapes: true,
+                  processEnvironments: true
+                },
+                options: {
+                  ignoreHtmlClass: 'tex2jax_ignore',
+                  processHtmlClass: 'tex2jax_process'
+                }
+              };
+            `;
+            document.head.appendChild(configScript);
+          }
+
+          // スタイルを追加
+          const styleElement = document.createElement('style');
+          styleElement.textContent = styles;
+          document.head.appendChild(styleElement);
+
+          // domスクリプトを追加
+          const domScriptElement = document.createElement('script');
+          domScriptElement.textContent = domScript;
+          document.head.appendChild(domScriptElement);
+
+          // コンテンツを挿入
+          content.innerHTML = html;
+
+          // MathJaxの初期化を待ってからtypesetを実行
+          const initMathJaxContent = () => {
             if (window.MathJax && window.MathJax.typesetPromise) {
               window.MathJax.typesetPromise().then(() => {
-                console.log('MathJax typesetting completed (manual)');
+                console.log('MathJax typesetting completed for content');
               }).catch((err) => {
-                console.error('MathJax typesetting error (manual):', err);
+                console.error('MathJax typesetting error for content:', err);
               });
             } else {
-              console.log('MathJax typesetPromise not available yet');
+              setTimeout(initMathJaxContent, 100);
             }
+          };
+
+          // MathJaxスクリプトの読み込み完了を待つ
+          const mathJaxScript = document.getElementById('MathJax-script');
+          if (mathJaxScript.complete) {
+            initMathJaxContent();
+          } else {
+            mathJaxScript.onload = initMathJaxContent;
           }
-          
-          // 複数のタイミングで初期化を試行
-          setTimeout(initMathJax, 2000);
-          setTimeout(initMathJax, 5000);
-          setTimeout(initMathJax, 8000);
-        `;
-        
-        const fullHtml = `
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <meta charset="utf-8">
-            <script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-            <script>
-            ${mathJaxConfig}
-            </script>
-            <style>
-            ${styles}
-            </style>
-            <script>
-            ${script}
-            </script>
-          </head>
-          <body>
-            <div id="content">
-            ${html}
-            </div>
-            <script>
-            ${mathJaxBodyScript}
-            </script>
-          </body>
-          </html>
-        `;
-    
-        const iframe = document.getElementById("pickramu_iframe");
-        const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-        iframeDocument.open();
-        iframeDocument.write(fullHtml);
-        iframeDocument.close();
-        
-        // iframeの読み込み完了後にMathJaxを再実行
-        iframe.onload = function() {
-          console.log('iframe loaded');
-          try {
-            const iframeWindow = iframe.contentWindow;
-            console.log('iframeWindow:', iframeWindow);
-            console.log('MathJax in iframe:', iframeWindow.MathJax);
-            
-            // MathJaxの初期化完了を待つ関数
-            function waitForIframeMathJax() {
-              return new Promise((resolve, reject) => {
-                let attempts = 0;
-                const maxAttempts = 100; // 最大100回試行（10秒）
-                
-                const checkMathJax = () => {
-                  attempts++;
-                  console.log(`iframe MathJax check attempt ${attempts}`);
-                  
-                  if (iframeWindow.MathJax && iframeWindow.MathJax.typesetPromise) {
-                    console.log('iframe MathJax typesetPromise available');
-                    resolve();
-                  } else if (attempts >= maxAttempts) {
-                    console.error('iframe MathJax initialization timeout');
-                    reject(new Error('iframe MathJax initialization timeout'));
-                  } else {
-                    setTimeout(checkMathJax, 100);
-                  }
-                };
-                checkMathJax();
-              });
-            }
-            
-            // MathJaxの準備が完了したらtypesetを実行
-            waitForIframeMathJax().then(() => {
-              iframeWindow.MathJax.typesetPromise().then(() => {
-                console.log('iframe MathJax typesetting completed');
-              }).catch((err) => {
-                console.error('iframe MathJax typesetting error:', err);
-              });
-            }).catch((err) => {
-              console.error('Error waiting for iframe MathJax:', err);
-            });
-            
-          } catch (e) {
-            console.error('Error accessing iframe content:', e);
-          }
-        };
         } else {
           content.textContent = `教材の読み込みに失敗しました (404 Not Found)\nURL: ${fetchUrl}`;
         }

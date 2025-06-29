@@ -1,6 +1,6 @@
 {
   "deepSchoolFamily": {
-    "version": "25C872X1",
+    "version": "25C873X1",
     "status": "beta",
     "lastUpdated": "2025-06-27",
     "description": "Deep-School Family Software - Initial release"
@@ -24,7 +24,7 @@
     "description": "Deep-School Server - Initial stable release"
   },
   "pickramu": {
-    "version": "1.0.18",
+    "version": "1.0.19",
     "status": "beta",
     "cycle": 1,
     "release": 0,
@@ -92,4 +92,4 @@
     "releaseDays": [1, 5, 10, 25, 30],
     "nextCycleUpdate": "2025-07-01"
   }
-} 
+}
