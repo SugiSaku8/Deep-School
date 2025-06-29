@@ -854,7 +854,9 @@ export function appInit(shell) {
           if (!document.getElementById('MathJax-script')) {
             const mathJaxScript = document.createElement('script');
             mathJaxScript.id = 'MathJax-script';
-            mathJaxScript.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+            mathJaxScript.type = 'text/javascript';
+            mathJaxScript.async = true;
+            mathJaxScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML';
             document.head.appendChild(mathJaxScript);
           }
 
@@ -889,17 +891,26 @@ export function appInit(shell) {
           domScriptElement.textContent = domScript;
           document.head.appendChild(domScriptElement);
 
+          // 動的なMathJax処理関数を追加
+          const updateMathJax = () => {
+            if (window.MathJax && window.MathJax.Hub) {
+              MathJax.Hub.Queue(["Typeset", MathJax.Hub, "pickramu-content"]);
+              console.log('MathJax updated for dynamic content');
+            }
+          };
+
+          // グローバル関数として公開
+          window.updateMathJax = updateMathJax;
+
           // コンテンツを挿入
-          content.innerHTML = html;
+          content.innerHTML = `<div id="pickramu-content">${html}</div>`;
 
           // MathJaxの初期化を待ってからtypesetを実行
           const initMathJaxContent = () => {
-            if (window.MathJax && window.MathJax.typesetPromise) {
-              window.MathJax.typesetPromise().then(() => {
-                console.log('MathJax typesetting completed for content');
-              }).catch((err) => {
-                console.error('MathJax typesetting error for content:', err);
-              });
+            if (window.MathJax && window.MathJax.Hub) {
+              // MathJax v2.7.5の動的処理方法
+              MathJax.Hub.Queue(["Typeset", MathJax.Hub, "pickramu-content"]);
+              console.log('MathJax typesetting completed for content');
             } else {
               setTimeout(initMathJaxContent, 100);
             }
