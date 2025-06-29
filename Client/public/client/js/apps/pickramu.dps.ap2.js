@@ -1023,12 +1023,9 @@ export function appInit(shell) {
                 },
                 startup: {
                   pageReady: () => {
+                    console.log('MathJax pageReady called');
                     return MathJax.startup.defaultPageReady().then(() => {
                       console.log('MathJax startup completed');
-                      // 初期化完了後にtypesetを実行
-                      if (window.MathJax && window.MathJax.typesetPromise) {
-                        return window.MathJax.typesetPromise();
-                      }
                     });
                   }
                 }
@@ -1058,15 +1055,20 @@ export function appInit(shell) {
                 // MathJaxの初期化完了を待つ関数
                 function waitForMathJax() {
                   return new Promise((resolve, reject) => {
+                    let attempts = 0;
+                    const maxAttempts = 100; // 最大100回試行（10秒）
+                    
                     const checkMathJax = () => {
+                      attempts++;
+                      console.log(`MathJax check attempt ${attempts}`);
+                      
                       if (window.MathJax && window.MathJax.typesetPromise) {
                         console.log('MathJax typesetPromise available');
                         resolve();
-                      } else if (window.MathJax && window.MathJax.startup) {
-                        console.log('MathJax startup available, waiting for completion...');
-                        setTimeout(checkMathJax, 100);
+                      } else if (attempts >= maxAttempts) {
+                        console.error('MathJax initialization timeout');
+                        reject(new Error('MathJax initialization timeout'));
                       } else {
-                        console.log('MathJax not ready yet, retrying...');
                         setTimeout(checkMathJax, 100);
                       }
                     };
@@ -1100,9 +1102,9 @@ export function appInit(shell) {
               }
               
               // 複数のタイミングで初期化を試行
-              setTimeout(initMathJax, 1000);
-              setTimeout(initMathJax, 3000);
+              setTimeout(initMathJax, 2000);
               setTimeout(initMathJax, 5000);
+              setTimeout(initMathJax, 8000);
             </script>
           </body>
           </html>
@@ -1125,15 +1127,20 @@ export function appInit(shell) {
             // MathJaxの初期化完了を待つ関数
             function waitForIframeMathJax() {
               return new Promise((resolve, reject) => {
+                let attempts = 0;
+                const maxAttempts = 100; // 最大100回試行（10秒）
+                
                 const checkMathJax = () => {
+                  attempts++;
+                  console.log(`iframe MathJax check attempt ${attempts}`);
+                  
                   if (iframeWindow.MathJax && iframeWindow.MathJax.typesetPromise) {
                     console.log('iframe MathJax typesetPromise available');
                     resolve();
-                  } else if (iframeWindow.MathJax && iframeWindow.MathJax.startup) {
-                    console.log('iframe MathJax startup available, waiting for completion...');
-                    setTimeout(checkMathJax, 100);
+                  } else if (attempts >= maxAttempts) {
+                    console.error('iframe MathJax initialization timeout');
+                    reject(new Error('iframe MathJax initialization timeout'));
                   } else {
-                    console.log('iframe MathJax not ready yet, retrying...');
                     setTimeout(checkMathJax, 100);
                   }
                 };
