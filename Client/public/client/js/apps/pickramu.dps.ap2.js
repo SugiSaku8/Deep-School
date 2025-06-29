@@ -264,15 +264,22 @@ export function appInit(shell) {
             </div>
           </div>
         </div>
-        <iframe id="pickramu_iframe" style="width:100%; min-height:600px; border:none; border-radius:12px; background:#173c2b;"></iframe>
+        <iframe id="pickramu_iframe" style="width:100%; height:70vh; border:none; border-radius:12px; background:#173c2b; overflow-y: auto;"></iframe>
         <div id="pickramu-content"></div>
       </div>
       <div id="pickramu-eguide-area" style="display:none;">
-        <iframe src="eguide.html" style="width:100%; min-height:600px; border:none; border-radius:12px; background:#173c2b;"></iframe>
+        <iframe src="eguide.html" style="width:100%; height:70vh; border:none; border-radius:12px; background:#173c2b; overflow-y: auto;"></iframe>
       </div>
     </div>
     
     <style>
+      .page-container {
+        height: 100vh;
+        overflow-y: auto;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+      
       .pickramu-select-container {
         margin-bottom: 2rem;
         display: flex;
@@ -478,7 +485,11 @@ export function appInit(shell) {
               display: flex;
               flex-direction: column;
               align-items: center;
-              justify-content: center;
+              justify-content: flex-start;
+              min-height: 100vh;
+              padding: 20px;
+              margin: 0;
+              overflow-y: auto;
             }
             #red {
               color: red;
@@ -488,6 +499,10 @@ export function appInit(shell) {
             }
             #content{
               font-size:1.6em;
+              width: 100%;
+              max-width: 800px;
+              margin: 0 auto;
+              padding: 20px 0;
             }
             #content .red {
               color: red;
