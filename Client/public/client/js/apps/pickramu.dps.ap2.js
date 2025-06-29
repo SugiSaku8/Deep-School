@@ -1,7 +1,7 @@
 /* 
 Pickramu
 The Pickramu is a language for creating teaching materials for Deep-School.
-version:1.0.7
+version:1.0.23
 Development:Carnaion Studio
 License:MPL-2.0
 */
@@ -826,6 +826,18 @@ export function appInit(shell) {
              */
             const dom = {
               /**
+               * back - 前のページに戻る
+               * @returns {void}
+               */
+              back: function() {
+                if (window.history && window.history.back) {
+                  window.history.back();
+                } else {
+                  window.location.href = document.referrer || '/';
+                }
+              },
+              
+              /**
                * Tag - 指定されたIDを持つ要素を取得し、その要素のスタイルを操作するための関数を提供する。
                * @param {string} tagName - 取得する要素のID
                * @returns {{style: {display: Function}}} - スタイル操作関数を持つオブジェクト
@@ -850,6 +862,9 @@ export function appInit(shell) {
                 };
               },
             };
+            
+            // Make dom globally available
+            window.dom = dom;
           `;
           // Create the full HTML content with styles
           const fullHtml = `
@@ -889,10 +904,8 @@ export function appInit(shell) {
           `;
       
           const iframe = document.getElementById("pickramu_iframe");
-          const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-          iframeDocument.open();
-          iframeDocument.write(fullHtml);
-          iframeDocument.close();
+          // Use srcdoc instead of document.write for better security and to avoid warnings
+          iframe.srcdoc = fullHtml;
         } else {
           content.textContent = `教材の読み込みに失敗しました (404 Not Found)\nURL: ${fetchUrl}`;
         }
