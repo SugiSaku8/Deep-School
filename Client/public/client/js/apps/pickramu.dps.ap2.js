@@ -1020,22 +1020,23 @@ export function appInit(shell) {
                 options: {
                   ignoreHtmlClass: 'tex2jax_ignore',
                   processHtmlClass: 'tex2jax_process'
+                },
+                startup: {
+                  pageReady: () => {
+                    return MathJax.startup.defaultPageReady().then(() => {
+                      console.log('MathJax startup completed');
+                      // 初期化完了後にtypesetを実行
+                      if (window.MathJax && window.MathJax.typesetPromise) {
+                        return window.MathJax.typesetPromise();
+                      }
+                    });
+                  }
                 }
               };
               
               // MathJaxスクリプトの読み込み完了を待つ
               document.getElementById('MathJax-script').onload = function() {
                 console.log('MathJax script loaded');
-                // 少し待ってからtypesetを実行
-                setTimeout(() => {
-                  if (window.MathJax && window.MathJax.typesetPromise) {
-                    window.MathJax.typesetPromise().then(() => {
-                      console.log('MathJax initial typesetting completed');
-                    }).catch((err) => {
-                      console.error('MathJax initial typesetting error:', err);
-                    });
-                  }
-                }, 100);
               };
             </script>
             <style>
@@ -1053,25 +1054,36 @@ export function appInit(shell) {
               // iframe内でのDOMContentLoadedイベント処理
               document.addEventListener('DOMContentLoaded', function() {
                 console.log('DOMContentLoaded fired');
-                // MathJaxが読み込まれるまで待機
-                if (window.MathJax && window.MathJax.typesetPromise) {
+                
+                // MathJaxの初期化完了を待つ関数
+                function waitForMathJax() {
+                  return new Promise((resolve, reject) => {
+                    const checkMathJax = () => {
+                      if (window.MathJax && window.MathJax.typesetPromise) {
+                        console.log('MathJax typesetPromise available');
+                        resolve();
+                      } else if (window.MathJax && window.MathJax.startup) {
+                        console.log('MathJax startup available, waiting for completion...');
+                        setTimeout(checkMathJax, 100);
+                      } else {
+                        console.log('MathJax not ready yet, retrying...');
+                        setTimeout(checkMathJax, 100);
+                      }
+                    };
+                    checkMathJax();
+                  });
+                }
+                
+                // MathJaxの準備が完了したらtypesetを実行
+                waitForMathJax().then(() => {
                   window.MathJax.typesetPromise().then(() => {
                     console.log('MathJax typesetting completed');
                   }).catch((err) => {
                     console.error('MathJax typesetting error:', err);
                   });
-                } else {
-                  // MathJaxがまだ読み込まれていない場合、少し待ってから再試行
-                  setTimeout(() => {
-                    if (window.MathJax && window.MathJax.typesetPromise) {
-                      window.MathJax.typesetPromise().then(() => {
-                        console.log('MathJax typesetting completed (delayed)');
-                      }).catch((err) => {
-                        console.error('MathJax typesetting error (delayed):', err);
-                      });
-                    }
-                  }, 1000);
-                }
+                }).catch((err) => {
+                  console.error('Error waiting for MathJax:', err);
+                });
               });
               
               // 追加の初期化処理
@@ -1082,13 +1094,15 @@ export function appInit(shell) {
                   }).catch((err) => {
                     console.error('MathJax typesetting error (manual):', err);
                   });
+                } else {
+                  console.log('MathJax typesetPromise not available yet');
                 }
               }
               
               // 複数のタイミングで初期化を試行
-              setTimeout(initMathJax, 500);
-              setTimeout(initMathJax, 1500);
+              setTimeout(initMathJax, 1000);
               setTimeout(initMathJax, 3000);
+              setTimeout(initMathJax, 5000);
             </script>
           </body>
           </html>
@@ -1108,30 +1122,36 @@ export function appInit(shell) {
             console.log('iframeWindow:', iframeWindow);
             console.log('MathJax in iframe:', iframeWindow.MathJax);
             
-            if (iframeWindow.MathJax && iframeWindow.MathJax.typesetPromise) {
-              iframeWindow.MathJax.typesetPromise().then(() => {
-                console.log('MathJax typesetting completed after iframe load');
-              }).catch((err) => {
-                console.error('MathJax typesetting error after iframe load:', err);
-              });
-            } else {
-              // MathJaxがまだ利用できない場合、再試行
-              setTimeout(() => {
-                try {
+            // MathJaxの初期化完了を待つ関数
+            function waitForIframeMathJax() {
+              return new Promise((resolve, reject) => {
+                const checkMathJax = () => {
                   if (iframeWindow.MathJax && iframeWindow.MathJax.typesetPromise) {
-                    iframeWindow.MathJax.typesetPromise().then(() => {
-                      console.log('MathJax typesetting completed after retry');
-                    }).catch((err) => {
-                      console.error('MathJax typesetting error after retry:', err);
-                    });
+                    console.log('iframe MathJax typesetPromise available');
+                    resolve();
+                  } else if (iframeWindow.MathJax && iframeWindow.MathJax.startup) {
+                    console.log('iframe MathJax startup available, waiting for completion...');
+                    setTimeout(checkMathJax, 100);
                   } else {
-                    console.log('MathJax still not available after retry');
+                    console.log('iframe MathJax not ready yet, retrying...');
+                    setTimeout(checkMathJax, 100);
                   }
-                } catch (e) {
-                  console.error('Error in MathJax retry:', e);
-                }
-              }, 2000);
+                };
+                checkMathJax();
+              });
             }
+            
+            // MathJaxの準備が完了したらtypesetを実行
+            waitForIframeMathJax().then(() => {
+              iframeWindow.MathJax.typesetPromise().then(() => {
+                console.log('iframe MathJax typesetting completed');
+              }).catch((err) => {
+                console.error('iframe MathJax typesetting error:', err);
+              });
+            }).catch((err) => {
+              console.error('Error waiting for iframe MathJax:', err);
+            });
+            
           } catch (e) {
             console.error('Error accessing iframe content:', e);
           }
