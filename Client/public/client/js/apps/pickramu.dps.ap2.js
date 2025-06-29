@@ -1020,13 +1020,6 @@ export function appInit(shell) {
                 options: {
                   ignoreHtmlClass: 'tex2jax_ignore',
                   processHtmlClass: 'tex2jax_process'
-                },
-                startup: {
-                  pageReady: () => {
-                    return MathJax.startup.defaultPageReady().then(() => {
-                      console.log('MathJax is ready');
-                    });
-                  }
                 }
               };
               
@@ -1042,7 +1035,7 @@ export function appInit(shell) {
                       console.error('MathJax initial typesetting error:', err);
                     });
                   }
-                }, 500);
+                }, 100);
               };
             </script>
             <style>
@@ -1059,6 +1052,7 @@ export function appInit(shell) {
             <script>
               // iframe内でのDOMContentLoadedイベント処理
               document.addEventListener('DOMContentLoaded', function() {
+                console.log('DOMContentLoaded fired');
                 // MathJaxが読み込まれるまで待機
                 if (window.MathJax && window.MathJax.typesetPromise) {
                   window.MathJax.typesetPromise().then(() => {
@@ -1079,6 +1073,22 @@ export function appInit(shell) {
                   }, 1000);
                 }
               });
+              
+              // 追加の初期化処理
+              function initMathJax() {
+                if (window.MathJax && window.MathJax.typesetPromise) {
+                  window.MathJax.typesetPromise().then(() => {
+                    console.log('MathJax typesetting completed (manual)');
+                  }).catch((err) => {
+                    console.error('MathJax typesetting error (manual):', err);
+                  });
+                }
+              }
+              
+              // 複数のタイミングで初期化を試行
+              setTimeout(initMathJax, 500);
+              setTimeout(initMathJax, 1500);
+              setTimeout(initMathJax, 3000);
             </script>
           </body>
           </html>
@@ -1092,8 +1102,12 @@ export function appInit(shell) {
         
         // iframeの読み込み完了後にMathJaxを再実行
         iframe.onload = function() {
+          console.log('iframe loaded');
           try {
             const iframeWindow = iframe.contentWindow;
+            console.log('iframeWindow:', iframeWindow);
+            console.log('MathJax in iframe:', iframeWindow.MathJax);
+            
             if (iframeWindow.MathJax && iframeWindow.MathJax.typesetPromise) {
               iframeWindow.MathJax.typesetPromise().then(() => {
                 console.log('MathJax typesetting completed after iframe load');
@@ -1110,6 +1124,8 @@ export function appInit(shell) {
                     }).catch((err) => {
                       console.error('MathJax typesetting error after retry:', err);
                     });
+                  } else {
+                    console.log('MathJax still not available after retry');
                   }
                 } catch (e) {
                   console.error('Error in MathJax retry:', e);
