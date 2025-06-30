@@ -71,13 +71,9 @@ export function appInit(shell) {
   #22382b 86%,
   #2d3436 100%
 );    opacity: 0.3;
-    animation: float 20s ease-in-out infinite;
   }
   
-  @keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-20px) rotate(180deg); }
-  }
+
   
   .login-content {
     flex: 1;
