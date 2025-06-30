@@ -19,6 +19,17 @@ export function initializeSCR() {
     return;
   }
 
+  // デモユーザーの場合は投稿不可
+  if (window.isDemoUser) {
+    postButton.disabled = true;
+    postButton.title = 'デモユーザーは投稿できません';
+    postButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      alert('デモユーザーはSCR投稿機能を利用できません。');
+    });
+    return;
+  }
+
   postButton.addEventListener("click", () => {
     const postName = postNameInput.value;
     const postData = postDataInput.value;

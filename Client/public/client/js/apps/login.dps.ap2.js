@@ -29,6 +29,7 @@ export function appInit(shell) {
         </div>
         <div id="google-signin-container">
           <div id="openLoginButton" class="login-button button-chalk"></div>
+          <button id="demo-login-btn" class="login-button button-chalk" style="margin-top: 12px;">デモ</button>
         </div>
       </div>
       <div class="copyright-container">
@@ -388,6 +389,27 @@ export function appInit(shell) {
     }
     
     shell.log({from: 'dp.app.login.out', message: 'LoginApp: Parallax effects initialized', level: 'info'});
+  }
+
+  // デモユーザーログインボタンの設定
+  const demoLoginBtn = document.getElementById('demo-login-btn');
+  if (demoLoginBtn) {
+    demoLoginBtn.onclick = () => {
+      // ランダムな単語リスト（安全な英単語）
+      const words = [
+        'apple', 'sky', 'river', 'tree', 'star', 'cloud', 'light', 'dream', 'stone', 'leaf',
+        'moon', 'sun', 'wind', 'wave', 'bird', 'seed', 'book', 'note', 'blue', 'green',
+        'fox', 'cat', 'dog', 'fish', 'rain', 'snow', 'fire', 'earth', 'mountain', 'ocean'
+      ];
+      const now = Date.now();
+      const randomWord = words[Math.floor(Math.random() * words.length)];
+      window.googleUserId = `${now}.${randomWord}.demo_user`;
+      window.googleUserName = 'Demo_USER';
+      window.isDemoUser = true;
+      // メニューに遷移
+      shell.log({from: 'dp.app.login.out', message: 'LoginApp: デモユーザーでログイン', level: 'info'});
+      shell.loadApp('menu');
+    };
   }
 
   shell.log({from: 'dp.app.login.out', message: 'LoginApp: 初期化完了', level: 'info'});
