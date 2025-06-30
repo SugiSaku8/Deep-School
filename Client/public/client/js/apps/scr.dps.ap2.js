@@ -15,14 +15,14 @@ export function appInit(shell) {
   root.innerHTML = `
     <div class="page-container">
       <button class="go-back-button" id="scr-back-btn" data-lang-key="back">←</button>
-      <h1 class="page-title" data-lang-key="scr_note">SCRノート</h1>
+      <h1 class="page-title" data-lang-key="scr_note">SCR</h1>
       <button id="scr-open-post-modal" class="scr-post-icon-btn" title="新規ポスト" aria-label="新規ポスト">
         <img src="re/ico/note.svg" alt="新規ポスト" style="width:32px;height:32px;vertical-align:middle;">
       </button>
       <div id="feed" class="scr-feed">
         <h2>フィード</h2>
         <input type="text" id="scr-search-input" placeholder="検索ワード">
-        <button id="scr-search-btn" class="button-chalk">検索</button>
+        <button id="scr-search-btn" class="button-chalk submit-button">検索</button>
         <div id="feed-content"></div>
       </div>
       <div id="scr-post-modal" class="scr-post-modal" style="display:none;">
@@ -46,7 +46,7 @@ export function appInit(shell) {
               <label for="postdata-modal">ポスト内容</label>
               <textarea id="postdata-modal" placeholder="ポスト内容" required></textarea>
             </div>
-            <button type="submit" class="button-chalk modal-post-btn">ポストする</button>
+            <button type="submit" class="button-chalk modal-post-btn submit-button">ポストする</button>
           </form>
         </div>
       </div>

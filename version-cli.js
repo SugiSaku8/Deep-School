@@ -56,6 +56,7 @@ class VersionCLI {
       'client': 'deepSchoolClient',
       'server': 'deepSchoolServer',
       'pickramu': 'pickramu',
+      'scr': 'scr',
       'toaster': 'toasterMachine'
     };
 
@@ -86,6 +87,7 @@ class VersionCLI {
             case 'deepSchoolClient': icon = '💻'; label = 'Deep-School Client'; break;
             case 'deepSchoolServer': icon = '🖥️'; label = 'Deep-School Server'; break;
             case 'pickramu': icon = '📚'; label = 'Pickramu'; break;
+            case 'scr': icon = '📷'; label = 'SCR'; break;
             case 'eguide': icon = '📖'; label = 'eGuide'; break;
             case 'estore': icon = '🛒'; label = 'eStore'; break;
             case 'login': icon = '🔑'; label = 'Login'; break;
@@ -169,6 +171,7 @@ class VersionCLI {
     const currentClient = this.versionConfig.deepSchoolClient;
     const currentServer = this.versionConfig.deepSchoolServer;
     const currentPickramu = this.versionConfig.pickramu;
+    const currentScr = this.versionConfig.scr;
     const currentToaster = this.versionConfig.toasterMachine;
 
     // 実際のアップデートチェックロジックはここに実装
@@ -177,6 +180,7 @@ class VersionCLI {
       client: { hasUpdate: false, current: currentClient.version, latest: currentClient.version },
       server: { hasUpdate: false, current: currentServer.version, latest: currentServer.version },
       pickramu: { hasUpdate: false, current: currentPickramu.version, latest: currentPickramu.version },
+      scr: { hasUpdate: false, current: currentScr.version, latest: currentScr.version },
       toaster: { hasUpdate: false, current: currentToaster.version, latest: currentToaster.version }
     };
   }
@@ -197,7 +201,7 @@ Commands:
   compare <v1> <v2>      - Compare two versions
   help                   - Show this help information
 
-Available components: family, client, server, pickramu, toaster
+Available components: family, client, server, pickramu, scr, toaster
 
 Examples:
   node version-cli.js all

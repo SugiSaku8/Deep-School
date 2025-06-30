@@ -36,6 +36,8 @@ class VersionManager {
       'family': 'deepSchoolFamily',
       'client': 'deepSchoolClient',
       'server': 'deepSchoolServer',
+      'pickramu': 'pickramu',
+      'scr': 'scr',
       'workmaker': 'workMaker',
       'toaster': 'toasterMachine'
     };
@@ -70,6 +72,7 @@ class VersionManager {
           case 'deepSchoolClient': icon = '💻'; label = 'Deep-School Client'; break;
           case 'deepSchoolServer': icon = '🖥️'; label = 'Deep-School Server'; break;
           case 'pickramu': icon = '📚'; label = 'Pickramu'; break;
+          case 'scr': icon = '📷'; label = 'SCR'; break;
           case 'eguide': icon = '📖'; label = 'eGuide'; break;
           case 'estore': icon = '🛒'; label = 'eStore'; break;
           case 'login': icon = '🔑'; label = 'Login'; break;
@@ -147,6 +150,8 @@ class VersionManager {
 
     const currentClient = this.versionConfig.deepSchoolClient;
     const currentServer = this.versionConfig.deepSchoolServer;
+    const currentPickramu = this.versionConfig.pickramu;
+    const currentScr = this.versionConfig.scr;
     const currentWorkMaker = this.versionConfig.workMaker;
     const currentToaster = this.versionConfig.toasterMachine;
 
@@ -155,7 +160,9 @@ class VersionManager {
     return {
       client: { hasUpdate: false, current: currentClient.version, latest: currentClient.version },
       server: { hasUpdate: false, current: currentServer.version, latest: currentServer.version },
-      workMaker: { hasUpdate: false, current: workMaker.version, latest: workMaker.version },
+      pickramu: { hasUpdate: false, current: currentPickramu.version, latest: currentPickramu.version },
+      scr: { hasUpdate: false, current: currentScr.version, latest: currentScr.version },
+      workMaker: { hasUpdate: false, current: currentWorkMaker.version, latest: currentWorkMaker.version },
       toaster: { hasUpdate: false, current: currentToaster.version, latest: currentToaster.version }
     };
   }

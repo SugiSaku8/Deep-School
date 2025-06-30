@@ -1,7 +1,7 @@
 /* 
 Pickramu
 The Pickramu is a language for creating teaching materials for Deep-School.
-version:1.0.24
+version:1.0.31
 Development:Carnaion Studio
 License:MPL-2.0
 */
@@ -350,11 +350,10 @@ export function appInit(shell) {
             </div>
           </div>
         </div>
-        <iframe id="pickramu_iframe" style="width:100%; height:70vh; border:none; border-radius:12px; background:#173c2b; overflow-y: auto;"></iframe>
-        <div id="pickramu-content"></div>
+        <iframe id="pickramu_iframe" style="width:100%; height:70vh; border:none; border-radius:8px; background:#ffffff; overflow-y: auto;"></iframe>
       </div>
       <div id="pickramu-eguide-area" style="display:none;">
-        <iframe src="eguide.html" style="width:100%; height:70vh; border:none; border-radius:12px; background:#173c2b; overflow-y: auto;"></iframe>
+        <iframe src="eguide.html" style="width:100%; height:70vh; border:none; border-radius:8px; background:#ffffff; overflow-y: auto;"></iframe>
       </div>
     </div>
     
@@ -364,6 +363,8 @@ export function appInit(shell) {
         overflow-y: auto;
         padding: 20px;
         box-sizing: border-box;
+        background: #ffffff;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       }
       
       .pickramu-select-container {
@@ -373,126 +374,103 @@ export function appInit(shell) {
       }
       
       .pickramu-select-card {
-        background: rgba(255, 255, 255, 0.13);
-        border-radius: 24px;
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.27);
-        backdrop-filter: blur(12px) saturate(180%);
-        -webkit-backdrop-filter: blur(12px) saturate(180%);
-        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: #ffffff;
+        border-radius: 12px;
+        border: 1px solid #e5e5e7;
         padding: 2rem;
         max-width: 600px;
         width: 100%;
-        color: #fff;
+        color: #1d1d1f;
         text-align: center;
-        animation: fadeInUp 1.2s cubic-bezier(.23,1.01,.32,1) both;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
       }
       
       .pickramu-select-title {
-        font-family: "anka", 'Helvetica Neue', Arial, 'Hiragino Sans', 'Meiryo', sans-serif;
-        font-size: 1.8rem;
-        font-weight: bold;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 1.5rem;
+        font-weight: 600;
         margin: 0 0 1.5rem 0;
-        color: #ffe066;
-        text-shadow: 0 2px 8px #0008;
-        letter-spacing: 0.05em;
+        color: #1d1d1f;
       }
       
       .pickramu-select-group {
         display: flex;
         flex-direction: column;
-        gap: 1.2rem;
+        gap: 1rem;
         align-items: center;
       }
       
       .pickramu-select-label {
-        font-family: "anka", 'Helvetica Neue', Arial, 'Hiragino Sans', 'Meiryo', sans-serif;
-        font-size: 1.1rem;
-        color: #f8f8f2;
-        text-shadow: 0 1px 2px #0008;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 1rem;
+        color: #86868b;
         margin-bottom: 0.5rem;
       }
       
       .pickramu-select-dropdown {
-        background: rgba(45, 58, 46, 0.8);
-        border: 2px dashed #f8f8f2;
-        border-radius: 16px;
-        padding: 0.8rem 1.2rem;
+        background: #ffffff;
+        border: 1px solid #d2d2d7;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
         font-size: 1rem;
-        color: #f8f8f2;
-        font-family: "anka", 'Helvetica Neue', Arial, 'Hiragino Sans', 'Meiryo', sans-serif;
+        color: #1d1d1f;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        transition: all 0.2s ease;
         min-width: 300px;
         text-align: center;
       }
       
       .pickramu-select-dropdown:focus {
         outline: none;
-        border-color: #ffe066;
-        box-shadow: 0 4px 16px #ffe06688;
-        background: rgba(45, 58, 46, 0.9);
+        border-color: #007aff;
+        box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
       }
       
       .pickramu-select-dropdown:hover {
-        border-color: #aee9f5;
-        box-shadow: 0 4px 16px #aee9f588;
+        border-color: #007aff;
       }
       
       .pickramu-select-dropdown option {
-        background: #2d3a2e;
-        color: #f8f8f2;
+        background: #ffffff;
+        color: #1d1d1f;
         padding: 0.5rem;
       }
       
       .pickramu-load-button {
-        background: linear-gradient(90deg, #00b894 0%, #00cec9 100%);
-        color: #fff;
-        font-family: "anka", 'Helvetica Neue', Arial, 'Hiragino Sans', 'Meiryo', sans-serif;
+        background: #007aff;
+        color: #ffffff;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         font-size: 1rem;
-        font-weight: bold;
-        padding: 0.7rem 1.5rem;
+        font-weight: 500;
+        padding: 0.75rem 1.5rem;
         border: none;
-        border-radius: 1.5rem;
+        border-radius: 8px;
         cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 3px 12px #00b89444;
+        transition: all 0.2s ease;
         display: flex;
         align-items: center;
-        gap: 0.6rem;
+        gap: 0.5rem;
         min-width: 160px;
         justify-content: center;
       }
       
       .pickramu-load-button:hover {
+        background: #0056cc;
         transform: translateY(-1px);
-        box-shadow: 0 4px 16px #00b89466;
-        background: linear-gradient(90deg, #00cec9 0%, #00b894 100%);
       }
       
       .pickramu-load-button:active {
+        background: #004499;
         transform: translateY(0);
-        box-shadow: 0 2px 8px #00b89444;
       }
       
       .button-text {
-        font-size: 0.95rem;
+        font-size: 1rem;
       }
       
       .button-icon {
-        font-size: 1.1rem;
-        filter: drop-shadow(0 1px 2px #0008);
-      }
-      
-      @keyframes fadeInUp {
-        0% {
-          opacity: 0;
-          transform: translateY(40px);
-        }
-        100% {
-          opacity: 1;
-          transform: translateY(0);
-        }
+        font-size: 1rem;
       }
       
       /* Responsive design */
@@ -513,16 +491,8 @@ export function appInit(shell) {
           min-width: 140px;
         }
         
-        .button-text {
-          font-size: 0.85rem;
-        }
-        
-        .button-icon {
-          font-size: 1rem;
-        }
-        
         .pickramu-select-title {
-          font-size: 1.5rem;
+          font-size: 1.3rem;
         }
       }
     </style>
@@ -548,10 +518,8 @@ export function appInit(shell) {
   // 教材読み込みボタン
   document.getElementById('pickramu-load-btn').onclick = async () => {
     const select = document.getElementById('pickramu-unit-select');
-    const content = document.getElementById('pickramu-content');
-    if (select && content) {
+    if (select) {
       const path = select.value;
-      content.textContent = '読み込み中...';
       try {
         const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
         const basePath = isLocal ? '/Pickramu/data/' : 'https://sugisaku8.github.io/Deep-School/client/Pickramu/data/';
@@ -565,8 +533,8 @@ export function appInit(shell) {
           // Define the CSS styles
           const styles = `
             body{
-              font-family: "Noto Sans JP", sans-serif;
-              color: white;
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              color: #333;
               text-align: center;
               display: flex;
               flex-direction: column;
@@ -576,9 +544,10 @@ export function appInit(shell) {
               padding: 20px;
               margin: 0;
               overflow-y: auto;
+              background: #ffffff;
             }
             #red {
-              color: red;
+              color: #ff3b30;
             }
             #testB {
               display: none;
@@ -591,430 +560,427 @@ export function appInit(shell) {
               padding: 20px 0;
             }
             #content .red {
-              color: red;
-            }
-            #content .red {
-              color: red;
+              color: #ff3b30;
             }
             #content .aliceblue {
-              color: aliceblue;
+              color: #f0f8ff;
             }
             #content .antiquewhite {
-              color: antiquewhite;
+              color: #faebd7;
             }
             #content .aqua {
-              color: aqua;
+              color: #00ffff;
             }
             #content .aquamarine {
-              color: aquamarine;
+              color: #7fffd4;
             }
             #content .azure {
-              color: azure;
+              color: #f0ffff;
             }
             #content .beige {
-              color: beige;
+              color: #f5f5dc;
             }
             #content .bisque {
-              color: bisque;
+              color: #ffe4c4;
             }
             #content .black {
-              color: black;
+              color: #000000;
             }
             #content .blanchedalmond {
-              color: blanchedalmond;
+              color: #ffebcd;
             }
             #content .blue {
-              color: blue;
+              color: #0000ff;
             }
             #content .blueviolet {
-              color: blueviolet;
+              color: #8a2be2;
             }
             #content .brown {
-              color: brown;
+              color: #a52a2a;
             }
             #content .burlywood {
-              color: burlywood;
+              color: #deb887;
             }
             #content .cadetblue {
-              color: cadetblue;
+              color: #5f9ea0;
             }
             #content .chartreuse {
-              color: chartreuse;
+              color: #7fff00;
             }
             #content .chocolate {
-              color: chocolate;
+              color: #d2691e;
             }
             #content .coral {
-              color: coral;
+              color: #ff7f50;
             }
             #content .cornflowerblue {
-              color: cornflowerblue;
+              color: #6495ed;
             }
             #content .cornsilk {
-              color: cornsilk;
+              color: #fff8dc;
             }
             #content .crimson {
-              color: crimson;
+              color: #dc143c;
             }
             #content .cyan {
-              color: cyan;
+              color: #00ffff;
             }
             #content .darkblue {
-              color: darkblue;
+              color: #00008b;
             }
             #content .darkcyan {
-              color: darkcyan;
+              color: #008b8b;
             }
             #content .darkgoldenrod {
-              color: darkgoldenrod;
+              color: #b8860b;
             }
             #content .darkgray {
-              color: darkgray;
+              color: #a9a9a9;
             }
             #content .darkgreen {
-              color: darkgreen;
+              color: #006400;
             }
             #content .darkkhaki {
-              color: darkkhaki;
+              color: #bdb76b;
             }
             #content .darkmagenta {
-              color: darkmagenta;
+              color: #8b008b;
             }
             #content .darkolivegreen {
-              color: darkolivegreen;
+              color: #556b2f;
             }
             #content .darkorange {
-              color: darkorange;
+              color: #ff8c00;
             }
             #content .darkorchid {
-              color: darkorchid;
+              color: #9932cc;
             }
             #content .darkred {
-              color: darkred;
+              color: #8b0000;
             }
             #content .darksalmon {
-              color: darksalmon;
+              color: #e9967a;
             }
             #content .darkseagreen {
-              color: darkseagreen;
+              color: #8fbc8f;
             }
             #content .darkslateblue {
-              color: darkslateblue;
+              color: #483d8b;
             }
             #content .darkslategray {
-              color: darkslategray;
+              color: #2f4f4f;
             }
             #content .darkturquoise {
-              color: darkturquoise;
+              color: #00ced1;
             }
             #content .darkviolet {
-              color: darkviolet;
+              color: #9400d3;
             }
             #content .deeppink {
-              color: deeppink;
+              color: #ff1493;
             }
             #content .deepskyblue {
-              color: deepskyblue;
+              color: #00bfff;
             }
             #content .dimgray {
-              color: dimgray;
+              color: #696969;
             }
             #content .dodgerblue {
-              color: dodgerblue;
+              color: #1e90ff;
             }
             #content .firebrick {
-              color: firebrick;
+              color: #b22222;
             }
             #content .floralwhite {
-              color: floralwhite;
+              color: #fffaf0;
             }
             #content .forestgreen {
-              color: forestgreen;
+              color: #228b22;
             }
             #content .fuchsia {
-              color: fuchsia;
+              color: #ff00ff;
             }
             #content .gainsboro {
-              color: gainsboro;
+              color: #dcdcdc;
             }
             #content .ghostwhite {
-              color: ghostwhite;
+              color: #f8f8ff;
             }
             #content .gold {
-              color: gold;
+              color: #ffd700;
             }
             #content .goldenrod {
-              color: goldenrod;
+              color: #daa520;
             }
             #content .gray {
-              color: gray;
+              color: #808080;
             }
             #content .green {
-              color: green;
+              color: #008000;
             }
             #content .greenyellow {
-              color: greenyellow;
+              color: #adff2f;
             }
             #content .honeydew {
-              color: honeydew;
+              color: #f0fff0;
             }
             #content .hotpink {
-              color: hotpink;
+              color: #ff69b4;
             }
             #content .indianred {
-              color: indianred;
+              color: #cd5c5c;
             }
             #content .indigo {
-              color: indigo;
+              color: #4b0082;
             }
             #content .ivory {
-              color: ivory;
+              color: #fffff0;
             }
             #content .khaki {
-              color: khaki;
+              color: #f0e68c;
             }
             #content .lavender {
-              color: lavender;
+              color: #e6e6fa;
             }
             #content .lavenderblush {
-              color: lavenderblush;
+              color: #fff0f5;
             }
             #content .lawngreen {
-              color: lawngreen;
+              color: #7cfc00;
             }
             #content .lemonchiffon {
-              color: lemonchiffon;
+              color: #fffacd;
             }
             #content .lightblue {
-              color: lightblue;
+              color: #add8e6;
             }
             #content .lightcoral {
-              color: lightcoral;
+              color: #f08080;
             }
             #content .lightcyan {
-              color: lightcyan;
+              color: #e0ffff;
             }
             #content .lightgoldenrodyellow {
-              color: lightgoldenrodyellow;
+              color: #fafad2;
             }
             #content .lightgray {
-              color: lightgray;
+              color: #d3d3d3;
             }
             #content .lightgreen {
-              color: lightgreen;
+              color: #90ee90;
             }
             #content .lightpink {
-              color: lightpink;
+              color: #ffb6c1;
             }
             #content .lightsalmon {
-              color: lightsalmon;
+              color: #ffa07a;
             }
             #content .lightseagreen {
-              color: lightseagreen;
+              color: #20b2aa;
             }
             #content .lightskyblue {
-              color: lightskyblue;
+              color: #87cefa;
             }
             #content .lightslategray {
-              color: lightslategray;
+              color: #778899;
             }
             #content .lightsteelblue {
-              color: lightsteelblue;
+              color: #b0c4de;
             }
             #content .lightyellow {
-              color: lightyellow;
+              color: #ffffe0;
             }
             #content .lime {
-              color: lime;
+              color: #00ff00;
             }
             #content .limegreen {
-              color: limegreen;
+              color: #32cd32;
             }
             #content .linen {
-              color: linen;
+              color: #faf0e6;
             }
             #content .magenta {
-              color: magenta;
+              color: #ff00ff;
             }
             #content .maroon {
-              color: maroon;
+              color: #800000;
             }
             #content .mediumaquamarine {
-              color: mediumaquamarine;
+              color: #66cdaa;
             }
             #content .mediumblue {
-              color: mediumblue;
+              color: #0000cd;
             }
             #content .mediumorchid {
-              color: mediumorchid;
+              color: #ba55d3;
             }
             #content .mediumpurple {
-              color: mediumpurple;
+              color: #9370db;
             }
             #content .mediumseagreen {
-              color: mediumseagreen;
+              color: #3cb371;
             }
             #content .mediumslateblue {
-              color: mediumslateblue;
+              color: #7b68ee;
             }
             #content .mediumspringgreen {
-              color: mediumspringgreen;
+              color: #00fa9a;
             }
             #content .mediumturquoise {
-              color: mediumturquoise;
+              color: #48d1cc;
             }
             #content .mediumvioletred {
-              color: mediumvioletred;
+              color: #c71585;
             }
             #content .midnightblue {
-              color: midnightblue;
+              color: #191970;
             }
             #content .mintcream {
-              color: mintcream;
+              color: #f5fffa;
             }
             #content .mistyrose {
-              color: mistyrose;
+              color: #ffe4e1;
             }
             #content .moccasin {
-              color: moccasin;
+              color: #ffe4b5;
             }
             #content .navajowhite {
-              color: navajowhite;
+              color: #ffdead;
             }
             #content .navy {
-              color: navy;
+              color: #000080;
             }
             #content .oldlace {
-              color: oldlace;
+              color: #fdf5e6;
             }
             #content .olive {
-              color: olive;
+              color: #808000;
             }
             #content .olivedrab {
-              color: olivedrab;
+              color: #6b8e23;
             }
             #content .orange {
-              color: orange;
+              color: #ffa500;
             }
             #content .orangered {
-              color: orangered;
+              color: #ff4500;
             }
             #content .orchid {
-              color: orchid;
+              color: #da70d6;
             }
             #content .palegoldenrod {
-              color: palegoldenrod;
+              color: #eee8aa;
             }
             #content .palegreen {
-              color: palegreen;
+              color: #98fb98;
             }
             #content .paleturquoise {
-              color: paleturquoise;
+              color: #afeeee;
             }
             #content .palevioletred {
-              color: palevioletred;
+              color: #db7093;
             }
             #content .papayawhip {
-              color: papayawhip;
+              color: #ffefd5;
             }
             #content .peachpuff {
-              color: peachpuff;
+              color: #ffdab9;
             }
             #content .peru {
-              color: peru;
+              color: #cd853f;
             }
             #content .pink {
-              color: pink;
+              color: #ffc0cb;
             }
             #content .plum {
-              color: plum;
+              color: #dda0dd;
             }
             #content .powderblue {
-              color: powderblue;
+              color: #b0e0e6;
             }
             #content .purple {
-              color: purple;
+              color: #800080;
             }
             #content .rebeccapurple {
-              color: rebeccapurple;
+              color: #663399;
             }
             #content .rosybrown {
-              color: rosybrown;
+              color: #bc8f8f;
             }
             #content .royalblue {
-              color: royalblue;
+              color: #4169e1;
             }
             #content .saddlebrown {
-              color: saddlebrown;
+              color: #8b4513;
             }
             #content .salmon {
-              color: salmon;
+              color: #fa8072;
             }
             #content .sandybrown {
-              color: sandybrown;
+              color: #f4a460;
             }
             #content .seagreen {
-              color: seagreen;
+              color: #2e8b57;
             }
             #content .seashell {
-              color: seashell;
+              color: #fff5ee;
             }
             #content .sienna {
-              color: sienna;
+              color: #a0522d;
             }
             #content .silver {
-              color: silver;
+              color: #c0c0c0;
             }
             #content .skyblue {
-              color: skyblue;
+              color: #87ceeb;
             }
             #content .slateblue {
-              color: slateblue;
+              color: #6a5acd;
             }
             #content .slategray {
-              color: slategray;
+              color: #708090;
             }
             #content .snow {
-              color: snow;
+              color: #fffafa;
             }
             #content .springgreen {
-              color: springgreen;
+              color: #00ff7f;
             }
             #content .steelblue {
-              color: steelblue;
+              color: #4682b4;
             }
             #content .tan {
-              color: tan;
+              color: #d2b48c;
             }
             #content .teal {
-              color: teal;
+              color: #008080;
             }
             #content .thistle {
-              color: thistle;
+              color: #d8bfd8;
             }
             #content .tomato {
-              color: tomato;
+              color: #ff6347;
             }
             #content .turquoise {
-              color: turquoise;
+              color: #40e0d0;
             }
             #content .violet {
-              color: violet;
+              color: #ee82ee;
             }
             #content .wheat {
-              color: wheat;
+              color: #f5deb3;
             }
             #content .white {
-              color: white;
+              color: #ffffff;
             }
             #content .whitesmoke {
-              color: whitesmoke;
+              color: #f5f5f5;
             }
             #content .yellow {
-              color: yellow;
+              color: #ffff00;
             }
             #content .yellowgreen {
-              color: yellowgreen;
+              color: #9acd32;
             }
             #content h1 {
               font-size: 2em;
@@ -1041,58 +1007,57 @@ export function appInit(shell) {
               align-items: center;
               margin-top: 2em;
               gap: 1em;
-              padding: 1em;
-              background: rgba(255, 255, 255, 0.1);
+              padding: 1.5em;
+              background: #f5f5f7;
               border-radius: 12px;
-              backdrop-filter: blur(10px);
+              border: 1px solid #e5e5e7;
             }
             #content .input-box {
-              background-color: rgba(163, 177, 166, 0.8);
-              border-radius: 25px;
-              padding: 0.8em 2em;
+              background-color: #ffffff;
+              border-radius: 8px;
+              padding: 0.8em 1em;
               font-size: 1.6em;
-              color: white;
-              border: 2px solid rgba(255, 255, 255, 0.2);
+              color: #1d1d1f;
+              border: 1px solid #d2d2d7;
               width: 300px;
               text-align: center;
-              transition: all 0.3s ease;
+              transition: all 0.2s ease;
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             }
             #content .input-box:focus {
               outline: none;
-              border-color: #33aaff;
-              box-shadow: 0 0 10px rgba(51, 170, 255, 0.3);
-              background-color: rgba(163, 177, 166, 0.9);
+              border-color: #007aff;
+              box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
             }
             #content .input-box::placeholder {
-              color: rgba(255, 255, 255, 0.7);
+              color: #86868b;
             }
             #content .button-next {
-              background: linear-gradient(135deg, #33aaff, #2288cc);
+              background: #007aff;
               border: none;
-              border-radius: 25px;
-              padding: 0.8em 2em;
+              border-radius: 8px;
+              padding: 0.8em 1.5em;
               font-size: 1.2em;
               color: white;
               cursor: pointer;
-              transition: all 0.3s ease;
-              box-shadow: 0 4px 15px rgba(51, 170, 255, 0.3);
-              font-weight: bold;
+              transition: all 0.2s ease;
+              font-weight: 500;
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             }
             #content .button-next:hover {
-              transform: translateY(-2px);
-              box-shadow: 0 6px 20px rgba(51, 170, 255, 0.4);
-              background: linear-gradient(135deg, #44bbff, #3399dd);
+              background: #0056cc;
+              transform: translateY(-1px);
             }
             #content .button-next:active {
+              background: #004499;
               transform: translateY(0);
-              box-shadow: 0 2px 10px rgba(51, 170, 255, 0.3);
             }
             #content .footer-bar {
               position: absolute;
               bottom: 0;
               width: 100%;
               height: 20px;
-              background: linear-gradient(to right, #dca10d, #8c5d00);
+              background: #007aff;
             }
             #content #n2{
               display: none;
@@ -1357,10 +1322,10 @@ export function appInit(shell) {
             }
           };
         } else {
-          content.textContent = `教材の読み込みに失敗しました (404 Not Found)\nURL: ${fetchUrl}`;
+          console.error("Error: Failed to fetch the content");
         }
       } catch (e) {
-        content.textContent = '教材の読み込みでエラーが発生しました';
+        console.error("Error: ", e);
       }
     }
   };

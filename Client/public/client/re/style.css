@@ -383,7 +383,15 @@ body {
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: #006837;
+  background: linear-gradient(135deg,
+  #1a3a1a 0%,
+  #18422a 18%,
+  #17603a 36%,
+  #005f30 54%,
+  #18422a 72%,
+  #22382b 86%,
+  #2d3436 100%
+);
   transition: opacity 0.3s ease-in-out;
 }
 
@@ -1507,17 +1515,13 @@ body::-webkit-scrollbar {
   text-align: center;
   transition: background 0.2s, color 0.2s;
 }
-.close-btn:hover, .close-btn:focus {
-  background: #ffe06644;
-  color: #2d3a2e;
-  outline: 2px solid #ffe066;
-}
 
 .scr-post-icon-btn {
   position: absolute;
   top: 18px;
   right: 72px;
-  background: #ffe066;
+  background: #007bff;
+
   border: none;
   border-radius: 50%;
   width: 44px;
@@ -1530,9 +1534,9 @@ body::-webkit-scrollbar {
   transition: background 0.2s, box-shadow 0.2s;
 }
 .scr-post-icon-btn:hover, .scr-post-icon-btn:focus {
-  background: #fff8c6;
-  box-shadow: 0 4px 16px #ffe06688;
-  outline: 2px solid #ffe066;
+  background: #3290f4;
+  box-shadow: 0 4px 16px #3290f488;
+  outline: 2px solid #3290f4;
 }
 
 .scr-post-modal {

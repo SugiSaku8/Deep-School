@@ -6,7 +6,7 @@ Deep-School Version Management Systemは、Deep-Schoolファミリーソフト�
 
 ## バージョンフォーマット
 
-### Deep-School CLIENT/SERVER/PICKRAMU
+### Deep-School CLIENT/SERVER/PICKRAMU/SCR
 ```
 v.CYCLE-NUMBER.RELEASE-NUMBER.REVISION(.STATUS=OPTION)
                                                                                      [NIGHTLY,BETA,PRE]
@@ -39,7 +39,19 @@ YEAR(FIRST-CODE-RELEASED-YEAR,EXAMPLE 2025 TO 25)C[BUILD-NUMBER][RELEASE-NUMBER]
 
 Deep-Schoolは、基本的に次のようにリリースする。
 
-- **基本的に1サイクル1年**で行う。(SERVERは同じ、PICKRAMUは3年周期)
+- **基本的に1サイクル1年**で行う。(SERVERは同じ、PICKRAMUは3年周期、SCRは1年周期)
+- **サイクル更新日**: 10/13, 10/03, 4/15, 9/1のいずれか
+- **リリース**: 不定期で行い、新機能が安定したらリリースする
+- **リリース日**: 1, 5, 10, 25, 30のいずれかの日
+- **リビジョン**: 主にセキュリティパッチを含むバグ修正やDEEP-SCHOOL-FAMILY-SOFTWAREのコード更新
+- **リビジョン公開**: 修正次第NIGHTLYで公開し、1日後にメインサイクルに埋め込む
+- **BETA/PRE**: サイクル更新/リリース前、昨日が発表されたらまずその機能をBETAとして公開。ユーザーフィードバックを経て、最終テスト版PREを公開する
+
+### SCR CLIENT RELEASE CYCLE
+
+SCRは、基本的に次のようにリリースする。
+
+- **基本的に1サイクル1年**で行う
 - **サイクル更新日**: 10/13, 10/03, 4/15, 9/1のいずれか
 - **リリース**: 不定期で行い、新機能が安定したらリリースする
 - **リリース日**: 1, 5, 10, 25, 30のいずれかの日
@@ -103,6 +115,7 @@ npm run version:help
 - `client` - Deep-School Client
 - `server` - Deep-School Server
 - `pickramu` - Pickramu
+- `scr` - SCR (Screen Capture and Recording)
 - `toaster` - Toaster-Machine
 
 #### 使用例
@@ -133,6 +146,7 @@ ds.version.all()
 ds.version.get('client')
 ds.version.get('server')
 ds.version.get('pickramu')
+ds.version.get('scr')
 ds.version.get('toaster')
 ds.version.get('family')
 
@@ -203,6 +217,15 @@ console.log(comparison); // { result: -1, comparison: 'older' }
     "revision": 1,
     "lastUpdated": "2025-01-01",
     "description": "Pickramu - Initial stable release"
+  },
+  "scr": {
+    "version": "0.1.0",
+    "status": "beta",
+    "cycle": 0,
+    "release": 1,
+    "revision": 0,
+    "lastUpdated": "2025-06-30",
+    "description": "SCR - Screen Capture and Recording tool - Initial beta release"
   },
   "toasterMachine": {
     "version": "1.0.1",
