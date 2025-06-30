@@ -1918,3 +1918,21 @@ body::-webkit-scrollbar {
   --border-radius: 8px;
   --animation-duration: 0.3s;
 }
+
+@media (min-width: 901px) {
+  #pickramu-work-area {
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+    align-items: flex-start;
+  }
+  .pickramu-select-container {
+    flex: 0 0 320px;
+    max-width: 320px;
+  }
+  #pickramu_iframe {
+    flex: 1 1 0%;
+    min-width: 0;
+    height: 70vh;
+  }
+}
