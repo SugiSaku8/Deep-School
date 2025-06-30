@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+// To use as a global CLI: add to package.json: { "bin": { "deepschool-version": "./version-cli.js" } }
+// Then run: npm i -g .
+// Usage: deepschool-version -update <module> <new_version>
 
 /**
  * Deep-School Version Management CLI
@@ -266,6 +269,16 @@ Examples:
           console.log(`Version comparison: ${version1} is ${comparison} than ${version2}`);
           break;
 
+        case '-update':
+          if (args.length < 3) {
+            console.error('Error: Module name and new version are required');
+            process.exit(1);
+          }
+          const moduleName = args[1];
+          const newVersion = args[2];
+          this.updateModuleVersion(moduleName, newVersion);
+          break;
+
         default:
           console.error(`Unknown command: ${command}`);
           this.showHelp();
@@ -275,6 +288,34 @@ Examples:
       console.error('Error:', error.message);
       process.exit(1);
     }
+  }
+
+  updateModuleVersion(moduleName, newVersion) {
+    const configPaths = [
+      path.join(__dirname, 'version.config.json'),
+      path.join(__dirname, 'Client/public/client/version.config.json')
+    ];
+    let updated = false;
+    configPaths.forEach(configPath => {
+      if (fs.existsSync(configPath)) {
+        const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+        if (!config[moduleName]) {
+          // Only warn if not found, don't exit
+          console.warn(`Module '${moduleName}' not found in ${configPath}`);
+          return;
+        }
+        const oldVersion = config[moduleName];
+        config[moduleName] = newVersion;
+        fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
+        console.log(`Updated ${moduleName} in ${configPath}: ${oldVersion} -> ${newVersion}`);
+        updated = true;
+      }
+    });
+    if (!updated) {
+      console.error('No config file updated.');
+      process.exit(1);
+    }
+    process.exit(0);
   }
 }
 

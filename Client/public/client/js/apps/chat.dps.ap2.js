@@ -15,8 +15,8 @@ export function appInit(shell) {
   root.innerHTML = `
     <div class="splash-container" id="splash">
       <div class="card">
+        <img src="re/ico/tm.cb.png" alt="ToasterMachine ロゴ" class="logo-img center-logo" />
         <div class="title_t chalk-text" data-lang-key="menu_toaster">ToasterMachine</div>
-        <img src="re/ico/tm.cb.png" alt="ロゴ" class="logo-img" />
         <div class="version">v0.1.2</div>
         <div class="input-group">
           <input id="user-input" type="text" placeholder="ここに質問を入力" data-lang-key="ask_placeholder" />
@@ -148,10 +148,10 @@ export function appInit(shell) {
     
     .button-chalk {
       padding: 12px 24px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: #ced8eb;
       border: none;
       border-radius: 12px;
-      color: #fff;
+      color: #222;
       font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
@@ -160,29 +160,14 @@ export function appInit(shell) {
       overflow: hidden;
     }
     
-    .button-chalk::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      transition: left 0.5s ease;
-    }
-    
-    .button-chalk:hover::before {
-      left: 100%;
-    }
-    
     .button-chalk:hover {
-      transform: translateY(-3px) scale(1.05);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-      background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+      background: #b7c6e0;
+      color: #222;
     }
     
     .button-chalk:active {
-      transform: translateY(-1px) scale(1.02);
+      background: #a2b3d1;
+      color: #222;
     }
     
     .chat-container {
@@ -237,6 +222,13 @@ export function appInit(shell) {
       background: rgba(255, 255, 255, 0.2);
       border-color: rgba(255, 255, 255, 0.5);
       transform: translateY(-2px) scale(1.1);
+    }
+    
+    .center-logo {
+      display: block;
+      margin: 0 auto 1.5rem auto;
+      width: 100px;
+      height: 100px;
     }
     
     /* Dark mode adjustments */
