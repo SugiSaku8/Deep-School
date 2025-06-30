@@ -15,7 +15,7 @@ export function appInit(shell) {
       <div class="card">
         <div class="title_t chalk-text" data-lang-key="menu_toaster">ToasterMachine</div>
         <img src="re/ico/tm.cb.png" alt="ロゴ" class="logo-img" />
-        <div class="version">v0.0.1-Demo</div>
+        <div class="version">v0.1.2</div>
         <div class="input-group">
           <input id="user-input" type="text" placeholder="ここに質問を入力" data-lang-key="ask_placeholder" />
           <button id="submit-btn" class="button-chalk" data-lang-key="send">送信</button>

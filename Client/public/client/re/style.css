@@ -432,7 +432,7 @@ body {
 .title_t {
   font-size: 2.5em;
   font-weight: bold;
-  color: black;
+  color: rgb(255, 255, 255);
   margin-bottom: 15px;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
@@ -440,7 +440,7 @@ body {
 .version {
   font-size: 1.2em;
   margin-top: 20px;
-  color: #666;
+  color: #e3fbff;
   font-weight: 500;
 }
 
@@ -1410,6 +1410,27 @@ body::-webkit-scrollbar {
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.setting-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.setting-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.setting-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.setting-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
 }
 
 .setting-section {
@@ -1760,4 +1781,92 @@ body::-webkit-scrollbar {
   .pickramu-select-title {
     font-size: 1.3rem;
   }
+}
+
+/* ダークモードのスタイル */
+.dark-mode {
+  --bg-color: #1a1a1a;
+  --text-color: #ffffff;
+  --card-bg: #2d2d2d;
+  --border-color: #404040;
+  --shadow-color: rgba(0, 0, 0, 0.5);
+}
+
+.dark-mode body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.dark-mode .card,
+.dark-mode .glass-card {
+  background: var(--card-bg);
+  border-color: var(--border-color);
+  box-shadow: 0 4px 16px var(--shadow-color);
+}
+
+.dark-mode .setting-section {
+  background: #2d2d2d;
+  border-color: #404040;
+}
+
+.dark-mode .setting-section h2 {
+  color: #ffffff;
+  border-bottom-color: #404040;
+}
+
+.dark-mode .setting-item {
+  border-bottom-color: #404040;
+}
+
+.dark-mode .setting-item label {
+  color: #ffffff;
+}
+
+.dark-mode .setting-item span {
+  color: #cccccc;
+}
+
+.dark-mode .setting-item select {
+  background: #404040;
+  color: #ffffff;
+  border-color: #666666;
+}
+
+/* コンパクトモードのスタイル */
+.compact-mode {
+  --spacing-unit: 8px;
+  --border-radius: 4px;
+}
+
+.compact-mode .setting-section {
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: var(--border-radius);
+}
+
+.compact-mode .setting-item {
+  padding: 6px 0;
+}
+
+.compact-mode .setting-section h2 {
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+/* アニメーション制御 */
+.no-animation * {
+  animation-duration: 0s !important;
+  transition-duration: 0s !important;
+}
+
+/* CSS変数のデフォルト値 */
+:root {
+  --bg-color: #f5f5f5;
+  --text-color: #333333;
+  --card-bg: #ffffff;
+  --border-color: #e0e0e0;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --spacing-unit: 16px;
+  --border-radius: 8px;
+  --animation-duration: 0.3s;
 }

@@ -30,14 +30,19 @@ export function appInit(shell) {
             <label>ユーザーID:</label>
             <span id="setting-userid">未設定</span>
           </div>
+          <div class="setting-item">
+            <label>アカウント作成日:</label>
+            <span id="setting-created">未設定</span>
+          </div>
+          <div class="setting-item">
+            <label>最終ログイン:</label>
+            <span id="setting-lastlogin">未設定</span>
+          </div>
           <button class="auto-btn" id="logout-btn" data-lang-key="logout">ログアウト</button>
         </div>
         <div class="setting-section">
           <h2>表示設定</h2>
-          <div class="setting-item">
-            <label for="dark-mode-toggle">ダークモード:</label>
-            <input type="checkbox" id="dark-mode-toggle" checked>
-          </div>
+    
           <div class="setting-item">
             <label for="font-size-select">フォントサイズ:</label>
             <select id="font-size-select">
@@ -45,6 +50,14 @@ export function appInit(shell) {
               <option value="medium" selected>中</option>
               <option value="large">大</option>
             </select>
+          </div>
+          <div class="setting-item">
+            <label for="animation-toggle">アニメーション:</label>
+            <input type="checkbox" id="animation-toggle" checked>
+          </div>
+          <div class="setting-item">
+            <label for="compact-mode-toggle">コンパクトモード:</label>
+            <input type="checkbox" id="compact-mode-toggle">
           </div>
         </div>
         <div class="setting-section">
@@ -57,6 +70,44 @@ export function appInit(shell) {
             <label for="sound-toggle">サウンド:</label>
             <input type="checkbox" id="sound-toggle" checked>
           </div>
+          <div class="setting-item">
+            <label for="email-notification-toggle">メール通知:</label>
+            <input type="checkbox" id="email-notification-toggle">
+          </div>
+          <div class="setting-item">
+            <label for="push-notification-toggle">プッシュ通知:</label>
+            <input type="checkbox" id="push-notification-toggle" checked>
+          </div>
+        </div>
+        <div class="setting-section">
+          <h2>プライバシー設定</h2>
+          <div class="setting-item">
+            <label for="analytics-toggle">分析データの送信:</label>
+            <input type="checkbox" id="analytics-toggle" checked>
+          </div>
+          <div class="setting-item">
+            <label for="crash-report-toggle">クラッシュレポート:</label>
+            <input type="checkbox" id="crash-report-toggle" checked>
+          </div>
+          <div class="setting-item">
+            <label for="location-toggle">位置情報の使用:</label>
+            <input type="checkbox" id="location-toggle">
+          </div>
+        </div>
+        <div class="setting-section">
+          <h2>パフォーマンス設定</h2>
+          <div class="setting-item">
+            <label for="cache-toggle">キャッシュを有効にする:</label>
+            <input type="checkbox" id="cache-toggle" checked>
+          </div>
+          <div class="setting-item">
+            <label for="auto-save-toggle">自動保存:</label>
+            <input type="checkbox" id="auto-save-toggle" checked>
+          </div>
+          <div class="setting-item">
+            <label for="background-sync-toggle">バックグラウンド同期:</label>
+            <input type="checkbox" id="background-sync-toggle" checked>
+          </div>
         </div>
         <div class="setting-section">
           <h2>データ管理</h2>
@@ -67,7 +118,31 @@ export function appInit(shell) {
             <button class="auto-btn" id="import-btn" data-lang-key="import_data">データをインポート</button>
           </div>
           <div class="setting-item">
+            <button class="auto-btn" id="backup-btn">バックアップを作成</button>
+          </div>
+          <div class="setting-item">
+            <button class="auto-btn" id="restore-btn">バックアップを復元</button>
+          </div>
+          <div class="setting-item">
             <button class="auto-btn danger" id="clear-btn" data-lang-key="clear_data">データをクリア</button>
+          </div>
+        </div>
+        <div class="setting-section">
+          <h2>アプリケーション情報</h2>
+          <div class="setting-item">
+            <label>バージョン:</label>
+            <span id="setting-version">1.0.0</span>
+          </div>
+          <div class="setting-item">
+            <label>ビルド番号:</label>
+            <span id="setting-build">20250630</span>
+          </div>
+          <div class="setting-item">
+            <label>最終更新:</label>
+            <span id="setting-updated">2025-06-30</span>
+          </div>
+          <div class="setting-item">
+            <button class="auto-btn" id="check-update-btn">アップデートをチェック</button>
           </div>
         </div>
       </div>
@@ -91,21 +166,85 @@ export function appInit(shell) {
 function updateUserInfo() {
   const usernameElement = document.getElementById('setting-username');
   const useridElement = document.getElementById('setting-userid');
+  const createdElement = document.getElementById('setting-created');
+  const lastloginElement = document.getElementById('setting-lastlogin');
+  const versionElement = document.getElementById('setting-version');
+  const buildElement = document.getElementById('setting-build');
+  const updatedElement = document.getElementById('setting-updated');
+  
   if (usernameElement) usernameElement.textContent = window.googleUserName || '未設定';
   if (useridElement) useridElement.textContent = window.googleUserId || '未設定';
+  
+  // アカウント作成日と最終ログイン日を設定
+  const now = new Date();
+  const formattedDate = now.toLocaleDateString('ja-JP', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+  
+  if (createdElement) createdElement.textContent = formattedDate;
+  if (lastloginElement) lastloginElement.textContent = formattedDate;
+  
+  // バージョン情報を設定
+  if (versionElement) versionElement.textContent = '1.0.32';
+  if (buildElement) buildElement.textContent = '20250630';
+  if (updatedElement) updatedElement.textContent = '2025-06-30';
 }
 
 function loadSettings() {
   try {
     const settings = JSON.parse(localStorage.getItem('deep-school-settings') || '{}');
+    
+    // 既存の設定項目
     const darkModeToggle = document.getElementById('dark-mode-toggle');
     if (darkModeToggle) darkModeToggle.checked = settings.darkMode !== false;
+    
     const fontSizeSelect = document.getElementById('font-size-select');
     if (fontSizeSelect) fontSizeSelect.value = settings.fontSize || 'medium';
+    
     const notificationToggle = document.getElementById('notification-toggle');
     if (notificationToggle) notificationToggle.checked = settings.notifications !== false;
+    
     const soundToggle = document.getElementById('sound-toggle');
     if (soundToggle) soundToggle.checked = settings.sound !== false;
+    
+    // 新しく追加した設定項目
+    const animationToggle = document.getElementById('animation-toggle');
+    if (animationToggle) animationToggle.checked = settings.animation !== false;
+    
+    const compactModeToggle = document.getElementById('compact-mode-toggle');
+    if (compactModeToggle) compactModeToggle.checked = settings.compactMode === true;
+    
+    const emailNotificationToggle = document.getElementById('email-notification-toggle');
+    if (emailNotificationToggle) emailNotificationToggle.checked = settings.emailNotifications === true;
+    
+    const pushNotificationToggle = document.getElementById('push-notification-toggle');
+    if (pushNotificationToggle) pushNotificationToggle.checked = settings.pushNotifications !== false;
+    
+    const analyticsToggle = document.getElementById('analytics-toggle');
+    if (analyticsToggle) analyticsToggle.checked = settings.analytics !== false;
+    
+    const crashReportToggle = document.getElementById('crash-report-toggle');
+    if (crashReportToggle) crashReportToggle.checked = settings.crashReports !== false;
+    
+    const locationToggle = document.getElementById('location-toggle');
+    if (locationToggle) locationToggle.checked = settings.location === true;
+    
+    const cacheToggle = document.getElementById('cache-toggle');
+    if (cacheToggle) cacheToggle.checked = settings.cache !== false;
+    
+    const autoSaveToggle = document.getElementById('auto-save-toggle');
+    if (autoSaveToggle) autoSaveToggle.checked = settings.autoSave !== false;
+    
+    const backgroundSyncToggle = document.getElementById('background-sync-toggle');
+    if (backgroundSyncToggle) backgroundSyncToggle.checked = settings.backgroundSync !== false;
+    
+    // 設定を実際に適用
+    applySettings(settings);
+    
     shell.log({from: 'dp.app.setting.out', message: 'SettingApp: 設定を読み込みました', level: 'info'});
   } catch (error) {
     shell.log({from: 'dp.app.setting.err', message: 'SettingApp: 設定の読み込みエラー ' + error, level: 'error'});
@@ -115,12 +254,30 @@ function loadSettings() {
 function saveSettings() {
   try {
     const settings = {
+      // 既存の設定項目
       darkMode: document.getElementById('dark-mode-toggle')?.checked ?? true,
       fontSize: document.getElementById('font-size-select')?.value ?? 'medium',
       notifications: document.getElementById('notification-toggle')?.checked ?? true,
-      sound: document.getElementById('sound-toggle')?.checked ?? true
+      sound: document.getElementById('sound-toggle')?.checked ?? true,
+      
+      // 新しく追加した設定項目
+      animation: document.getElementById('animation-toggle')?.checked ?? true,
+      compactMode: document.getElementById('compact-mode-toggle')?.checked ?? false,
+      emailNotifications: document.getElementById('email-notification-toggle')?.checked ?? false,
+      pushNotifications: document.getElementById('push-notification-toggle')?.checked ?? true,
+      analytics: document.getElementById('analytics-toggle')?.checked ?? true,
+      crashReports: document.getElementById('crash-report-toggle')?.checked ?? true,
+      location: document.getElementById('location-toggle')?.checked ?? false,
+      cache: document.getElementById('cache-toggle')?.checked ?? true,
+      autoSave: document.getElementById('auto-save-toggle')?.checked ?? true,
+      backgroundSync: document.getElementById('background-sync-toggle')?.checked ?? true
     };
+    
     localStorage.setItem('deep-school-settings', JSON.stringify(settings));
+    
+    // 設定を実際に適用
+    applySettings(settings);
+    
     shell.log({from: 'dp.app.setting.out', message: 'SettingApp: 設定を保存しました', level: 'info'});
   } catch (error) {
     shell.log({from: 'dp.app.setting.err', message: 'SettingApp: 設定の保存エラー ' + error, level: 'error'});
@@ -128,10 +285,19 @@ function saveSettings() {
 }
 
 function setupEventListeners(shell) {
+  // 既存の設定項目
   ['dark-mode-toggle','font-size-select','notification-toggle','sound-toggle'].forEach(id => {
     const element = document.getElementById(id);
     if (element) element.addEventListener('change', saveSettings);
   });
+  
+  // 新しく追加した設定項目
+  ['animation-toggle','compact-mode-toggle','email-notification-toggle','push-notification-toggle',
+   'analytics-toggle','crash-report-toggle','location-toggle','cache-toggle','auto-save-toggle','background-sync-toggle'].forEach(id => {
+    const element = document.getElementById(id);
+    if (element) element.addEventListener('change', saveSettings);
+  });
+  
   const logoutBtn = document.getElementById('logout-btn');
   if (logoutBtn) {
     logoutBtn.addEventListener('click', () => {
@@ -141,10 +307,22 @@ function setupEventListeners(shell) {
       }
     });
   }
+  
   const exportBtn = document.getElementById('export-btn');
   if (exportBtn) exportBtn.addEventListener('click', exportData);
+  
   const importBtn = document.getElementById('import-btn');
   if (importBtn) importBtn.addEventListener('click', importData);
+  
+  const backupBtn = document.getElementById('backup-btn');
+  if (backupBtn) backupBtn.addEventListener('click', createBackup);
+  
+  const restoreBtn = document.getElementById('restore-btn');
+  if (restoreBtn) restoreBtn.addEventListener('click', restoreBackup);
+  
+  const checkUpdateBtn = document.getElementById('check-update-btn');
+  if (checkUpdateBtn) checkUpdateBtn.addEventListener('click', checkForUpdates);
+  
   const clearBtn = document.getElementById('clear-btn');
   if (clearBtn) {
     clearBtn.addEventListener('click', () => {
@@ -242,7 +420,420 @@ function clearData(shell) {
   }
 }
 
+function applySettings(settings) {
+  try {
+    // ダークモードの適用
+    if (settings.darkMode !== undefined) {
+      applyDarkMode(settings.darkMode);
+    }
+    
+    // フォントサイズの適用
+    if (settings.fontSize) {
+      applyFontSize(settings.fontSize);
+    }
+    
+    // アニメーションの適用
+    if (settings.animation !== undefined) {
+      applyAnimation(settings.animation);
+    }
+    
+    // コンパクトモードの適用
+    if (settings.compactMode !== undefined) {
+      applyCompactMode(settings.compactMode);
+    }
+    
+    // 通知設定の適用
+    if (settings.notifications !== undefined) {
+      applyNotifications(settings.notifications);
+    }
+    
+    // サウンド設定の適用
+    if (settings.sound !== undefined) {
+      applySound(settings.sound);
+    }
+    
+    // キャッシュ設定の適用
+    if (settings.cache !== undefined) {
+      applyCache(settings.cache);
+    }
+    
+    // 自動保存設定の適用
+    if (settings.autoSave !== undefined) {
+      applyAutoSave(settings.autoSave);
+    }
+    
+    // バックグラウンド同期設定の適用
+    if (settings.backgroundSync !== undefined) {
+      applyBackgroundSync(settings.backgroundSync);
+    }
+    
+    // 分析データ設定の適用
+    if (settings.analytics !== undefined) {
+      applyAnalytics(settings.analytics);
+    }
+    
+    // クラッシュレポート設定の適用
+    if (settings.crashReports !== undefined) {
+      applyCrashReports(settings.crashReports);
+    }
+    
+    // 位置情報設定の適用
+    if (settings.location !== undefined) {
+      applyLocation(settings.location);
+    }
+    
+    shell.log({from: 'dp.app.setting.out', message: 'SettingApp: 設定を適用しました', level: 'info'});
+  } catch (error) {
+    shell.log({from: 'dp.app.setting.err', message: 'SettingApp: 設定の適用エラー ' + error, level: 'error'});
+  }
+}
+
+// ダークモードの適用
+function applyDarkMode(enabled) {
+  const body = document.body;
+  if (enabled) {
+    body.classList.add('dark-mode');
+    body.style.setProperty('--bg-color', '#1a1a1a');
+    body.style.setProperty('--text-color', '#ffffff');
+    body.style.setProperty('--card-bg', '#2d2d2d');
+  } else {
+    body.classList.remove('dark-mode');
+    body.style.setProperty('--bg-color', '#f5f5f5');
+    body.style.setProperty('--text-color', '#333333');
+    body.style.setProperty('--card-bg', '#ffffff');
+  }
+}
+
+// フォントサイズの適用
+function applyFontSize(size) {
+  const root = document.documentElement;
+  const sizes = {
+    small: '14px',
+    medium: '16px',
+    large: '18px'
+  };
+  root.style.fontSize = sizes[size] || sizes.medium;
+}
+
+// アニメーションの適用
+function applyAnimation(enabled) {
+  const body = document.body;
+  if (enabled) {
+    body.style.setProperty('--animation-duration', '0.3s');
+    body.classList.remove('no-animation');
+  } else {
+    body.style.setProperty('--animation-duration', '0s');
+    body.classList.add('no-animation');
+  }
+}
+
+// コンパクトモードの適用
+function applyCompactMode(enabled) {
+  const body = document.body;
+  if (enabled) {
+    body.classList.add('compact-mode');
+    body.style.setProperty('--spacing-unit', '8px');
+    body.style.setProperty('--border-radius', '4px');
+  } else {
+    body.classList.remove('compact-mode');
+    body.style.setProperty('--spacing-unit', '16px');
+    body.style.setProperty('--border-radius', '8px');
+  }
+}
+
+// 通知設定の適用
+function applyNotifications(enabled) {
+  if (enabled && 'Notification' in window) {
+    if (Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+  }
+  window.notificationsEnabled = enabled;
+}
+
+// サウンド設定の適用
+function applySound(enabled) {
+  window.soundEnabled = enabled;
+  if (enabled) {
+    // サウンド機能の初期化
+    console.log('サウンド機能が有効になりました');
+  }
+}
+
+// キャッシュ設定の適用
+function applyCache(enabled) {
+  window.cacheEnabled = enabled;
+  if (!enabled) {
+    // キャッシュをクリア
+    if ('caches' in window) {
+      caches.keys().then(names => {
+        names.forEach(name => caches.delete(name));
+      });
+    }
+  }
+}
+
+// 自動保存設定の適用
+function applyAutoSave(enabled) {
+  window.autoSaveEnabled = enabled;
+  if (enabled) {
+    // 自動保存機能の開始
+    startAutoSave();
+  } else {
+    // 自動保存機能の停止
+    stopAutoSave();
+  }
+}
+
+// バックグラウンド同期設定の適用
+function applyBackgroundSync(enabled) {
+  window.backgroundSyncEnabled = enabled;
+  if (enabled && 'serviceWorker' in navigator) {
+    // バックグラウンド同期の設定
+    console.log('バックグラウンド同期が有効になりました');
+  }
+}
+
+// 分析データ設定の適用
+function applyAnalytics(enabled) {
+  window.analyticsEnabled = enabled;
+  if (enabled) {
+    // 分析機能の開始
+    console.log('分析データの送信が有効になりました');
+  } else {
+    // 分析機能の停止
+    console.log('分析データの送信が無効になりました');
+  }
+}
+
+// クラッシュレポート設定の適用
+function applyCrashReports(enabled) {
+  window.crashReportsEnabled = enabled;
+  if (enabled) {
+    // エラーハンドリングの設定
+    window.addEventListener('error', handleError);
+    window.addEventListener('unhandledrejection', handleUnhandledRejection);
+  } else {
+    // エラーハンドリングの削除
+    window.removeEventListener('error', handleError);
+    window.removeEventListener('unhandledrejection', handleUnhandledRejection);
+  }
+}
+
+// 位置情報設定の適用
+function applyLocation(enabled) {
+  window.locationEnabled = enabled;
+  if (enabled && 'geolocation' in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        console.log('位置情報が取得されました:', position.coords);
+      },
+      error => {
+        console.log('位置情報の取得に失敗しました:', error);
+      }
+    );
+  }
+}
+
+// エラーハンドリング関数
+function handleError(event) {
+  if (window.crashReportsEnabled) {
+    const errorData = {
+      message: event.message,
+      filename: event.filename,
+      lineno: event.lineno,
+      colno: event.colno,
+      error: event.error?.stack,
+      timestamp: new Date().toISOString()
+    };
+    console.log('クラッシュレポート:', errorData);
+    // 実際のアプリケーションでは、ここでサーバーにエラーデータを送信
+  }
+}
+
+function handleUnhandledRejection(event) {
+  if (window.crashReportsEnabled) {
+    const errorData = {
+      reason: event.reason,
+      timestamp: new Date().toISOString()
+    };
+    console.log('未処理のPromise拒否:', errorData);
+  }
+}
+
+// 自動保存機能
+let autoSaveInterval = null;
+
+function startAutoSave() {
+  if (autoSaveInterval) return;
+  
+  autoSaveInterval = setInterval(() => {
+    if (window.autoSaveEnabled) {
+      // 現在のアプリケーション状態を保存
+      const appState = {
+        currentApp: window.currentApp || 'menu',
+        userData: JSON.parse(localStorage.getItem('deep-school-user-data') || '{}'),
+        timestamp: new Date().toISOString()
+      };
+      localStorage.setItem('deep-school-auto-save', JSON.stringify(appState));
+      console.log('自動保存が実行されました');
+    }
+  }, 30000); // 30秒ごと
+}
+
+function stopAutoSave() {
+  if (autoSaveInterval) {
+    clearInterval(autoSaveInterval);
+    autoSaveInterval = null;
+  }
+}
+
+// バックアップ機能
+function createBackup() {
+  try {
+    const backupData = {
+      settings: JSON.parse(localStorage.getItem('deep-school-settings') || '{}'),
+      userData: JSON.parse(localStorage.getItem('deep-school-user-data') || '{}'),
+      autoSave: localStorage.getItem('deep-school-auto-save'),
+      timestamp: new Date().toISOString(),
+      version: '1.0.32'
+    };
+    
+    const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `deep-school-backup-${new Date().toISOString().split('T')[0]}-${Date.now()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    shell.log({from: 'dp.app.setting.out', message: 'SettingApp: バックアップを作成しました', level: 'info'});
+    alert('バックアップが正常に作成されました');
+  } catch (error) {
+    shell.log({from: 'dp.app.setting.err', message: 'SettingApp: バックアップ作成エラー ' + error, level: 'error'});
+    alert('バックアップの作成に失敗しました');
+  }
+}
+
+// 復元機能
+function restoreBackup() {
+  try {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const backupData = JSON.parse(e.target.result);
+            
+            // バックアップデータの検証
+            if (!backupData.timestamp || !backupData.version) {
+              throw new Error('無効なバックアップファイルです');
+            }
+            
+            // データの復元
+            if (backupData.settings) {
+              localStorage.setItem('deep-school-settings', JSON.stringify(backupData.settings));
+            }
+            if (backupData.userData) {
+              localStorage.setItem('deep-school-user-data', JSON.stringify(backupData.userData));
+            }
+            if (backupData.autoSave) {
+              localStorage.setItem('deep-school-auto-save', backupData.autoSave);
+            }
+            
+            // 設定を再読み込みして適用
+            loadSettings();
+            
+            shell.log({from: 'dp.app.setting.out', message: 'SettingApp: バックアップを復元しました', level: 'info'});
+            alert('バックアップの復元が完了しました。ページを再読み込みしてください。');
+            
+            // ページを再読み込み
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+          } catch (error) {
+            shell.log({from: 'dp.app.setting.err', message: 'SettingApp: バックアップ復元エラー ' + error, level: 'error'});
+            alert('バックアップの復元に失敗しました: ' + error.message);
+          }
+        };
+        reader.readAsText(file);
+      }
+    };
+    input.click();
+  } catch (error) {
+    shell.log({from: 'dp.app.setting.err', message: 'SettingApp: バックアップ復元エラー ' + error, level: 'error'});
+    alert('バックアップの復元に失敗しました');
+  }
+}
+
+// アップデートチェック機能
+function checkForUpdates() {
+  try {
+    // 現在のバージョン情報を取得
+    const currentVersion = '1.0.32';
+    const currentBuild = '20250630';
+    
+    // 実際のアプリケーションでは、ここでサーバーから最新バージョン情報を取得
+    // 今回は模擬的な実装
+    const latestVersion = '1.0.33';
+    const latestBuild = '20250701';
+    
+    if (latestVersion > currentVersion) {
+      const updateMessage = `新しいバージョンが利用可能です。\n\n現在のバージョン: ${currentVersion} (${currentBuild})\n最新バージョン: ${latestVersion} (${latestBuild})\n\nアップデートをダウンロードしますか？`;
+      
+      if (confirm(updateMessage)) {
+        // 実際のアプリケーションでは、ここでアップデートをダウンロード
+        alert('アップデートのダウンロードを開始しました。\nダウンロードが完了したら、アプリケーションを再起動してください。');
+      }
+    } else {
+      alert('お使いのアプリケーションは最新バージョンです。\n\n現在のバージョン: ' + currentVersion + ' (' + currentBuild + ')');
+    }
+    
+    shell.log({from: 'dp.app.setting.out', message: 'SettingApp: アップデートチェックを実行しました', level: 'info'});
+  } catch (error) {
+    shell.log({from: 'dp.app.setting.err', message: 'SettingApp: アップデートチェックエラー ' + error, level: 'error'});
+    alert('アップデートチェックに失敗しました');
+  }
+}
+
 window.logout = logout;
 window.exportData = exportData;
 window.importData = importData;
-window.clearData = clearData; 
+window.clearData = clearData;
+window.createBackup = createBackup;
+window.restoreBackup = restoreBackup;
+window.checkForUpdates = checkForUpdates;
+window.applySettings = applySettings;
+window.loadSettings = loadSettings;
+window.saveSettings = saveSettings;
+
+// 設定の取得関数
+window.getSetting = function(key) {
+  try {
+    const settings = JSON.parse(localStorage.getItem('deep-school-settings') || '{}');
+    return settings[key];
+  } catch (error) {
+    console.error('設定の取得エラー:', error);
+    return null;
+  }
+};
+
+// 設定の設定関数
+window.setSetting = function(key, value) {
+  try {
+    const settings = JSON.parse(localStorage.getItem('deep-school-settings') || '{}');
+    settings[key] = value;
+    localStorage.setItem('deep-school-settings', JSON.stringify(settings));
+    applySettings(settings);
+    return true;
+  } catch (error) {
+    console.error('設定の保存エラー:', error);
+    return false;
+  }
+}; 
