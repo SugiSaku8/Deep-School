@@ -194,6 +194,12 @@ export function convertToHtml(inputText, shell) {
           visibleNextButtons.forEach(button => {
             if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Processing next button: " + button.id, level: 'info'});
             
+            // 優先度の高いボタンは上書きしない
+            if (button.getAttribute('data-priority') === 'high') {
+              if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Skipping high priority button: " + button.id, level: 'info'});
+              return;
+            }
+            
             // ボタンにクリックハンドラーがない場合、対応するスクリプトを探して設定
             if (!button.onclick) {
               // 対応する@scriptタグを探す
@@ -332,6 +338,8 @@ export function convertToHtml(inputText, shell) {
           (function() {
             var btn = (window.document ? window.document : document).getElementById("${btnIds}");
             if (btn) {
+              // 「次へ」ボタンの優先度を高く設定
+              btn.setAttribute('data-priority', 'high');
               btn.onclick = function() {
                 var doc = window.document ? window.document : document;
                 // 非表示のinputは除外（getComputedStyleで厳密に）
@@ -357,6 +365,35 @@ export function convertToHtml(inputText, shell) {
                   allInputs[current + 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
               };
+              
+              // 回答システムが上書きしないように、定期的にイベントハンドラーを復元
+              setInterval(function() {
+                if (btn && !btn.onclick) {
+                  if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.warn', message: "Restoring click handler for next button: " + btn.id, level: 'warn'});
+                  btn.onclick = function() {
+                    var doc = window.document ? window.document : document;
+                    var allInputs = Array.from(doc.querySelectorAll('.input-container input')).filter(i => {
+                      var container = i.closest('.input-container');
+                      return container && window.getComputedStyle(container).display !== 'none';
+                    });
+                    if (!allInputs.length) return;
+                    var current = allInputs.findIndex(i => i === doc.activeElement);
+                    if (current === -1) {
+                      var next = allInputs.find(i => !i.value);
+                      if (next) {
+                        next.focus();
+                        next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      } else {
+                        allInputs[0].focus();
+                        allInputs[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      }
+                    } else if (allInputs[current + 1]) {
+                      allInputs[current + 1].focus();
+                      allInputs[current + 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                  };
+                }
+              }, 1000);
             }
           })();
         </script>\n`;
@@ -382,6 +419,11 @@ export function convertToHtml(inputText, shell) {
         outputHtml += `  function initScript() {\n`;
         outputHtml += `    const element = document.getElementById("${scriptOn}");\n`;
         outputHtml += `    if (element) {\n`;
+        outputHtml += `      // 優先度の高いボタンは上書きしない\n`;
+        outputHtml += `      if (element.getAttribute('data-priority') === 'high') {\n`;
+        outputHtml += `        if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Skipping high priority element: ${scriptOn}", level: 'info'});\n`;
+        outputHtml += `        return;\n`;
+        outputHtml += `      }\n`;
         outputHtml += `      // Remove existing click handler to prevent duplicates\n`;
         outputHtml += `      element.onclick = null;\n`;
         outputHtml += `      element.onclick = function() {\n`;
