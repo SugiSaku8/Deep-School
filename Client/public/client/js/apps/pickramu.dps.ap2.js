@@ -379,14 +379,17 @@ export function appInit(shell) {
     document.getElementById('tab-eguide').classList.remove('active');
     // eguideエリアの高さ等をリセット
     const eguideArea = document.getElementById('pickramu-eguide-area');
-    eguideArea.style.height = '';
-    eguideArea.style.flex = '';
-    eguideArea.style.minWidth = '';
+    eguideArea.style.height = 'auto';
+    eguideArea.style.flex = 'initial';
+    eguideArea.style.minWidth = 'initial';
     // workエリアの高さ等もリセット
     const workArea = document.getElementById('pickramu-work-area');
-    workArea.style.height = '';
-    workArea.style.flex = '';
-    workArea.style.minWidth = '';
+    workArea.style.height = 'auto';
+    workArea.style.flex = 'initial';
+    workArea.style.minWidth = 'initial';
+    // もしiframeの高さが変になっていたらリセット
+    const workIframe = document.getElementById('pickramu_iframe');
+    if (workIframe) workIframe.style.height = 'auto';
   };
   document.getElementById('tab-eguide').onclick = () => {
     document.getElementById('pickramu-work-area').style.display = 'none';

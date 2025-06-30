@@ -7,6 +7,7 @@ export const appMeta = {
 };
 
 export function appInit(shell) {
+  const processor = new GeminiProcessor();
   const root = document.getElementById('app-root');
   if (!root) {
     console.error('ChatApp: #app-rootが見つかりません');
