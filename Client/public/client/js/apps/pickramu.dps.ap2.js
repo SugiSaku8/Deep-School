@@ -379,17 +379,21 @@ export function appInit(shell) {
     document.getElementById('tab-eguide').classList.remove('active');
     // eguideエリアの高さ等をリセット
     const eguideArea = document.getElementById('pickramu-eguide-area');
-    eguideArea.style.height = 'auto';
-    eguideArea.style.flex = 'initial';
-    eguideArea.style.minWidth = 'initial';
+    eguideArea.style.height = '';
+    eguideArea.style.flex = '';
+    eguideArea.style.minWidth = '';
     // workエリアの高さ等もリセット
     const workArea = document.getElementById('pickramu-work-area');
-    workArea.style.height = 'auto';
-    workArea.style.flex = 'initial';
-    workArea.style.minWidth = 'initial';
+    workArea.style.height = '';
+    workArea.style.flex = '';
+    workArea.style.minWidth = '';
     // もしiframeの高さが変になっていたらリセット
     const workIframe = document.getElementById('pickramu_iframe');
-    if (workIframe) workIframe.style.height = 'auto';
+    if (workIframe) {
+      workIframe.style.height = '';
+      workIframe.style.minHeight = '';
+      workIframe.style.flex = '';
+    }
   };
   document.getElementById('tab-eguide').onclick = () => {
     document.getElementById('pickramu-work-area').style.display = 'none';
@@ -399,6 +403,18 @@ export function appInit(shell) {
     document.getElementById('pickramu-eguide-area').style.minWidth = '0';
     document.getElementById('tab-pickramu').classList.remove('active');
     document.getElementById('tab-eguide').classList.add('active');
+    // workエリアの高さ等もリセット
+    const workArea = document.getElementById('pickramu-work-area');
+    workArea.style.height = '';
+    workArea.style.flex = '';
+    workArea.style.minWidth = '';
+    // もしiframeの高さが変になっていたらリセット
+    const workIframe = document.getElementById('pickramu_iframe');
+    if (workIframe) {
+      workIframe.style.height = '';
+      workIframe.style.minHeight = '';
+      workIframe.style.flex = '';
+    }
   };
 
   // 教材読み込みボタン
