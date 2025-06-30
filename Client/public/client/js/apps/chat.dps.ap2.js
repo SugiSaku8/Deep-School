@@ -43,7 +43,6 @@ export function appInit(shell) {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       position: relative;
       overflow: hidden;
     }
@@ -190,7 +189,6 @@ export function appInit(shell) {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       position: relative;
     }
     
@@ -260,79 +258,6 @@ export function appInit(shell) {
 
   // 戻るボタン
   document.getElementById('chat-back-btn').onclick = () => shell.loadApp('menu');
-
-  // Initialize parallax effects for chat elements
-  if (window.parallaxManager) {
-    const card = document.querySelector('.card');
-    const submitBtn = document.getElementById('submit-btn');
-    const chatSubmitBtn = document.getElementById('chat-submit-btn');
-    const newChatBtn = document.getElementById('new-chat-btn');
-    const backBtn = document.getElementById('chat-back-btn');
-    const userInput = document.getElementById('user-input');
-    const chatInput = document.getElementById('chat-input');
-    
-    if (card) {
-      window.parallaxManager.addParallaxEffects(card, {
-        hover: true,
-        mouse: true,
-        touch: false
-      });
-    }
-    
-    if (submitBtn) {
-      window.parallaxManager.addParallaxEffects(submitBtn, {
-        hover: true,
-        mouse: false,
-        touch: true,
-        ripple: true
-      });
-    }
-    
-    if (chatSubmitBtn) {
-      window.parallaxManager.addParallaxEffects(chatSubmitBtn, {
-        hover: true,
-        mouse: false,
-        touch: true,
-        ripple: true
-      });
-    }
-    
-    if (newChatBtn) {
-      window.parallaxManager.addParallaxEffects(newChatBtn, {
-        hover: true,
-        mouse: false,
-        touch: true,
-        ripple: true
-      });
-    }
-    
-    if (backBtn) {
-      window.parallaxManager.addParallaxEffects(backBtn, {
-        hover: true,
-        mouse: false,
-        touch: true,
-        ripple: true
-      });
-    }
-    
-    if (userInput) {
-      window.parallaxManager.addParallaxEffects(userInput, {
-        hover: true,
-        mouse: false,
-        touch: false
-      });
-    }
-    
-    if (chatInput) {
-      window.parallaxManager.addParallaxEffects(chatInput, {
-        hover: true,
-        mouse: false,
-        touch: false
-      });
-    }
-    
-    shell.log({from: 'dp.app.chat.out', message: 'ChatApp: Parallax effects initialized', level: 'info'});
-  }
 
   // メッセージ表示
   function addMessage(text, sender) {

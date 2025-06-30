@@ -270,6 +270,43 @@ body::after {
   gap: 15px;
 }
 
+.menu-item.from-left {
+  animation: menuInFromLeft 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.menu-item.from-right {
+  animation: menuInFromRight 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.menu-item.from-top {
+  animation: menuInFromTop 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.menu-item.from-bottom {
+  animation: menuInFromBottom 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+@keyframes menuInFromLeft {
+  from { transform: translateX(-40px) scale(0.98); opacity: 0.7; }
+  to { transform: translateX(0) scale(1); opacity: 1; }
+}
+@keyframes menuInFromRight {
+  from { transform: translateX(40px) scale(0.98); opacity: 0.7; }
+  to { transform: translateX(0) scale(1); opacity: 1; }
+}
+@keyframes menuInFromTop {
+  from { transform: translateY(-40px) scale(0.98); opacity: 0.7; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+@keyframes menuInFromBottom {
+  from { transform: translateY(40px) scale(0.98); opacity: 0.7; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .menu-item.from-left,
+  .menu-item.from-right,
+  .menu-item.from-top,
+  .menu-item.from-bottom {
+    animation: none !important;
+  }
+}
+
 .menu-icon, .scr-icon, .setting-icon, .toaster-icon, .pickramu-icon {
   width: 100px !important;
   height: 100px !important;

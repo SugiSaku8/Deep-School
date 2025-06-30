@@ -441,20 +441,35 @@ export function appInit(shell) {
     }
   });
 
-  // Initialize parallax effects for menu items (hover only)
-  if (window.parallaxManager) {
-    const menuItems = document.querySelectorAll('.menu-item');
-    menuItems.forEach(item => {
-      window.parallaxManager.addParallaxEffects(item, {
-        hover: true,
-        mouse: false,
-        touch: true,
-        ripple: false
-      });
-    });
-    shell.log({from: 'dp.app.menu.out', message: 'MenuApp: Parallax effects initialized', level: 'info'});
-  }
+  // parallax effects disabled
 
+  // Implement directional animation based on mouse entry direction
+  const menuItemEls = document.querySelectorAll('.menu-item');
+  menuItemEls.forEach(item => {
+    let lastMousePos = null;
+    item.addEventListener('mouseenter', (e) => {
+      const rect = item.getBoundingClientRect();
+      let direction = '';
+      if (e.clientX < rect.left + 10) direction = 'from-left';
+      else if (e.clientX > rect.right - 10) direction = 'from-right';
+      else if (e.clientY < rect.top + 10) direction = 'from-top';
+      else if (e.clientY > rect.bottom - 10) direction = 'from-bottom';
+      else {
+        // fallback: compare to center
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const dx = e.clientX - cx;
+        const dy = e.clientY - cy;
+        if (Math.abs(dx) > Math.abs(dy)) direction = dx < 0 ? 'from-left' : 'from-right';
+        else direction = dy < 0 ? 'from-top' : 'from-bottom';
+      }
+      item.classList.remove('from-left', 'from-right', 'from-top', 'from-bottom');
+      item.classList.add(direction);
+    });
+    item.addEventListener('mouseleave', () => {
+      item.classList.remove('from-left', 'from-right', 'from-top', 'from-bottom');
+    });
+  });
 
   // ユーザー情報の表示（ログイン済みの場合）
   if (window.googleUserName) {
