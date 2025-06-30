@@ -1,6 +1,6 @@
 {
   "deepSchoolFamily": {
-    "version": "25C891X1",
+    "version": "25C892X1",
     "status": "beta",
     "lastUpdated": "2025-06-30",
     "description": "Deep-School Family Software - Initial release"
@@ -24,7 +24,7 @@
     "description": "Deep-School Server - Initial stable release"
   },
   "pickramu": {
-    "version": "1.0.33",
+    "version": "1.0.34",
     "status": "beta",
     "cycle": 1,
     "release": 0,
@@ -78,7 +78,7 @@
     "description": "Setting - Initial beta release"
   },
   "toasterMachine": {
-    "version": "0.4.2",
+    "version": "0.4.3",
     "status": "beta",
     "cycle": 1,
     "release": 0,

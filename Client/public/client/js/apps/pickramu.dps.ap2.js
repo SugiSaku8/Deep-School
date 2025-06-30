@@ -1,11 +1,11 @@
 /* 
 Pickramu
 The Pickramu is a language for creating teaching materials for Deep-School.
-version:1.0.31
+version:1.0.33
 Development:Carnaion Studio
 License:MPL-2.0
 */
-export function convertToHtml(inputText) {
+export function convertToHtml(inputText, shell) {
   let outputHtml = "";
   // Remove lines starting with //
   const lines = inputText
@@ -92,26 +92,26 @@ export function convertToHtml(inputText) {
         outputHtml += `(function() {\n`;
         outputHtml += `  // Wait for DOM to be ready\n`;
         outputHtml += `  function initAnswerSystem() {\n`;
-        outputHtml += `    console.log("Initializing answer system for ${inputId} -> ${futterId}");\n`;
+        outputHtml += `    if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Initializing answer system for ${inputId} -> ${futterId}", level: 'info'});\n`;
         outputHtml += `    const input = document.getElementById("${inputId}_input");\n`;
         outputHtml += `    const button = document.getElementById("${buttonId}");\n`;
         outputHtml += `    const futterElement = document.getElementById("${futterId}");\n`;
         outputHtml += `    \n`;
-        outputHtml += `    console.log("Elements found:", { input: !!input, button: !!button, futter: !!futterElement });\n`;
+        outputHtml += `    if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Elements found: " + JSON.stringify({ input: !!input, button: !!button, futter: !!futterElement }), level: 'info'});\n`;
         outputHtml += `    \n`;
         outputHtml += `    if (!input || !button || !futterElement) {\n`;
-        outputHtml += `      console.error("Required elements not found:", { input: !!input, button: !!button, futter: !!futterElement });\n`;
+        outputHtml += `      if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.err', message: "Required elements not found: " + JSON.stringify({ input: !!input, button: !!button, futter: !!futterElement }), level: 'error'});\n`;
         outputHtml += `      return;\n`;
         outputHtml += `    }\n`;
         outputHtml += `    \n`;
         outputHtml += `    // Get the answer content that was stored during compilation\n`;
         outputHtml += `    const answerContent = ${JSON.stringify(answers[futterId] || "")};\n`;
-        outputHtml += `    console.log("Answer content for ${futterId}:", answerContent);\n`;
+        outputHtml += `    if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Answer content for ${futterId}: " + answerContent, level: 'info'});\n`;
         outputHtml += `    \n`;
         outputHtml += `    function checkAnswer() {\n`;
-        outputHtml += `      console.log("checkAnswer function called");\n`;
+        outputHtml += `      if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "checkAnswer function called", level: 'info'});\n`;
         outputHtml += `      const userAnswer = input.value.trim();\n`;
-        outputHtml += `      console.log("User answer:", userAnswer);\n`;
+        outputHtml += `      if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "User answer: " + userAnswer, level: 'info'});\n`;
         outputHtml += `      \n`;
         outputHtml += `      // Extract expected answer from the stored content - multiple patterns\n`;
         outputHtml += `      let expectedAnswer = "";\n`;
@@ -152,18 +152,18 @@ export function convertToHtml(inputText) {
         outputHtml += `          }\n`;
         outputHtml += `        }\n`;
         outputHtml += `      }\n`;
-        outputHtml += `      console.log("Expected answer:", expectedAnswer);\n`;
+        outputHtml += `      if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Expected answer: " + expectedAnswer, level: 'info'});\n`;
         outputHtml += `      \n`;
         outputHtml += `      // Check if user provided an answer\n`;
         outputHtml += `      if (!userAnswer) {\n`;
-        outputHtml += `        alert("答えを入力してください。");\n`;
+        outputHtml += `        if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.warn', message: "答えを入力してください。", level: 'warn'});\n`;
         outputHtml += `        input.focus();\n`;
         outputHtml += `        return;\n`;
         outputHtml += `      }\n`;
         outputHtml += `      \n`;
         outputHtml += `      // If no expected answer found, just show the answer content\n`;
         outputHtml += `      if (!expectedAnswer) {\n`;
-        outputHtml += `        console.log("No expected answer found, showing answer content");\n`;
+        outputHtml += `        if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "No expected answer found, showing answer content", level: 'info'});\n`;
         outputHtml += `        document.getElementById("${inputId}").style.display = "none";\n`;
         outputHtml += `        document.getElementById("${futterId}").style.display = "block";\n`;
         outputHtml += `        return;\n`;
@@ -171,17 +171,17 @@ export function convertToHtml(inputText) {
         outputHtml += `      \n`;
         outputHtml += `      // Check if answer is correct (case-insensitive, trim whitespace)\n`;
         outputHtml += `      const isCorrect = userAnswer.toLowerCase().trim() === expectedAnswer.toLowerCase().trim();\n`;
-        outputHtml += `      console.log("Answer check:", { userAnswer, expectedAnswer, isCorrect });\n`;
+        outputHtml += `      if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Answer check: " + JSON.stringify({ userAnswer, expectedAnswer, isCorrect }), level: 'info'});\n`;
         outputHtml += `      \n`;
         outputHtml += `      if (isCorrect) {\n`;
-        outputHtml += `        console.log("Correct answer!");\n`;
+        outputHtml += `        if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Correct answer!", level: 'info'});\n`;
         outputHtml += `        // Show correct answer\n`;
         outputHtml += `        document.getElementById("${inputId}").style.display = "none";\n`;
         outputHtml += `        document.getElementById("${futterId}").style.display = "block";\n`;
         outputHtml += `      } else {\n`;
-        outputHtml += `        console.log("Incorrect answer");\n`;
+        outputHtml += `        if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.warn', message: "Incorrect answer: あなたの答え: " + userAnswer + " 正解: " + expectedAnswer, level: 'warn'});\n`;
         outputHtml += `        // Show error message with retry option\n`;
-        outputHtml += `        const retry = confirm("不正解です。\\n\\nあなたの答え: " + userAnswer + "\\n正解: " + expectedAnswer + "\\n\\nもう一度試しますか？");\n`;
+        outputHtml += `        const retry = window.confirm("不正解です。\\n\\nあなたの答え: " + userAnswer + "\\n正解: " + expectedAnswer + "\\n\\nもう一度試しますか？");\n`;
         outputHtml += `        if (retry) {\n`;
         outputHtml += `          input.value = "";\n`;
         outputHtml += `          input.focus();\n`;
@@ -190,26 +190,26 @@ export function convertToHtml(inputText) {
         outputHtml += `    }\n`;
         outputHtml += `    \n`;
         outputHtml += `    // Button click handler\n`;
-        outputHtml += `    console.log("Setting up button click handler for button ${buttonId}");\n`;
+        outputHtml += `    if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Setting up button click handler for button ${buttonId}", level: 'info'});\n`;
         outputHtml += `    button.onclick = checkAnswer;\n`;
         outputHtml += `    \n`;
         outputHtml += `    // Enter key handler\n`;
-        outputHtml += `    console.log("Setting up Enter key handler for input ${inputId}_input");\n`;
+        outputHtml += `    if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Setting up Enter key handler for input ${inputId}_input", level: 'info'});\n`;
         outputHtml += `    input.addEventListener("keypress", function(e) {\n`;
         outputHtml += `      if (e.key === "Enter") {\n`;
-        outputHtml += `        console.log("Enter key pressed");\n`;
+        outputHtml += `        if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Enter key pressed", level: 'info'});\n`;
         outputHtml += `        checkAnswer();\n`;
         outputHtml += `      }\n`;
         outputHtml += `    });\n`;
         outputHtml += `    \n`;
-        outputHtml += `    console.log("Answer system initialized for ${inputId} -> ${futterId}");\n`;
+        outputHtml += `    if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Answer system initialized for ${inputId} -> ${futterId}", level: 'info'});\n`;
         outputHtml += `  }\n`;
         outputHtml += `  \n`;
         outputHtml += `  // Try to initialize immediately, then on DOMContentLoaded\n`;
-        outputHtml += `  console.log("Calling initAnswerSystem immediately");\n`;
+        outputHtml += `  if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Calling initAnswerSystem immediately", level: 'info'});\n`;
         outputHtml += `  initAnswerSystem();\n`;
         outputHtml += `  if (document.readyState === 'loading') {\n`;
-        outputHtml += `    console.log("Document still loading, adding DOMContentLoaded listener");\n`;
+        outputHtml += `    if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Document still loading, adding DOMContentLoaded listener", level: 'info'});\n`;
         outputHtml += `    document.addEventListener('DOMContentLoaded', initAnswerSystem);\n`;
         outputHtml += `  }\n`;
         outputHtml += `})();\n`;
@@ -295,7 +295,7 @@ export function convertToHtml(inputText) {
         outputHtml += `})();\n`;
         outputHtml += `</script>\n`;
       } else {
-        console.error("Error: Missing closing script tag");
+        if (shell && shell.log) shell.log({from: 'dp.app.pickramu.err', message: 'Error: Missing closing script tag', level: 'error'});
         return null;
       }
       i++;
@@ -545,7 +545,7 @@ export function appInit(shell) {
         const res = await fetch(fetchUrl);
         if (res.ok) {
           const text = await res.text();
-          const html = convertToHtml(text);
+          const html = convertToHtml(text, shell);
           shell.log({from: 'dp.app.menu.out', message: `Pickramu-Compiler:Complied html:\n${html}`, level: 'info'});
 
           // Define the CSS styles
@@ -901,10 +901,10 @@ export function appInit(shell) {
             }
           };
         } else {
-          console.error("Error: Failed to fetch the content");
+          shell.log({from: 'dp.app.pickramu.err', message: 'Error: Failed to fetch the content', level: 'error'});
         }
       } catch (e) {
-        console.error("Error: ", e);
+        shell.log({from: 'dp.app.pickramu.err', message: 'Error: ' + e, level: 'error'});
       }
     }
   };
