@@ -15,6 +15,25 @@ export function appInit(shell) {
   }
   root.innerHTML = `
     <div class="menu-container">
+      <div class="blackboard-panel">
+        <div class="blackboard-content">
+          <div class="blackboard-header">
+            <div class="chalk-icon">📅</div>
+            <h2 class="chalk-text">今日の情報</h2>
+          </div>
+          <div class="info-section">
+            <div class="info-item">
+              <span class="info-label chalk-text">日付:</span>
+              <span class="info-value chalk-text" id="current-date"></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label chalk-text">アカウント:</span>
+              <span class="info-value chalk-text" id="user-account"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       <div class="menu-content">
         <div class="menu-item">
           <img src="re/ico/tm.png" alt="ToasterMachineアイコン" class="menu-icon" />
@@ -35,25 +54,6 @@ export function appInit(shell) {
         <div class="menu-item">
           <img src="re/ico/note.svg" alt="Pickramuアイコン" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-pickramu" style="cursor: pointer" data-lang-key="menu_pickramu">Pickramu</div>
-        </div>
-      </div>
-      
-      <div class="blackboard-panel">
-        <div class="blackboard-content">
-          <div class="blackboard-header">
-            <div class="chalk-icon">📅</div>
-            <h2 class="chalk-text">今日の情報</h2>
-          </div>
-          <div class="info-section">
-            <div class="info-item">
-              <span class="info-label chalk-text">日付:</span>
-              <span class="info-value chalk-text" id="current-date"></span>
-            </div>
-            <div class="info-item">
-              <span class="info-label chalk-text">アカウント:</span>
-              <span class="info-value chalk-text" id="user-account"></span>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -149,19 +149,22 @@ export function appInit(shell) {
     text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   }
   
-  /* Blackboard Panel */
+  /* Blackboard Panel - Vertical Chalk Style */
   .blackboard-panel {
-    width: 350px;
-    min-height: 400px;
+    width: 280px;
+    min-height: 100vh;
     background: linear-gradient(135deg, #2c3e50 0%, #34495e 50%, #2c3e50 100%);
-    border-radius: 20px;
+    border-radius: 0 20px 20px 0;
     border: 3px solid #1a252f;
+    border-left: none;
     box-shadow: 
       0 10px 30px rgba(0, 0, 0, 0.3),
       inset 0 2px 4px rgba(255, 255, 255, 0.1),
       inset 0 -2px 4px rgba(0, 0, 0, 0.2);
     position: relative;
     overflow: hidden;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
   }
   
   .blackboard-panel::before {
@@ -178,65 +181,89 @@ export function appInit(shell) {
   }
   
   .blackboard-content {
-    padding: 2rem;
+    padding: 2rem 1rem;
     position: relative;
     z-index: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
   }
   
   .blackboard-header {
     display: flex;
+    flex-direction: column;
     align-items: center;
     gap: 1rem;
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
     padding-bottom: 1rem;
     border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
   }
   
   .chalk-icon {
-    font-size: 2rem;
+    font-size: 2.5rem;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    writing-mode: horizontal-tb;
   }
   
   .blackboard-header h2 {
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     font-weight: 700;
     color: #ecf0f1;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     font-family: 'Courier New', monospace;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    letter-spacing: 0.2em;
   }
   
   .info-section {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 2rem;
+    align-items: center;
   }
   
   .info-item {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    padding: 1rem;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1.5rem 1rem;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    min-height: 200px;
   }
   
   .info-label {
-    font-size: 0.9rem;
+    font-size: 1rem;
     color: #bdc3c7;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3em;
     font-family: 'Courier New', monospace;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
   }
   
   .info-value {
-    font-size: 1.1rem;
+    font-size: 1.3rem;
     color: #ecf0f1;
     font-weight: 700;
     font-family: 'Courier New', monospace;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    letter-spacing: 0.1em;
+    text-align: center;
+    line-height: 1.8;
   }
   
   /* Dark mode adjustments */
@@ -262,7 +289,49 @@ export function appInit(shell) {
     .blackboard-panel {
       width: 100%;
       max-width: 500px;
+      min-height: 300px;
       order: -1;
+      writing-mode: horizontal-tb;
+      border-radius: 20px;
+      border: 3px solid #1a252f;
+    }
+    
+    .blackboard-content {
+      writing-mode: horizontal-tb;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      padding: 2rem;
+    }
+    
+    .blackboard-header {
+      writing-mode: horizontal-tb;
+      flex-direction: row;
+      margin-bottom: 0;
+      margin-right: 2rem;
+    }
+    
+    .blackboard-header h2 {
+      writing-mode: horizontal-tb;
+    }
+    
+    .info-section {
+      flex-direction: row;
+      gap: 2rem;
+    }
+    
+    .info-item {
+      writing-mode: horizontal-tb;
+      min-height: auto;
+      min-width: 150px;
+    }
+    
+    .info-label {
+      writing-mode: horizontal-tb;
+    }
+    
+    .info-value {
+      writing-mode: horizontal-tb;
     }
   }
   
@@ -292,11 +361,28 @@ export function appInit(shell) {
     }
     
     .blackboard-panel {
-      min-height: 300px;
+      min-height: 250px;
     }
     
     .blackboard-content {
       padding: 1.5rem;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .blackboard-header {
+      margin-bottom: 1rem;
+      margin-right: 0;
+    }
+    
+    .info-section {
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .info-item {
+      min-width: auto;
+      padding: 1rem;
     }
   }
   </style>
