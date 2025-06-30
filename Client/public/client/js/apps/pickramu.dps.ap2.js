@@ -281,7 +281,11 @@ export function convertToHtml(inputText, shell) {
             if (btn) {
               btn.onclick = function() {
                 var doc = window.document ? window.document : document;
-                var allInputs = Array.from(doc.querySelectorAll('.input-container input'));
+                // 修正: 非表示のinputは除外
+                var allInputs = Array.from(doc.querySelectorAll('.input-container input')).filter(i => {
+                  var container = i.closest('.input-container');
+                  return container && container.style.display !== 'none';
+                });
                 if (!allInputs.length) return;
                 var current = allInputs.findIndex(i => i === doc.activeElement);
                 if (current === -1) {
