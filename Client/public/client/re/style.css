@@ -252,14 +252,34 @@ body::after {
   padding: 0;
 }
 
-.menu-content {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 40px;
-  width: 100%;
-  margin: 2.5rem 0 2.5rem 0;
+.menu-container, .menu-content {
+  background: linear-gradient(135deg,
+    #1a3a1a 0%,
+    #18422a 18%,
+    #17603a 36%,
+    #005f30 54%,
+    #18422a 72%,
+    #22382b 86%,
+    #2d3436 100%
+  );
+  background-size: 200% 200%;
+  animation: menuGradientMove 16s ease-in-out infinite alternate;
+}
+@keyframes menuGradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .menu-container, .menu-content {
+    animation: none !important;
+  }
 }
 
 .menu-item {

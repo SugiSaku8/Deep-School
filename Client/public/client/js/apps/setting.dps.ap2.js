@@ -820,13 +820,10 @@ function restoreBackup() {
 function checkForUpdates() {
   try {
     // 現在のバージョン情報を取得
-    const currentVersion = '0.2.1';
-    const currentBuild = '25C897X1';
-    
-    // 実際のアプリケーションでは、ここでサーバーから最新バージョン情報を取得
-    // 今回は模擬的な実装
-    const latestVersion = '0.2.1';
-    const latestBuild = '25C897X1';
+    const currentVersion = '0.2.2';
+    const currentBuild = '25C914X1';
+    const latestVersion = '0.2.2';
+    const latestBuild = '25C914X1';
     
     if (latestVersion > currentVersion) {
       const updateMessage = `新しいバージョンが利用可能です。\n\n現在のバージョン: ${currentVersion} (${currentBuild})\n最新バージョン: ${latestVersion} (${latestBuild})\n\nアップデートをダウンロードしますか？`;
