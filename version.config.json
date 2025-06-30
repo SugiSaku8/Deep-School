@@ -1,6 +1,6 @@
 {
   "deepSchoolFamily": {
-    "version": "25C931X1",
+    "version": "25C932X1",
     "status": "beta",
     "lastUpdated": "2025-06-30",
     "description": "Deep-School Family Software - Initial release"
@@ -78,7 +78,7 @@
     "description": "Setting - Initial beta release"
   },
   "toasterMachine": {
-    "version": "0.4.8",
+    "version": "0.4.9",
     "status": "beta",
     "cycle": 0,
     "release": 1,

@@ -176,10 +176,11 @@ export function appInit(shell) {
       display: flex;
       flex-direction: column;
       position: relative;
+      padding-top: 80px;
     }
     
     .new-chat-btn {
-      margin: 20px;
+      margin: 0 20px 20px 20px;
       align-self: flex-start;
       background: rgba(255, 255, 255, 0.1);
       border: 2px solid rgba(255, 255, 255, 0.3);
