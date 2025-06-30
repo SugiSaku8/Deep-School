@@ -180,36 +180,54 @@ export function convertToHtml(inputText, shell) {
         outputHtml += `        inputContainer.style.display = "none";\n`;
         outputHtml += `        futterElement.style.display = "block";\n`;
         outputHtml += `        \n`;
-        outputHtml += `        // Re-initialize any scripts that might be needed for the next section\n`;
-        outputHtml += `        setTimeout(() => {\n`;
-        outputHtml += `          // Find and re-initialize any script elements that might need to be re-run\n`;
-        outputHtml += `          const scripts = document.querySelectorAll('script');\n`;
-        outputHtml += `          scripts.forEach(script => {\n`;
-        outputHtml += `            if (script.textContent.includes('initScript') || script.textContent.includes('onclick')) {\n`;
-        outputHtml += `              try {\n`;
-        outputHtml += `                // Re-evaluate the script content\n`;
-        outputHtml += `                const newScript = document.createElement('script');\n`;
-        outputHtml += `                newScript.textContent = script.textContent;\n`;
-        outputHtml += `                document.head.appendChild(newScript);\n`;
-        outputHtml += `                document.head.removeChild(newScript);\n`;
-        outputHtml += `              } catch (e) {\n`;
-        outputHtml += `                if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.err', message: "Error re-initializing script: " + e.message, level: 'error'});\n`;
-        outputHtml += `              }\n`;
-        outputHtml += `            }\n`;
-        outputHtml += `          });\n`;
-        outputHtml += `          
-          // Also try to manually trigger any "次へ" buttons that might be visible
-          const nextButtons = document.querySelectorAll('button');
-          nextButtons.forEach(button => {
-            if (button.textContent.includes('次へ') && button.style.display !== 'none') {
-              if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Found visible next button: " + button.id, level: 'info'});
-              // Ensure the button has a click handler
-              if (!button.onclick) {
-                if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.warn', message: "Next button has no click handler: " + button.id, level: 'warn'});
+        outputHtml += `        // 回答表示後に「次へ」ボタンのイベントハンドラーを確実に再設定
+        setTimeout(() => {
+          // 現在表示されている「次へ」ボタンを探して、イベントハンドラーを再設定
+          const visibleNextButtons = Array.from(document.querySelectorAll('button')).filter(btn => 
+            btn.textContent.includes('次へ') && 
+            btn.style.display !== 'none' && 
+            window.getComputedStyle(btn).display !== 'none'
+          );
+          
+          if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Found " + visibleNextButtons.length + " visible next buttons after answer", level: 'info'});
+          
+          visibleNextButtons.forEach(button => {
+            if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Processing next button: " + button.id, level: 'info'});
+            
+            // ボタンにクリックハンドラーがない場合、対応するスクリプトを探して設定
+            if (!button.onclick) {
+              // 対応する@scriptタグを探す
+              const scriptElements = document.querySelectorAll('script');
+              let scriptFound = false;
+              
+              scriptElements.forEach(script => {
+                const scriptContent = script.textContent;
+                if (scriptContent.includes('on=' + button.id) || 
+                    scriptContent.includes('getElementById("' + button.id + '")') ||
+                    scriptContent.includes('getElementById(\'' + button.id + '\')')) {
+                  
+                  try {
+                    // スクリプトを再実行
+                    const newScript = document.createElement('script');
+                    newScript.textContent = scriptContent;
+                    document.head.appendChild(newScript);
+                    document.head.removeChild(newScript);
+                    scriptFound = true;
+                    if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Re-executed script for button: " + button.id, level: 'info'});
+                  } catch (e) {
+                    if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.err', message: "Error re-executing script for button " + button.id + ": " + e.message, level: 'error'});
+                  }
+                }
+              });
+              
+              if (!scriptFound) {
+                if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.warn', message: "No script found for button: " + button.id, level: 'warn'});
               }
+            } else {
+              if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Button " + button.id + " already has click handler", level: 'info'});
             }
           });
-        }, 100);\n`;
+        }, 50);\n`;
         outputHtml += `      } else {\n`;
         outputHtml += `        if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.warn', message: "Incorrect answer: あなたの答え: " + userAnswer + " 正解: " + expectedAnswer, level: 'warn'});\n`;
         outputHtml += `        // Show error message with retry option\n`;
