@@ -1,12 +1,11 @@
 @tag unit-title [open] Jla-2 数学 Unit 1
 @tag unit-title [close]
-@tag chapter-title [open] 式の計算 1節 用語 Chapter 2
+@tag chapter-title [open] 式の計算 1節 乗法・除法 Chapter2 
 @tag chapter-title [close]
-
 @tag n1 [open]
 
 @tag question [open]
-$ 5a+2 $の項をすべて答えましょう。
+$ 5a \times \frac{1}{5}b $を計算しましょう。
 @tag question [close]
 
 @tag answer [open]
@@ -17,8 +16,7 @@ $ 5a+2 $の項をすべて答えましょう。
 @input q1_input futter=q1_answer [close] 
 
 @futter q1_answer futter=q1_answer [open]
-正解は「$ 5a,2 $」です。/br
-※1は+1でも〇
+正解は「$ ab $」です。
 @futter q1_answer futter=q1_answer [close]
 
 @tag answer [close]
@@ -35,7 +33,7 @@ dom.Tag("n2").style.display('block','auto');
 @tag n2 [open]
 
 @tag question [open]
-$ 2y-x^2 y $の項をすべて答えましょう。
+$ 0.005x \times 6x^2y $を計算しましょう。
 @tag question [close]
 
 @tag answer [open]
@@ -46,7 +44,7 @@ $ 2y-x^2 y $の項をすべて答えましょう。
 @input q2_input futter=q1_answer [close] 
 
 @futter q1_answer futter=q1_answer [open]
-正解は「$ 2y,-x^2 y $」です。
+正解は「$ 0.03x^3y $」です。
 @futter q2_answer futter=q1_answer [close]
 
 @tag answer [close]
@@ -63,7 +61,7 @@ dom.Tag("n3").style.display('block','auto');
 @tag n3 [open]
 
 @tag question [open]
-$ x^2 y $の次数を言いましょう。
+$ 4x \times \frac{x+y}{4} $を計算しましょう。
 @tag question [close]
 
 @tag answer [open]
@@ -74,7 +72,7 @@ $ x^2 y $の次数を言いましょう。
 @input q3_input futter=q1_answer [close] 
 
 @futter q3_answer futter=q1_answer [open]
-正解は「$ 3 $」です。
+正解は「$ x^2+xy $」です。
 @futter q3_answer futter=q1_answer [close]
 
 @tag answer [close]
@@ -91,7 +89,7 @@ dom.Tag("n4").style.display('block','auto');
 @tag n4 [open]
 
 @tag question [open]
-$ 4x $は単項式と多項式のどちらに当てはまりますか。
+$ 121a^3 \div 11a^2 $を計算しましょう。
 @tag question [close]
 
 @tag answer [open]
@@ -102,7 +100,7 @@ $ 4x $は単項式と多項式のどちらに当てはまりますか。
 @input q4_input futter=q1_answer [close] 
 
 @futter q4_answer futter=q1_answer [open]
-正解は「単項式」です。
+正解は「$ 11a $」です。
 @futter q4_answer futter=q1_answer [close]
 
 @tag answer [close]
@@ -119,7 +117,7 @@ dom.Tag("n5").style.display('block','auto');
 @tag n5 [open]
 
 @tag question [open]
-式の項の中で、文字の部分が全く同じ項のことを何と言いますか。
+$ 4x^3 \div \frac{8}{3}x^2y^3 \times 16xy^3 $を計算しなさい。
 @tag question [close]
 
 @tag answer [open]
@@ -130,12 +128,12 @@ dom.Tag("n5").style.display('block','auto');
 @input q5_input futter=q1_answer [close] 
 
 @futter q5_answer futter=q1_answer [open]
-正解は「同類項」です。
+正解は「$ 24x^2 $」です。/br
 @futter q5_answer futter=q1_answer [close]
 
 @tag answer [close]
 
-@btn id=next5 次へ
+@btn id=next5 おしまい
 
 @tag n5 [close]
 

@@ -1,0 +1,148 @@
+@tag unit-title [open] Jla-2 数学 Unit 1
+@tag unit-title [close]
+@tag chapter-title [open] 式の計算 1節 分配法則・分数 Chapter3
+@tag chapter-title [close]
+@tag n1 [open]
+
+@tag question [open]
+$ 2(3n+m) $を計算しましょう。
+@tag question [close]
+
+@tag answer [open]
+
+@input q1_input [open]
+回答を入力してください。
+@btn on=^set^ 回答する
+@input q1_input futter=q1_answer [close] 
+
+@futter q1_answer futter=q1_answer [open]
+正解は「$ 6n+2m $」です。
+@futter q1_answer futter=q1_answer [close]
+
+@tag answer [close]
+
+@btn id=next1 次へ
+
+@tag n1 [close]
+
+@script on=next1 [open]
+dom.Tag("n1").style.display('none','auto');
+dom.Tag("n2").style.display('block','auto');
+@script [close]
+
+@tag n2 [open]
+
+@tag question [open]
+$ 3(2a-5b+12c) $を計算しましょう。
+@tag question [close]
+
+@tag answer [open]
+
+@input q2_input [open]
+回答を入力してください。
+@btn on=^set^ 回答する
+@input q2_input futter=q1_answer [close] 
+
+@futter q1_answer futter=q1_answer [open]
+正解は「$ 6a-15b+36c $」です。
+@futter q2_answer futter=q1_answer [close]
+
+@tag answer [close]
+
+@btn id=next2 次へ
+
+@tag n2 [close]
+
+@script on=next2 [open]
+dom.Tag("n2").style.display('none','auto');
+dom.Tag("n3").style.display('block','auto');
+@script [close]
+
+@tag n3 [open]
+
+@tag question [open]
+$ \frac{x+y}{3} + \frac{x+y}{4} $を計算しましょう。
+@tag question [close]
+
+@tag answer [open]
+
+@input q3_input [open]
+回答を入力してください。
+@btn on=^set^ 回答する
+@input q3_input futter=q1_answer [close] 
+
+@futter q3_answer futter=q1_answer [open]
+正解は「$ \frac{7x+7y}{12} $」です。/br
+(別解:$ /frac{7x}{12} + {7y}{12} $ )
+@futter q3_answer futter=q1_answer [close]
+
+@tag answer [close]
+
+@btn id=next3 次へ
+
+@tag n3 [close]
+
+@script on=next3 [open]
+dom.Tag("n3").style.display('none','auto');
+dom.Tag("n4").style.display('block','auto');
+@script [close]
+
+@tag n4 [open]
+
+@tag question [open]
+$ \frac{5x+2}{2} - \frac{6x-4}{4} $を計算しましょう。
+@tag question [close]
+
+@tag answer [open]
+
+@input q4_input [open]
+回答を入力してください。
+@btn on=^set^ 回答する
+@input q4_input futter=q1_answer [close] 
+
+@futter q4_answer futter=q1_answer [open]
+正解は「$ x+2 $」です。
+@futter q4_answer futter=q1_answer [close]
+
+@tag answer [close]
+
+@btn id=next4 次へ
+
+@tag n4 [close]
+
+@script on=next4 [open]
+dom.Tag("n4").style.display('none','auto');
+dom.Tag("n5").style.display('block','auto');
+@script [close]
+
+@tag n5 [open]
+
+@tag question [open]
+$ \frac{1}{11}(22x-121y-242z) + \frac{1}{2}(1x+23y+19z) $を計算しなさい。
+@tag question [close]
+
+@tag answer [open]
+
+@input q5_input [open]
+回答を入力してください。/br
+ヒント : 片方の分数は簡単にできるかも。/br
+答えはきもい by 解説かいてる人
+@btn on=^set^ 回答する
+@input q5_input futter=q1_answer [close] 
+
+@futter q5_answer futter=q1_answer [open]
+正解は「$ \frac{3}{2}x + \frac{1}{2}y - /frac{25}{2}z $」です。/br
+(別解:$ \frac{3x+y-25z}{2} $)
+@futter q5_answer futter=q1_answer [close]
+
+@tag answer [close]
+
+@btn id=next5 おしまい
+
+@tag n5 [close]
+
+@script on=next5 [open]
+dom.back();
+@script [close] 
+
+

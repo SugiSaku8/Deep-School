@@ -1,14 +1,15 @@
 @tag unit-title [open] Jla-2 数学 Unit 1
 @tag unit-title [close]
-@tag chapter-title [open] 式の計算 1節 加法,減法 Chapter1 
+@tag chapter-title [open] 式の計算 1節 用語 Chapter 1
 @tag chapter-title [close]
 
 @tag n1 [open]
 
 @tag question [open]
-前の用語の問題とけた？/br
-質問したかったら多分できるはず。/br
-たぶん。え？そうだよね？
+こんにちは！/br
+2年生の最初のやつです！/br
+まあこのくらいのテンションでいいのか？/br
+次へボタンで次進んでー
 @tag question [close]
 
 @btn id=next1 次へ
@@ -18,9 +19,9 @@
 @tag n2 [open]
 
 @tag question [open]
-さて今回は、多項式を足したり引いたりしよう！/br
-まあ用語覚えるよりこっちの方がまだ楽しいけど/br
-どっちにしろ楽しくないのよここ。
+まあこの単元は式の計算だから、/br
+文字がたくさんでてくるねーっていうやつ。/br
+今回は用語を覚えようっていう回。
 @tag question [close]
 
 @btn id=next2 次へ
@@ -31,8 +32,10 @@
 @tag n3 [open]
 
 @tag question [open]
-まあ先に言うと、一年とほぼ同じ。/br
-解説すこしさぼりまーす/br
+まず、$2$、$x$とかのぼっちや、/br
+$-3x$,$-\frac{4}{3}xy$とかの一つのセットを単項式、/br
+その単項式を$+$か$-$でつないだ、/br
+$-x+15$,$2y+5x-4z$とかは多項式っていう名前！
 @tag question [close]
 
 @btn id=next3 次へ
@@ -42,10 +45,8 @@
 @tag n4 [open]
 
 @tag question [open]
-同類項をまとめる。/br
-$3a$と、$-2a$をまとめると？/br
-$a$ですね。って感じ。/br
-細かく書くなら、$(3-2)a$
+まあ名前そのままだね。/br
+単 か 多か。
 @tag question [close]
 
 @btn id=next4 次へ
@@ -55,26 +56,12 @@ $a$ですね。って感じ。/br
 @tag n5 [open]
 
 @tag question [open]
-文字が増えても同じ。/br
-解けるかな？/br
-$x - 2y + 3x - 4y$
+で、項は覚えてる？一年でやったやつ/br
+まあ$+$とか$-$の前で区切ったやつ。/br
+例えば、$6x - 5y$だったら、$6x$と$-5y$。/br
+$-2x + 5 - 7y$だったら、$-2x$,$+5$,$-7y$が項。/br
+このとき、$+5$の項は、$5$でもOKです。
 @tag question [close]
-
-@tag answer [open]
-
-@input q1_input [open]
-入れて！出来るよ！
-@btn on=^set^ 回答する
-@input q1_input futter=q1_answer [close] 
-
-@futter q1_answer futter=q1_answer [open]
-$4x - 6y$だよ！/br
-まあちょっと解説すると、/br
-$x + 3x = 4x$ , $-2y - 4y = -6y$だね。/br
-$x$は、$1x$のことを表しているからね。
-@futter q1_answer futter=q1_answer [close]
-
-@tag answer [close]
 
 @btn id=next5 次へ
 
@@ -83,11 +70,8 @@ $x$は、$1x$のことを表しているからね。
 @tag n6 [open]
 
 @tag question [open]
-次。多項式の加法。/br
-$(2x + 3y) + (-3x + 2y)$とか。/br
-加法=足し算なら、普通にかっこ外してOK！/br
-後はまとめてあげて、$-x + 5y$? か。/br
-作ってるの人間だからミスあったら教えて。
+そして、数字だけの項を定数項といって、/br
+$5$とか、$-2$とか。$-x$とかは、違うね。文字あるから。うん。
 @tag question [close]
 
 @btn id=next6 次へ
@@ -97,25 +81,11 @@ $(2x + 3y) + (-3x + 2y)$とか。/br
 @tag n7 [open]
 
 @tag question [open]
-解いてみよう！
-$(4x + 2y) + (5x + 2y)$
+一旦まとめると、ぼっち→単項式、/br
+ぼっちの集まり→多項式、/br
+$+,-$の前で区切る→項、/br
+項で数字だけのやつ→定数項
 @tag question [close]
-
-@tag answer [open]
-
-@input q2_input [open]
-がんばれ。
-@btn on=^set^ 回答する
-@input q2_input futter=q2_answer [close] 
-
-@futter q2_answer futter=q2_answer [open]
-$9x + 4y$だよ！/br
-途中式の書き方はね、/br
-$(4x + 2y) + (5x + 2y) = 4x + 5x + 2y + 2y=9x + 4y$/br
-とかでいいと思う。どうやって改行するの式？許して？
-@futter q2_answer futter=q2_answer [close]
-
-@tag answer [close]
 
 @btn id=next7 次へ
 
@@ -124,10 +94,11 @@ $(4x + 2y) + (5x + 2y) = 4x + 5x + 2y + 2y=9x + 4y$/br
 @tag n8 [open]
 
 @tag question [open]
-減法は、テストで間違えさせるための計算で、/br
-どっかで絶対にミスります。/br
-まあ、$-$ついてる方のかっこの$+ , -$を、/br
-全部逆にすればいいんですけどね。
+もうちょい頑張って。半分終わったから。/br
+単項式で、文字のかけあわされている個数を、次数という。/br
+例えば、$5xy$なら、文字は、$x$が一個、$y$が一個で/br
+合計2個だから、$5xy$の次数は2!
+
 @tag question [close]
 
 @btn id=next8 次へ
@@ -137,11 +108,9 @@ $(4x + 2y) + (5x + 2y) = 4x + 5x + 2y + 2y=9x + 4y$/br
 @tag n9 [open]
 
 @tag question [open]
-$(3x - 4y) - (3x - 2y)$だったら、/br
-$3x - 4y -3x + 2y$。/br
-$3x - 2y$の方が全部符号逆になったのわかるかな？/br
-まあそのまま計算しちゃって$-2y$/br
-$3x - 3x$ は $0$ になるね。
+次数の問題は、だいだい指数がでてくる。/br
+$5x^3y^2$とかは、$x$が3個、$y$が2個だから、/br
+次数は5ってわかるね。
 @tag question [close]
 
 @btn id=next9 次へ
@@ -151,23 +120,13 @@ $3x - 3x$ は $0$ になるね。
 @tag n10 [open]
 
 @tag question [open]
-解いてみよう！
-$(x - 2x^2) - (3x - 4x^2)$
+さて、多項式も次数があるんだけど、/br
+項にわけて、それぞれの次数を比べて、一番高いやつを選ぶ。/br
+$3x^2 + 4y^3$なら、$3x^2$は2、$4y^3$は3だから、/br
+多い方をとって、$3x^2 + 4y^3$の次数は3。/br
+多項式の時は、3次式っていうこともあるよ。/br
+次数の合計じゃないから、気を付けてね。
 @tag question [close]
-
-@tag answer [open]
-
-@input q1_input [open]
-がんばれ。
-@btn on=^set^ 回答する
-@input q1_input futter=q1_answer [close] 
-
-@futter q1_answer futter=q1_answer [open]
-$(x - 2x^2) - (3x - 4x^2) = x - 2x^2 - 3x + 4x^2 = -2x + 2x^2$/br
-符号気を付けてね！
-@futter q1_answer futter=q1_answer [close]
-
-@tag answer [close]
 
 @btn id=next10 次へ
 
@@ -176,8 +135,11 @@ $(x - 2x^2) - (3x - 4x^2) = x - 2x^2 - 3x + 4x^2 = -2x + 2x^2$/br
 @tag n11 [open]
 
 @tag question [open]
-一応筆算もあるらしいけど。/br
-教科書みようね！
+最後ー！/br
+文字の部分が「まったく」同じ項を同類項っていうよ。/br
+$3x$と$-4x$は、文字が$x$で同じだから、同類項。/br
+まったく　は重要。/br
+$3a$と$3a^2$は、$a$と$a^2$で違うから、同類項じゃない。
 @tag question [close]
 
 @btn id=next11 次へ
@@ -189,13 +151,13 @@ $(x - 2x^2) - (3x - 4x^2) = x - 2x^2 - 3x + 4x^2 = -2x + 2x^2$/br
 
 @tag question [open]
 まとめ！/br
-計算ミス嫌い！/br
-...とりあえず加法はそのまま()はずす。/br
-で減法は、引く方の符号全部逆にする。/br
+文字のかけあわされている個数→次数/br
+多項式は、一番高いやつを選ぶ！/br
+文字が全く同じやつ→同類項！/br
 おわる！
 @tag question [close]
 
-@btn id=next12 次へ
+@btn id=next12 おしまい
 
 @tag n12 [close]
 

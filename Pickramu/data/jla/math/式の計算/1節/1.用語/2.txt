@@ -1,12 +1,12 @@
 @tag unit-title [open] Jla-2 数学 Unit 1
 @tag unit-title [close]
-@tag chapter-title [open] 式の計算 1節 加法,減法 Chapter2 
+@tag chapter-title [open] 式の計算 1節 用語 Chapter 2
 @tag chapter-title [close]
 
 @tag n1 [open]
 
 @tag question [open]
-$ 2x+5y+y+x $を同類項でまとめましょう。
+$ 5a+2 $の項をすべて答えましょう。
 @tag question [close]
 
 @tag answer [open]
@@ -17,7 +17,8 @@ $ 2x+5y+y+x $を同類項でまとめましょう。
 @input q1_input futter=q1_answer [close] 
 
 @futter q1_answer futter=q1_answer [open]
-正解は「$ 3x-6y $」です。
+正解は「$ 5a,2 $」です。/br
+※2は+2でも〇
 @futter q1_answer futter=q1_answer [close]
 
 @tag answer [close]
@@ -34,7 +35,7 @@ dom.Tag("n2").style.display('block','auto');
 @tag n2 [open]
 
 @tag question [open]
-$ -a-3b-2a-b $を同類項でまとめましょう。
+$ 2y-x^2 y $の項をすべて答えましょう。
 @tag question [close]
 
 @tag answer [open]
@@ -45,7 +46,7 @@ $ -a-3b-2a-b $を同類項でまとめましょう。
 @input q2_input futter=q1_answer [close] 
 
 @futter q1_answer futter=q1_answer [open]
-正解は「$ -3a-4b $」です。
+正解は「$ 2y,-x^2 y $」です。
 @futter q2_answer futter=q1_answer [close]
 
 @tag answer [close]
@@ -62,7 +63,7 @@ dom.Tag("n3").style.display('block','auto');
 @tag n3 [open]
 
 @tag question [open]
-$ 5x^2+5y-x^2-5y $を同類項でまとめましょう。
+$ x^2 y $の次数を言いましょう。
 @tag question [close]
 
 @tag answer [open]
@@ -73,7 +74,7 @@ $ 5x^2+5y-x^2-5y $を同類項でまとめましょう。
 @input q3_input futter=q1_answer [close] 
 
 @futter q3_answer futter=q1_answer [open]
-正解は「$ 4x^2 $」です。
+正解は「$ 3 $」です。
 @futter q3_answer futter=q1_answer [close]
 
 @tag answer [close]
@@ -90,7 +91,7 @@ dom.Tag("n4").style.display('block','auto');
 @tag n4 [open]
 
 @tag question [open]
-$ (a+2b)-(3a-3b) $を同類項でまとめなさい。
+$ 4x $は単項式と多項式のどちらに当てはまりますか。
 @tag question [close]
 
 @tag answer [open]
@@ -101,7 +102,7 @@ $ (a+2b)-(3a-3b) $を同類項でまとめなさい。
 @input q4_input futter=q1_answer [close] 
 
 @futter q4_answer futter=q1_answer [open]
-正解は「$ -2a+5b $」です。
+正解は「単項式」です。
 @futter q4_answer futter=q1_answer [close]
 
 @tag answer [close]
@@ -118,7 +119,7 @@ dom.Tag("n5").style.display('block','auto');
 @tag n5 [open]
 
 @tag question [open]
-$ (3x-2y+9z)-(5x+19y-16z) $を同類項でまとめなさい。
+式の項の中で、文字の部分が全く同じ項のことを何と言いますか。
 @tag question [close]
 
 @tag answer [open]
@@ -129,12 +130,12 @@ $ (3x-2y+9z)-(5x+19y-16z) $を同類項でまとめなさい。
 @input q5_input futter=q1_answer [close] 
 
 @futter q5_answer futter=q1_answer [open]
-正解は「-2x-21y+25z」です。
+正解は「同類項」です。
 @futter q5_answer futter=q1_answer [close]
 
 @tag answer [close]
 
-@btn id=next5 次へ
+@btn id=next5 おしまい
 
 @tag n5 [close]
 

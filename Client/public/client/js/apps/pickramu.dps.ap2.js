@@ -349,10 +349,10 @@ export function appInit(shell) {
             <div class="pickramu-select-group">
               <label for="pickramu-unit-select" class="pickramu-select-label">学習する教材を選択してください：</label>
               <select id="pickramu-unit-select" class="pickramu-select-dropdown">
-                <option value="jla/math/式の計算/1節/1.用語/1.md">数学: 式の計算・1節・用語 (1)</option>
-                <option value="jla/math/式の計算/1節/1.用語/2.md">数学: 式の計算・1節・用語 (2)</option>
-                <option value="jla/math/式の計算/1節/2.加法・減法/1.md">数学: 式の計算・1節・加法・減法 (1)</option>
-                <option value="jla/math/式の計算/1節/2.加法・減法/2.md">数学: 式の計算・1節・加法・減法 (2)</option>
+                <option value="jla/math/式の計算/1節/1.用語/1.txt">数学: 式の計算・1節・用語 (1)</option>
+                <option value="jla/math/式の計算/1節/1.用語/2.txt">数学: 式の計算・1節・用語 (2)</option>
+                <option value="jla/math/式の計算/1節/2.加法・減法/1.txt">数学: 式の計算・1節・加法・減法 (1)</option>
+                <option value="jla/math/式の計算/1節/2.加法・減法/2.txt">数学: 式の計算・1節・加法・減法 (2)</option>
               </select>
               <button class="pickramu-load-button" id="pickramu-load-btn" data-lang-key="load">
                 <span class="button-text">教材を読み込む</span>
@@ -377,6 +377,16 @@ export function appInit(shell) {
     document.getElementById('pickramu-eguide-area').style.display = 'none';
     document.getElementById('tab-pickramu').classList.add('active');
     document.getElementById('tab-eguide').classList.remove('active');
+    // eguideエリアの高さ等をリセット
+    const eguideArea = document.getElementById('pickramu-eguide-area');
+    eguideArea.style.height = '';
+    eguideArea.style.flex = '';
+    eguideArea.style.minWidth = '';
+    // workエリアの高さ等もリセット
+    const workArea = document.getElementById('pickramu-work-area');
+    workArea.style.height = '';
+    workArea.style.flex = '';
+    workArea.style.minWidth = '';
   };
   document.getElementById('tab-eguide').onclick = () => {
     document.getElementById('pickramu-work-area').style.display = 'none';
