@@ -353,6 +353,13 @@ export function appInit(shell) {
                 <option value="jla/math/式の計算/1節/1.用語/2.txt">数学: 式の計算・1節・用語 (2)</option>
                 <option value="jla/math/式の計算/1節/2.加法・減法/1.txt">数学: 式の計算・1節・加法・減法 (1)</option>
                 <option value="jla/math/式の計算/1節/2.加法・減法/2.txt">数学: 式の計算・1節・加法・減法 (2)</option>
+                <option value="jla/math/式の計算/1節/3.分配法則・分数/1.txt">数学: 式の計算・1節・分配法則・分数 (1)</option>
+                <option value="jla/math/式の計算/1節/3.分配法則・分数/2.txt">数学: 式の計算・1節・分配法則・分数 (2)</option>
+                <option value="jla/math/式の計算/1節/3.分配法則・分数/3.txt">数学: 式の計算・1節・分配法則・分数 (3)</option>
+                <option value="jla/math/式の計算/1節/4.乗法・除法/1.txt">数学: 式の計算・1節・乗法・除法 (1)</option>
+                <option value="jla/math/式の計算/1節/4.乗法・除法/2.txt">数学: 式の計算・1節・乗法・除法 (2)</option>
+                <option value="jla/math/式の計算/1節/5.式の値/1.txt">数学: 式の計算・1節・式の値 (1)</option>
+                <option value="jla/math/式の計算/1節/5.式の値/2.txt">数学: 式の計算・1節・式の値 (2)</option>
               </select>
               <button class="pickramu-load-button" id="pickramu-load-btn" data-lang-key="load">
                 <span class="button-text">教材を読み込む</span>
