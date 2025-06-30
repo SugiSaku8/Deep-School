@@ -33,7 +33,7 @@ export function appInit(shell) {
         </div>
       </div>
       <div class="copyright-container">
-        <p class="copyright chalk-text" data-lang-key="copyright">(c) 2022-2025 Carnation Studio v0.1.2</p>
+        <p class="copyright chalk-text" data-lang-key="copyright">(c) 2022-2025 Carnation Studio v0.2.6 25C930X1</p>
       </div>
     </div>
   
