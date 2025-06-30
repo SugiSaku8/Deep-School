@@ -178,6 +178,18 @@ export function convertToHtml(inputText, shell) {
         outputHtml += `        // Show correct answer\n`;
         outputHtml += `        document.getElementById("${inputId}").style.display = "none";\n`;
         outputHtml += `        document.getElementById("${futterId}").style.display = "block";\n`;
+        outputHtml += `        // Move to next input if exists\n`;
+        outputHtml += `        setTimeout(() => {\n`;
+        outputHtml += `          const allInputs = Array.from(document.querySelectorAll('.input-container'));\n`;
+        outputHtml += `          const currentIndex = allInputs.findIndex(el => el.contains(input));\n`;
+        outputHtml += `          if (currentIndex !== -1 && allInputs[currentIndex + 1]) {\n`;
+        outputHtml += `            const nextInput = allInputs[currentIndex + 1].querySelector('input');\n`;
+        outputHtml += `            if (nextInput) {\n`;
+        outputHtml += `              nextInput.focus();\n`;
+        outputHtml += `              nextInput.scrollIntoView({ behavior: 'smooth', block: 'center' });\n`;
+        outputHtml += `            }\n`;
+        outputHtml += `          }\n`;
+        outputHtml += `        }, 300);\n`;
         outputHtml += `      } else {\n`;
         outputHtml += `        if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.warn', message: "Incorrect answer: あなたの答え: " + userAnswer + " 正解: " + expectedAnswer, level: 'warn'});\n`;
         outputHtml += `        // Show error message with retry option\n`;
@@ -232,7 +244,7 @@ export function convertToHtml(inputText, shell) {
         i++;
         let answerContent = "";
         while (i < lines.length && !lines[i].match(/@futter.*\[close\]/)) {
-          answerContent += lines[i] + "\n";
+          answerContent += lines[i].replace(/\/br/g, "<br>") + "\n";
           i++;
         }
         // Store the answer content
@@ -369,6 +381,9 @@ export function appInit(shell) {
   document.getElementById('tab-eguide').onclick = () => {
     document.getElementById('pickramu-work-area').style.display = 'none';
     document.getElementById('pickramu-eguide-area').style.display = 'block';
+    document.getElementById('pickramu-eguide-area').style.height = '70vh';
+    document.getElementById('pickramu-eguide-area').style.flex = '1 1 0%';
+    document.getElementById('pickramu-eguide-area').style.minWidth = '0';
     document.getElementById('tab-pickramu').classList.remove('active');
     document.getElementById('tab-eguide').classList.add('active');
   };
