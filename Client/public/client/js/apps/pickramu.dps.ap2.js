@@ -92,9 +92,12 @@ export function convertToHtml(inputText) {
         outputHtml += `(function() {\n`;
         outputHtml += `  // Wait for DOM to be ready\n`;
         outputHtml += `  function initAnswerSystem() {\n`;
+        outputHtml += `    console.log("Initializing answer system for ${inputId} -> ${futterId}");\n`;
         outputHtml += `    const input = document.getElementById("${inputId}_input");\n`;
         outputHtml += `    const button = document.getElementById("${buttonId}");\n`;
         outputHtml += `    const futterElement = document.getElementById("${futterId}");\n`;
+        outputHtml += `    \n`;
+        outputHtml += `    console.log("Elements found:", { input: !!input, button: !!button, futter: !!futterElement });\n`;
         outputHtml += `    \n`;
         outputHtml += `    if (!input || !button || !futterElement) {\n`;
         outputHtml += `      console.error("Required elements not found:", { input: !!input, button: !!button, futter: !!futterElement });\n`;
@@ -103,9 +106,12 @@ export function convertToHtml(inputText) {
         outputHtml += `    \n`;
         outputHtml += `    // Get the answer content that was stored during compilation\n`;
         outputHtml += `    const answerContent = ${JSON.stringify(answers[futterId] || "")};\n`;
+        outputHtml += `    console.log("Answer content for ${futterId}:", answerContent);\n`;
         outputHtml += `    \n`;
         outputHtml += `    function checkAnswer() {\n`;
+        outputHtml += `      console.log("checkAnswer function called");\n`;
         outputHtml += `      const userAnswer = input.value.trim();\n`;
+        outputHtml += `      console.log("User answer:", userAnswer);\n`;
         outputHtml += `      \n`;
         outputHtml += `      // Extract expected answer from the stored content - multiple patterns\n`;
         outputHtml += `      let expectedAnswer = "";\n`;
@@ -129,11 +135,24 @@ export function convertToHtml(inputText) {
         outputHtml += `              answerMatch = answerContent.match(/解答:\\s*([^\\n]+)/);\n`;
         outputHtml += `              if (answerMatch) {\n`;
         outputHtml += `                expectedAnswer = answerMatch[1].trim();\n`;
+        outputHtml += `              } else {\n`;
+        outputHtml += `                // Pattern 5: 最初の数式を探す（$...$形式）\n`;
+        outputHtml += `                answerMatch = answerContent.match(/\\$([^$]+)\\$/);\n`;
+        outputHtml += `                if (answerMatch) {\n`;
+        outputHtml += `                  expectedAnswer = answerMatch[1].trim();\n`;
+        outputHtml += `                } else {\n`;
+        outputHtml += `                  // Pattern 6: 最初の行から数式っぽいものを探す\n`;
+        outputHtml += `                  const firstLine = answerContent.split('\\n')[0];\n`;
+        outputHtml += `                  if (firstLine && (firstLine.includes('x') || firstLine.includes('y') || firstLine.includes('=') || firstLine.includes('+'))) {\n`;
+        outputHtml += `                    expectedAnswer = firstLine.trim();\n`;
+        outputHtml += `                  }\n`;
+        outputHtml += `                }\n`;
         outputHtml += `              }\n`;
         outputHtml += `            }\n`;
         outputHtml += `          }\n`;
         outputHtml += `        }\n`;
         outputHtml += `      }\n`;
+        outputHtml += `      console.log("Expected answer:", expectedAnswer);\n`;
         outputHtml += `      \n`;
         outputHtml += `      // Check if user provided an answer\n`;
         outputHtml += `      if (!userAnswer) {\n`;
@@ -144,6 +163,7 @@ export function convertToHtml(inputText) {
         outputHtml += `      \n`;
         outputHtml += `      // If no expected answer found, just show the answer content\n`;
         outputHtml += `      if (!expectedAnswer) {\n`;
+        outputHtml += `        console.log("No expected answer found, showing answer content");\n`;
         outputHtml += `        document.getElementById("${inputId}").style.display = "none";\n`;
         outputHtml += `        document.getElementById("${futterId}").style.display = "block";\n`;
         outputHtml += `        return;\n`;
@@ -151,12 +171,15 @@ export function convertToHtml(inputText) {
         outputHtml += `      \n`;
         outputHtml += `      // Check if answer is correct (case-insensitive, trim whitespace)\n`;
         outputHtml += `      const isCorrect = userAnswer.toLowerCase().trim() === expectedAnswer.toLowerCase().trim();\n`;
+        outputHtml += `      console.log("Answer check:", { userAnswer, expectedAnswer, isCorrect });\n`;
         outputHtml += `      \n`;
         outputHtml += `      if (isCorrect) {\n`;
+        outputHtml += `        console.log("Correct answer!");\n`;
         outputHtml += `        // Show correct answer\n`;
         outputHtml += `        document.getElementById("${inputId}").style.display = "none";\n`;
         outputHtml += `        document.getElementById("${futterId}").style.display = "block";\n`;
         outputHtml += `      } else {\n`;
+        outputHtml += `        console.log("Incorrect answer");\n`;
         outputHtml += `        // Show error message with retry option\n`;
         outputHtml += `        const retry = confirm("不正解です。\\n\\nあなたの答え: " + userAnswer + "\\n正解: " + expectedAnswer + "\\n\\nもう一度試しますか？");\n`;
         outputHtml += `        if (retry) {\n`;
@@ -167,11 +190,14 @@ export function convertToHtml(inputText) {
         outputHtml += `    }\n`;
         outputHtml += `    \n`;
         outputHtml += `    // Button click handler\n`;
+        outputHtml += `    console.log("Setting up button click handler for button ${buttonId}");\n`;
         outputHtml += `    button.onclick = checkAnswer;\n`;
         outputHtml += `    \n`;
         outputHtml += `    // Enter key handler\n`;
+        outputHtml += `    console.log("Setting up Enter key handler for input ${inputId}_input");\n`;
         outputHtml += `    input.addEventListener("keypress", function(e) {\n`;
         outputHtml += `      if (e.key === "Enter") {\n`;
+        outputHtml += `        console.log("Enter key pressed");\n`;
         outputHtml += `        checkAnswer();\n`;
         outputHtml += `      }\n`;
         outputHtml += `    });\n`;
@@ -180,8 +206,10 @@ export function convertToHtml(inputText) {
         outputHtml += `  }\n`;
         outputHtml += `  \n`;
         outputHtml += `  // Try to initialize immediately, then on DOMContentLoaded\n`;
+        outputHtml += `  console.log("Calling initAnswerSystem immediately");\n`;
         outputHtml += `  initAnswerSystem();\n`;
         outputHtml += `  if (document.readyState === 'loading') {\n`;
+        outputHtml += `    console.log("Document still loading, adding DOMContentLoaded listener");\n`;
         outputHtml += `    document.addEventListener('DOMContentLoaded', initAnswerSystem);\n`;
         outputHtml += `  }\n`;
         outputHtml += `})();\n`;
@@ -308,6 +336,7 @@ export function appInit(shell) {
             <div class="pickramu-select-group">
               <label for="pickramu-unit-select" class="pickramu-select-label">学習する教材を選択してください：</label>
               <select id="pickramu-unit-select" class="pickramu-select-dropdown">
+                <option value="test-answer.md">テスト用教材（回答システム）</option>
                 <option value="jla/math/式の計算/1節/1.用語/1.md">数学: 式の計算・1節・用語 (1)</option>
                 <option value="jla/math/式の計算/1節/1.用語/2.md">数学: 式の計算・1節・用語 (2)</option>
                 <option value="jla/math/式の計算/1節/2.加法・減法/1.md">数学: 式の計算・1節・加法・減法 (1)</option>
@@ -1288,6 +1317,41 @@ export function appInit(shell) {
                   }
                 }
               });
+              
+              // Additional check for answer system elements
+              setTimeout(() => {
+                const inputs = iframeDoc.querySelectorAll('input[type="text"]');
+                const buttons = iframeDoc.querySelectorAll('button');
+                console.log("Found inputs:", inputs.length);
+                console.log("Found buttons:", buttons.length);
+                
+                inputs.forEach((input, i) => {
+                  console.log(`Input ${i}:`, input.id, input.placeholder);
+                });
+                
+                buttons.forEach((button, i) => {
+                  console.log(`Button ${i}:`, button.id, button.textContent);
+                  if (button.textContent.includes('回答する')) {
+                    console.log("Found answer button:", button.id);
+                    // Force add click handler if not already set
+                    if (!button.onclick) {
+                      console.log("Adding click handler to answer button");
+                      button.onclick = function() {
+                        console.log("Answer button clicked manually");
+                        const inputId = this.closest('.input-container').querySelector('input').id;
+                        const futterId = inputId.replace('_input', '').replace('input', 'answer');
+                        console.log("Looking for futter:", futterId);
+                        const futter = iframeDoc.getElementById(futterId);
+                        if (futter) {
+                          console.log("Showing answer");
+                          this.closest('.input-container').style.display = 'none';
+                          futter.style.display = 'block';
+                        }
+                      };
+                    }
+                  }
+                });
+              }, 1000);
             } catch (e) {
               console.error("Error accessing iframe content:", e);
             }
