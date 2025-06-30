@@ -948,18 +948,9 @@ export function appInit(shell) {
     shell.log({from: 'dp.app.pickramu.out', message: 'PickramuApp: Parallax effects initialized', level: 'info'});
   }
 
-  // PickramuのeGuide有効設定を取得
-  let pickramuEguideEnabled = true;
-  try {
-    const settings = JSON.parse(localStorage.getItem('deep-school-settings') || '{}');
-    if (settings.pickramuEguideEnabled === false) pickramuEguideEnabled = false;
-  } catch (e) {}
-
-  // eGuideタブとエリアの表示制御
-  if (!pickramuEguideEnabled) {
-    const eguideTab = document.getElementById('tab-eguide');
-    const eguideArea = document.getElementById('pickramu-eguide-area');
-    if (eguideTab) eguideTab.style.display = 'none';
-    if (eguideArea) eguideArea.style.display = 'none';
-  }
+  // eGuideタブとエリアを常に非表示にする
+  const eguideTab = document.getElementById('tab-eguide');
+  const eguideArea = document.getElementById('pickramu-eguide-area');
+  if (eguideTab) eguideTab.style.display = 'none';
+  if (eguideArea) eguideArea.style.display = 'none';
 } 
