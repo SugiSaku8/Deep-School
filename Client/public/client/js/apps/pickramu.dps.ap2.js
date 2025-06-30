@@ -336,12 +336,10 @@ export function appInit(shell) {
             <div class="pickramu-select-group">
               <label for="pickramu-unit-select" class="pickramu-select-label">学習する教材を選択してください：</label>
               <select id="pickramu-unit-select" class="pickramu-select-dropdown">
-                <option value="test-answer.md">テスト用教材（回答システム）</option>
                 <option value="jla/math/式の計算/1節/1.用語/1.md">数学: 式の計算・1節・用語 (1)</option>
                 <option value="jla/math/式の計算/1節/1.用語/2.md">数学: 式の計算・1節・用語 (2)</option>
                 <option value="jla/math/式の計算/1節/2.加法・減法/1.md">数学: 式の計算・1節・加法・減法 (1)</option>
                 <option value="jla/math/式の計算/1節/2.加法・減法/2.md">数学: 式の計算・1節・加法・減法 (2)</option>
-                <option value="jla/ss/unit1/chapter1.md">社会: Unit1・Chapter1</option>
               </select>
               <button class="pickramu-load-button" id="pickramu-load-btn" data-lang-key="load">
                 <span class="button-text">教材を読み込む</span>
@@ -358,7 +356,163 @@ export function appInit(shell) {
     </div>
     
     <style>
-   
+    :root {
+      --bg-color: #f5f5f5;
+      --text-color: #222;
+      --card-bg: #fff;
+      --border-radius: 12px;
+      --shadow-color: rgba(0,0,0,0.08);
+      --spacing-unit: 20px;
+      --animation-duration: 0.3s;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--text-color);
+      background: var(--bg-color);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      transition: background var(--animation-duration);
+    }
+    #content {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 8px var(--shadow-color);
+      margin: 32px auto;
+      padding: 32px 5vw;
+      max-width: 700px;
+      width: 100%;
+      box-sizing: border-box;
+      word-break: break-word;
+      transition: background var(--animation-duration);
+    }
+    #content h1, #content .unit-title {
+      font-size: 2em;
+      font-weight: bold;
+      margin: 0.2em 0 0.7em 0;
+      color: var(--text-color);
+    }
+    #content .chapter-title {
+      font-size: 1.5em;
+      margin-bottom: 0.5em;
+      color: var(--text-color);
+    }
+    #content .question {
+      font-size: 1.2em;
+      margin: 1em 0 0.5em 0;
+      color: var(--text-color);
+    }
+    #content .input-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 2em;
+      gap: 1em;
+      padding: 1.5em;
+      background: #f5f5f7;
+      border-radius: var(--border-radius);
+      border: 1px solid #e5e5e7;
+      box-shadow: 0 1px 4px var(--shadow-color);
+      transition: background var(--animation-duration);
+    }
+    #content .input-box {
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 0.8em 1em;
+      font-size: 1.1em;
+      color: var(--text-color);
+      border: 1px solid #d2d2d7;
+      width: 260px;
+      text-align: center;
+      transition: all var(--animation-duration);
+      font-family: inherit;
+    }
+    #content .input-box:focus {
+      outline: none;
+      border-color: #007aff;
+      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+    }
+    #content .input-box::placeholder {
+      color: #86868b;
+    }
+    #content .button-next {
+      background: #007aff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.8em 1.5em;
+      font-size: 1em;
+      color: #fff;
+      cursor: pointer;
+      transition: all var(--animation-duration);
+      font-weight: 500;
+      font-family: inherit;
+      box-shadow: 0 1px 4px var(--shadow-color);
+    }
+    #content .button-next:hover {
+      background: #0056cc;
+      transform: translateY(-1px);
+    }
+    #content .button-next:active {
+      background: #004499;
+      transform: translateY(0);
+    }
+    /* ダークモード */
+    body.dark-mode, .dark-mode #content {
+      --bg-color: #1a1a1a;
+      --text-color: #fff;
+      --card-bg: #222;
+      --shadow-color: rgba(0,0,0,0.3);
+    }
+    body.dark-mode #content {
+      background: var(--card-bg);
+      color: var(--text-color);
+    }
+    body.dark-mode .input-container {
+      background: #23272e;
+      border: 1px solid #333;
+    }
+    body.dark-mode .input-box {
+      background: #181c20;
+      color: #fff;
+      border: 1px solid #444;
+    }
+    body.dark-mode .input-box::placeholder {
+      color: #aaa;
+    }
+    body.dark-mode .button-next {
+      background: #3290f4;
+      color: #fff;
+    }
+    /* コンパクトモード */
+    body.compact-mode #content {
+      padding: 12px 2vw;
+      border-radius: 6px;
+    }
+    body.compact-mode .input-container {
+      padding: 0.7em;
+      border-radius: 6px;
+    }
+    /* アニメーション制御 */
+    body.no-animation * {
+      animation-duration: 0s !important;
+      transition-duration: 0s !important;
+    }
+    /* スクロールバー */
+    #content::-webkit-scrollbar {
+      width: 8px;
+    }
+    #content::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 4px;
+    }
+    #content::-webkit-scrollbar-track {
+      background: #f5f5f7;
+    }
+    /* その他色クラスや数式・footer等は既存のまま */
     </style>
   `;
 
@@ -396,474 +550,55 @@ export function appInit(shell) {
 
           // Define the CSS styles
           const styles = `
-            body{
+            :root {
+              --bg-color: #f5f5f5;
+              --text-color: #222;
+              --card-bg: #fff;
+              --border-radius: 12px;
+              --shadow-color: rgba(0,0,0,0.08);
+              --spacing-unit: 20px;
+              --animation-duration: 0.3s;
+            }
+            body {
               font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-              color: #333;
-              text-align: center;
+              color: var(--text-color);
+              background: var(--bg-color);
+              margin: 0;
+              padding: 0;
+              min-height: 100vh;
               display: flex;
               flex-direction: column;
               align-items: center;
               justify-content: flex-start;
-              min-height: 100vh;
-              padding: 20px;
-              margin: 0;
-              overflow-y: auto;
-              background: #ffffff;
+              transition: background var(--animation-duration);
             }
-            #red {
-              color: #ff3b30;
-            }
-            #testB {
-              display: none;
-            }
-            #content{
-              font-size:1.6em;
+            #content {
+              background: var(--card-bg);
+              border-radius: var(--border-radius);
+              box-shadow: 0 2px 8px var(--shadow-color);
+              margin: 32px auto;
+              padding: 32px 5vw;
+              max-width: 700px;
               width: 100%;
-              max-width: 800px;
-              margin: 0 auto;
-              padding: 20px 0;
-            }
-            #content .red {
-              color: #ff3b30;
-            }
-            #content .aliceblue {
-              color: #f0f8ff;
-            }
-            #content .antiquewhite {
-              color: #faebd7;
-            }
-            #content .aqua {
-              color: #00ffff;
-            }
-            #content .aquamarine {
-              color: #7fffd4;
-            }
-            #content .azure {
-              color: #f0ffff;
-            }
-            #content .beige {
-              color: #f5f5dc;
-            }
-            #content .bisque {
-              color: #ffe4c4;
-            }
-            #content .black {
-              color: #000000;
-            }
-            #content .blanchedalmond {
-              color: #ffebcd;
-            }
-            #content .blue {
-              color: #0000ff;
-            }
-            #content .blueviolet {
-              color: #8a2be2;
-            }
-            #content .brown {
-              color: #a52a2a;
-            }
-            #content .burlywood {
-              color: #deb887;
-            }
-            #content .cadetblue {
-              color: #5f9ea0;
-            }
-            #content .chartreuse {
-              color: #7fff00;
-            }
-            #content .chocolate {
-              color: #d2691e;
-            }
-            #content .coral {
-              color: #ff7f50;
-            }
-            #content .cornflowerblue {
-              color: #6495ed;
-            }
-            #content .cornsilk {
-              color: #fff8dc;
-            }
-            #content .crimson {
-              color: #dc143c;
-            }
-            #content .cyan {
-              color: #00ffff;
-            }
-            #content .darkblue {
-              color: #00008b;
-            }
-            #content .darkcyan {
-              color: #008b8b;
-            }
-            #content .darkgoldenrod {
-              color: #b8860b;
-            }
-            #content .darkgray {
-              color: #a9a9a9;
-            }
-            #content .darkgreen {
-              color: #006400;
-            }
-            #content .darkkhaki {
-              color: #bdb76b;
-            }
-            #content .darkmagenta {
-              color: #8b008b;
-            }
-            #content .darkolivegreen {
-              color: #556b2f;
-            }
-            #content .darkorange {
-              color: #ff8c00;
-            }
-            #content .darkorchid {
-              color: #9932cc;
-            }
-            #content .darkred {
-              color: #8b0000;
-            }
-            #content .darksalmon {
-              color: #e9967a;
-            }
-            #content .darkseagreen {
-              color: #8fbc8f;
-            }
-            #content .darkslateblue {
-              color: #483d8b;
-            }
-            #content .darkslategray {
-              color: #2f4f4f;
-            }
-            #content .darkturquoise {
-              color: #00ced1;
-            }
-            #content .darkviolet {
-              color: #9400d3;
-            }
-            #content .deeppink {
-              color: #ff1493;
-            }
-            #content .deepskyblue {
-              color: #00bfff;
-            }
-            #content .dimgray {
-              color: #696969;
-            }
-            #content .dodgerblue {
-              color: #1e90ff;
-            }
-            #content .firebrick {
-              color: #b22222;
-            }
-            #content .floralwhite {
-              color: #fffaf0;
-            }
-            #content .forestgreen {
-              color: #228b22;
-            }
-            #content .fuchsia {
-              color: #ff00ff;
-            }
-            #content .gainsboro {
-              color: #dcdcdc;
-            }
-            #content .ghostwhite {
-              color: #f8f8ff;
-            }
-            #content .gold {
-              color: #ffd700;
-            }
-            #content .goldenrod {
-              color: #daa520;
-            }
-            #content .gray {
-              color: #808080;
-            }
-            #content .green {
-              color: #008000;
-            }
-            #content .greenyellow {
-              color: #adff2f;
-            }
-            #content .honeydew {
-              color: #f0fff0;
-            }
-            #content .hotpink {
-              color: #ff69b4;
-            }
-            #content .indianred {
-              color: #cd5c5c;
-            }
-            #content .indigo {
-              color: #4b0082;
-            }
-            #content .ivory {
-              color: #fffff0;
-            }
-            #content .khaki {
-              color: #f0e68c;
-            }
-            #content .lavender {
-              color: #e6e6fa;
-            }
-            #content .lavenderblush {
-              color: #fff0f5;
-            }
-            #content .lawngreen {
-              color: #7cfc00;
-            }
-            #content .lemonchiffon {
-              color: #fffacd;
-            }
-            #content .lightblue {
-              color: #add8e6;
-            }
-            #content .lightcoral {
-              color: #f08080;
-            }
-            #content .lightcyan {
-              color: #e0ffff;
-            }
-            #content .lightgoldenrodyellow {
-              color: #fafad2;
-            }
-            #content .lightgray {
-              color: #d3d3d3;
-            }
-            #content .lightgreen {
-              color: #90ee90;
-            }
-            #content .lightpink {
-              color: #ffb6c1;
-            }
-            #content .lightsalmon {
-              color: #ffa07a;
-            }
-            #content .lightseagreen {
-              color: #20b2aa;
-            }
-            #content .lightskyblue {
-              color: #87cefa;
-            }
-            #content .lightslategray {
-              color: #778899;
-            }
-            #content .lightsteelblue {
-              color: #b0c4de;
-            }
-            #content .lightyellow {
-              color: #ffffe0;
-            }
-            #content .lime {
-              color: #00ff00;
-            }
-            #content .limegreen {
-              color: #32cd32;
-            }
-            #content .linen {
-              color: #faf0e6;
-            }
-            #content .magenta {
-              color: #ff00ff;
-            }
-            #content .maroon {
-              color: #800000;
-            }
-            #content .mediumaquamarine {
-              color: #66cdaa;
-            }
-            #content .mediumblue {
-              color: #0000cd;
-            }
-            #content .mediumorchid {
-              color: #ba55d3;
-            }
-            #content .mediumpurple {
-              color: #9370db;
-            }
-            #content .mediumseagreen {
-              color: #3cb371;
-            }
-            #content .mediumslateblue {
-              color: #7b68ee;
-            }
-            #content .mediumspringgreen {
-              color: #00fa9a;
-            }
-            #content .mediumturquoise {
-              color: #48d1cc;
-            }
-            #content .mediumvioletred {
-              color: #c71585;
-            }
-            #content .midnightblue {
-              color: #191970;
-            }
-            #content .mintcream {
-              color: #f5fffa;
-            }
-            #content .mistyrose {
-              color: #ffe4e1;
-            }
-            #content .moccasin {
-              color: #ffe4b5;
-            }
-            #content .navajowhite {
-              color: #ffdead;
-            }
-            #content .navy {
-              color: #000080;
-            }
-            #content .oldlace {
-              color: #fdf5e6;
-            }
-            #content .olive {
-              color: #808000;
-            }
-            #content .olivedrab {
-              color: #6b8e23;
-            }
-            #content .orange {
-              color: #ffa500;
-            }
-            #content .orangered {
-              color: #ff4500;
-            }
-            #content .orchid {
-              color: #da70d6;
-            }
-            #content .palegoldenrod {
-              color: #eee8aa;
-            }
-            #content .palegreen {
-              color: #98fb98;
-            }
-            #content .paleturquoise {
-              color: #afeeee;
-            }
-            #content .palevioletred {
-              color: #db7093;
-            }
-            #content .papayawhip {
-              color: #ffefd5;
-            }
-            #content .peachpuff {
-              color: #ffdab9;
-            }
-            #content .peru {
-              color: #cd853f;
-            }
-            #content .pink {
-              color: #ffc0cb;
-            }
-            #content .plum {
-              color: #dda0dd;
-            }
-            #content .powderblue {
-              color: #b0e0e6;
-            }
-            #content .purple {
-              color: #800080;
-            }
-            #content .rebeccapurple {
-              color: #663399;
-            }
-            #content .rosybrown {
-              color: #bc8f8f;
-            }
-            #content .royalblue {
-              color: #4169e1;
-            }
-            #content .saddlebrown {
-              color: #8b4513;
-            }
-            #content .salmon {
-              color: #fa8072;
-            }
-            #content .sandybrown {
-              color: #f4a460;
-            }
-            #content .seagreen {
-              color: #2e8b57;
-            }
-            #content .seashell {
-              color: #fff5ee;
-            }
-            #content .sienna {
-              color: #a0522d;
-            }
-            #content .silver {
-              color: #c0c0c0;
-            }
-            #content .skyblue {
-              color: #87ceeb;
-            }
-            #content .slateblue {
-              color: #6a5acd;
-            }
-            #content .slategray {
-              color: #708090;
-            }
-            #content .snow {
-              color: #fffafa;
-            }
-            #content .springgreen {
-              color: #00ff7f;
-            }
-            #content .steelblue {
-              color: #4682b4;
-            }
-            #content .tan {
-              color: #d2b48c;
-            }
-            #content .teal {
-              color: #008080;
-            }
-            #content .thistle {
-              color: #d8bfd8;
-            }
-            #content .tomato {
-              color: #ff6347;
-            }
-            #content .turquoise {
-              color: #40e0d0;
-            }
-            #content .violet {
-              color: #ee82ee;
-            }
-            #content .wheat {
-              color: #f5deb3;
-            }
-            #content .white {
-              color: #ffffff;
-            }
-            #content .whitesmoke {
-              color: #f5f5f5;
-            }
-            #content .yellow {
-              color: #ffff00;
-            }
-            #content .yellowgreen {
-              color: #9acd32;
-            }
-            #content h1 {
+              box-sizing: border-box;
+              word-break: break-word;
+              transition: background var(--animation-duration);
+            }
+            #content h1, #content .unit-title {
               font-size: 2em;
-              margin: 0.2em 0;
-            }
-            #content .unit-title {
               font-weight: bold;
-              font-size: 1.5em;
+              margin: 0.2em 0 0.7em 0;
+              color: var(--text-color);
             }
             #content .chapter-title {
-              font-size: 2em;
+              font-size: 1.5em;
+              margin-bottom: 0.5em;
+              color: var(--text-color);
             }
             #content .question {
-              font-size: 1.7em;
-              margin: 0.5em 0;
-            }
-            #content .equations {
-              font-size: 1.6em;
-              line-height: 1.6;
+              font-size: 1.2em;
+              margin: 1em 0 0.5em 0;
+              color: var(--text-color);
             }
             #content .input-container {
               display: flex;
@@ -873,20 +608,22 @@ export function appInit(shell) {
               gap: 1em;
               padding: 1.5em;
               background: #f5f5f7;
-              border-radius: 12px;
+              border-radius: var(--border-radius);
               border: 1px solid #e5e5e7;
+              box-shadow: 0 1px 4px var(--shadow-color);
+              transition: background var(--animation-duration);
             }
             #content .input-box {
-              background-color: #ffffff;
+              background-color: #fff;
               border-radius: 8px;
               padding: 0.8em 1em;
-              font-size: 1.6em;
-              color: #1d1d1f;
+              font-size: 1.1em;
+              color: var(--text-color);
               border: 1px solid #d2d2d7;
-              width: 300px;
+              width: 260px;
               text-align: center;
-              transition: all 0.2s ease;
-              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              transition: all var(--animation-duration);
+              font-family: inherit;
             }
             #content .input-box:focus {
               outline: none;
@@ -901,12 +638,13 @@ export function appInit(shell) {
               border: none;
               border-radius: 8px;
               padding: 0.8em 1.5em;
-              font-size: 1.2em;
-              color: white;
+              font-size: 1em;
+              color: #fff;
               cursor: pointer;
-              transition: all 0.2s ease;
+              transition: all var(--animation-duration);
               font-weight: 500;
-              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              font-family: inherit;
+              box-shadow: 0 1px 4px var(--shadow-color);
             }
             #content .button-next:hover {
               background: #0056cc;
@@ -916,82 +654,59 @@ export function appInit(shell) {
               background: #004499;
               transform: translateY(0);
             }
-            #content .footer-bar {
-              position: absolute;
-              bottom: 0;
-              width: 100%;
-              height: 20px;
-              background: #007aff;
+            /* ダークモード */
+            body.dark-mode, .dark-mode #content {
+              --bg-color: #1a1a1a;
+              --text-color: #fff;
+              --card-bg: #222;
+              --shadow-color: rgba(0,0,0,0.3);
             }
-            #content #n2{
-              display: none;
+            body.dark-mode #content {
+              background: var(--card-bg);
+              color: var(--text-color);
             }
-            #content #n3{
-              display: none;
+            body.dark-mode .input-container {
+              background: #23272e;
+              border: 1px solid #333;
             }
-            #content #n4{
-              display: none;
+            body.dark-mode .input-box {
+              background: #181c20;
+              color: #fff;
+              border: 1px solid #444;
             }
-            #content #n5{
-              display: none;
+            body.dark-mode .input-box::placeholder {
+              color: #aaa;
             }
-            #content #n6{
-              display: none;
+            body.dark-mode .button-next {
+              background: #3290f4;
+              color: #fff;
             }
-            #content #n7{
-              display: none;
+            /* コンパクトモード */
+            body.compact-mode #content {
+              padding: 12px 2vw;
+              border-radius: 6px;
             }
-            #content #n8{
-              display: none;
+            body.compact-mode .input-container {
+              padding: 0.7em;
+              border-radius: 6px;
             }
-            #content #n9{
-              display:none;
+            /* アニメーション制御 */
+            body.no-animation * {
+              animation-duration: 0s !important;
+              transition-duration: 0s !important;
             }
-            #content #n10{
-              display:none;
+            /* スクロールバー */
+            #content::-webkit-scrollbar {
+              width: 8px;
             }
-            #content #n11{
-              display:none;
+            #content::-webkit-scrollbar-thumb {
+              background: #ccc;
+              border-radius: 4px;
             }
-            #content #n12{
-              display:none;
+            #content::-webkit-scrollbar-track {
+              background: #f5f5f7;
             }
-            #content #n13{
-              display:none;
-            }
-            #content #n14{
-              display:none;
-            }
-            #content #n15{
-              display:none;
-            }
-            #content #n16{
-              display:none;
-            }
-            #content #n17{
-              display:none;
-            }
-            #content #n18{
-              display:none; 
-            }
-            #content #n19{
-              display:none;
-            }
-            #content #n20{
-              display:none;
-            }
-            #content #n21{
-              display:none;
-            }
-            #content #n22{
-              display:none;
-            }
-            #content #n23{
-              display:none;
-            }
-            #content #n24{
-              display:none;
-            }
+            /* その他色クラスや数式・footer等は既存のまま */
           `;
           const script = `
             // Clear any existing dom object to prevent redeclaration

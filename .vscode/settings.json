@@ -22,7 +22,7 @@
     "cursor.composer.collapsePaneInputBoxPills": true,
     "cursor.composer.renderPillsInsteadOfBlocks": true,
     "editor.fontFamily": "Hack",
-    "workbench.colorTheme": "Abyss",
+    "workbench.colorTheme": "Arc+",
     "editor.accessibilitySupport": "off",
     "[css]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode"
