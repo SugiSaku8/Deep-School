@@ -14,6 +14,25 @@ export function appInit(shell) {
     return;
   }
   root.innerHTML = `
+    <div class="menu-container">
+      <div class="blackboard-panel">
+        <div class="blackboard-content">
+          <div class="blackboard-header">
+            <div class="chalk-icon">📅</div>
+            <h2 class="chalk-text">今日の情報</h2>
+          </div>
+          <div class="info-section">
+            <div class="info-item">
+              <span class="info-label chalk-text">日付:</span>
+              <span class="info-value chalk-text" id="current-date"></span>
+            </div>
+            <div class="info-item">
+              <span class="info-label chalk-text">アカウント:</span>
+              <span class="info-value chalk-text" id="user-account"></span>
+            </div>
+          </div>
+        </div>
+      </div>
       
       <div class="menu-content">
         <div class="menu-item">
@@ -37,6 +56,10 @@ export function appInit(shell) {
           <div class="menu-label chalk-text" id="menu-pickramu" style="cursor: pointer" data-lang-key="menu_pickramu">Pickramu</div>
         </div>
       </div>
+    </div>
+    
+    <div class="copyright-container">
+      <p class="copyright chalk-text" data-lang-key="copyright">(c) 2022-2025 Carnation Studio v0.1.2</p>
     </div>
   
   <style>
@@ -247,6 +270,28 @@ export function appInit(shell) {
     line-height: 1.8;
   }
   
+  /* Copyright Container */
+  .copyright-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 0.75rem;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .copyright {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    font-family: 'Courier New', monospace;
+  }
+  
   /* Dark mode adjustments */
   @media (prefers-color-scheme: dark) {
     .menu-item {
@@ -258,6 +303,10 @@ export function appInit(shell) {
       background: rgba(0, 0, 0, 0.4);
       border-color: rgba(255, 255, 255, 0.2);
     }
+    
+    .copyright-container {
+      background: rgba(0, 0, 0, 0.4);
+    }
   }
   
   /* Responsive design */
@@ -265,6 +314,7 @@ export function appInit(shell) {
     .menu-container {
       flex-direction: column;
       align-items: center;
+      padding-bottom: 4rem; /* Space for copyright */
     }
     
     .blackboard-panel {
@@ -319,6 +369,7 @@ export function appInit(shell) {
   @media (max-width: 768px) {
     .menu-container {
       padding: 1rem;
+      padding-bottom: 3.5rem; /* Space for copyright */
     }
     
     .menu-content {
@@ -365,11 +416,43 @@ export function appInit(shell) {
       min-width: auto;
       padding: 1rem;
     }
+    
+    .copyright-container {
+      padding: 0.5rem;
+    }
+    
+    .copyright {
+      font-size: 0.7rem;
+    }
   }
   </style>
 `;
 
-
+  // 日付とアカウント情報を表示
+  function updateInfo() {
+    const dateElement = document.getElementById('current-date');
+    const accountElement = document.getElementById('user-account');
+    
+    if (dateElement) {
+      const now = new Date();
+      const options = { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric', 
+        weekday: 'long' 
+      };
+      const dateString = now.toLocaleDateString('ja-JP', options);
+      dateElement.textContent = dateString;
+    }
+    
+    if (accountElement) {
+      if (window.googleUserName) {
+        accountElement.textContent = window.googleUserName;
+      } else {
+        accountElement.textContent = 'ゲストユーザー';
+      }
+    }
+  }
 
   // メニューアイテムの設定
   const menuItems = {
@@ -416,7 +499,12 @@ export function appInit(shell) {
     shell.log({from: 'dp.app.menu.out', message: 'MenuApp: Parallax effects initialized', level: 'info'});
   }
 
- 
+  // 情報を更新
+  updateInfo();
+  
+  // 日付を毎日更新
+  setInterval(updateInfo, 60000); // 1分ごとに更新
+
   // ユーザー情報の表示（ログイン済みの場合）
   if (window.googleUserName) {
     shell.log({from: 'dp.app.menu.out', message: 'MenuApp: ユーザー情報 ' + JSON.stringify({name: window.googleUserName, id: window.googleUserId}), level: 'info'});
