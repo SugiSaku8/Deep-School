@@ -43,15 +43,7 @@ export function appInit(shell) {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
- background: linear-gradient(135deg,
-  #1a3a1a 0%,
-  #18422a 18%,
-  #17603a 36%,
-  #005f30 54%,
-  #18422a 72%,
-  #22382b 86%,
-  #2d3436 100%
-);    position: relative;
+    position: relative;
     overflow: hidden;
   }
   
@@ -62,15 +54,7 @@ export function appInit(shell) {
     left: 0;
     right: 0;
     bottom: 0;
- background: linear-gradient(135deg,
-  #1a3a1a 0%,
-  #18422a 18%,
-  #17603a 36%,
-  #005f30 54%,
-  #18422a 72%,
-  #22382b 86%,
-  #2d3436 100%
-);    opacity: 0.3;
+    opacity: 0.3;
   }
   
 

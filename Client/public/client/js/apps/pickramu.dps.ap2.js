@@ -322,14 +322,14 @@ export function appInit(shell) {
     return;
   }
   root.innerHTML = `
-    <div class="page-container">
+    <div class="page-container pickramu-page">
       <button class="go-back-button" id="pickramu-back-btn" data-lang-key="back">←</button>
       <h1 class="page-title" data-lang-key="pickramu_work">Pickramu</h1>
-      <div class="pickramu-tabs" style="margin-bottom: 20px; display: flex; gap: 12px;">
+      <div class="pickramu-tabs">
         <button class="auto-btn" id="tab-pickramu" data-lang-key="pickramu_tab">教材ワーク</button>
         <button class="auto-btn" id="tab-eguide" data-lang-key="eguide_tab">eGuide</button>
       </div>
-      <div id="pickramu-work-area">
+      <div id="pickramu-work-area" class="pickramu-work-area">
         <div class="pickramu-select-container">
           <div class="pickramu-select-card">
             <h3 class="pickramu-select-title">教材選択</h3>
@@ -348,172 +348,12 @@ export function appInit(shell) {
             </div>
           </div>
         </div>
-        <iframe id="pickramu_iframe" style="width:100%; height:70vh; border:none; border-radius:8px; background:#ffffff; overflow-y: auto;"></iframe>
+        <iframe id="pickramu_iframe" class="pickramu-iframe"></iframe>
       </div>
-      <div id="pickramu-eguide-area" style="display:none;">
-        <iframe src="eguide.html" style="width:100%; height:70vh; border:none; border-radius:8px; background:#ffffff; overflow-y: auto;"></iframe>
+      <div id="pickramu-eguide-area" class="pickramu-eguide-area" style="display:none;">
+        <iframe src="eguide.html" class="pickramu-iframe"></iframe>
       </div>
     </div>
-    
-    <style>
-    :root {
-      --bg-color: #f5f5f5;
-      --text-color: #222;
-      --card-bg: #fff;
-      --border-radius: 12px;
-      --shadow-color: rgba(0,0,0,0.08);
-      --spacing-unit: 20px;
-      --animation-duration: 0.3s;
-    }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      color: var(--text-color);
-      background: var(--bg-color);
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      transition: background var(--animation-duration);
-    }
-    #content {
-      background: var(--card-bg);
-      border-radius: var(--border-radius);
-      box-shadow: 0 2px 8px var(--shadow-color);
-      margin: 32px auto;
-      padding: 32px 5vw;
-      max-width: 700px;
-      width: 100%;
-      box-sizing: border-box;
-      word-break: break-word;
-      transition: background var(--animation-duration);
-    }
-    #content h1, #content .unit-title {
-      font-size: 2em;
-      font-weight: bold;
-      margin: 0.2em 0 0.7em 0;
-      color: var(--text-color);
-    }
-    #content .chapter-title {
-      font-size: 1.5em;
-      margin-bottom: 0.5em;
-      color: var(--text-color);
-    }
-    #content .question {
-      font-size: 1.2em;
-      margin: 1em 0 0.5em 0;
-      color: var(--text-color);
-    }
-    #content .input-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 2em;
-      gap: 1em;
-      padding: 1.5em;
-      background: #f5f5f7;
-      border-radius: var(--border-radius);
-      border: 1px solid #e5e5e7;
-      box-shadow: 0 1px 4px var(--shadow-color);
-      transition: background var(--animation-duration);
-    }
-    #content .input-box {
-      background-color: #fff;
-      border-radius: 8px;
-      padding: 0.8em 1em;
-      font-size: 1.1em;
-      color: var(--text-color);
-      border: 1px solid #d2d2d7;
-      width: 260px;
-      text-align: center;
-      transition: all var(--animation-duration);
-      font-family: inherit;
-    }
-    #content .input-box:focus {
-      outline: none;
-      border-color: #007aff;
-      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
-    }
-    #content .input-box::placeholder {
-      color: #86868b;
-    }
-    #content .button-next {
-      background: #007aff;
-      border: none;
-      border-radius: 8px;
-      padding: 0.8em 1.5em;
-      font-size: 1em;
-      color: #fff;
-      cursor: pointer;
-      transition: all var(--animation-duration);
-      font-weight: 500;
-      font-family: inherit;
-      box-shadow: 0 1px 4px var(--shadow-color);
-    }
-    #content .button-next:hover {
-      background: #0056cc;
-      transform: translateY(-1px);
-    }
-    #content .button-next:active {
-      background: #004499;
-      transform: translateY(0);
-    }
-    /* ダークモード */
-    body.dark-mode, .dark-mode #content {
-      --bg-color: #1a1a1a;
-      --text-color: #fff;
-      --card-bg: #222;
-      --shadow-color: rgba(0,0,0,0.3);
-    }
-    body.dark-mode #content {
-      background: var(--card-bg);
-      color: var(--text-color);
-    }
-    body.dark-mode .input-container {
-      background: #23272e;
-      border: 1px solid #333;
-    }
-    body.dark-mode .input-box {
-      background: #181c20;
-      color: #fff;
-      border: 1px solid #444;
-    }
-    body.dark-mode .input-box::placeholder {
-      color: #aaa;
-    }
-    body.dark-mode .button-next {
-      background: #3290f4;
-      color: #fff;
-    }
-    /* コンパクトモード */
-    body.compact-mode #content {
-      padding: 12px 2vw;
-      border-radius: 6px;
-    }
-    body.compact-mode .input-container {
-      padding: 0.7em;
-      border-radius: 6px;
-    }
-    /* アニメーション制御 */
-    body.no-animation * {
-      animation-duration: 0s !important;
-      transition-duration: 0s !important;
-    }
-    /* スクロールバー */
-    #content::-webkit-scrollbar {
-      width: 8px;
-    }
-    #content::-webkit-scrollbar-thumb {
-      background: #ccc;
-      border-radius: 4px;
-    }
-    #content::-webkit-scrollbar-track {
-      background: #f5f5f7;
-    }
-    /* その他色クラスや数式・footer等は既存のまま */
-    </style>
   `;
 
   // 戻るボタン
@@ -551,7 +391,7 @@ export function appInit(shell) {
           // Define the CSS styles
           const styles = `
             :root {
-              --bg-color: #f5f5f5;
+              --bg-color: transparent;
               --text-color: #222;
               --card-bg: #fff;
               --border-radius: 12px;
@@ -562,7 +402,7 @@ export function appInit(shell) {
             body {
               font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
               color: var(--text-color);
-              background: var(--bg-color);
+              background: transparent;
               margin: 0;
               padding: 0;
               min-height: 100vh;

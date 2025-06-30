@@ -43,10 +43,9 @@ export function appInit(shell) {
   </div>
   
   <style>
-  /* Enhanced estore styles with parallax effects */
+  /* Enhanced estore styles */
   .page-container {
     min-height: 100vh;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     padding: 20px;
     position: relative;
   }

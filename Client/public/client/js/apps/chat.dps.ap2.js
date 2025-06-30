@@ -37,7 +37,7 @@ export function appInit(shell) {
     <button class="go-back-button button-chalk" id="chat-back-btn" data-lang-key="back">←</button>
     
     <style>
-    /* Enhanced chat styles with parallax effects */
+    /* Enhanced chat styles */
     .splash-container {
       min-height: 100vh;
       display: flex;
@@ -213,7 +213,6 @@ export function appInit(shell) {
     
     .chat-input-container {
       padding: 20px;
-      background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(20px);
       border-top: 1px solid rgba(255, 255, 255, 0.2);
     }
@@ -223,7 +222,6 @@ export function appInit(shell) {
       top: 20px;
       left: 20px;
       z-index: 1000;
-      background: rgba(255, 255, 255, 0.1);
       border: 2px solid rgba(255, 255, 255, 0.3);
       backdrop-filter: blur(10px);
       border-radius: 50%;
