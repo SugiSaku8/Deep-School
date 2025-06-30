@@ -145,6 +145,13 @@ export function appInit(shell) {
             <button class="auto-btn" id="check-update-btn">アップデートをチェック</button>
           </div>
         </div>
+        <div class="setting-section">
+          <h2>Pickramu設定</h2>
+          <div class="setting-item">
+            <label for="pickramu-eguide-toggle">eGuideをPickramuで有効化:</label>
+            <input type="checkbox" id="pickramu-eguide-toggle">
+          </div>
+        </div>
       </div>
     </div>
   `;
@@ -286,6 +293,9 @@ function loadSettings() {
     const backgroundSyncToggle = document.getElementById('background-sync-toggle');
     if (backgroundSyncToggle) backgroundSyncToggle.checked = settings.backgroundSync !== false;
     
+    const pickramuEguideToggle = document.getElementById('pickramu-eguide-toggle');
+    if (pickramuEguideToggle) pickramuEguideToggle.checked = settings.pickramuEguideEnabled === true;
+    
     // 設定を実際に適用
     applySettings(settings);
     
@@ -314,7 +324,8 @@ function saveSettings() {
       location: document.getElementById('location-toggle')?.checked ?? false,
       cache: document.getElementById('cache-toggle')?.checked ?? true,
       autoSave: document.getElementById('auto-save-toggle')?.checked ?? true,
-      backgroundSync: document.getElementById('background-sync-toggle')?.checked ?? true
+      backgroundSync: document.getElementById('background-sync-toggle')?.checked ?? true,
+      pickramuEguideEnabled: document.getElementById('pickramu-eguide-toggle')?.checked ?? false
     };
     
     localStorage.setItem('deep-school-settings', JSON.stringify(settings));
@@ -524,6 +535,11 @@ function applySettings(settings) {
     // 位置情報設定の適用
     if (settings.location !== undefined) {
       applyLocation(settings.location);
+    }
+    
+    // Pickramu設定の適用
+    if (settings.pickramuEguideEnabled !== undefined) {
+      applyPickramuEguide(settings.pickramuEguideEnabled);
     }
     
     shell.log({from: 'dp.app.setting.out', message: 'SettingApp: 設定を適用しました', level: 'info'});
@@ -877,4 +893,14 @@ window.setSetting = function(key, value) {
     console.error('設定の保存エラー:', error);
     return false;
   }
-}; 
+};
+
+// Pickramu設定の適用
+function applyPickramuEguide(enabled) {
+  window.pickramuEguideEnabled = enabled;
+  if (enabled) {
+    console.log('eGuideがPickramuで有効になりました');
+  } else {
+    console.log('eGuideがPickramuで無効になりました');
+  }
+} 
