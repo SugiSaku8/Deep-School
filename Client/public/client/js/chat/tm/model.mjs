@@ -1,3 +1,5 @@
+import CONFIG from "./config.js";
+
 /**
  * Gemini APIを利用してコーチング資料の生成や対話処理を行うクラス
  */
