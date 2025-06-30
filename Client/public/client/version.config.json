@@ -1,12 +1,12 @@
 {
   "deepSchoolFamily": {
-    "version": "25C914X1",
+    "version": "25C915X1",
     "status": "beta",
     "lastUpdated": "2025-06-30",
     "description": "Deep-School Family Software - Initial release"
   },
   "deepSchoolClient": {
-    "version": "0.2.2",
+    "version": "0.2.3",
     "status": "stable",
     "cycle": 1,
     "release": 0,
@@ -60,7 +60,7 @@
     "description": "Login - Initial beta release"
   },
   "menu": {
-    "version": "0.0.12",
+    "version": "0.0.13",
     "status": "beta",
     "cycle": 0,
     "release": 0,
