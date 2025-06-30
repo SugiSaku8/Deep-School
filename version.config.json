@@ -1,12 +1,12 @@
 {
   "deepSchoolFamily": {
-    "version": "25C915X1",
+    "version": "25C916X1",
     "status": "beta",
     "lastUpdated": "2025-06-30",
     "description": "Deep-School Family Software - Initial release"
   },
   "deepSchoolClient": {
-    "version": "0.2.3",
+    "version": "0.2.4",
     "status": "stable",
     "cycle": 1,
     "release": 0,

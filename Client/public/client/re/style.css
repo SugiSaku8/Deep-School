@@ -23,8 +23,6 @@ body, html {
     #22382b 86%,
     #2d3436 100%
   );
-  background-size: 200% 200%;
-  animation: menuGradientMove 16s ease-in-out infinite alternate;
   color: #fff;
   overflow-x: hidden;
 }
@@ -264,24 +262,6 @@ body::after {
     #22382b 86%,
     #2d3436 100%
   );
-  background-size: 200% 200%;
-  animation: menuGradientMove 16s ease-in-out infinite alternate;
-}
-@keyframes menuGradientMove {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .menu-container, .menu-content {
-    animation: none !important;
-  }
 }
 
 .menu-item {
@@ -394,14 +374,32 @@ body::after {
   background: linear-gradient(90deg, #4e6e62 0%, #4e7e7e 100%);
   transform: scale(0.97);
 }
-.copyright {
-  position: absolute;
-  bottom: 20px;
+.copyright, .copyright.left-align {
+  text-align: left !important;
+  writing-mode: horizontal-tb !important;
+  margin: 0;
+  padding: 0;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.7);
+  font-family: 'Courier New', monospace;
+}
+.copyright-container, .horizontal-copyright {
+  position: fixed;
   left: 0;
-  font-size: 22px;
-  color: white;
-  text-align: left;
-  line-height: 1.5;
+  bottom: 0;
+  width: 100vw;
+  background: rgba(0,0,0,0.3);
+  z-index: 1000;
+  padding: 0.75rem 0 0.75rem 1.5rem;
+  box-sizing: border-box;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+}
+@media (max-width: 768px) {
+  .copyright-container, .horizontal-copyright {
+    padding-left: 0.7rem;
+    font-size: 0.7rem;
+  }
 }
 @keyframes fadeInUp {
   0% {
@@ -1115,15 +1113,6 @@ body::-webkit-scrollbar {
   transition: background 0.2s;
 }
 
-.copyright {
-  position: absolute;
-  bottom: 20px;
-  left: 0;
-  font-size: 22px;
-  color: white;
-  text-align: left;
-  line-height: 1.5;
-}
 #loginForm {
   display: none;
 }
@@ -1928,32 +1917,4 @@ body::-webkit-scrollbar {
   --spacing-unit: 16px;
   --border-radius: 8px;
   --animation-duration: 0.3s;
-}
-
-.horizontal-copyright {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100vw;
-  background: rgba(0,0,0,0.3);
-  z-index: 1000;
-  padding: 0.75rem 0 0.75rem 1.5rem;
-  box-sizing: border-box;
-  border-top: 1px solid rgba(255,255,255,0.1);
-  backdrop-filter: blur(10px);
-}
-.copyright.left-align {
-  text-align: left;
-  writing-mode: horizontal-tb !important;
-  margin: 0;
-  padding: 0;
-  font-size: 0.8rem;
-  color: rgba(255,255,255,0.7);
-  font-family: 'Courier New', monospace;
-}
-@media (max-width: 768px) {
-  .horizontal-copyright {
-    padding-left: 0.7rem;
-    font-size: 0.7rem;
-  }
 }
