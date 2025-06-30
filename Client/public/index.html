@@ -39,7 +39,8 @@
       <img src="./img/icon.png" alt="Deep-School ロゴ" class="ds-hero-logo" />
       <h1>Deep-School</h1>
       <p class="ds-tagline">Deepに学習。</p>
-      <p class="ds-release">7月1日に公開。</p>
+      <p class="ds-release">7月1日に公開</p>
+      <button id="open-client-btn" class="open-client-btn" aria-label="Deep-Schoolアプリを開く">Deep-Schoolアプリを開く</button>
     </header>
     <main class="ds-main">
       <section class="ds-section ds-hero-section">
@@ -142,5 +143,39 @@
         <small>(C) Carnation Studios 2022-2025 All Rights Reserved.</small>
       </footer>
     </main>
+    <script>
+      document.getElementById('open-client-btn').onclick = function() {
+        window.location.href = '/client/';
+      };
+    </script>
+    <style>
+      .open-client-btn {
+        display: inline-block;
+        margin: 24px auto 0 auto;
+        padding: 18px 48px;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #fff;
+        background: linear-gradient(90deg, #0071e3 0%, #34c759 100%);
+        border: none;
+        border-radius: 32px;
+        box-shadow: 0 6px 24px rgba(0,113,227,0.18);
+        cursor: pointer;
+        transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+        outline: none;
+        letter-spacing: 0.03em;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      }
+      .open-client-btn:hover, .open-client-btn:focus {
+        background: linear-gradient(90deg, #005bb5 0%, #28a745 100%);
+        box-shadow: 0 12px 36px rgba(0,113,227,0.25);
+        transform: translateY(-2px) scale(1.03);
+      }
+      .open-client-btn:active {
+        background: linear-gradient(90deg, #003366 0%, #1e7e34 100%);
+        box-shadow: 0 2px 8px rgba(0,113,227,0.12);
+        transform: scale(0.98);
+      }
+    </style>
   </body>
 </html>
