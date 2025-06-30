@@ -227,6 +227,21 @@ export function convertToHtml(inputText, shell) {
               if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Button " + button.id + " already has click handler", level: 'info'});
             }
           });
+          
+          // 追加の対策: すべてのスクリプトを再実行
+          const allScripts = document.querySelectorAll('script');
+          allScripts.forEach(script => {
+            if (script.textContent.includes('onclick') || script.textContent.includes('getElementById')) {
+              try {
+                const newScript = document.createElement('script');
+                newScript.textContent = script.textContent;
+                document.head.appendChild(newScript);
+                document.head.removeChild(newScript);
+              } catch (e) {
+                if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.err', message: "Error re-executing general script: " + e.message, level: 'error'});
+              }
+            }
+          });
         }, 50);\n`;
         outputHtml += `      } else {\n`;
         outputHtml += `        if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.warn', message: "Incorrect answer: あなたの答え: " + userAnswer + " 正解: " + expectedAnswer, level: 'warn'});\n`;
