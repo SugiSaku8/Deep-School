@@ -343,7 +343,6 @@ export function appInit(shell) {
               </select>
               <button class="pickramu-load-button" id="pickramu-load-btn" data-lang-key="load">
                 <span class="button-text">教材を読み込む</span>
-                <span class="button-icon">📚</span>
               </button>
             </div>
           </div>

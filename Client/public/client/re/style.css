@@ -1679,15 +1679,7 @@ body::-webkit-scrollbar {
   overflow-y: auto;
   padding: 20px;
   box-sizing: border-box;
-  background: linear-gradient(135deg,
-    #1a3a1a 0%,
-    #18422a 18%,
-    #17603a 36%,
-    #005f30 54%,
-    #18422a 72%,
-    #22382b 86%,
-    #2d3436 100%
-  );
+
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
