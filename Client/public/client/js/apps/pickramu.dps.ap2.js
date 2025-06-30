@@ -1145,47 +1145,46 @@ export function appInit(shell) {
              * dom - DOM操作を簡単にするためのオブジェクト
              * @namespace dom
              */
-            const dom = {
-              /**
-               * back - 前のページに戻る
-               * @returns {void}
-               */
-              back: function() {
-                if (window.history && window.history.back) {
-                  window.history.back();
-                } else {
-                  window.location.href = document.referrer || '/';
-                }
-              },
-              
-              /**
-               * Tag - 指定されたIDを持つ要素を取得し、その要素のスタイルを操作するための関数を提供する。
-               * @param {string} tagName - 取得する要素のID
-               * @returns {{style: {display: Function}}} - スタイル操作関数を持つオブジェクト
-               */
-              Tag: function (tagName) {
-                const element = document.getElementById(tagName);
-                return {
-                  style: {
-                    /**
-                     * display - 要素のdisplayスタイルを変更する。
-                     * @param {string} displayValue - 設定するdisplayの値
-                     * @param {string} important - 'auto'の場合、!importantを設定する
-                     * @returns {void}
-                     */
-                    display: function (displayValue, important) {
-                      element.style.display = displayValue;
-                      if (important === "auto") {
-                        element.style.setProperty("display", displayValue, "important");
-                      }
+            if (!window.dom) {
+              window.dom = {
+                /**
+                 * back - 前のページに戻る
+                 * @returns {void}
+                 */
+                back: function() {
+                  if (window.history && window.history.back) {
+                    window.history.back();
+                  } else {
+                    window.location.href = document.referrer || '/';
+                  }
+                },
+                
+                /**
+                 * Tag - 指定されたIDを持つ要素を取得し、その要素のスタイルを操作するための関数を提供する。
+                 * @param {string} tagName - 取得する要素のID
+                 * @returns {{style: {display: Function}}} - スタイル操作関数を持つオブジェクト
+                 */
+                Tag: function (tagName) {
+                  const element = document.getElementById(tagName);
+                  return {
+                    style: {
+                      /**
+                       * display - 要素のdisplayスタイルを変更する。
+                       * @param {string} displayValue - 設定するdisplayの値
+                       * @param {string} important - 'auto'の場合、!importantを設定する
+                       * @returns {void}
+                       */
+                      display: function (displayValue, important) {
+                        element.style.display = displayValue;
+                        if (important === "auto") {
+                          element.style.setProperty("display", displayValue, "important");
+                        }
+                      },
                     },
-                  },
-                };
-              },
-            };
-            
-            // Make dom globally available
-            window.dom = dom;
+                  };
+                },
+              };
+            }
           `;
           // Create the full HTML content with styles
           const fullHtml = `
@@ -1194,6 +1193,7 @@ export function appInit(shell) {
             <head>
               <meta charset="UTF-8">
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://accounts.google.com https://apis.google.com">
               <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
               <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
               <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
@@ -1240,7 +1240,10 @@ export function appInit(shell) {
                   if (script.textContent.includes('initAnswerSystem') || script.textContent.includes('initScript')) {
                     console.log(\`Re-executing script \${index}\`);
                     try {
-                      eval(script.textContent);
+                      // Instead of eval, create a new script element
+                      const newScript = document.createElement('script');
+                      newScript.textContent = script.textContent;
+                      document.body.appendChild(newScript);
                     } catch (e) {
                       console.error(\`Error re-executing script \${index}:\`, e);
                     }
@@ -1268,8 +1271,17 @@ export function appInit(shell) {
                 if (script.textContent.includes('initAnswerSystem') || script.textContent.includes('initScript')) {
                   console.log(`Re-executing script ${index} in iframe`);
                   try {
+                    // Create a new script element with modified content to avoid dom redeclaration
                     const newScript = iframeDoc.createElement('script');
-                    newScript.textContent = script.textContent;
+                    let scriptContent = script.textContent;
+                    
+                    // Remove dom object redeclaration if it exists
+                    if (scriptContent.includes('const dom =') || scriptContent.includes('let dom =') || scriptContent.includes('var dom =')) {
+                      scriptContent = scriptContent.replace(/(const|let|var)\s+dom\s*=\s*\{/g, 'if (!window.dom) { window.dom = {');
+                      scriptContent = scriptContent.replace(/window\.dom\s*=\s*dom;?\s*$/, '}');
+                    }
+                    
+                    newScript.textContent = scriptContent;
                     iframeDoc.body.appendChild(newScript);
                   } catch (e) {
                     console.error(`Error re-executing script ${index} in iframe:`, e);
