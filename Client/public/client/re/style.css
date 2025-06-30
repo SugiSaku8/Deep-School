@@ -1907,3 +1907,31 @@ body::-webkit-scrollbar {
   --border-radius: 8px;
   --animation-duration: 0.3s;
 }
+
+.horizontal-copyright {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100vw;
+  background: rgba(0,0,0,0.3);
+  z-index: 1000;
+  padding: 0.75rem 0 0.75rem 1.5rem;
+  box-sizing: border-box;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+}
+.copyright.left-align {
+  text-align: left;
+  writing-mode: horizontal-tb !important;
+  margin: 0;
+  padding: 0;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.7);
+  font-family: 'Courier New', monospace;
+}
+@media (max-width: 768px) {
+  .horizontal-copyright {
+    padding-left: 0.7rem;
+    font-size: 0.7rem;
+  }
+}
