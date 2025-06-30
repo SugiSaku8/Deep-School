@@ -433,8 +433,28 @@ export function appInit(shell) {
   // 各メニューアイテムにクリックイベントを設定
   Object.entries(menuItems).forEach(([id, handler]) => {
     const menuItem = document.getElementById(id);
-    if (menuItem) {
+    if (id === 'menu-scr') {
+      menuItem.onclick = () => {
+        if (window.isDemoUser) {
+            root.innerHTML = `
+              <div class="pickramu-modal-overlay">
+                <div class="pickramu-modal">
+                  <div class="pickramu-modal-message">SCRは、現在利用できません</div>
+                  <button class="button-chalk pickramu-modal-close">閉じる</button>
+                </div>
+              </div>
+            `;
+            root.querySelector('.pickramu-modal-close').onclick = () => shell.loadApp('menu');
+            return;
+          }else {
+            handler();
+          }
+      };
+    } else {
       menuItem.onclick = handler;
+    }
+    if (menuItem) {
+      
       shell.log({from: 'dp.app.menu.out', message: `MenuApp: ${id}のイベントリスナーを設定`, level: 'info'});
     } else {
       shell.log({from: 'dp.app.menu.err', message: `MenuApp: ${id}のメニューアイテムが見つかりません`, level: 'warn'});

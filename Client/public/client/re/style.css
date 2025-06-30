@@ -1424,19 +1424,33 @@ body::-webkit-scrollbar {
   box-sizing: border-box;
   word-break: break-word;
 }
-#pickramu-eguide-area {
+.pickramu-eguide-area {
   width: 100%;
-  min-height: 600px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+.pickramu-eguide-area .pickramu-iframe,
+.pickramu-eguide-area iframe {
+  width: 100%;
+  height: 70vh;
   border-radius: 12px;
-  background: #173c2b;
-  overflow: hidden;
+  border: none;
+  background: transparent;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  min-width: 0;
+}
+@media (max-width: 900px) {
+  .pickramu-eguide-area .pickramu-iframe,
+  .pickramu-eguide-area iframe {
+    height: 60vh;
+  }
 }
 @media (max-width: 700px) {
   #pickramu_app, .page-container {
     max-width: 98vw;
     padding: 8px 2vw;
   }
-  #pickramu-content, #pickramu-eguide-area {
+  #pickramu-content, .pickramu-eguide-area {
     min-width: 0;
     padding: 12px 4vw;
   }
@@ -1916,4 +1930,36 @@ body::-webkit-scrollbar {
     min-width: 0;
     height: 70vh;
   }
+}
+
+.pickramu-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pickramu-modal {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  padding: 2.5rem 2rem 2rem 2rem;
+  min-width: 320px;
+  max-width: 90vw;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.pickramu-modal-message {
+  font-size: 1.3rem;
+  color: #222;
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
+.pickramu-modal-close {
+  margin-top: 0.5rem;
+  min-width: 120px;
 }

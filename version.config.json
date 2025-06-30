@@ -1,6 +1,6 @@
 {
   "deepSchoolFamily": {
-    "version": "25C923X1",
+    "version": "25C93X1",
     "status": "beta",
     "lastUpdated": "2025-06-30",
     "description": "Deep-School Family Software - Initial release"
@@ -24,7 +24,7 @@
     "description": "Deep-School Server - Initial stable release"
   },
   "pickramu": {
-    "version": "1.0.38",
+    "version": "1.0.39",
     "status": "beta",
     "cycle": 1,
     "release": 0,
@@ -60,7 +60,7 @@
     "description": "Login - Initial beta release"
   },
   "menu": {
-    "version": "0.0.14",
+    "version": "0.0.15",
     "status": "beta",
     "cycle": 0,
     "release": 0,
