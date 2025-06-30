@@ -96,11 +96,12 @@ export function convertToHtml(inputText, shell) {
         outputHtml += `    const input = document.getElementById("${inputId}_input");\n`;
         outputHtml += `    const button = document.getElementById("${buttonId}");\n`;
         outputHtml += `    const futterElement = document.getElementById("${futterId}");\n`;
+        outputHtml += `    const inputContainer = document.getElementById("${inputId}");\n`;
         outputHtml += `    \n`;
-        outputHtml += `    if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Elements found: " + JSON.stringify({ input: !!input, button: !!button, futter: !!futterElement }), level: 'info'});\n`;
+        outputHtml += `    if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Elements found: " + JSON.stringify({ input: !!input, button: !!button, futter: !!futterElement, container: !!inputContainer }), level: 'info'});\n`;
         outputHtml += `    \n`;
-        outputHtml += `    if (!input || !button || !futterElement) {\n`;
-        outputHtml += `      if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.err', message: "Required elements not found: " + JSON.stringify({ input: !!input, button: !!button, futter: !!futterElement }), level: 'error'});\n`;
+        outputHtml += `    if (!input || !button || !futterElement || !inputContainer) {\n`;
+        outputHtml += `      if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.err', message: "Required elements not found: " + JSON.stringify({ input: !!input, button: !!button, futter: !!futterElement, container: !!inputContainer }), level: 'error'});\n`;
         outputHtml += `      return;\n`;
         outputHtml += `    }\n`;
         outputHtml += `    \n`;
@@ -164,8 +165,8 @@ export function convertToHtml(inputText, shell) {
         outputHtml += `      // If no expected answer found, just show the answer content\n`;
         outputHtml += `      if (!expectedAnswer) {\n`;
         outputHtml += `        if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "No expected answer found, showing answer content", level: 'info'});\n`;
-        outputHtml += `        document.getElementById("${inputId}").style.display = "none";\n`;
-        outputHtml += `        document.getElementById("${futterId}").style.display = "block";\n`;
+        outputHtml += `        inputContainer.style.display = "none";\n`;
+        outputHtml += `        futterElement.style.display = "block";\n`;
         outputHtml += `        return;\n`;
         outputHtml += `      }\n`;
         outputHtml += `      \n`;
@@ -176,20 +177,39 @@ export function convertToHtml(inputText, shell) {
         outputHtml += `      if (isCorrect) {\n`;
         outputHtml += `        if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Correct answer!", level: 'info'});\n`;
         outputHtml += `        // Show correct answer\n`;
-        outputHtml += `        document.getElementById("${inputId}").style.display = "none";\n`;
-        outputHtml += `        document.getElementById("${futterId}").style.display = "block";\n`;
-        outputHtml += `        // Move to next input if exists\n`;
+        outputHtml += `        inputContainer.style.display = "none";\n`;
+        outputHtml += `        futterElement.style.display = "block";\n`;
+        outputHtml += `        \n`;
+        outputHtml += `        // Re-initialize any scripts that might be needed for the next section\n`;
         outputHtml += `        setTimeout(() => {\n`;
-        outputHtml += `          const allInputs = Array.from(document.querySelectorAll('.input-container'));\n`;
-        outputHtml += `          const currentIndex = allInputs.findIndex(el => el.contains(input));\n`;
-        outputHtml += `          if (currentIndex !== -1 && allInputs[currentIndex + 1]) {\n`;
-        outputHtml += `            const nextInput = allInputs[currentIndex + 1].querySelector('input');\n`;
-        outputHtml += `            if (nextInput) {\n`;
-        outputHtml += `              nextInput.focus();\n`;
-        outputHtml += `              nextInput.scrollIntoView({ behavior: 'smooth', block: 'center' });\n`;
+        outputHtml += `          // Find and re-initialize any script elements that might need to be re-run\n`;
+        outputHtml += `          const scripts = document.querySelectorAll('script');\n`;
+        outputHtml += `          scripts.forEach(script => {\n`;
+        outputHtml += `            if (script.textContent.includes('initScript') || script.textContent.includes('onclick')) {\n`;
+        outputHtml += `              try {\n`;
+        outputHtml += `                // Re-evaluate the script content\n`;
+        outputHtml += `                const newScript = document.createElement('script');\n`;
+        outputHtml += `                newScript.textContent = script.textContent;\n`;
+        outputHtml += `                document.head.appendChild(newScript);\n`;
+        outputHtml += `                document.head.removeChild(newScript);\n`;
+        outputHtml += `              } catch (e) {\n`;
+        outputHtml += `                if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.err', message: "Error re-initializing script: " + e.message, level: 'error'});\n`;
+        outputHtml += `              }\n`;
         outputHtml += `            }\n`;
-        outputHtml += `          }\n`;
-        outputHtml += `        }, 300);\n`;
+        outputHtml += `          });\n`;
+        outputHtml += `          
+          // Also try to manually trigger any "次へ" buttons that might be visible
+          const nextButtons = document.querySelectorAll('button');
+          nextButtons.forEach(button => {
+            if (button.textContent.includes('次へ') && button.style.display !== 'none') {
+              if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Found visible next button: " + button.id, level: 'info'});
+              // Ensure the button has a click handler
+              if (!button.onclick) {
+                if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.warn', message: "Next button has no click handler: " + button.id, level: 'warn'});
+              }
+            }
+          });
+        }, 100);\n`;
         outputHtml += `      } else {\n`;
         outputHtml += `        if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.warn', message: "Incorrect answer: あなたの答え: " + userAnswer + " 正解: " + expectedAnswer, level: 'warn'});\n`;
         outputHtml += `        // Show error message with retry option\n`;
@@ -329,14 +349,45 @@ export function convertToHtml(inputText, shell) {
         outputHtml += `  function initScript() {\n`;
         outputHtml += `    const element = document.getElementById("${scriptOn}");\n`;
         outputHtml += `    if (element) {\n`;
+        outputHtml += `      // Remove existing click handler to prevent duplicates\n`;
+        outputHtml += `      element.onclick = null;\n`;
         outputHtml += `      element.onclick = function() {\n`;
         outputHtml += scriptContent + "\n";
         outputHtml += `      };\n`;
+        outputHtml += `      if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Script initialized for element: ${scriptOn}", level: 'info'});\n`;
+        outputHtml += `    } else {\n`;
+        outputHtml += `      if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.warn', message: "Element not found for script: ${scriptOn}", level: 'warn'});\n`;
         outputHtml += `    }\n`;
         outputHtml += `  }\n`;
+        outputHtml += `  \n`;
+        outputHtml += `  // Initialize immediately\n`;
         outputHtml += `  initScript();\n`;
+        outputHtml += `  \n`;
+        outputHtml += `  // Also initialize when DOM is ready\n`;
         outputHtml += `  if (document.readyState === 'loading') {\n`;
         outputHtml += `    document.addEventListener('DOMContentLoaded', initScript);\n`;
+        outputHtml += `  }\n`;
+        outputHtml += `  \n`;
+        outputHtml += `  // Set up a mutation observer to re-initialize when new elements are added\n`;
+        outputHtml += `  if (typeof MutationObserver !== 'undefined') {\n`;
+        outputHtml += `    const observer = new MutationObserver(function(mutations) {\n`;
+        outputHtml += `      mutations.forEach(function(mutation) {\n`;
+        outputHtml += `        if (mutation.type === 'childList') {\n`;
+        outputHtml += `          mutation.addedNodes.forEach(function(node) {\n`;
+        outputHtml += `            if (node.nodeType === 1) { // Element node\n`;
+        outputHtml += `              if (node.id === '${scriptOn}' || node.querySelector && node.querySelector('#${scriptOn}')) {\n`;
+        outputHtml += `                setTimeout(initScript, 10);\n`;
+        outputHtml += `              }\n`;
+        outputHtml += `            }\n`;
+        outputHtml += `          });\n`;
+        outputHtml += `        }\n`;
+        outputHtml += `      });\n`;
+        outputHtml += `    });\n`;
+        outputHtml += `    \n`;
+        outputHtml += `    observer.observe(document.body, {\n`;
+        outputHtml += `      childList: true,\n`;
+        outputHtml += `      subtree: true\n`;
+        outputHtml += `    });\n`;
         outputHtml += `  }\n`;
         outputHtml += `})();\n`;
         outputHtml += `</script>\n`;
@@ -938,6 +989,30 @@ export function appInit(shell) {
                           console.log("Showing answer");
                           this.closest('.input-container').style.display = 'none';
                           futter.style.display = 'block';
+                          
+                          // After showing answer, re-initialize any "次へ" button scripts
+                          setTimeout(() => {
+                            const nextButtons = iframeDoc.querySelectorAll('button');
+                            nextButtons.forEach(nextBtn => {
+                              if (nextBtn.textContent.includes('次へ') && nextBtn.style.display !== 'none') {
+                                console.log("Found next button after answer:", nextBtn.id);
+                                // Re-initialize the script for this button
+                                const scripts = iframeDoc.querySelectorAll('script');
+                                scripts.forEach(script => {
+                                  if (script.textContent.includes(nextBtn.id) && script.textContent.includes('onclick')) {
+                                    console.log("Re-initializing script for next button:", nextBtn.id);
+                                    try {
+                                      const newScript = iframeDoc.createElement('script');
+                                      newScript.textContent = script.textContent;
+                                      iframeDoc.body.appendChild(newScript);
+                                    } catch (e) {
+                                      console.error("Error re-initializing script for next button:", e);
+                                    }
+                                  }
+                                });
+                              }
+                            });
+                          }, 100);
                         }
                       };
                     }
