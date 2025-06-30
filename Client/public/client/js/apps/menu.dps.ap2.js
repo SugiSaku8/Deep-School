@@ -14,25 +14,6 @@ export function appInit(shell) {
     return;
   }
   root.innerHTML = `
-    <div class="menu-container">
-      <div class="blackboard-panel">
-        <div class="blackboard-content">
-          <div class="blackboard-header">
-            <div class="chalk-icon">📅</div>
-            <h2 class="chalk-text">今日の情報</h2>
-          </div>
-          <div class="info-section">
-            <div class="info-item">
-              <span class="info-label chalk-text">日付:</span>
-              <span class="info-value chalk-text" id="current-date"></span>
-            </div>
-            <div class="info-item">
-              <span class="info-label chalk-text">アカウント:</span>
-              <span class="info-value chalk-text" id="user-account"></span>
-            </div>
-          </div>
-        </div>
-      </div>
       
       <div class="menu-content">
         <div class="menu-item">
@@ -388,31 +369,7 @@ export function appInit(shell) {
   </style>
 `;
 
-  // 日付とアカウント情報を表示
-  function updateInfo() {
-    const dateElement = document.getElementById('current-date');
-    const accountElement = document.getElementById('user-account');
-    
-    if (dateElement) {
-      const now = new Date();
-      const options = { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric', 
-        weekday: 'long' 
-      };
-      const dateString = now.toLocaleDateString('ja-JP', options);
-      dateElement.textContent = dateString;
-    }
-    
-    if (accountElement) {
-      if (window.googleUserName) {
-        accountElement.textContent = window.googleUserName;
-      } else {
-        accountElement.textContent = 'ゲストユーザー';
-      }
-    }
-  }
+
 
   // メニューアイテムの設定
   const menuItems = {
@@ -459,12 +416,7 @@ export function appInit(shell) {
     shell.log({from: 'dp.app.menu.out', message: 'MenuApp: Parallax effects initialized', level: 'info'});
   }
 
-  // 情報を更新
-  updateInfo();
-  
-  // 日付を毎日更新
-  setInterval(updateInfo, 60000); // 1分ごとに更新
-
+ 
   // ユーザー情報の表示（ログイン済みの場合）
   if (window.googleUserName) {
     shell.log({from: 'dp.app.menu.out', message: 'MenuApp: ユーザー情報 ' + JSON.stringify({name: window.googleUserName, id: window.googleUserId}), level: 'info'});

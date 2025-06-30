@@ -17,20 +17,24 @@ export function appInit(shell) {
   }
   root.innerHTML = `
     <div class="container_top" id="login-app">
-    <h1 class="title chalk-text" id="itisttitle">Deep-School</h1>
-    <div class="login-form popup" id="loginForm">
-        <div class="login-form-inner">
-          <label for="schoolId" class="chalk-text" data-lang-key="school_id">学校ID</label>
-          <input type="text" id="schoolId" placeholder="学校ID" data-lang-key="school_id_placeholder" />
-          <button type="button" class="submit-button button-chalk" id="school_login_btn" data-lang-key="login_button">ログイン</button>
-          <p data-lang-key="login_id_hint">学校IDは、pL:2^4,5,101 のような形式の文字列です。</p>
+      <div class="login-content">
+        <h1 class="title chalk-text" id="itisttitle">Deep-School</h1>
+        <div class="login-form popup" id="loginForm">
+          <div class="login-form-inner">
+            <label for="schoolId" class="chalk-text" data-lang-key="school_id">学校ID</label>
+            <input type="text" id="schoolId" placeholder="学校ID" data-lang-key="school_id_placeholder" />
+            <button type="button" class="submit-button button-chalk" id="school_login_btn" data-lang-key="login_button">ログイン</button>
+            <p data-lang-key="login_id_hint">学校IDは、pL:2^4,5,101 のような形式の文字列です。</p>
+          </div>
         </div>
-    </div>
-      <div id="google-signin-container">
-    <div id="openLoginButton" class="login-button button-chalk"></div>
+        <div id="google-signin-container">
+          <div id="openLoginButton" class="login-button button-chalk"></div>
+        </div>
       </div>
-      <p class="copyright chalk-text" data-lang-key="copyright">(c) 2022-2025 Carnation Studio v0.1.2</p>
-  </div>
+      <div class="copyright-container">
+        <p class="copyright chalk-text" data-lang-key="copyright">(c) 2022-2025 Carnation Studio v0.1.2</p>
+      </div>
+    </div>
   
   <style>
   /* Enhanced login styles with parallax effects */
@@ -38,8 +42,6 @@ export function appInit(shell) {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     position: relative;
     overflow: hidden;
@@ -60,6 +62,17 @@ export function appInit(shell) {
   @keyframes float {
     0%, 100% { transform: translateY(0px) rotate(0deg); }
     50% { transform: translateY(-20px) rotate(180deg); }
+  }
+  
+  .login-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    position: relative;
+    z-index: 1;
   }
   
   .title {
@@ -88,6 +101,8 @@ export function appInit(shell) {
     position: relative;
     z-index: 1;
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    max-width: 400px;
+    width: 100%;
   }
   
   .login-form:hover {
@@ -190,12 +205,21 @@ export function appInit(shell) {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
   }
   
+  .copyright-container {
+    position: relative;
+    z-index: 1;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
   .copyright {
     font-size: 0.9rem;
     color: rgba(255, 255, 255, 0.8);
     text-align: center;
-    position: relative;
-    z-index: 1;
+    margin: 0;
+    padding: 0;
   }
   
   /* Dark mode adjustments */
@@ -208,6 +232,58 @@ export function appInit(shell) {
     .login-form:hover {
       background: rgba(0, 0, 0, 0.3);
       border-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .copyright-container {
+      background: rgba(0, 0, 0, 0.3);
+    }
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .login-content {
+      padding: 1rem;
+      justify-content: flex-start;
+      padding-top: 3rem;
+    }
+    
+    .title {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .login-form {
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .copyright-container {
+      padding: 0.75rem;
+      margin-top: auto;
+    }
+    
+    .copyright {
+      font-size: 0.8rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .title {
+      font-size: 2rem;
+    }
+    
+    .login-form {
+      padding: 1rem;
+    }
+    
+    .login-form-inner {
+      gap: 0.75rem;
+    }
+    
+    .submit-button,
+    .login-button {
+      padding: 10px 20px;
+      font-size: 1rem;
     }
   }
   </style>
