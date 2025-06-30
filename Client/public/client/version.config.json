@@ -1,12 +1,12 @@
 {
   "deepSchoolFamily": {
-    "version": "25C893X1",
+    "version": "25C894X1",
     "status": "beta",
     "lastUpdated": "2025-06-30",
     "description": "Deep-School Family Software - Initial release"
   },
   "deepSchoolClient": {
-    "version": "0.1.8",
+    "version": "0.1.9",
     "status": "stable",
     "cycle": 1,
     "release": 0,
@@ -24,7 +24,7 @@
     "description": "Deep-School Server - Initial stable release"
   },
   "pickramu": {
-    "version": "1.0.34",
+    "version": "1.0.35",
     "status": "beta",
     "cycle": 1,
     "release": 0,
@@ -33,7 +33,7 @@
     "description": "Pickramu - Initial stable release"
   },
   "eguide": {
-    "version": "0.0.1",
+    "version": "0.0.2",
     "status": "beta",
     "cycle": 0,
     "release": 0,
@@ -42,7 +42,7 @@
     "description": "eGuide - Initial beta release"
   },
   "estore": {
-    "version": "0.0.1",
+    "version": "0.0.2",
     "status": "beta",
     "cycle": 0,
     "release": 0,
@@ -51,7 +51,7 @@
     "description": "eStore - Initial beta release"
   },
   "login": {
-    "version": "0.0.2",
+    "version": "0.0.3",
     "status": "beta",
     "cycle": 0,
     "release": 0,
@@ -60,7 +60,7 @@
     "description": "Login - Initial beta release"
   },
   "menu": {
-    "version": "0.0.2",
+    "version": "0.0.4",
     "status": "beta",
     "cycle": 0,
     "release": 0,
@@ -69,7 +69,7 @@
     "description": "Menu - Initial beta release"
   },
   "setting": {
-    "version": "0.0.3",
+    "version": "0.0.4",
     "status": "beta",
     "cycle": 0,
     "release": 0,
@@ -78,7 +78,7 @@
     "description": "Setting - Initial beta release"
   },
   "toasterMachine": {
-    "version": "0.4.3",
+    "version": "0.4.4",
     "status": "beta",
     "cycle": 1,
     "release": 0,
@@ -93,7 +93,7 @@
     "nextCycleUpdate": "2025-07-01"
   },
   "scr": {
-    "version": "0.1.2",
+    "version": "0.1.3",
     "status": "beta",
     "cycle": 0,
     "release": 1,

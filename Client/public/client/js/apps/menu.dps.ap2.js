@@ -16,53 +16,57 @@ export function appInit(shell) {
   root.innerHTML = `
     <div class="menu-content">
       <div class="menu-item">
-        <img src="re/ico/tm.png" alt="ToasterMachineアイコン" class="menu-icon toaster-icon icon-anim" />
-        <span class="notification-badge">25</span>
-        <div class="menu-label chalk-text icon-anim" id="menu-toaster" style="cursor: pointer" data-lang-key="menu_toaster">
+        <img src="re/ico/tm.png" alt="ToasterMachineアイコン" class="menu-icon" />
+        <div class="menu-label chalk-text" id="menu-toaster" style="cursor: pointer" data-lang-key="menu_toaster">
           ToasterMachine
         </div>
       </div>
       <div class="menu-item" id="scr_menu_icon">
-        <img src="re/ico/SCR.png" alt="SCRアイコン" class="menu-icon scr-icon icon-anim" />
-        <span class="notification-badge">25</span>
-        <div class="menu-label chalk-text icon-anim" id="menu-scr" style="cursor: pointer" data-lang-key="menu_scr">
+        <img src="re/ico/SCR.png" alt="SCRアイコン" class="menu-icon" />
+        <div class="menu-label chalk-text" id="menu-scr" style="cursor: pointer" data-lang-key="menu_scr">
           SCR
         </div>
       </div>
       <div class="menu-item">
-        <img src="re/ico/Setting.png" alt="設定アイコン" class="menu-icon setting-icon icon-anim" />
-        <div class="menu-label chalk-text icon-anim" id="menu-setting" style="cursor: pointer" data-lang-key="menu_setting">設定</div>
+        <img src="re/ico/Setting.png" alt="設定アイコン" class="menu-icon" />
+        <div class="menu-label chalk-text" id="menu-setting" style="cursor: pointer" data-lang-key="menu_setting">設定</div>
       </div>
       <div class="menu-item">
-        <img src="re/ico/note.svg" alt="Pickramuアイコン" class="menu-icon pickramu-icon icon-anim" />
-        <div class="menu-label chalk-text icon-anim" id="menu-pickramu" style="cursor: pointer" data-lang-key="menu_pickramu">Pickramu</div>
+        <img src="re/ico/note.svg" alt="Pickramuアイコン" class="menu-icon" />
+        <div class="menu-label chalk-text" id="menu-pickramu" style="cursor: pointer" data-lang-key="menu_pickramu">Pickramu</div>
     </div>
   </div>
   
   <style>
-  /* Enhanced menu styles with parallax effects */
+  /* Enhanced menu styles with horizontal layout and hover-only animations */
   .menu-content {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 40px 20px;
-    max-width: 400px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    padding: 4rem 2rem;
+    max-width: 1200px;
     margin: 0 auto;
+    min-height: 100vh;
+    flex-wrap: wrap;
   }
   
   .menu-item {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 15px;
-    padding: 20px;
+    gap: 1rem;
+    padding: 2rem;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
+    border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(20px);
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     position: relative;
     overflow: hidden;
+    min-width: 200px;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
   
   .menu-item::before {
@@ -74,10 +78,12 @@ export function appInit(shell) {
     height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
     transition: left 0.5s ease;
+    opacity: 0;
   }
   
   .menu-item:hover::before {
     left: 100%;
+    opacity: 1;
   }
   
   .menu-item:hover {
@@ -89,9 +95,9 @@ export function appInit(shell) {
   }
   
   .menu-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
     transition: all 0.3s ease;
   }
   
@@ -101,39 +107,17 @@ export function appInit(shell) {
   }
   
   .menu-label {
-    font-size: 18px;
+    font-size: 1.2rem;
     font-weight: 600;
     color: #fff;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease;
+    text-align: center;
   }
   
   .menu-item:hover .menu-label {
-    transform: translateX(5px);
+    transform: translateY(-2px);
     text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-  }
-  
-  .notification-badge {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background: #ff3b30;
-    color: white;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: bold;
-    animation: pulse 2s infinite;
-  }
-  
-  @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
   }
   
   /* Dark mode adjustments */
@@ -146,6 +130,29 @@ export function appInit(shell) {
     .menu-item:hover {
       background: rgba(0, 0, 0, 0.4);
       border-color: rgba(255, 255, 255, 0.2);
+    }
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .menu-content {
+      flex-direction: column;
+      gap: 1.5rem;
+      padding: 2rem 1rem;
+    }
+    
+    .menu-item {
+      min-width: 180px;
+      padding: 1.5rem;
+    }
+    
+    .menu-icon {
+      width: 48px;
+      height: 48px;
+    }
+    
+    .menu-label {
+      font-size: 1rem;
     }
   }
   </style>
@@ -182,15 +189,15 @@ export function appInit(shell) {
     }
   });
 
-  // Initialize parallax effects for menu items
+  // Initialize parallax effects for menu items (hover only)
   if (window.parallaxManager) {
     const menuItems = document.querySelectorAll('.menu-item');
     menuItems.forEach(item => {
       window.parallaxManager.addParallaxEffects(item, {
         hover: true,
-        mouse: true,
+        mouse: false,
         touch: true,
-        ripple: true
+        ripple: false
       });
     });
     shell.log({from: 'dp.app.menu.out', message: 'MenuApp: Parallax effects initialized', level: 'info'});
