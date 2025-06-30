@@ -43,11 +43,11 @@ $ 2y-x^2 y $の項をすべて答えましょう。
 @input q2_input [open]
 回答を入力してください。
 @btn on=^set^ 回答する
-@input q2_input futter=q1_answer [close] 
+@input q2_input futter=q2_answer [close] 
 
-@futter q1_answer futter=q1_answer [open]
+@futter q2_answer futter=q2_answer [open]
 正解は「$ 2y,-x^2 y $」です。
-@futter q2_answer futter=q1_answer [close]
+@futter q2_answer futter=q2_answer [close]
 
 @tag answer [close]
 
@@ -71,11 +71,11 @@ $ x^2 y $の次数を言いましょう。
 @input q3_input [open]
 回答を入力してください。
 @btn on=^set^ 回答する
-@input q3_input futter=q1_answer [close] 
+@input q3_input futter=q3_answer [close] 
 
-@futter q3_answer futter=q1_answer [open]
+@futter q3_answer futter=q3_answer [open]
 正解は「$ 3 $」です。
-@futter q3_answer futter=q1_answer [close]
+@futter q3_answer futter=q3_answer [close]
 
 @tag answer [close]
 
@@ -99,11 +99,11 @@ $ 4x $は単項式と多項式のどちらに当てはまりますか。
 @input q4_input [open]
 回答を入力してください。
 @btn on=^set^ 回答する
-@input q4_input futter=q1_answer [close] 
+@input q4_input futter=q4_answer [close] 
 
-@futter q4_answer futter=q1_answer [open]
+@futter q4_answer futter=q4_answer [open]
 正解は「単項式」です。
-@futter q4_answer futter=q1_answer [close]
+@futter q4_answer futter=q4_answer [close]
 
 @tag answer [close]
 
@@ -127,11 +127,11 @@ dom.Tag("n5").style.display('block','auto');
 @input q5_input [open]
 回答を入力してください。
 @btn on=^set^ 回答する
-@input q5_input futter=q1_answer [close] 
+@input q5_input futter=q5_answer [close] 
 
-@futter q5_answer futter=q1_answer [open]
+@futter q5_answer futter=q5_answer [open]
 正解は「同類項」です。
-@futter q5_answer futter=q1_answer [close]
+@futter q5_answer futter=q5_answer [close]
 
 @tag answer [close]
 

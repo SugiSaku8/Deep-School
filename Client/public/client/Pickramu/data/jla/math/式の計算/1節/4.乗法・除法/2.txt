@@ -41,11 +41,11 @@ $ 0.005x \times 6x^2y $を計算しましょう。
 @input q2_input [open]
 回答を入力してください。
 @btn on=^set^ 回答する
-@input q2_input futter=q1_answer [close] 
+@input q2_input futter=q2_answer [close] 
 
-@futter q1_answer futter=q1_answer [open]
+@futter q2_answer futter=q2_answer [open]
 正解は「$ 0.03x^3y $」です。
-@futter q2_answer futter=q1_answer [close]
+@futter q2_answer futter=q2_answer [close]
 
 @tag answer [close]
 
@@ -69,11 +69,11 @@ $ 4x \times \frac{x+y}{4} $を計算しましょう。
 @input q3_input [open]
 回答を入力してください。
 @btn on=^set^ 回答する
-@input q3_input futter=q1_answer [close] 
+@input q3_input futter=q3_answer [close] 
 
-@futter q3_answer futter=q1_answer [open]
+@futter q3_answer futter=q3_answer [open]
 正解は「$ x^2+xy $」です。
-@futter q3_answer futter=q1_answer [close]
+@futter q3_answer futter=q3_answer [close]
 
 @tag answer [close]
 
@@ -97,11 +97,11 @@ $ 121a^3 \div 11a^2 $を計算しましょう。
 @input q4_input [open]
 回答を入力してください。
 @btn on=^set^ 回答する
-@input q4_input futter=q1_answer [close] 
+@input q4_input futter=q4_answer [close] 
 
-@futter q4_answer futter=q1_answer [open]
+@futter q4_answer futter=q4_answer [open]
 正解は「$ 11a $」です。
-@futter q4_answer futter=q1_answer [close]
+@futter q4_answer futter=q4_answer [close]
 
 @tag answer [close]
 
@@ -125,11 +125,11 @@ $ 4x^3 \div \frac{8}{3}x^2y^3 \times 16xy^3 $を計算しなさい。
 @input q5_input [open]
 回答を入力してください。
 @btn on=^set^ 回答する
-@input q5_input futter=q1_answer [close] 
+@input q5_input futter=q5_answer [close] 
 
-@futter q5_answer futter=q1_answer [open]
+@futter q5_answer futter=q5_answer [open]
 正解は「$ 24x^2 $」です。/br
-@futter q5_answer futter=q1_answer [close]
+@futter q5_answer futter=q5_answer [close]
 
 @tag answer [close]
 

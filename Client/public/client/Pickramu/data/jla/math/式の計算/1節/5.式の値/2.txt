@@ -43,13 +43,13 @@ $ x=-1 $,$ y=-\frac{1}{2} $のとき、$ 2(x-5y)-9(-5x+2y) $の値を求めま�
 @input q2_input [open]
 回答を入力してください。
 @btn on=^set^ 回答する
-@input q2_input futter=q1_answer [close] 
+@input q2_input futter=q2_answer [close] 
 
-@futter q1_answer futter=q1_answer [open]
+@futter q2_answer futter=q2_answer [open]
 正解は「$ -33 $」です。
 $2(x-5y)-9(-5x+2y)=2x-10y+45x-18y$/br
 $=47x-28y=-47+14=-33$
-@futter q2_answer futter=q1_answer [close]
+@futter q2_answer futter=q2_answer [close]
 
 @tag answer [close]
 
@@ -74,9 +74,9 @@ $ x=-\frac{1}{2} $,$ y=\frac{2}{5} $のとき、$ 12x^3y^3 \div \frac{3}{4}x^2y^
 @input q3_input [open]
 回答を入力してください。
 @btn on=^set^ 回答する
-@input q3_input futter=q1_answer [close] 
+@input q3_input futter=q3_answer [close] 
 
-@futter q3_answer futter=q1_answer [open]
+@futter q3_answer futter=q3_answer [open]
 正解は「$ -\frac{16}{25} $」です。
 $12x^3y^3 \div \frac{3}{4}x^2y^2 \times \frac{4}{8}y$/br
 $=\frac{\cancelto{\cancel4}{12}x^\cancel3y^\cancel3\times4\times\cancelto24y}{\cancel3\cancel{x^2}\cancel{y^2}\times\cancelto{\cancel2}{8}}=8xy^2$/br
@@ -87,7 +87,7 @@ $=-\frac{\cancelto48\times1\times4}{\cancel2\times25}=-\frac{16}{25}$/br
 問題作ったやつまじで許さない/br
 入力大変すg/br
 ...メッセージはここでとぎれているようだ
-@futter q3_answer futter=q1_answer [close]
+@futter q3_answer futter=q3_answer [close]
 
 @tag answer [close]
 

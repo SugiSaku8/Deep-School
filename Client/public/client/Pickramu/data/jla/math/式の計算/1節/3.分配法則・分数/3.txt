@@ -41,11 +41,11 @@ $ 3(2a-5b+12c) $を計算しましょう。
 @input q2_input [open]
 回答を入力してください。
 @btn on=^set^ 回答する
-@input q2_input futter=q1_answer [close] 
+@input q2_input futter=q2_answer [close] 
 
-@futter q1_answer futter=q1_answer [open]
+@futter q2_answer futter=q2_answer [open]
 正解は「$ 6a-15b+36c $」です。
-@futter q2_answer futter=q1_answer [close]
+@futter q2_answer futter=q2_answer [close]
 
 @tag answer [close]
 
@@ -69,12 +69,12 @@ $ \frac{x+y}{3} + \frac{x+y}{4} $を計算しましょう。
 @input q3_input [open]
 回答を入力してください。
 @btn on=^set^ 回答する
-@input q3_input futter=q1_answer [close] 
+@input q3_input futter=q3_answer [close] 
 
-@futter q3_answer futter=q1_answer [open]
+@futter q3_answer futter=q3_answer [open]
 正解は「$ \frac{7x+7y}{12} $」です。/br
 (別解:$ /frac{7x}{12} + {7y}{12} $ )
-@futter q3_answer futter=q1_answer [close]
+@futter q3_answer futter=q3_answer [close]
 
 @tag answer [close]
 
@@ -98,11 +98,11 @@ $ \frac{5x+2}{2} - \frac{6x-4}{4} $を計算しましょう。
 @input q4_input [open]
 回答を入力してください。
 @btn on=^set^ 回答する
-@input q4_input futter=q1_answer [close] 
+@input q4_input futter=q4_answer [close] 
 
-@futter q4_answer futter=q1_answer [open]
+@futter q4_answer futter=q4_answer [open]
 正解は「$ x+2 $」です。
-@futter q4_answer futter=q1_answer [close]
+@futter q4_answer futter=q4_answer [close]
 
 @tag answer [close]
 
@@ -128,12 +128,12 @@ $ \frac{1}{11}(22x-121y-242z) + \frac{1}{2}(1x+23y+19z) $を計算しなさい�
 ヒント : 片方の分数は簡単にできるかも。/br
 答えはきもい by 解説かいてる人
 @btn on=^set^ 回答する
-@input q5_input futter=q1_answer [close] 
+@input q5_input futter=q5_answer [close] 
 
-@futter q5_answer futter=q1_answer [open]
+@futter q5_answer futter=q5_answer [open]
 正解は「$ \frac{3}{2}x + \frac{1}{2}y - /frac{25}{2}z $」です。/br
 (別解:$ \frac{3x+y-25z}{2} $)
-@futter q5_answer futter=q1_answer [close]
+@futter q5_answer futter=q5_answer [close]
 
 @tag answer [close]
 
