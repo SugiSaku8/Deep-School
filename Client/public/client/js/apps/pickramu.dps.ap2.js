@@ -281,11 +281,12 @@ export function convertToHtml(inputText, shell) {
             if (btn) {
               btn.onclick = function() {
                 var doc = window.document ? window.document : document;
-                // 修正: 非表示のinputは除外
+                // 修正: 非表示のinputは除外（getComputedStyleで厳密に）
                 var allInputs = Array.from(doc.querySelectorAll('.input-container input')).filter(i => {
                   var container = i.closest('.input-container');
-                  return container && container.style.display !== 'none';
+                  return container && window.getComputedStyle(container).display !== 'none';
                 });
+                console.log('次へボタン: 有効なinput数', allInputs.length, allInputs.map(i => i.id));
                 if (!allInputs.length) return;
                 var current = allInputs.findIndex(i => i === doc.activeElement);
                 if (current === -1) {
