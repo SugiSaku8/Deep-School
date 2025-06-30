@@ -1,7 +1,7 @@
 /* 
 Pickramu
 The Pickramu is a language for creating teaching materials for Deep-School.
-version:1.0.23
+version:1.0.24
 Development:Carnaion Studio
 License:MPL-2.0
 */
@@ -90,84 +90,100 @@ export function convertToHtml(inputText) {
       if (hasButton && futterId) {
         outputHtml += `<script>\n`;
         outputHtml += `(function() {\n`;
-        outputHtml += `  const input = document.getElementById("${inputId}_input");\n`;
-        outputHtml += `  const button = document.getElementById("${buttonId}");\n`;
-        outputHtml += `  \n`;
-        outputHtml += `  function checkAnswer() {\n`;
-        outputHtml += `    const userAnswer = input.value.trim();\n`;
+        outputHtml += `  // Wait for DOM to be ready\n`;
+        outputHtml += `  function initAnswerSystem() {\n`;
+        outputHtml += `    const input = document.getElementById("${inputId}_input");\n`;
+        outputHtml += `    const button = document.getElementById("${buttonId}");\n`;
         outputHtml += `    const futterElement = document.getElementById("${futterId}");\n`;
+        outputHtml += `    \n`;
+        outputHtml += `    if (!input || !button || !futterElement) {\n`;
+        outputHtml += `      console.error("Required elements not found:", { input: !!input, button: !!button, futter: !!futterElement });\n`;
+        outputHtml += `      return;\n`;
+        outputHtml += `    }\n`;
         outputHtml += `    \n`;
         outputHtml += `    // Get the answer content that was stored during compilation\n`;
         outputHtml += `    const answerContent = ${JSON.stringify(answers[futterId] || "")};\n`;
         outputHtml += `    \n`;
-        outputHtml += `    // Extract expected answer from the stored content - multiple patterns\n`;
-        outputHtml += `    let expectedAnswer = "";\n`;
-        outputHtml += `    if (answerContent) {\n`;
-        outputHtml += `      // Pattern 1: 正解は「...」\n`;
-        outputHtml += `      let answerMatch = answerContent.match(/正解は「([^」]+)」/);\n`;
-        outputHtml += `      if (answerMatch) {\n`;
-        outputHtml += `        expectedAnswer = answerMatch[1].trim();\n`;
-        outputHtml += `      } else {\n`;
-        outputHtml += `        // Pattern 2: 正解: ...\n`;
-        outputHtml += `        answerMatch = answerContent.match(/正解:\\s*([^\\n]+)/);\n`;
+        outputHtml += `    function checkAnswer() {\n`;
+        outputHtml += `      const userAnswer = input.value.trim();\n`;
+        outputHtml += `      \n`;
+        outputHtml += `      // Extract expected answer from the stored content - multiple patterns\n`;
+        outputHtml += `      let expectedAnswer = "";\n`;
+        outputHtml += `      if (answerContent) {\n`;
+        outputHtml += `        // Pattern 1: 正解は「...」\n`;
+        outputHtml += `        let answerMatch = answerContent.match(/正解は「([^」]+)」/);\n`;
         outputHtml += `        if (answerMatch) {\n`;
         outputHtml += `          expectedAnswer = answerMatch[1].trim();\n`;
         outputHtml += `        } else {\n`;
-        outputHtml += `          // Pattern 3: 答え: ...\n`;
-        outputHtml += `          answerMatch = answerContent.match(/答え:\\s*([^\\n]+)/);\n`;
+        outputHtml += `          // Pattern 2: 正解: ...\n`;
+        outputHtml += `          answerMatch = answerContent.match(/正解:\\s*([^\\n]+)/);\n`;
         outputHtml += `          if (answerMatch) {\n`;
         outputHtml += `            expectedAnswer = answerMatch[1].trim();\n`;
         outputHtml += `          } else {\n`;
-        outputHtml += `            // Pattern 4: 解答: ...\n`;
-        outputHtml += `            answerMatch = answerContent.match(/解答:\\s*([^\\n]+)/);\n`;
+        outputHtml += `            // Pattern 3: 答え: ...\n`;
+        outputHtml += `            answerMatch = answerContent.match(/答え:\\s*([^\\n]+)/);\n`;
         outputHtml += `            if (answerMatch) {\n`;
         outputHtml += `              expectedAnswer = answerMatch[1].trim();\n`;
+        outputHtml += `            } else {\n`;
+        outputHtml += `              // Pattern 4: 解答: ...\n`;
+        outputHtml += `              answerMatch = answerContent.match(/解答:\\s*([^\\n]+)/);\n`;
+        outputHtml += `              if (answerMatch) {\n`;
+        outputHtml += `                expectedAnswer = answerMatch[1].trim();\n`;
+        outputHtml += `              }\n`;
         outputHtml += `            }\n`;
         outputHtml += `          }\n`;
         outputHtml += `        }\n`;
         outputHtml += `      }\n`;
-        outputHtml += `    }\n`;
-        outputHtml += `    \n`;
-        outputHtml += `    // Check if user provided an answer\n`;
-        outputHtml += `    if (!userAnswer) {\n`;
-        outputHtml += `      alert("答えを入力してください。");\n`;
-        outputHtml += `      input.focus();\n`;
-        outputHtml += `      return;\n`;
-        outputHtml += `    }\n`;
-        outputHtml += `    \n`;
-        outputHtml += `    // If no expected answer found, just show the answer content\n`;
-        outputHtml += `    if (!expectedAnswer) {\n`;
-        outputHtml += `      document.getElementById("${inputId}").style.display = "none";\n`;
-        outputHtml += `      document.getElementById("${futterId}").style.display = "block";\n`;
-        outputHtml += `      return;\n`;
-        outputHtml += `    }\n`;
-        outputHtml += `    \n`;
-        outputHtml += `    // Check if answer is correct (case-insensitive, trim whitespace)\n`;
-        outputHtml += `    const isCorrect = userAnswer.toLowerCase().trim() === expectedAnswer.toLowerCase().trim();\n`;
-        outputHtml += `    \n`;
-        outputHtml += `    if (isCorrect) {\n`;
-        outputHtml += `      // Show correct answer\n`;
-        outputHtml += `      document.getElementById("${inputId}").style.display = "none";\n`;
-        outputHtml += `      document.getElementById("${futterId}").style.display = "block";\n`;
-        outputHtml += `    } else {\n`;
-        outputHtml += `      // Show error message with retry option\n`;
-        outputHtml += `      const retry = confirm("不正解です。\\n\\nあなたの答え: " + userAnswer + "\\n正解: " + expectedAnswer + "\\n\\nもう一度試しますか？");\n`;
-        outputHtml += `      if (retry) {\n`;
-        outputHtml += `        input.value = "";\n`;
+        outputHtml += `      \n`;
+        outputHtml += `      // Check if user provided an answer\n`;
+        outputHtml += `      if (!userAnswer) {\n`;
+        outputHtml += `        alert("答えを入力してください。");\n`;
         outputHtml += `        input.focus();\n`;
+        outputHtml += `        return;\n`;
+        outputHtml += `      }\n`;
+        outputHtml += `      \n`;
+        outputHtml += `      // If no expected answer found, just show the answer content\n`;
+        outputHtml += `      if (!expectedAnswer) {\n`;
+        outputHtml += `        document.getElementById("${inputId}").style.display = "none";\n`;
+        outputHtml += `        document.getElementById("${futterId}").style.display = "block";\n`;
+        outputHtml += `        return;\n`;
+        outputHtml += `      }\n`;
+        outputHtml += `      \n`;
+        outputHtml += `      // Check if answer is correct (case-insensitive, trim whitespace)\n`;
+        outputHtml += `      const isCorrect = userAnswer.toLowerCase().trim() === expectedAnswer.toLowerCase().trim();\n`;
+        outputHtml += `      \n`;
+        outputHtml += `      if (isCorrect) {\n`;
+        outputHtml += `        // Show correct answer\n`;
+        outputHtml += `        document.getElementById("${inputId}").style.display = "none";\n`;
+        outputHtml += `        document.getElementById("${futterId}").style.display = "block";\n`;
+        outputHtml += `      } else {\n`;
+        outputHtml += `        // Show error message with retry option\n`;
+        outputHtml += `        const retry = confirm("不正解です。\\n\\nあなたの答え: " + userAnswer + "\\n正解: " + expectedAnswer + "\\n\\nもう一度試しますか？");\n`;
+        outputHtml += `        if (retry) {\n`;
+        outputHtml += `          input.value = "";\n`;
+        outputHtml += `          input.focus();\n`;
+        outputHtml += `        }\n`;
         outputHtml += `      }\n`;
         outputHtml += `    }\n`;
+        outputHtml += `    \n`;
+        outputHtml += `    // Button click handler\n`;
+        outputHtml += `    button.onclick = checkAnswer;\n`;
+        outputHtml += `    \n`;
+        outputHtml += `    // Enter key handler\n`;
+        outputHtml += `    input.addEventListener("keypress", function(e) {\n`;
+        outputHtml += `      if (e.key === "Enter") {\n`;
+        outputHtml += `        checkAnswer();\n`;
+        outputHtml += `      }\n`;
+        outputHtml += `    });\n`;
+        outputHtml += `    \n`;
+        outputHtml += `    console.log("Answer system initialized for ${inputId} -> ${futterId}");\n`;
         outputHtml += `  }\n`;
         outputHtml += `  \n`;
-        outputHtml += `  // Button click handler\n`;
-        outputHtml += `  button.onclick = checkAnswer;\n`;
-        outputHtml += `  \n`;
-        outputHtml += `  // Enter key handler\n`;
-        outputHtml += `  input.addEventListener("keypress", function(e) {\n`;
-        outputHtml += `    if (e.key === "Enter") {\n`;
-        outputHtml += `      checkAnswer();\n`;
-        outputHtml += `    }\n`;
-        outputHtml += `  });\n`;
+        outputHtml += `  // Try to initialize immediately, then on DOMContentLoaded\n`;
+        outputHtml += `  initAnswerSystem();\n`;
+        outputHtml += `  if (document.readyState === 'loading') {\n`;
+        outputHtml += `    document.addEventListener('DOMContentLoaded', initAnswerSystem);\n`;
+        outputHtml += `  }\n`;
         outputHtml += `})();\n`;
         outputHtml += `</script>\n`;
       }
@@ -235,9 +251,20 @@ export function convertToHtml(inputText) {
       if (i < lines.length) {
         const scriptContent = scriptContentLines.join("\n");
         outputHtml += `<script>\n`;
-        outputHtml += `document.getElementById("${scriptOn}").onclick = function() {\n`;
+        outputHtml += `(function() {\n`;
+        outputHtml += `  function initScript() {\n`;
+        outputHtml += `    const element = document.getElementById("${scriptOn}");\n`;
+        outputHtml += `    if (element) {\n`;
+        outputHtml += `      element.onclick = function() {\n`;
         outputHtml += scriptContent + "\n";
-        outputHtml += `}\n`;
+        outputHtml += `      };\n`;
+        outputHtml += `    }\n`;
+        outputHtml += `  }\n`;
+        outputHtml += `  initScript();\n`;
+        outputHtml += `  if (document.readyState === 'loading') {\n`;
+        outputHtml += `    document.addEventListener('DOMContentLoaded', initScript);\n`;
+        outputHtml += `  }\n`;
+        outputHtml += `})();\n`;
         outputHtml += `</script>\n`;
       } else {
         console.error("Error: Missing closing script tag");
@@ -1165,34 +1192,62 @@ export function appInit(shell) {
             <!DOCTYPE html>
             <html>
             <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
               <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
               <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
               <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
               <style>
               ${styles}
               </style>
-              <script>
-              ${script}
-              
-              // KaTeX auto-render configuration
-              document.addEventListener("DOMContentLoaded", function() {
-                renderMathInElement(document.body, {
-                  delimiters: [
-                    {left: "$$", right: "$$", display: true},
-                    {left: "$", right: "$", display: false},
-                    {left: "\\(", right: "\\)", display: true},
-                    {left: "\\[", right: "\\]", display: true}
-                  ],
-                  throwOnError: false,
-                  errorColor: '#cc0000'
-                });
-              });
-              </script>
             </head>
             <body>
               <div id="content">
               ${html}
               </div>
+              
+              <script>
+              ${script}
+              
+              // Debug logging
+              console.log("Pickramu content loaded");
+              
+              // KaTeX auto-render configuration
+              document.addEventListener("DOMContentLoaded", function() {
+                console.log("DOMContentLoaded fired");
+                if (typeof renderMathInElement !== 'undefined') {
+                  renderMathInElement(document.body, {
+                    delimiters: [
+                      {left: "$$", right: "$$", display: true},
+                      {left: "$", right: "$", display: false},
+                      {left: "\\(", right: "\\)", display: true},
+                      {left: "\\[", right: "\\]", display: true}
+                    ],
+                    throwOnError: false,
+                    errorColor: '#cc0000'
+                  });
+                } else {
+                  console.warn("KaTeX renderMathInElement not available");
+                }
+              });
+              
+              // Additional initialization for scripts
+              window.addEventListener('load', function() {
+                console.log("Window load event fired");
+                // Re-initialize any scripts that might not have been set up yet
+                const scripts = document.querySelectorAll('script');
+                scripts.forEach((script, index) => {
+                  if (script.textContent.includes('initAnswerSystem') || script.textContent.includes('initScript')) {
+                    console.log(\`Re-executing script \${index}\`);
+                    try {
+                      eval(script.textContent);
+                    } catch (e) {
+                      console.error(\`Error re-executing script \${index}:\`, e);
+                    }
+                  }
+                });
+              });
+              </script>
             </body>
             </html>
           `;
@@ -1200,6 +1255,31 @@ export function appInit(shell) {
           const iframe = document.getElementById("pickramu_iframe");
           // Use srcdoc instead of document.write for better security and to avoid warnings
           iframe.srcdoc = fullHtml;
+          
+          // Wait for iframe to load and then ensure scripts are executed
+          iframe.onload = function() {
+            try {
+              const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+              console.log("Iframe loaded, checking for scripts");
+              
+              // Force re-execution of any answer system scripts
+              const scripts = iframeDoc.querySelectorAll('script');
+              scripts.forEach((script, index) => {
+                if (script.textContent.includes('initAnswerSystem') || script.textContent.includes('initScript')) {
+                  console.log(`Re-executing script ${index} in iframe`);
+                  try {
+                    const newScript = iframeDoc.createElement('script');
+                    newScript.textContent = script.textContent;
+                    iframeDoc.body.appendChild(newScript);
+                  } catch (e) {
+                    console.error(`Error re-executing script ${index} in iframe:`, e);
+                  }
+                }
+              });
+            } catch (e) {
+              console.error("Error accessing iframe content:", e);
+            }
+          };
         } else {
           content.textContent = `教材の読み込みに失敗しました (404 Not Found)\nURL: ${fetchUrl}`;
         }
