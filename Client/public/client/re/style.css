@@ -1616,3 +1616,148 @@ body::-webkit-scrollbar {
     height: 38px;
   }
 }
+.page-container {
+  height: 100vh;
+  overflow-y: auto;
+  padding: 20px;
+  box-sizing: border-box;
+  background: linear-gradient(135deg,
+    #1a3a1a 0%,
+    #18422a 18%,
+    #17603a 36%,
+    #005f30 54%,
+    #18422a 72%,
+    #22382b 86%,
+    #2d3436 100%
+  );
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.pickramu-select-container {
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.pickramu-select-card {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e5e5e7;
+  padding: 2rem;
+  max-width: 600px;
+  width: 100%;
+  color: #1d1d1f;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.pickramu-select-title {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 1.5rem 0;
+  color: #1d1d1f;
+}
+
+.pickramu-select-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.pickramu-select-label {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 1rem;
+  color: #86868b;
+  margin-bottom: 0.5rem;
+}
+
+.pickramu-select-dropdown {
+  background: #166b50;
+  border: 1px solid #006d2c;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  color: #1d1d1f;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 300px;
+  text-align: center;
+}
+
+.pickramu-select-dropdown:focus {
+  outline: none;
+  border-color: #007aff;
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+}
+
+.pickramu-select-dropdown:hover {
+  border-color: #007aff;
+}
+
+.pickramu-select-dropdown option {
+  background: #166b50;
+  color: #1d1d1f;
+  padding: 0.5rem;
+}
+
+.pickramu-load-button {
+  background: #007aff;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 160px;
+  justify-content: center;
+}
+
+.pickramu-load-button:hover {
+  background: #0056cc;
+  transform: translateY(-1px);
+}
+
+.pickramu-load-button:active {
+  background: #004499;
+  transform: translateY(0);
+}
+
+.button-text {
+  font-size: 1rem;
+}
+
+.button-icon {
+  font-size: 1rem;
+}
+
+/* Responsive design */
+@media (max-width: 700px) {
+  .pickramu-select-card {
+    margin: 0 1rem;
+    padding: 1.5rem;
+  }
+  
+  .pickramu-select-dropdown {
+    min-width: 250px;
+    font-size: 0.9rem;
+  }
+  
+  .pickramu-load-button {
+    font-size: 0.9rem;
+    padding: 0.6rem 1.2rem;
+    min-width: 140px;
+  }
+  
+  .pickramu-select-title {
+    font-size: 1.3rem;
+  }
+}
