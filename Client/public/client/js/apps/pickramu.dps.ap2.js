@@ -340,7 +340,18 @@ export function convertToHtml(inputText, shell) {
             if (btn) {
               // 「次へ」ボタンの優先度を高く設定
               btn.setAttribute('data-priority', 'high');
+              
+              // 元のクリックハンドラーを保存（@scriptタグで定義される）
+              var originalClickHandler = null;
+              
               btn.onclick = function() {
+                // まず、@scriptタグで定義された動作を実行
+                if (originalClickHandler) {
+                  originalClickHandler.call(this);
+                  return;
+                }
+                
+                // @scriptタグが定義されていない場合のフォールバック
                 var doc = window.document ? window.document : document;
                 // 非表示のinputは除外（getComputedStyleで厳密に）
                 var allInputs = Array.from(doc.querySelectorAll('.input-container input')).filter(i => {
@@ -366,11 +377,28 @@ export function convertToHtml(inputText, shell) {
                 }
               };
               
+              // @scriptタグで定義されたハンドラーを設定する関数
+              function setOriginalHandler(handler) {
+                originalClickHandler = handler;
+                if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Original handler set for button: " + btn.id, level: 'info'});
+              }
+              
+              // グローバルに公開して@scriptタグからアクセス可能にする
+              if (!window.pickramuButtonHandlers) {
+                window.pickramuButtonHandlers = {};
+              }
+              window.pickramuButtonHandlers[btn.id] = setOriginalHandler;
+              
               // 回答システムが上書きしないように、定期的にイベントハンドラーを復元
               setInterval(function() {
                 if (btn && !btn.onclick) {
                   if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.warn', message: "Restoring click handler for next button: " + btn.id, level: 'warn'});
                   btn.onclick = function() {
+                    if (originalClickHandler) {
+                      originalClickHandler.call(this);
+                      return;
+                    }
+                    // フォールバック処理
                     var doc = window.document ? window.document : document;
                     var allInputs = Array.from(doc.querySelectorAll('.input-container input')).filter(i => {
                       var container = i.closest('.input-container');
@@ -419,9 +447,16 @@ export function convertToHtml(inputText, shell) {
         outputHtml += `  function initScript() {\n`;
         outputHtml += `    const element = document.getElementById("${scriptOn}");\n`;
         outputHtml += `    if (element) {\n`;
-        outputHtml += `      // 優先度の高いボタンは上書きしない\n`;
+        outputHtml += `      // 優先度の高いボタンの場合、元のハンドラーを設定する\n`;
         outputHtml += `      if (element.getAttribute('data-priority') === 'high') {\n`;
-        outputHtml += `        if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Skipping high priority element: ${scriptOn}", level: 'info'});\n`;
+        outputHtml += `        if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Setting original handler for high priority element: ${scriptOn}", level: 'info'});\n`;
+        outputHtml += `        // グローバルハンドラーを通じて元のハンドラーを設定\n`;
+        outputHtml += `        if (window.pickramuButtonHandlers && window.pickramuButtonHandlers["${scriptOn}"]) {\n`;
+        outputHtml += `          const handler = function() {\n`;
+        outputHtml += scriptContent + "\n";
+        outputHtml += `          };\n`;
+        outputHtml += `          window.pickramuButtonHandlers["${scriptOn}"](handler);\n`;
+        outputHtml += `        }\n`;
         outputHtml += `        return;\n`;
         outputHtml += `      }\n`;
         outputHtml += `      // Remove existing click handler to prevent duplicates\n`;
