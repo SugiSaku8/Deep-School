@@ -51,7 +51,7 @@
     "description": "eStore - Initial beta release"
   },
   "login": {
-    "version": "0.0.9",
+    "version": "0.0.10",
     "status": "beta",
     "cycle": 0,
     "release": 0,

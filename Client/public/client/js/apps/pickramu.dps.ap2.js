@@ -274,6 +274,30 @@ export function convertToHtml(inputText, shell) {
         : "button-next";
       const btnContent = btnMatch[3];
       outputHtml += `<button id="${btnIds}" class="${btnClasses}">${btnContent}</button>\n`;
+      if (/次へ|次|Next/i.test(btnContent)) {
+        outputHtml += `<script>
+          (function() {
+            var btn = document.getElementById("${btnIds}");
+            if (btn) {
+              btn.onclick = function() {
+                var allInputs = Array.from(document.querySelectorAll('.input-container input'));
+                var current = allInputs.findIndex(i => i === document.activeElement);
+                if (current === -1) {
+                  // フォーカスされていない場合は最初の未入力inputへ
+                  var next = allInputs.find(i => !i.value);
+                  if (next) {
+                    next.focus();
+                    next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  }
+                } else if (allInputs[current + 1]) {
+                  allInputs[current + 1].focus();
+                  allInputs[current + 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+              };
+            }
+          })();
+        </script>\n`;
+      }
       i++;
       continue;
     }
