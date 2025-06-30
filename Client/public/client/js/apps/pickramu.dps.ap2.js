@@ -277,17 +277,22 @@ export function convertToHtml(inputText, shell) {
       if (/次へ|次|Next/i.test(btnContent)) {
         outputHtml += `<script>
           (function() {
-            var btn = document.getElementById("${btnIds}");
+            var btn = (window.document ? window.document : document).getElementById("${btnIds}");
             if (btn) {
               btn.onclick = function() {
-                var allInputs = Array.from(document.querySelectorAll('.input-container input'));
-                var current = allInputs.findIndex(i => i === document.activeElement);
+                var doc = window.document ? window.document : document;
+                var allInputs = Array.from(doc.querySelectorAll('.input-container input'));
+                if (!allInputs.length) return;
+                var current = allInputs.findIndex(i => i === doc.activeElement);
                 if (current === -1) {
                   // フォーカスされていない場合は最初の未入力inputへ
                   var next = allInputs.find(i => !i.value);
                   if (next) {
                     next.focus();
                     next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  } else {
+                    allInputs[0].focus();
+                    allInputs[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
                   }
                 } else if (allInputs[current + 1]) {
                   allInputs[current + 1].focus();
@@ -723,6 +728,28 @@ export function appInit(shell) {
 #content #n100 {
   display: none;
 }
+/* ▼▼▼ 追加: ドロップダウン幅調整 ▼▼▼ */
+.pickramu-select-dropdown, select.pickramu-select-dropdown {
+  max-width: 320px;
+  width: 100%;
+  min-width: 120px;
+  box-sizing: border-box;
+  font-size: 1.1em;
+  padding: 0.5em 1em;
+  border-radius: 8px;
+  border: 1px solid #d2d2d7;
+  background: #fff;
+  color: #222;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+@media (max-width: 600px) {
+  .pickramu-select-dropdown, select.pickramu-select-dropdown {
+    max-width: 98vw;
+    font-size: 1em;
+  }
+}
+/* ▲▲▲ 追加ここまで ▲▲▲ */
           `;
           const script = `
             // Clear any existing dom object to prevent redeclaration
