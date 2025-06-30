@@ -1,6 +1,6 @@
 {
   "deepSchoolFamily": {
-    "version": "25C93X1",
+    "version": "25C94X1",
     "status": "beta",
     "lastUpdated": "2025-06-30",
     "description": "Deep-School Family Software - Initial release"
@@ -24,7 +24,7 @@
     "description": "Deep-School Server - Initial stable release"
   },
   "pickramu": {
-    "version": "1.0.39",
+    "version": "1.0.40",
     "status": "beta",
     "cycle": 1,
     "release": 0,
@@ -77,7 +77,15 @@
     "lastUpdated": "2025-06-30",
     "description": "Setting - Initial beta release"
   },
-  "toasterMachine": "0.4.6",
+  "toasterMachine": {
+    "version": "0.4.6",
+    "status": "beta",
+    "cycle": 0,
+    "release": 1,
+    "revision": 0,
+    "lastUpdated": "2025-06-30",
+    "description": "ToasterMachine - Toaster Machine is AI tools for Deep-School - Initial beta release"
+  },
   "scr": {
     "version": "0.1.4",
     "status": "beta",

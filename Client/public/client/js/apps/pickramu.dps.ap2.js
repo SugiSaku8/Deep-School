@@ -361,14 +361,22 @@ export function appInit(shell) {
 
   // タブ切り替え
   document.getElementById('tab-pickramu').onclick = () => {
-    document.getElementById('pickramu-work-area').style.display = 'block';
-    document.getElementById('pickramu-eguide-area').style.display = 'none';
+    const workArea = document.getElementById('pickramu-work-area');
+    const eguideArea = document.getElementById('pickramu-eguide-area');
+    workArea.style.display = 'block';
+    workArea.style.height = '';
+    eguideArea.style.display = 'none';
+    eguideArea.style.height = '';
     document.getElementById('tab-pickramu').classList.add('active');
     document.getElementById('tab-eguide').classList.remove('active');
   };
   document.getElementById('tab-eguide').onclick = () => {
-    document.getElementById('pickramu-work-area').style.display = 'none';
-    document.getElementById('pickramu-eguide-area').style.display = 'block';
+    const workArea = document.getElementById('pickramu-work-area');
+    const eguideArea = document.getElementById('pickramu-eguide-area');
+    workArea.style.display = 'none';
+    workArea.style.height = '';
+    eguideArea.style.display = 'block';
+    eguideArea.style.height = '';
     document.getElementById('tab-pickramu').classList.remove('active');
     document.getElementById('tab-eguide').classList.add('active');
   };
