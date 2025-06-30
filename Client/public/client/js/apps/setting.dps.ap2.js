@@ -131,11 +131,11 @@ export function appInit(shell) {
           <h2>アプリケーション情報</h2>
           <div class="setting-item">
             <label>バージョン:</label>
-            <span id="setting-version">1.0.0</span>
+            <span id="setting-version">0.3.0</span>
           </div>
           <div class="setting-item">
             <label>ビルド番号:</label>
-            <span id="setting-build">20250630</span>
+            <span id="setting-build">25C962X1</span>
           </div>
           <div class="setting-item">
             <label>最終更新:</label>
@@ -836,10 +836,10 @@ function restoreBackup() {
 function checkForUpdates() {
   try {
     // 現在のバージョン情報を取得
-    const currentVersion = '0.2.2';
-    const currentBuild = '25C914X1';
-    const latestVersion = '0.2.2';
-    const latestBuild = '25C914X1';
+    const currentVersion = '0.3.0';
+    const currentBuild = '25C962X1';
+    const latestVersion = '0.3.0';
+    const latestBuild = '25C9621';
     
     if (latestVersion > currentVersion) {
       const updateMessage = `新しいバージョンが利用可能です。\n\n現在のバージョン: ${currentVersion} (${currentBuild})\n最新バージョン: ${latestVersion} (${latestBuild})\n\nアップデートをダウンロードしますか？`;
