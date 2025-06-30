@@ -35,14 +35,304 @@ export function appInit(shell) {
       </div>
     </div>
     <button class="go-back-button button-chalk" id="chat-back-btn" data-lang-key="back">←</button>
+    
+    <style>
+    /* Enhanced chat styles with parallax effects */
+    .splash-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .splash-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+      opacity: 0.3;
+      animation: float 20s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+    
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 3rem;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      max-width: 500px;
+      width: 90%;
+    }
+    
+    .card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+    
+    .title_t {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      margin-bottom: 1.5rem;
+      animation: titleGlow 3s ease-in-out infinite alternate;
+    }
+    
+    @keyframes titleGlow {
+      0% { text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.5); }
+      100% { text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), 0 0 40px rgba(255, 255, 255, 0.8); }
+    }
+    
+    .logo-img {
+      width: 80px;
+      height: 80px;
+      margin: 1rem 0;
+      border-radius: 16px;
+      transition: all 0.3s ease;
+    }
+    
+    .card:hover .logo-img {
+      transform: scale(1.1) rotate(5deg);
+      filter: brightness(1.1) contrast(1.1);
+    }
+    
+    .version {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 2rem;
+    }
+    
+    .input-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 1.5rem;
+    }
+    
+    .input-group input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+    
+    .input-group input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .input-group input:focus {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+      transform: scale(1.02);
+    }
+    
+    .button-chalk {
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .button-chalk::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+    
+    .button-chalk:hover::before {
+      left: 100%;
+    }
+    
+    .button-chalk:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+    }
+    
+    .button-chalk:active {
+      transform: translateY(-1px) scale(1.02);
+    }
+    
+    .chat-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      position: relative;
+    }
+    
+    .new-chat-btn {
+      margin: 20px;
+      align-self: flex-start;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px);
+    }
+    
+    .new-chat-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .messages-container {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    
+    .chat-input-container {
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .go-back-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+    
+    .go-back-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-2px) scale(1.1);
+    }
+    
+    /* Dark mode adjustments */
+    @media (prefers-color-scheme: dark) {
+      .card {
+        background: rgba(0, 0, 0, 0.2);
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+      
+      .card:hover {
+        background: rgba(0, 0, 0, 0.3);
+        border-color: rgba(255, 255, 255, 0.2);
+      }
+    }
+    </style>
   `;
 
   // 戻るボタン
   document.getElementById('chat-back-btn').onclick = () => shell.loadApp('menu');
 
-  // --- ToasterMachine コーチングセッションの初期化 ---
-  const processor = new GeminiProcessor(/* APIキーは内部で取得 or 設定 */);
-  let session = null;
+  // Initialize parallax effects for chat elements
+  if (window.parallaxManager) {
+    const card = document.querySelector('.card');
+    const submitBtn = document.getElementById('submit-btn');
+    const chatSubmitBtn = document.getElementById('chat-submit-btn');
+    const newChatBtn = document.getElementById('new-chat-btn');
+    const backBtn = document.getElementById('chat-back-btn');
+    const userInput = document.getElementById('user-input');
+    const chatInput = document.getElementById('chat-input');
+    
+    if (card) {
+      window.parallaxManager.addParallaxEffects(card, {
+        hover: true,
+        mouse: true,
+        touch: false
+      });
+    }
+    
+    if (submitBtn) {
+      window.parallaxManager.addParallaxEffects(submitBtn, {
+        hover: true,
+        mouse: false,
+        touch: true,
+        ripple: true
+      });
+    }
+    
+    if (chatSubmitBtn) {
+      window.parallaxManager.addParallaxEffects(chatSubmitBtn, {
+        hover: true,
+        mouse: false,
+        touch: true,
+        ripple: true
+      });
+    }
+    
+    if (newChatBtn) {
+      window.parallaxManager.addParallaxEffects(newChatBtn, {
+        hover: true,
+        mouse: false,
+        touch: true,
+        ripple: true
+      });
+    }
+    
+    if (backBtn) {
+      window.parallaxManager.addParallaxEffects(backBtn, {
+        hover: true,
+        mouse: false,
+        touch: true,
+        ripple: true
+      });
+    }
+    
+    if (userInput) {
+      window.parallaxManager.addParallaxEffects(userInput, {
+        hover: true,
+        mouse: false,
+        touch: false
+      });
+    }
+    
+    if (chatInput) {
+      window.parallaxManager.addParallaxEffects(chatInput, {
+        hover: true,
+        mouse: false,
+        touch: false
+      });
+    }
+    
+    shell.log({from: 'dp.app.chat.out', message: 'ChatApp: Parallax effects initialized', level: 'info'});
+  }
 
   // メッセージ表示
   function addMessage(text, sender) {

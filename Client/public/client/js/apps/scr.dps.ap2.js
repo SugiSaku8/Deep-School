@@ -98,4 +98,68 @@ export function appInit(shell) {
 
   // SCRロジック初期化
   initializeSCR();
+
+  // Initialize parallax effects for SCR elements
+  if (window.parallaxManager) {
+    const buttons = document.querySelectorAll('.button-chalk, .auto-btn');
+    const backBtn = document.getElementById('scr-back-btn');
+    const postIconBtn = document.getElementById('scr-open-post-modal');
+    const closeBtn = document.getElementById('scr-post-modal-close');
+    const inputs = document.querySelectorAll('input[type="text"], textarea');
+    const modal = document.getElementById('scr-post-modal');
+    
+    buttons.forEach(btn => {
+      window.parallaxManager.addParallaxEffects(btn, {
+        hover: true,
+        mouse: false,
+        touch: true,
+        ripple: true
+      });
+    });
+    
+    if (backBtn) {
+      window.parallaxManager.addParallaxEffects(backBtn, {
+        hover: true,
+        mouse: false,
+        touch: true,
+        ripple: true
+      });
+    }
+    
+    if (postIconBtn) {
+      window.parallaxManager.addParallaxEffects(postIconBtn, {
+        hover: true,
+        mouse: false,
+        touch: true,
+        ripple: true
+      });
+    }
+    
+    if (closeBtn) {
+      window.parallaxManager.addParallaxEffects(closeBtn, {
+        hover: true,
+        mouse: false,
+        touch: true,
+        ripple: true
+      });
+    }
+    
+    inputs.forEach(input => {
+      window.parallaxManager.addParallaxEffects(input, {
+        hover: true,
+        mouse: false,
+        touch: false
+      });
+    });
+    
+    if (modal) {
+      window.parallaxManager.addParallaxEffects(modal, {
+        hover: false,
+        mouse: false,
+        touch: false
+      });
+    }
+    
+    shell.log({from: 'dp.app.scr.out', message: 'SCRApp: Parallax effects initialized', level: 'info'});
+  }
 } 

@@ -908,4 +908,58 @@ export function appInit(shell) {
       }
     }
   };
+
+  // Initialize parallax effects for pickramu elements
+  if (window.parallaxManager) {
+    const backBtn = document.getElementById('pickramu-back-btn');
+    const loadBtn = document.getElementById('pickramu-load-btn');
+    const tabButtons = document.querySelectorAll('#tab-pickramu, #tab-eguide');
+    const selectDropdown = document.getElementById('pickramu-unit-select');
+    const selectCard = document.querySelector('.pickramu-select-card');
+    
+    if (backBtn) {
+      window.parallaxManager.addParallaxEffects(backBtn, {
+        hover: true,
+        mouse: false,
+        touch: true,
+        ripple: true
+      });
+    }
+    
+    if (loadBtn) {
+      window.parallaxManager.addParallaxEffects(loadBtn, {
+        hover: true,
+        mouse: false,
+        touch: true,
+        ripple: true
+      });
+    }
+    
+    tabButtons.forEach(btn => {
+      window.parallaxManager.addParallaxEffects(btn, {
+        hover: true,
+        mouse: false,
+        touch: true,
+        ripple: true
+      });
+    });
+    
+    if (selectDropdown) {
+      window.parallaxManager.addParallaxEffects(selectDropdown, {
+        hover: true,
+        mouse: false,
+        touch: false
+      });
+    }
+    
+    if (selectCard) {
+      window.parallaxManager.addParallaxEffects(selectCard, {
+        hover: true,
+        mouse: true,
+        touch: false
+      });
+    }
+    
+    shell.log({from: 'dp.app.pickramu.out', message: 'PickramuApp: Parallax effects initialized', level: 'info'});
+  }
 } 

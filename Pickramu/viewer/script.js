@@ -172,17 +172,18 @@ function convertToHtml(inputText) {
   return outputHtml;
 }
 
-// test.mdをfetchで取得し、変換してiframeに表示
-fetch("./test.md")
-  .then((response) => {
-    if (!response.ok) throw new Error("Failed to load test.md");
-    return response.text();
-  })
-  .then((inputText) => {
+
+// ファイルアップロード対応
+document.getElementById('fileInput').addEventListener('change', function (e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function (evt) {
+    const inputText = evt.target.result;
     const htmlOutput = convertToHtml(inputText);
 
-    // Define the CSS styles
-    const styles = `
+    // CSSやスクリプトは既存のものを流用
+    const styles = /* ...既存の styles 生成処理... */ `
 body{
 font-family: "Noto Sans JP", sans-serif;
   color: black;
@@ -210,593 +211,447 @@ font-family: "Noto Sans JP", sans-serif;
     #content .aliceblue {
       color: aliceblue;
     }
-
     #content .antiquewhite {
       color: antiquewhite;
     }
-
     #content .aqua {
       color: aqua;
     }
-
     #content .aquamarine {
       color: aquamarine;
     }
-
     #content .azure {
       color: azure;
     }
-
     #content .beige {
       color: beige;
     }
-
     #content .bisque {
       color: bisque;
     }
-
     #content .black {
       color: black;
     }
-
     #content .blanchedalmond {
       color: blanchedalmond;
     }
-
     #content .blue {
       color: blue;
     }
-
     #content .blueviolet {
       color: blueviolet;
     }
-
     #content .brown {
       color: brown;
     }
-
     #content .burlywood {
       color: burlywood;
     }
-
     #content .cadetblue {
       color: cadetblue;
     }
-
     #content .chartreuse {
       color: chartreuse;
     }
-
     #content .chocolate {
       color: chocolate;
     }
-
     #content .coral {
       color: coral;
     }
-
     #content .cornflowerblue {
       color: cornflowerblue;
     }
-
     #content .cornsilk {
       color: cornsilk;
     }
-
     #content .crimson {
       color: crimson;
     }
-
     #content .cyan {
       color: cyan;
     }
-
     #content .darkblue {
       color: darkblue;
     }
-
     #content .darkcyan {
       color: darkcyan;
     }
-
     #content .darkgoldenrod {
       color: darkgoldenrod;
     }
-
     #content .darkgray {
       color: darkgray;
     }
-
     #content .darkgreen {
       color: darkgreen;
     }
-
     #content .darkkhaki {
       color: darkkhaki;
     }
-
     #content .darkmagenta {
       color: darkmagenta;
     }
-
     #content .darkolivegreen {
       color: darkolivegreen;
     }
-
     #content .darkorange {
       color: darkorange;
     }
-
     #content .darkorchid {
       color: darkorchid;
     }
-
     #content .darkred {
       color: darkred;
     }
-
     #content .darksalmon {
       color: darksalmon;
     }
-
     #content .darkseagreen {
       color: darkseagreen;
     }
-
     #content .darkslateblue {
       color: darkslateblue;
     }
-
     #content .darkslategray {
       color: darkslategray;
     }
-
     #content .darkturquoise {
       color: darkturquoise;
     }
-
     #content .darkviolet {
       color: darkviolet;
     }
-
     #content .deeppink {
       color: deeppink;
     }
-
     #content .deepskyblue {
       color: deepskyblue;
     }
-
     #content .dimgray {
       color: dimgray;
     }
-
     #content .dodgerblue {
       color: dodgerblue;
     }
-
     #content .firebrick {
       color: firebrick;
     }
-
     #content .floralwhite {
       color: floralwhite;
     }
-
     #content .forestgreen {
       color: forestgreen;
     }
-
     #content .fuchsia {
       color: fuchsia;
     }
-
     #content .gainsboro {
       color: gainsboro;
     }
-
     #content .ghostwhite {
       color: ghostwhite;
     }
-
     #content .gold {
       color: gold;
     }
-
     #content .goldenrod {
       color: goldenrod;
     }
-
     #content .gray {
       color: gray;
     }
-
     #content .green {
       color: green;
     }
-
     #content .greenyellow {
       color: greenyellow;
     }
-
     #content .honeydew {
       color: honeydew;
     }
-
     #content .hotpink {
       color: hotpink;
     }
-
     #content .indianred {
       color: indianred;
     }
-
     #content .indigo {
       color: indigo;
     }
-
     #content .ivory {
       color: ivory;
     }
-
     #content .khaki {
       color: khaki;
     }
-
     #content .lavender {
       color: lavender;
     }
-
     #content .lavenderblush {
       color: lavenderblush;
     }
-
     #content .lawngreen {
       color: lawngreen;
     }
-
     #content .lemonchiffon {
       color: lemonchiffon;
     }
-
     #content .lightblue {
       color: lightblue;
     }
-
     #content .lightcoral {
       color: lightcoral;
     }
-
     #content .lightcyan {
       color: lightcyan;
     }
-
     #content .lightgoldenrodyellow {
       color: lightgoldenrodyellow;
     }
-
     #content .lightgray {
       color: lightgray;
     }
-
     #content .lightgreen {
       color: lightgreen;
     }
-
     #content .lightpink {
       color: lightpink;
     }
-
     #content .lightsalmon {
       color: lightsalmon;
     }
-
     #content .lightseagreen {
       color: lightseagreen;
     }
-
     #content .lightskyblue {
       color: lightskyblue;
     }
-
     #content .lightslategray {
       color: lightslategray;
     }
-
     #content .lightsteelblue {
       color: lightsteelblue;
     }
-
     #content .lightyellow {
       color: lightyellow;
     }
-
     #content .lime {
       color: lime;
     }
-
     #content .limegreen {
       color: limegreen;
     }
-
     #content .linen {
       color: linen;
     }
-
     #content .magenta {
       color: magenta;
     }
-
     #content .maroon {
       color: maroon;
     }
-
     #content .mediumaquamarine {
       color: mediumaquamarine;
     }
-
     #content .mediumblue {
       color: mediumblue;
     }
-
     #content .mediumorchid {
       color: mediumorchid;
     }
-
     #content .mediumpurple {
       color: mediumpurple;
     }
-
     #content .mediumseagreen {
       color: mediumseagreen;
     }
-
     #content .mediumslateblue {
       color: mediumslateblue;
     }
-
     #content .mediumspringgreen {
       color: mediumspringgreen;
     }
-
     #content .mediumturquoise {
       color: mediumturquoise;
     }
-
     #content .mediumvioletred {
       color: mediumvioletred;
     }
-
     #content .midnightblue {
       color: midnightblue;
     }
-
     #content .mintcream {
       color: mintcream;
     }
-
     #content .mistyrose {
       color: mistyrose;
     }
-
     #content .moccasin {
       color: moccasin;
     }
-
     #content .navajowhite {
       color: navajowhite;
     }
-
     #content .navy {
       color: navy;
     }
-
     #content .oldlace {
       color: oldlace;
     }
-
     #content .olive {
       color: olive;
     }
-
     #content .olivedrab {
       color: olivedrab;
     }
-
     #content .orange {
       color: orange;
     }
-
     #content .orangered {
       color: orangered;
     }
-
     #content .orchid {
       color: orchid;
     }
-
     #content .palegoldenrod {
       color: palegoldenrod;
     }
-
     #content .palegreen {
       color: palegreen;
     }
-
     #content .paleturquoise {
       color: paleturquoise;
     }
-
     #content .palevioletred {
       color: palevioletred;
     }
-
     #content .papayawhip {
       color: papayawhip;
     }
-
     #content .peachpuff {
       color: peachpuff;
     }
-
     #content .peru {
       color: peru;
     }
-
     #content .pink {
       color: pink;
     }
-
     #content .plum {
       color: plum;
     }
-
     #content .powderblue {
       color: powderblue;
     }
-
     #content .purple {
       color: purple;
     }
-
     #content .rebeccapurple {
       color: rebeccapurple;
     }
-
     #content .rosybrown {
       color: rosybrown;
     }
-
     #content .royalblue {
       color: royalblue;
     }
-
     #content .saddlebrown {
       color: saddlebrown;
     }
-
     #content .salmon {
       color: salmon;
     }
-
     #content .sandybrown {
       color: sandybrown;
     }
-
     #content .seagreen {
       color: seagreen;
     }
-
     #content .seashell {
       color: seashell;
     }
-
     #content .sienna {
       color: sienna;
     }
-
     #content .silver {
       color: silver;
     }
-
     #content .skyblue {
       color: skyblue;
     }
-
     #content .slateblue {
       color: slateblue;
     }
-
     #content .slategray {
       color: slategray;
     }
-
     #content .snow {
       color: snow;
     }
-
     #content .springgreen {
       color: springgreen;
     }
-
     #content .steelblue {
       color: steelblue;
     }
-
     #content .tan {
       color: tan;
     }
-
     #content .teal {
       color: teal;
     }
-
     #content .thistle {
       color: thistle;
     }
-
     #content .tomato {
       color: tomato;
     }
-
     #content .turquoise {
       color: turquoise;
     }
-
     #content .violet {
       color: violet;
     }
-
     #content .wheat {
       color: wheat;
     }
-
     #content .white {
       color: white;
     }
-
     #content .whitesmoke {
       color: whitesmoke;
     }
-
     #content .yellow {
       color: yellow;
     }
-
     #content .yellowgreen {
       color: yellowgreen;
     }
-
     #content h1 {
       font-size: 2em;
       margin: 0.2em 0;
     }
-
     #content .unit-title {
       font-weight: bold;
       font-size: 1.5em;
     }
-
     #content .chapter-title {
       font-size: 2em;
     }
-
     #content .question {
       font-size: 1.7em;
       margin: 0.5em 0;
     }
-
     #content .equations {
       font-size: 1.6em;
       line-height: 1.6;
     }
-
     #content .input-container {
       display: flex;
       margin-top: 2em;
       gap: 1em;
     }
-
     #content .input-box {
       background-color: #a3b1a6;
       border-radius: 25px;
@@ -806,7 +661,6 @@ font-family: "Noto Sans JP", sans-serif;
       border: none;
       width: 300px;
     }
-
     #content .button-next {
       background-color: #33aaff;
       border: none;
@@ -816,7 +670,6 @@ font-family: "Noto Sans JP", sans-serif;
       color: white;
       cursor: pointer;
     }
-
     #content .footer-bar {
       position: absolute;
       bottom: 0;
@@ -828,7 +681,7 @@ font-family: "Noto Sans JP", sans-serif;
       display: none;
     }
   `;
-    const script = `
+    const script = /* ...既存の script 生成処理... */ `
   /**
    * dom - DOM操作を簡単にするためのオブジェクト
    * @namespace dom
@@ -860,7 +713,6 @@ font-family: "Noto Sans JP", sans-serif;
     },
   };
   `;
-    // Create the full HTML content with styles
     const fullHtml = `
       <!DOCTYPE html>
       <html>
@@ -880,13 +732,18 @@ font-family: "Noto Sans JP", sans-serif;
       </body>
       </html>
     `;
-
     const iframe = document.getElementById("myIframe");
     const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
     iframeDocument.open();
     iframeDocument.write(fullHtml);
     iframeDocument.close();
-  })
-  .catch((err) => {
-    console.error("Error loading or compiling test.md:", err);
-  });
+  };
+  reader.readAsText(file, "UTF-8");
+});
+
+// サンプル表示ボタン
+document.getElementById('loadSampleBtn').addEventListener('click', function () {
+  location.reload();
+});
+
+// ...existing code...

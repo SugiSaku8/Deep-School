@@ -3,12 +3,14 @@ import * as coreLang from './core/lang.js';
 import * as coreSecurity from './core/security.js';
 import * as coreUtils from './core/utils.mjs';
 import { versionManager } from './core/version.mjs';
+import { parallaxManager } from './core/parallax.mjs';
 
 window.coreConfig = coreConfig;
 window.coreLang = coreLang;
 window.coreSecurity = coreSecurity;
 window.coreUtils = coreUtils;
 window.versionManager = versionManager;
+window.parallaxManager = parallaxManager;
 
 function applyLangToDOM() {
   const { t } = window.coreLang;
@@ -237,6 +239,14 @@ Examples:
     const appModule = appModules[appName];
     if (appModule && typeof appModule.appInit === 'function') {
       appModule.appInit(this);
+      
+      // Initialize parallax effects after app initialization
+      setTimeout(() => {
+        if (parallaxManager && parallaxManager.isInitialized) {
+          parallaxManager.initializeElements();
+          this.log({from: 'dp.sys.shell', message: `Parallax effects initialized for ${appName}`, level: 'info'});
+        }
+      }, 100);
     } else {
       this.log({from: `dp.app.${appName}.err`, message: `アプリ${appName}の初期化関数が見つかりません`, level: 'warn'});
     }

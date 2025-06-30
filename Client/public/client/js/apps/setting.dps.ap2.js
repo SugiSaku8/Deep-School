@@ -160,6 +160,50 @@ export function appInit(shell) {
   const closeBtn = document.getElementById('setting-close-btn');
   if (closeBtn) closeBtn.onclick = () => shell.loadApp('menu');
 
+  // Initialize parallax effects for setting elements
+  if (window.parallaxManager) {
+    const settingItems = document.querySelectorAll('.setting-item');
+    const buttons = document.querySelectorAll('.auto-btn');
+    const closeBtn = document.getElementById('setting-close-btn');
+    const inputs = document.querySelectorAll('input[type="checkbox"], input[type="text"], select');
+    
+    settingItems.forEach(item => {
+      window.parallaxManager.addParallaxEffects(item, {
+        hover: true,
+        mouse: false,
+        touch: false
+      });
+    });
+    
+    buttons.forEach(btn => {
+      window.parallaxManager.addParallaxEffects(btn, {
+        hover: true,
+        mouse: false,
+        touch: true,
+        ripple: true
+      });
+    });
+    
+    if (closeBtn) {
+      window.parallaxManager.addParallaxEffects(closeBtn, {
+        hover: true,
+        mouse: false,
+        touch: true,
+        ripple: true
+      });
+    }
+    
+    inputs.forEach(input => {
+      window.parallaxManager.addParallaxEffects(input, {
+        hover: true,
+        mouse: false,
+        touch: false
+      });
+    });
+    
+    shell.log({from: 'dp.app.setting.out', message: 'SettingApp: Parallax effects initialized', level: 'info'});
+  }
+
   shell.log({from: 'dp.app.setting.out', message: 'SettingApp: 初期化完了', level: 'info'});
 }
 

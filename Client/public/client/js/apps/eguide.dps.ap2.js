@@ -15,4 +15,20 @@ export const appHtml = `
 export function appInit(shell) {
   document.getElementById('eguide-back').onclick = () => shell.loadApp('menu');
   ds.log({from: 'dp.app.eguide.out', message: 'EGuideApp: 初期化開始', level: 'info'});
+
+  // Initialize parallax effects for eguide elements
+  if (window.parallaxManager) {
+    const backBtn = document.getElementById('eguide-back');
+    
+    if (backBtn) {
+      window.parallaxManager.addParallaxEffects(backBtn, {
+        hover: true,
+        mouse: false,
+        touch: true,
+        ripple: true
+      });
+    }
+    
+    shell.log({from: 'dp.app.eguide.out', message: 'EGuideApp: Parallax effects initialized', level: 'info'});
+  }
 } 
