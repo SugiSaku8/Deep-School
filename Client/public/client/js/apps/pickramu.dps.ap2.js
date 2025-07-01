@@ -278,6 +278,29 @@ function generateAnswerScript(inputId, buttonId, futterId, answers) {
     '})();\n</script>\n'
   );
 }
+
+function generateNextButtonScript(buttonId) {
+  return (
+    '\n<script>\n(function() {\n' +
+    '  function initNextButton() {\n' +
+    '    const button = document.getElementById("' + buttonId + '");\n' +
+    '    if (!button) {\n' +
+    '      console.error("Next button not found.");\n' +
+    '      return;\n' +
+    '    }\n' +
+    '    button.onclick = function() {\n' +
+    '      console.log("Next button clicked:", buttonId);\n' +
+    '      // Add logic for next button click\n' +
+    '    };\n' +
+    '  }\n' +
+    '  initNextButton();\n' +
+    '  if (document.readyState === "loading") {\n' +
+    '    document.addEventListener("DOMContentLoaded", initNextButton);\n' +
+    '  }\n' +
+    '})();\n</script>\n'
+  );
+}
+
 /**
  * @param {string[]} lines
  * @param {number} startIndex
