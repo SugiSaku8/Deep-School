@@ -914,7 +914,7 @@ export function appInit(shell) {
                 // Ensure first section is visible
                 const firstBlock = document.querySelector('#n1');
                 if (firstBlock) {
-                  firstBlock.style.removeProperty('display');
+                  firstBlock.style.setProperty('display','block','important');
                 }
                 if (typeof renderMathInElement !== 'undefined') {
                   renderMathInElement(document.body, {
