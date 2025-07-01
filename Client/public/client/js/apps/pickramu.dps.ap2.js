@@ -414,7 +414,7 @@ function handleScriptBlock(lines, startIndex, shell) {
   }
   if (i < lines.length) {
     const scriptContent = scriptContentLines.join("\n");
-    let html = `<script>\n(function() {\n  function initScript() {\n    const element = document.getElementById("${scriptOn}");\n    if (element) {\n      element.onclick = null;\n      element.onclick = function() {\n        ${scriptContent}\n      };\n    }\n  }\n  initScript();\n  if (document.readyState === 'loading') {\n    document.addEventListener('DOMContentLoaded', initScript);\n  }\n})();\n</script>\n`;
+    let html = `<script>\n(function() {\n  function initScript() {\n    const element = document.getElementById("${scriptOn}");\n    if (element) {\n      element.onclick = null;\n      element.onclick = function() {\n        ${scriptContent}\n        /* 自動スクロール: 表示された次のブロックへスムーズに移動 */\n        setTimeout(function() {\n          const firstVisible = document.querySelector('#content > div[id^="n"]:not([style*="display: none"])');\n          if (firstVisible) {\n            firstVisible.scrollIntoView({ behavior: 'smooth', block: 'start' });\n          }\n        }, 20);\n      };\n    }\n  }\n  initScript();\n  if (document.readyState === 'loading') {\n    document.addEventListener('DOMContentLoaded', initScript);\n  }\n})();\n</script>\n`;
     return { html, nextIndex: i + 1 };
   } else {
     if (shell && shell.log) shell.log({from: 'dp.app.pickramu.err', message: 'Error: Missing closing script tag', level: 'error'});
