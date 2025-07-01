@@ -244,6 +244,8 @@ function generateAnswerScript(inputId, buttonId, futterId, answers) {
     '            scripts.forEach(function(script) {\n' +
     '              if (script.textContent.includes(`const element = document.getElementById(\"${nextBtn.id}\")`)) {\n' +
     '                try {\n' +
+    '                  // Remove existing event listeners\n' +
+    '                  nextBtn.onclick = null;\n' +
     '                  const newScript = document.createElement("script");\n' +
     '                  newScript.textContent = script.textContent;\n' +
     '                  document.body.appendChild(newScript);\n' +
