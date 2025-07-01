@@ -1,10 +1,17 @@
 /* 
 Pickramu
 The Pickramu is a language for creating teaching materials for Deep-School.
-version:1.0.33
+version:1.0.61
 Development:Carnaion Studio
 License:MPL-2.0
 */
+
+/**
+ * Pickramu記法テキストをHTMLに変換するメイン関数
+ * @param {string} inputText - Pickramu記法のテキスト
+ * @param {object} shell - ログ出力などのためのシェルオブジェクト
+ * @returns {string} 変換後のHTML
+ */
 export function convertToHtml(inputText, shell) {
   let outputHtml = "";
   // Remove lines starting with //
@@ -20,368 +27,377 @@ export function convertToHtml(inputText, shell) {
     const line = lines[i].trim();
 
     // Handle @tag [open] blocks
-    let tagOpenMatch = line.match(
-      /@tag\s+([\w,-]+)?(?:\s+class=([\w,-]+))?\s+\[open\]/
-    );
-    if (tagOpenMatch) {
-      const tagIds = tagOpenMatch[1]
-        ? tagOpenMatch[1]
-            .split(",")
-            .map((id) => id.trim())
-            .join(" ")
-        : "";
-      const tagClasses = tagOpenMatch[2]
-        ? tagOpenMatch[2]
-            .split(",")
-            .map((cls) => cls.trim())
-            .join(" ")
-        : "";
-      outputHtml += `<div id="${tagIds}" class="${tagClasses}">\n`;
+    if (isTagOpen(line)) {
+      outputHtml += handleTagOpen(line);
       i++;
       continue;
     }
 
     // Handle @tag [close] blocks
-    let tagCloseMatch = line.match(
-      /@tag\s+([\w,-]+)?(?:\s+class=([\w,-]+))?\s+\[close\]/
-    );
-    if (tagCloseMatch) {
+    if (isTagClose(line)) {
+      outputHtml += handleTagClose();
       i++;
-      outputHtml += `</div>\n`;
       continue;
     }
 
     // Handle @input blocks with button
-    let inputMatch = line.match(
-      /@input\s+(\w+)(?:\s+futter=(\w+))?\s+\[open\]/
-    );
-    if (inputMatch) {
-      const inputId = inputMatch[1];
-      const futterId = inputMatch[2];
-      i++;
-      let inputContent = "";
-      let hasButton = false;
-      let buttonId = "";
-
-      // Collect input content until close tag
-      while (i < lines.length && !lines[i].match(/@input.*\[close\]/)) {
-        const currentLine = lines[i].trim();
-        const btnMatch = currentLine.match(/@btn\s+on=\^(\w+)\^/);
-        if (btnMatch) {
-          hasButton = true;
-          buttonId = btnMatch[1];
-          inputContent += `<button id="${buttonId}" class="button-next">回答する</button>\n`;
-        } else {
-          // Replace /br with <br>
-          inputContent += currentLine.replace(/\/br/g, "<br>") + "\n";
-        }
-        i++;
-      }
-
-      // Create input container with content and button
-      outputHtml += `<div class="input-container">\n`;
-      outputHtml += `<div id="${inputId}">\n`;
-      outputHtml += `<input type="text" class="input-box" placeholder="答えを入力" id="${inputId}_input">\n`;
-      outputHtml += inputContent;
-      outputHtml += `</div>\n`;
-      outputHtml += `</div>\n`;
-
-      // Add script for button click handler and Enter key support
-      if (hasButton && futterId) {
-        outputHtml += `<script>\n`;
-        outputHtml += `(function() {\n`;
-        outputHtml += `  // Wait for DOM to be ready\n`;
-        outputHtml += `  function initAnswerSystem() {\n`;
-        outputHtml += `    if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Initializing answer system for ${inputId} -> ${futterId}", level: 'info'});\n`;
-        outputHtml += `    const input = document.getElementById("${inputId}_input");\n`;
-        outputHtml += `    const button = document.getElementById("${buttonId}");\n`;
-        outputHtml += `    const futterElement = document.getElementById("${futterId}");\n`;
-        outputHtml += `    const inputContainer = document.getElementById("${inputId}");\n`;
-        outputHtml += `    \n`;
-        outputHtml += `    if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Elements found: " + JSON.stringify({ input: !!input, button: !!button, futter: !!futterElement, container: !!inputContainer }), level: 'info'});\n`;
-        outputHtml += `    \n`;
-        outputHtml += `    if (!input || !button || !futterElement || !inputContainer) {\n`;
-        outputHtml += `      if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.err', message: "Required elements not found: " + JSON.stringify({ input: !!input, button: !!button, futter: !!futterElement, container: !!inputContainer }), level: 'error'});\n`;
-        outputHtml += `      return;\n`;
-        outputHtml += `    }\n`;
-        outputHtml += `    \n`;
-        outputHtml += `    // Get the answer content that was stored during compilation\n`;
-        outputHtml += `    const answerContent = ${JSON.stringify(answers[futterId] || "")};\n`;
-        outputHtml += `    if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Answer content for ${futterId}: " + answerContent, level: 'info'});\n`;
-        outputHtml += `    \n`;
-        outputHtml += `    function checkAnswer() {\n`;
-        outputHtml += `      if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "checkAnswer function called", level: 'info'});\n`;
-        outputHtml += `      const userAnswer = input.value.trim();\n`;
-        outputHtml += `      if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "User answer: " + userAnswer, level: 'info'});\n`;
-        outputHtml += `      \n`;
-        outputHtml += `      // Extract expected answer from the stored content - multiple patterns\n`;
-        outputHtml += `      let expectedAnswer = "";\n`;
-        outputHtml += `      if (answerContent) {\n`;
-        outputHtml += `        // Pattern 1: 正解は「...」\n`;
-        outputHtml += `        let answerMatch = answerContent.match(/正解は「([^」]+)」/);\n`;
-        outputHtml += `        if (answerMatch) {\n`;
-        outputHtml += `          expectedAnswer = answerMatch[1].trim();\n`;
-        outputHtml += `        } else {\n`;
-        outputHtml += `          // Pattern 2: 正解: ...\n`;
-        outputHtml += `          answerMatch = answerContent.match(/正解:\\s*([^\\n]+)/);\n`;
-        outputHtml += `          if (answerMatch) {\n`;
-        outputHtml += `            expectedAnswer = answerMatch[1].trim();\n`;
-        outputHtml += `          } else {\n`;
-        outputHtml += `            // Pattern 3: 答え: ...\n`;
-        outputHtml += `            answerMatch = answerContent.match(/答え:\\s*([^\\n]+)/);\n`;
-        outputHtml += `            if (answerMatch) {\n`;
-        outputHtml += `              expectedAnswer = answerMatch[1].trim();\n`;
-        outputHtml += `            } else {\n`;
-        outputHtml += `              // Pattern 4: 解答: ...\n`;
-        outputHtml += `              answerMatch = answerContent.match(/解答:\\s*([^\\n]+)/);\n`;
-        outputHtml += `              if (answerMatch) {\n`;
-        outputHtml += `                expectedAnswer = answerMatch[1].trim();\n`;
-        outputHtml += `              } else {\n`;
-        outputHtml += `                // Pattern 5: 最初の数式を探す（$...$形式）\n`;
-        outputHtml += `                answerMatch = answerContent.match(/\\$([^$]+)\\$/);\n`;
-        outputHtml += `                if (answerMatch) {\n`;
-        outputHtml += `                  expectedAnswer = answerMatch[1].trim();\n`;
-        outputHtml += `                } else {\n`;
-        outputHtml += `                  // Pattern 6: 最初の行から数式っぽいものを探す\n`;
-        outputHtml += `                  const firstLine = answerContent.split('\\n')[0];\n`;
-        outputHtml += `                  if (firstLine && (firstLine.includes('x') || firstLine.includes('y') || firstLine.includes('=') || firstLine.includes('+'))) {\n`;
-        outputHtml += `                    expectedAnswer = firstLine.trim();\n`;
-        outputHtml += `                  }\n`;
-        outputHtml += `                }\n`;
-        outputHtml += `              }\n`;
-        outputHtml += `            }\n`;
-        outputHtml += `          }\n`;
-        outputHtml += `        }\n`;
-        outputHtml += `      }\n`;
-        outputHtml += `      if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Expected answer: " + expectedAnswer, level: 'info'});\n`;
-        outputHtml += `      \n`;
-        outputHtml += `      // Check if user provided an answer\n`;
-        outputHtml += `      if (!userAnswer) {\n`;
-        outputHtml += `        if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.warn', message: "答えを入力してください。", level: 'warn'});\n`;
-        outputHtml += `        input.focus();\n`;
-        outputHtml += `        return;\n`;
-        outputHtml += `      }\n`;
-        outputHtml += `      \n`;
-        outputHtml += `      // If no expected answer found, just show the answer content\n`;
-        outputHtml += `      if (!expectedAnswer) {\n`;
-        outputHtml += `        if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "No expected answer found, showing answer content", level: 'info'});\n`;
-        outputHtml += `        inputContainer.style.display = "none";\n`;
-        outputHtml += `        futterElement.style.display = "block";\n`;
-        outputHtml += `        return;\n`;
-        outputHtml += `      }\n`;
-        outputHtml += `      \n`;
-        outputHtml += `      // Check if answer is correct (case-insensitive, trim whitespace)\n`;
-        outputHtml += `      const isCorrect = userAnswer.toLowerCase().trim() === expectedAnswer.toLowerCase().trim();\n`;
-        outputHtml += `      if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Answer check: " + JSON.stringify({ userAnswer, expectedAnswer, isCorrect }), level: 'info'});\n`;
-        outputHtml += `      \n`;
-        outputHtml += `      if (isCorrect) {\n`;
-        outputHtml += `        if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Correct answer!", level: 'info'});\n`;
-        outputHtml += `        // Show correct answer\n`;
-        outputHtml += `        inputContainer.style.display = "none";\n`;
-        outputHtml += `        futterElement.style.display = "block";\n`;
-        outputHtml += `        
-        // 回答表示後の簡単な処理
-        setTimeout(() => {
-          if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Answer displayed, checking for next buttons", level: 'info'});
-        }, 50);\n`;
-        outputHtml += `      } else {\n`;
-        outputHtml += `        if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.warn', message: "Incorrect answer: あなたの答え: " + userAnswer + " 正解: " + expectedAnswer, level: 'warn'});\n`;
-        outputHtml += `        // Show error message with retry option\n`;
-        outputHtml += `        const retry = window.confirm("不正解です。\\n\\nあなたの答え: " + userAnswer + "\\n正解: " + expectedAnswer + "\\n\\nもう一度試しますか？");\n`;
-        outputHtml += `        if (retry) {\n`;
-        outputHtml += `          input.value = "";\n`;
-        outputHtml += `          input.focus();\n`;
-        outputHtml += `        }\n`;
-        outputHtml += `      }\n`;
-        outputHtml += `    }\n`;
-        outputHtml += `    \n`;
-        outputHtml += `    // Button click handler\n`;
-        outputHtml += `    if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Setting up button click handler for button ${buttonId}", level: 'info'});\n`;
-        outputHtml += `    button.onclick = checkAnswer;\n`;
-        outputHtml += `    \n`;
-        outputHtml += `    // Enter key handler\n`;
-        outputHtml += `    if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Setting up Enter key handler for input ${inputId}_input", level: 'info'});\n`;
-        outputHtml += `    input.addEventListener("keypress", function(e) {\n`;
-        outputHtml += `      if (e.key === "Enter") {\n`;
-        outputHtml += `        if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Enter key pressed", level: 'info'});\n`;
-        outputHtml += `        checkAnswer();\n`;
-        outputHtml += `      }\n`;
-        outputHtml += `    });\n`;
-        outputHtml += `    \n`;
-        outputHtml += `    if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Answer system initialized for ${inputId} -> ${futterId}", level: 'info'});\n`;
-        outputHtml += `  }\n`;
-        outputHtml += `  \n`;
-        outputHtml += `  // Try to initialize immediately, then on DOMContentLoaded\n`;
-        outputHtml += `  if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Calling initAnswerSystem immediately", level: 'info'});\n`;
-        outputHtml += `  initAnswerSystem();\n`;
-        outputHtml += `  if (document.readyState === 'loading') {\n`;
-        outputHtml += `    if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Document still loading, adding DOMContentLoaded listener", level: 'info'});\n`;
-        outputHtml += `    document.addEventListener('DOMContentLoaded', initAnswerSystem);\n`;
-        outputHtml += `  }\n`;
-        outputHtml += `})();\n`;
-        outputHtml += `</script>\n`;
-      }
-
-      i++;
+    if (isInputOpen(line)) {
+      const { html, nextIndex } = handleInputBlock(lines, i, answers);
+      outputHtml += html;
+      i = nextIndex;
       continue;
     }
 
     // Handle @futter blocks
-    let futterMatch = line.match(
-      /@futter\s+(\w+)\s+futter=(\w+)\s+\[(open|close)\]/
-    );
-    if (futterMatch) {
-      const futterId = futterMatch[1];
-      if (futterMatch[3] === "open") {
-        outputHtml += `<div id="${futterId}" style="display: none;">\n`;
-        // Collect answer content for this futter
-        i++;
-        let answerContent = "";
-        while (i < lines.length && !lines[i].match(/@futter.*\[close\]/)) {
-          answerContent += lines[i].replace(/\/br/g, "<br>") + "\n";
-          i++;
-        }
-        // Store the answer content
-        answers[futterId] = answerContent.trim();
-        outputHtml += answerContent;
-      } else {
-        outputHtml += `</div>\n`;
-      }
-      i++;
+    if (isFutter(line)) {
+      const { html, nextIndex } = handleFutterBlock(lines, i, answers);
+      outputHtml += html;
+      i = nextIndex;
       continue;
     }
 
     // Handle regular @btn tags (without on=^set^)
-    let btnMatch = line.match(
-      /@btn\s+id=([\w,-]+)(?:\s+class=([\w,-]+))?\s+(.+)/
-    );
-    if (btnMatch) {
-      const btnIds = btnMatch[1]
-        .split(",")
-        .map((id) => id.trim())
-        .join(" ");
-      const btnClasses = btnMatch[2]
-        ? btnMatch[2]
-            .split(",")
-            .map((cls) => cls.trim())
-            .join(" ")
-        : "button-next";
-      const btnContent = btnMatch[3];
-      outputHtml += `<button id="${btnIds}" class="${btnClasses}">${btnContent}</button>\n`;
-      if (/次へ|次|Next/i.test(btnContent)) {
-        outputHtml += `<script>
-          (function() {
-            var btn = (window.document ? window.document : document).getElementById("${btnIds}");
-            if (btn) {
-              // 「次へ」ボタンの優先度を高く設定
-              btn.setAttribute('data-priority', 'high');
-              
-              // 基本的なクリックハンドラー（@scriptタグで上書きされる）
-              btn.onclick = function() {
-                // @scriptタグで定義された動作がない場合のフォールバック
-                var doc = window.document ? window.document : document;
-                var allInputs = Array.from(doc.querySelectorAll('.input-container input')).filter(i => {
-                  var container = i.closest('.input-container');
-                  return container && window.getComputedStyle(container).display !== 'none';
-                });
-                if (!allInputs.length) return;
-                var current = allInputs.findIndex(i => i === doc.activeElement);
-                if (current === -1) {
-                  var next = allInputs.find(i => !i.value);
-                  if (next) {
-                    next.focus();
-                    next.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                  } else {
-                    allInputs[0].focus();
-                    allInputs[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
-                  }
-                } else if (allInputs[current + 1]) {
-                  allInputs[current + 1].focus();
-                  allInputs[current + 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-              };
-            }
-          })();
-        </script>\n`;
-      }
+    if (isBtn(line)) {
+      outputHtml += handleBtn(line);
       i++;
       continue;
     }
 
     // Handle @script blocks
-    let scriptMatch = line.match(/@script\s+on=(\w+)\s+\[open\]/);
-    if (scriptMatch) {
-      const scriptOn = scriptMatch[1];
-      i++;
-      let scriptContentLines = [];
-      while (i < lines.length && !lines[i].match(/@script\s+\[close\]/)) {
-        scriptContentLines.push(lines[i]);
-        i++;
-      }
-      if (i < lines.length) {
-        const scriptContent = scriptContentLines.join("\n");
-        outputHtml += `<script>\n`;
-        outputHtml += `(function() {\n`;
-        outputHtml += `  function initScript() {\n`;
-        outputHtml += `    const element = document.getElementById("${scriptOn}");\n`;
-        outputHtml += `    if (element) {\n`;
-        outputHtml += `      // Remove existing click handler to prevent duplicates\n`;
-        outputHtml += `      element.onclick = null;\n`;
-        outputHtml += `      element.onclick = function() {\n`;
-        outputHtml += scriptContent + "\n";
-        outputHtml += `      };\n`;
-        outputHtml += `      if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.out', message: "Script initialized for element: ${scriptOn}", level: 'info'});\n`;
-        outputHtml += `    } else {\n`;
-        outputHtml += `      if (window.ds && ds.log) ds.log({from: 'dp.app.pickramu.warn', message: "Element not found for script: ${scriptOn}", level: 'warn'});\n`;
-        outputHtml += `    }\n`;
-        outputHtml += `  }\n`;
-        outputHtml += `  \n`;
-        outputHtml += `  // Initialize immediately\n`;
-        outputHtml += `  initScript();\n`;
-        outputHtml += `  \n`;
-        outputHtml += `  // Also initialize when DOM is ready\n`;
-        outputHtml += `  if (document.readyState === 'loading') {\n`;
-        outputHtml += `    document.addEventListener('DOMContentLoaded', initScript);\n`;
-        outputHtml += `  }\n`;
-        outputHtml += `  \n`;
-        outputHtml += `  // Set up a mutation observer to re-initialize when new elements are added\n`;
-        outputHtml += `  if (typeof MutationObserver !== 'undefined') {\n`;
-        outputHtml += `    const observer = new MutationObserver(function(mutations) {\n`;
-        outputHtml += `      mutations.forEach(function(mutation) {\n`;
-        outputHtml += `        if (mutation.type === 'childList') {\n`;
-        outputHtml += `          mutation.addedNodes.forEach(function(node) {\n`;
-        outputHtml += `            if (node.nodeType === 1) { // Element node\n`;
-        outputHtml += `              if (node.id === '${scriptOn}' || node.querySelector && node.querySelector('#${scriptOn}')) {\n`;
-        outputHtml += `                setTimeout(initScript, 10);\n`;
-        outputHtml += `              }\n`;
-        outputHtml += `            }\n`;
-        outputHtml += `          });\n`;
-        outputHtml += `        }\n`;
-        outputHtml += `      });\n`;
-        outputHtml += `    });\n`;
-        outputHtml += `    \n`;
-        outputHtml += `    observer.observe(document.body, {\n`;
-        outputHtml += `      childList: true,\n`;
-        outputHtml += `      subtree: true\n`;
-        outputHtml += `    });\n`;
-        outputHtml += `  }\n`;
-        outputHtml += `})();\n`;
-        outputHtml += `</script>\n`;
-      } else {
-        if (shell && shell.log) shell.log({from: 'dp.app.pickramu.err', message: 'Error: Missing closing script tag', level: 'error'});
-        return null;
-      }
-      i++;
+    if (isScriptOpen(line)) {
+      const { html, nextIndex } = handleScriptBlock(lines, i, shell);
+      outputHtml += html;
+      i = nextIndex;
       continue;
     }
 
     // If no match, treat the line as plain text and replace /br with <br>
-    outputHtml += line.replace(/\/br/g, "<br>") + "\n";
+    outputHtml += handlePlainText(line);
     i++;
   }
 
   return outputHtml;
-} 
+}
+
+/**
+ * @param {string} line
+ * @returns {boolean}
+ * @description @tag [open] 判定
+ */
+function isTagOpen(line) {
+  return /@tag\s+([\w,-]+)?(?:\s+class=([\w,-]+))?\s+\[open\]/.test(line);
+}
+/**
+ * @param {string} line
+ * @returns {string}
+ * @description @tag [open] のdiv生成
+ */
+function handleTagOpen(line) {
+  const match = line.match(/@tag\s+([\w,-]+)?(?:\s+class=([\w,-]+))?\s+\[open\]/);
+  const tagIds = match[1] ? match[1].split(",").map((id) => id.trim()).join(" ") : "";
+  const tagClasses = match[2] ? match[2].split(",").map((cls) => cls.trim()).join(" ") : "";
+  return `<div id="${tagIds}" class="${tagClasses}">\n`;
+}
+/**
+ * @returns {string}
+ * @description @tag [close] のdiv閉じ
+ */
+function handleTagClose() {
+  return `</div>\n`;
+}
+/**
+ * @param {string} line
+ * @returns {boolean}
+ * @description @tag [close] 判定
+ */
+function isTagClose(line) {
+  return /@tag\s+([\w,-]+)?(?:\s+class=([\w,-]+))?\s+\[close\]/.test(line);
+}
+/**
+ * @param {string} line
+ * @returns {boolean}
+ * @description @input [open] 判定
+ */
+function isInputOpen(line) {
+  return /@input\s+(\w+)(?:\s+futter=(\w+))?\s+\[open\]/.test(line);
+}
+/**
+ * @param {string[]} lines
+ * @param {number} startIndex
+ * @param {object} answers
+ * @returns {{html: string, nextIndex: number}}
+ * @description @inputブロックのHTML生成
+ */
+function handleInputBlock(lines, startIndex, answers) {
+  let i = startIndex;
+  const inputMatch = lines[i].trim().match(/@input\s+(\w+)(?:\s+futter=(\w+))?\s+\[open\]/);
+  const inputId = inputMatch[1];
+  const futterId = inputMatch[2];
+  i++;
+  let inputContent = "";
+  let hasButton = false;
+  let buttonId = "";
+
+  // Collect input content until close tag
+  while (i < lines.length && !lines[i].match(/@input.*\[close\]/)) {
+    const currentLine = lines[i].trim();
+    const btnMatch = currentLine.match(/@btn\s+on=\^(\w+)\^/);
+    if (btnMatch) {
+      hasButton = true;
+      buttonId = btnMatch[1];
+      inputContent += `<button id="${buttonId}" class="button-next">回答する</button>\n`;
+    } else {
+      // Replace /br with <br>
+      inputContent += currentLine.replace(/\/br/g, "<br>") + "\n";
+    }
+    i++;
+  }
+
+  // Create input container with content and button
+  let html = `<div class="input-container">\n`;
+  html += `<div id="${inputId}">\n`;
+  html += `<input type="text" class="input-box" placeholder="答えを入力" id="${inputId}_input">\n`;
+  html += inputContent;
+  html += `</div>\n`;
+  html += `</div>\n`;
+
+  // Add script for button click handler and Enter key support
+  if (hasButton && futterId) {
+    html += generateAnswerScript(inputId, buttonId, futterId, answers);
+  }
+
+  return { html, nextIndex: i + 1 };
+}
+/**
+ * @param {string} inputId
+ * @param {string} buttonId
+ * @param {string} futterId
+ * @param {object} answers
+ * @returns {string}
+ * @description 回答ボタン用スクリプト生成
+ */
+function generateAnswerScript(inputId, buttonId, futterId, answers) {
+  return (
+    '\n<script>\n(function() {\n' +
+    '  function initAnswerSystem() {\n' +
+    '    const input = document.getElementById("' + inputId + '_input");\n' +
+    '    const button = document.getElementById("' + buttonId + '");\n' +
+    '    const futterElement = document.getElementById("' + futterId + '");\n' +
+    '    const inputContainer = document.getElementById("' + inputId + '");\n' +
+    '    if (!input || !button || !futterElement || !inputContainer) return;\n' +
+    '    const answerContent = ' + JSON.stringify(answers[futterId] || "") + ';\n' +
+    '    function checkAnswer() {\n' +
+    '      const userAnswer = input.value.trim();\n' +
+    '      let expectedAnswer = "";\n' +
+    '      if (answerContent) {\n' +
+    '        let answerMatch = answerContent.match(/正解は「([^」]+)」/);\n' +
+    '        if (answerMatch) {\n' +
+    '          expectedAnswer = answerMatch[1].trim();\n' +
+    '        } else {\n' +
+    '          answerMatch = answerContent.match(/正解:\\s*([^\\n]+)/);\n' +
+    '          if (answerMatch) {\n' +
+    '            expectedAnswer = answerMatch[1].trim();\n' +
+    '          } else {\n' +
+    '            answerMatch = answerContent.match(/答え:\\s*([^\\n]+)/);\n' +
+    '            if (answerMatch) {\n' +
+    '              expectedAnswer = answerMatch[1].trim();\n' +
+    '            } else {\n' +
+    '              answerMatch = answerContent.match(/解答:\\s*([^\\n]+)/);\n' +
+    '              if (answerMatch) {\n' +
+    '                expectedAnswer = answerMatch[1].trim();\n' +
+    '              } else {\n' +
+    '                answerMatch = answerContent.match(/\\$([^$]+)\\$/);\n' +
+    '                if (answerMatch) {\n' +
+    '                  expectedAnswer = answerMatch[1].trim();\n' +
+    '                } else {\n' +
+    '                  const firstLine = answerContent.split("\\n")[0];\n' +
+    '                  if (firstLine && (firstLine.includes("x") || firstLine.includes("y") || firstLine.includes("=") || firstLine.includes("+"))) {\n' +
+    '                    expectedAnswer = firstLine.trim();\n' +
+    '                  }\n' +
+    '                }\n' +
+    '              }\n' +
+    '            }\n' +
+    '          }\n' +
+    '        }\n' +
+    '      }\n' +
+    '      if (!userAnswer) {\n' +
+    '        input.focus();\n' +
+    '        return;\n' +
+    '      }\n' +
+    '      if (!expectedAnswer) {\n' +
+    '        inputContainer.style.display = "none";\n' +
+    '        futterElement.style.display = "block";\n' +
+    '        return;\n' +
+    '      }\n' +
+    '      const isCorrect = userAnswer.toLowerCase().trim() === expectedAnswer.toLowerCase().trim();\n' +
+    '      if (isCorrect) {\n' +
+    '        inputContainer.style.display = "none";\n' +
+    '        futterElement.style.display = "block";\n' +
+    '        setTimeout(() => {\n' +
+    '          const nextBtns = futterElement.querySelectorAll(\'button[id^="next"]\');\n' +
+    '          nextBtns.forEach(function(nextBtn) {\n' +
+    '            const scripts = document.querySelectorAll(\'script\');\n' +
+    '            scripts.forEach(function(script) {\n' +
+    '              if (script.textContent.includes(`const element = document.getElementById(\\"${nextBtn.id}\\")`)) {\n' +
+    '                try {\n' +
+    '                  const newScript = document.createElement(\'script\');\n' +
+    '                  newScript.textContent = script.textContent;\n' +
+    '                  document.body.appendChild(newScript);\n' +
+    '                } catch (e) {\n' +
+    '                  console.error(\'Error re-executing script for next button:\', nextBtn.id, e);\n' +
+    '                }\n' +
+    '              }\n' +
+    '            });\n' +
+    '          });\n' +
+    '        }, 100);\n' +
+    '      } else {\n' +
+    '        const retry = window.confirm("不正解です。\\n\\nあなたの答え: " + userAnswer + "\\n正解: " + expectedAnswer + "\\n\\nもう一度試しますか？");\n' +
+    '        if (retry) {\n' +
+    '          input.value = "";\n' +
+    '          input.focus();\n' +
+    '        }\n' +
+    '      }\n' +
+    '    }\n' +
+    '    button.onclick = checkAnswer;\n' +
+    '    input.addEventListener("keypress", function(e) {\n' +
+    '      if (e.key === "Enter") {\n' +
+    '        checkAnswer();\n' +
+    '      }\n' +
+    '    });\n' +
+    '  }\n' +
+    '  initAnswerSystem();\n' +
+    '  if (document.readyState === \'loading\') {\n' +
+    '    document.addEventListener(\'DOMContentLoaded\', initAnswerSystem);\n' +
+    '  }\n' +
+    '})();\n</script>\n'
+  );
+}
+/**
+ * @param {string[]} lines
+ * @param {number} startIndex
+ * @param {object} answers
+ * @returns {{html: string, nextIndex: number}}
+ * @description @futterブロックのHTML生成
+ */
+function handleFutterBlock(lines, startIndex, answers) {
+  let i = startIndex;
+  const futterMatch = lines[i].trim().match(/@futter\s+(\w+)\s+futter=(\w+)\s+\[(open|close)\]/);
+  const futterId = futterMatch[1];
+  let html = "";
+  if (futterMatch[3] === "open") {
+    html += `<div id="${futterId}" style="display: none;">\n`;
+    // Collect answer content for this futter
+    i++;
+    let answerContent = "";
+    while (i < lines.length && !lines[i].match(/@futter.*\[close\]/)) {
+      answerContent += lines[i].replace(/\/br/g, "<br>") + "\n";
+      i++;
+    }
+    // Store the answer content
+    answers[futterId] = answerContent.trim();
+    html += answerContent;
+  } else {
+    html += `</div>\n`;
+  }
+  return { html, nextIndex: i + 1 };
+}
+/**
+ * @param {string} line
+ * @returns {boolean}
+ * @description @futter 判定
+ */
+function isFutter(line) {
+  return /@futter\s+(\w+)\s+futter=(\w+)\s+\[(open|close)\]/.test(line);
+}
+/**
+ * @param {string} line
+ * @returns {boolean}
+ * @description @btn 判定
+ */
+function isBtn(line) {
+  return /@btn\s+id=([\w,-]+)(?:\s+class=([\w,-]+))?\s+(.+)/.test(line);
+}
+/**
+ * @param {string} line
+ * @returns {string}
+ * @description @btnボタンのHTML生成
+ */
+function handleBtn(line) {
+  const btnMatch = line.match(/@btn\s+id=([\w,-]+)(?:\s+class=([\w,-]+))?\s+(.+)/);
+  const btnIds = btnMatch[1].split(",").map((id) => id.trim()).join(" ");
+  const btnClasses = btnMatch[2] ? btnMatch[2].split(",").map((cls) => cls.trim()).join(" ") : "button-next";
+  const btnContent = btnMatch[3];
+  let html = `<button id="${btnIds}" class="${btnClasses}">${btnContent}</button>\n`;
+  if (/次へ|次|Next/i.test(btnContent)) {
+    html += `<script>\n(function() {\n  var btn = document.getElementById("${btnIds}");\n  if (btn) {\n    btn.setAttribute('data-priority', 'high');\n    btn.onclick = function() {\n      var doc = document;
+      var allInputs = Array.from(doc.querySelectorAll('.input-container input')).filter(i => {
+        var container = i.closest('.input-container');
+        return container && window.getComputedStyle(container).display !== 'none';
+      });
+      if (!allInputs.length) return;
+      var current = allInputs.findIndex(i => i === doc.activeElement);
+      if (current === -1) {
+        var next = allInputs.find(i => !i.value);
+        if (next) {
+          next.focus();
+          next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          allInputs[0].focus();
+          allInputs[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } else if (allInputs[current + 1]) {
+        allInputs[current + 1].focus();
+        allInputs[current + 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    };
+  }
+})();\n</script>\n`;
+  }
+  return html;
+}
+/**
+ * @param {string} line
+ * @returns {boolean}
+ * @description @script [open] 判定
+ */
+function isScriptOpen(line) {
+  return /@script\s+on=(\w+)\s+\[open\]/.test(line);
+}
+/**
+ * @param {string[]} lines
+ * @param {number} startIndex
+ * @param {object} shell
+ * @returns {{html: string, nextIndex: number}}
+ * @description @scriptブロックのHTML生成
+ */
+function handleScriptBlock(lines, startIndex, shell) {
+  let i = startIndex;
+  const scriptMatch = lines[i].trim().match(/@script\s+on=(\w+)\s+\[open\]/);
+  const scriptOn = scriptMatch[1];
+  i++;
+  let scriptContentLines = [];
+  while (i < lines.length && !lines[i].match(/@script\s+\[close\]/)) {
+    scriptContentLines.push(lines[i]);
+    i++;
+  }
+  if (i < lines.length) {
+    const scriptContent = scriptContentLines.join("\n");
+    let html = `<script>\n(function() {\n  function initScript() {\n    const element = document.getElementById("${scriptOn}");\n    if (element) {\n      element.onclick = null;\n      element.onclick = function() {\n        ${scriptContent}\n      };\n    }\n  }\n  initScript();\n  if (document.readyState === 'loading') {\n    document.addEventListener('DOMContentLoaded', initScript);\n  }\n})();\n</script>\n`;
+    return { html, nextIndex: i + 1 };
+  } else {
+    if (shell && shell.log) shell.log({from: 'dp.app.pickramu.err', message: 'Error: Missing closing script tag', level: 'error'});
+    return { html: '', nextIndex: i + 1 };
+  }
+}
+/**
+ * @param {string} line
+ * @returns {string}
+ * @description 通常テキスト行のHTML生成
+ */
+function handlePlainText(line) {
+  return line.replace(/\/br/g, "<br>") + "\n";
+}
+
 export const appMeta = {
   name: "pickramu",
   title: "Pickramu",
