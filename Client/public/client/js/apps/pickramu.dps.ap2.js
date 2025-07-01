@@ -911,6 +911,11 @@ export function appInit(shell) {
               // KaTeX auto-render configuration
               document.addEventListener("DOMContentLoaded", function() {
                 console.log("DOMContentLoaded fired");
+                // Ensure first section is visible
+                const firstBlock = document.querySelector('#n1');
+                if (firstBlock) {
+                  firstBlock.style.removeProperty('display');
+                }
                 if (typeof renderMathInElement !== 'undefined') {
                   renderMathInElement(document.body, {
                     delimiters: [
