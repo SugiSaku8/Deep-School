@@ -3,15 +3,15 @@ import { GeminiProcessor, CoachingSession } from "../chat/tm/model.mjs";
 export const appMeta = {
   name: "chat",
   title: "ToasterMachine",
-  icon: "re/ico/tm.png"
+  icon: "re/ico/tm.png",
 };
 
 export function appInit(shell) {
   const processor = new GeminiProcessor();
   let session = null;
-  const root = document.getElementById('app-root');
+  const root = document.getElementById("app-root");
   if (!root) {
-    console.error('ChatApp: #app-rootが見つかりません');
+    console.error("ChatApp: #app-rootが見つかりません");
     return;
   }
   root.innerHTML = `
@@ -120,6 +120,7 @@ export function appInit(shell) {
     }
     
     .input-group {
+      color:black;
       display: flex;
       gap: 12px;
       margin-top: 1.5rem;
@@ -250,34 +251,36 @@ export function appInit(shell) {
   `;
 
   // 戻るボタン
-  document.getElementById('chat-back-btn').onclick = () => shell.loadApp('menu');
+  document.getElementById("chat-back-btn").onclick = () =>
+    shell.loadApp("menu");
 
   // メッセージ表示
   function addMessage(text, sender) {
-    const container = document.getElementById('messages-container');
+    const container = document.getElementById("messages-container");
     if (!container) return;
-    const msg = document.createElement('div');
-    msg.className = 'message ' + sender;
-    msg.innerHTML = sender === 'bot'
-      ? marked.parse(text, { gfm: true, breaks: true, sanitize: true })
-      : text;
+    const msg = document.createElement("div");
+    msg.className = "message " + sender;
+    msg.innerHTML =
+      sender === "bot"
+        ? marked.parse(text, { gfm: true, breaks: true, sanitize: true })
+        : text;
     container.appendChild(msg);
     container.scrollTop = container.scrollHeight;
   }
 
   // スプラッシュ→チャット画面切替
   function showChat() {
-    document.getElementById('splash').style.display = 'none';
-    document.getElementById('chat-container').style.display = '';
+    document.getElementById("splash").style.display = "none";
+    document.getElementById("chat-container").style.display = "";
   }
   function showSplash() {
-    document.getElementById('splash').style.display = '';
-    document.getElementById('chat-container').style.display = 'none';
-    document.getElementById('messages-container').innerHTML = '';
+    document.getElementById("splash").style.display = "";
+    document.getElementById("chat-container").style.display = "none";
+    document.getElementById("messages-container").innerHTML = "";
   }
 
   // 新規チャット
-  document.getElementById('new-chat-btn').onclick = () => {
+  document.getElementById("new-chat-btn").onclick = () => {
     if (confirm("チャットをクリアしますか？")) {
       session = null;
       showSplash();
@@ -285,52 +288,52 @@ export function appInit(shell) {
   };
 
   // スプラッシュ画面で質問送信
-  document.getElementById('submit-btn').onclick = async () => {
-    const input = document.getElementById('user-input');
+  document.getElementById("submit-btn").onclick = async () => {
+    const input = document.getElementById("user-input");
     const question = input.value.trim();
     if (!question) return;
-    input.value = '';
+    input.value = "";
     showChat();
-    addMessage(question, 'user');
-    addMessage("考え中...", 'bot');
+    addMessage(question, "user");
+    addMessage("考え中...", "bot");
     session = new CoachingSession(processor);
     try {
       const firstReply = await session.startSession(question);
-      document.querySelector('.message.bot').textContent = ""; // remove "考え中..."
-      addMessage(firstReply, 'bot');
+      document.querySelector(".message.bot").textContent = ""; // remove "考え中..."
+      addMessage(firstReply, "bot");
     } catch (e) {
-      addMessage("エラーが発生しました。もう一度お試しください。", 'bot');
+      addMessage("エラーが発生しました。もう一度お試しください。", "bot");
     }
   };
 
   // チャット画面でメッセージ送信
-  document.getElementById('chat-submit-btn').onclick = async () => {
-    const input = document.getElementById('chat-input');
+  document.getElementById("chat-submit-btn").onclick = async () => {
+    const input = document.getElementById("chat-input");
     const msg = input.value.trim();
     if (!msg || !session) return;
-    input.value = '';
-    addMessage(msg, 'user');
-    addMessage("考え中...", 'bot');
+    input.value = "";
+    addMessage(msg, "user");
+    addMessage("考え中...", "bot");
     try {
       const reply = await session.handleResponse(msg);
-      document.querySelector('.message.bot:last-child').textContent = "";
-      addMessage(reply, 'bot');
+      document.querySelector(".message.bot:last-child").textContent = "";
+      addMessage(reply, "bot");
     } catch (e) {
-      addMessage("エラーが発生しました。もう一度お試しください。", 'bot');
+      addMessage("エラーが発生しました。もう一度お試しください。", "bot");
     }
   };
 
   // Enterキー送信
-  document.getElementById('user-input').addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+  document.getElementById("user-input").addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      document.getElementById('submit-btn').click();
+      document.getElementById("submit-btn").click();
     }
   });
-  document.getElementById('chat-input').addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+  document.getElementById("chat-input").addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      document.getElementById('chat-submit-btn').click();
+      document.getElementById("chat-submit-btn").click();
     }
   });
 }
