@@ -239,12 +239,14 @@ function generateAnswerScript(inputId, buttonId, futterId, answers) {
     '        setTimeout(() => {\n' +
     '          const nextBtns = futterElement.querySelectorAll("button[id^=\"next\"]");\n' +
     '          nextBtns.forEach(function(nextBtn) {\n' +
+    '            if (nextBtn.dataset.scriptBound) return;\n' +
+    '            nextBtn.dataset.scriptBound = "true";\n' +
     '            console.log("Re-executing script for next button:", nextBtn.id);\n' +
     '            const scripts = document.querySelectorAll("script");\n' +
-    '            scripts.forEach(function(script) {\n' +
+    '            for (let i = 0; i < scripts.length; i++) {\n' +
+    '              const script = scripts[i];\n' +
     '              if (script.textContent.includes(`const element = document.getElementById(\"${nextBtn.id}\")`)) {\n' +
     '                try {\n' +
-    '                  // Remove existing event listeners\n' +
     '                  nextBtn.onclick = null;\n' +
     '                  const newScript = document.createElement("script");\n' +
     '                  newScript.textContent = script.textContent;\n' +
@@ -252,8 +254,9 @@ function generateAnswerScript(inputId, buttonId, futterId, answers) {
     '                } catch (e) {\n' +
     '                  console.error("Error re-executing script for next button:", nextBtn.id, e);\n' +
     '                }\n' +
+    '                break;\n' +
     '              }\n' +
-    '            });\n' +
+    '            }\n' +
     '          });\n' +
     '        }, 100);\n' +
     '      } else {\n' +
