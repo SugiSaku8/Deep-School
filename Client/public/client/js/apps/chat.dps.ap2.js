@@ -247,6 +247,11 @@ export function appInit(shell) {
         border-color: rgba(255, 255, 255, 0.2);
       }
     }
+    
+    /* 追加: チャット入力欄の文字色を黒に */
+    #chat-input {
+      color: #000 !important;
+    }
     </style>
   `;
 

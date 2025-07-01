@@ -184,7 +184,10 @@ function generateAnswerScript(inputId, buttonId, futterId, answers) {
     '    const button = document.getElementById("' + buttonId + '");\n' +
     '    const futterElement = document.getElementById("' + futterId + '");\n' +
     '    const inputContainer = document.getElementById("' + inputId + '");\n' +
-    '    if (!input || !button || !futterElement || !inputContainer) return;\n' +
+    '    if (!input || !button || !futterElement || !inputContainer) {\n' +
+    '      console.error("Missing elements for answer system initialization.");\n' +
+    '      return;\n' +
+    '    }\n' +
     '    const answerContent = ' + JSON.stringify(answers[futterId] || "") + ';\n' +
     '    function checkAnswer() {\n' +
     '      const userAnswer = input.value.trim();\n' +
@@ -194,23 +197,23 @@ function generateAnswerScript(inputId, buttonId, futterId, answers) {
     '        if (answerMatch) {\n' +
     '          expectedAnswer = answerMatch[1].trim();\n' +
     '        } else {\n' +
-    '          answerMatch = answerContent.match(/正解:\\s*([^\\n]+)/);\n' +
+    '          answerMatch = answerContent.match(/正解:\s*([^\n]+)/);\n' +
     '          if (answerMatch) {\n' +
     '            expectedAnswer = answerMatch[1].trim();\n' +
     '          } else {\n' +
-    '            answerMatch = answerContent.match(/答え:\\s*([^\\n]+)/);\n' +
+    '            answerMatch = answerContent.match(/答え:\s*([^\n]+)/);\n' +
     '            if (answerMatch) {\n' +
     '              expectedAnswer = answerMatch[1].trim();\n' +
     '            } else {\n' +
-    '              answerMatch = answerContent.match(/解答:\\s*([^\\n]+)/);\n' +
+    '              answerMatch = answerContent.match(/解答:\s*([^\n]+)/);\n' +
     '              if (answerMatch) {\n' +
     '                expectedAnswer = answerMatch[1].trim();\n' +
     '              } else {\n' +
-    '                answerMatch = answerContent.match(/\\$([^$]+)\\$/);\n' +
+    '                answerMatch = answerContent.match(/\$([^$]+)\$/);\n' +
     '                if (answerMatch) {\n' +
     '                  expectedAnswer = answerMatch[1].trim();\n' +
     '                } else {\n' +
-    '                  const firstLine = answerContent.split("\\n")[0];\n' +
+    '                  const firstLine = answerContent.split("\n")[0];\n' +
     '                  if (firstLine && (firstLine.includes("x") || firstLine.includes("y") || firstLine.includes("=") || firstLine.includes("+"))) {\n' +
     '                    expectedAnswer = firstLine.trim();\n' +
     '                  }\n' +
@@ -234,24 +237,25 @@ function generateAnswerScript(inputId, buttonId, futterId, answers) {
     '        inputContainer.style.display = "none";\n' +
     '        futterElement.style.display = "block";\n' +
     '        setTimeout(() => {\n' +
-    '          const nextBtns = futterElement.querySelectorAll(\'button[id^="next"]\');\n' +
+    '          const nextBtns = futterElement.querySelectorAll("button[id^=\"next\"]");\n' +
     '          nextBtns.forEach(function(nextBtn) {\n' +
-    '            const scripts = document.querySelectorAll(\'script\');\n' +
+    '            console.log("Re-executing script for next button:", nextBtn.id);\n' +
+    '            const scripts = document.querySelectorAll("script");\n' +
     '            scripts.forEach(function(script) {\n' +
-    '              if (script.textContent.includes(`const element = document.getElementById(\\"${nextBtn.id}\\")`)) {\n' +
+    '              if (script.textContent.includes(`const element = document.getElementById(\"${nextBtn.id}\")`)) {\n' +
     '                try {\n' +
-    '                  const newScript = document.createElement(\'script\');\n' +
+    '                  const newScript = document.createElement("script");\n' +
     '                  newScript.textContent = script.textContent;\n' +
     '                  document.body.appendChild(newScript);\n' +
     '                } catch (e) {\n' +
-    '                  console.error(\'Error re-executing script for next button:\', nextBtn.id, e);\n' +
+    '                  console.error("Error re-executing script for next button:", nextBtn.id, e);\n' +
     '                }\n' +
     '              }\n' +
     '            });\n' +
     '          });\n' +
     '        }, 100);\n' +
     '      } else {\n' +
-    '        const retry = window.confirm("不正解です。\\n\\nあなたの答え: " + userAnswer + "\\n正解: " + expectedAnswer + "\\n\\nもう一度試しますか？");\n' +
+    '        const retry = window.confirm("不正解です。\n\nあなたの答え: " + userAnswer + "\n正解: " + expectedAnswer + "\n\nもう一度試しますか？");\n' +
     '        if (retry) {\n' +
     '          input.value = "";\n' +
     '          input.focus();\n' +
@@ -266,8 +270,8 @@ function generateAnswerScript(inputId, buttonId, futterId, answers) {
     '    });\n' +
     '  }\n' +
     '  initAnswerSystem();\n' +
-    '  if (document.readyState === \'loading\') {\n' +
-    '    document.addEventListener(\'DOMContentLoaded\', initAnswerSystem);\n' +
+    '  if (document.readyState === "loading") {\n' +
+    '    document.addEventListener("DOMContentLoaded", initAnswerSystem);\n' +
     '  }\n' +
     '})();\n</script>\n'
   );
