@@ -15,8 +15,90 @@ const SOURCE_DIRS = [
 // Output directory (all compiled html will be mirrored here)
 const OUT_BASE = path.resolve(__dirname, '..', 'Pickramu', 'compiled_html');
 
+// AFTER OUT_BASE declaration, insert:
+const ASSETS_DIR = path.join(OUT_BASE, '_assets');
+
+// Shared asset content
+const HIDE_RULE = Array.from({length:99},(_,i)=>`#content #n${i+2}`).join(',')+` {\n  display: none;\n}`;
+
+const STYLE_CSS = `/* Pickramu common styles */
+:root {
+  --bg-color: transparent;
+  --text-color: #222;
+  --card-bg: #fff;
+  --border-radius: 12px;
+  --shadow-color: rgba(0,0,0,0.08);
+  --spacing-unit: 20px;
+  --animation-duration: 0.3s;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text-color);
+  background: var(--bg-color);
+  margin: 0;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  transition: background var(--animation-duration);
+}
+#content {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 8px var(--shadow-color);
+  max-width: 720px;
+  width: 100%;
+  padding: 2rem;
+  box-sizing: border-box;
+  word-break: break-word;
+}
+.input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
+  margin-top: 2em;
+  padding: 1.5em;
+  background: #f5f5f7;
+  border: 1px solid #e5e5e7;
+  border-radius: var(--border-radius);
+  box-shadow: 0 1px 4px var(--shadow-color);
+}
+.input-box {
+  background: #fff;
+  border-radius: 8px;
+  padding: 0.8em 1em;
+  font-size: 1.1em;
+  border: 1px solid #d2d2d7;
+  width: 260px;
+  text-align: center;
+}
+.button-next {
+  background: #007aff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.8em 1.5em;
+  font-size: 1em;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 1px 4px var(--shadow-color);
+}
+body.dark-mode, .dark-mode #content {
+  --bg-color: #1a1a1a;
+  --text-color: #fff;
+  --card-bg: #222;
+  --shadow-color: rgba(0,0,0,0.3);
+}
+${HIDE_RULE}`;
+
+const DOM_JS = `// Lightweight DOM helper injected by Pickramu compiler\n(function(global){\n  if(global.dom) return;\n  global.dom = {\n    back(){ if(global.history && global.history.back) global.history.back(); },\n    Tag(id){\n      const el=document.getElementById(id);\n      return { style:{ display(v,imp){ if(!el) return; el.style.display=v; if(imp==='auto'){ el.style.setProperty('display',v,'important');}}}};\n    }\n  };\n})(window);`;
+
 // Ensure output base exists
 await fs.mkdir(OUT_BASE, { recursive: true });
+
+// Ensure assets written once
+await fs.mkdir(ASSETS_DIR, { recursive: true });
+await fs.writeFile(path.join(ASSETS_DIR, 'pickramu.css'), STYLE_CSS, 'utf8');
+await fs.writeFile(path.join(ASSETS_DIR, 'pickramu-dom.js'), DOM_JS, 'utf8');
 
 // Dynamic import of converter
 const { convertToHtml } = await import(
@@ -75,105 +157,17 @@ function wrapHtml(bodyHtml) {
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
   <style>
-    :root {
-      --bg-color: transparent;
-      --text-color: #222;
-      --card-bg: #fff;
-      --border-radius: 12px;
-      --shadow-color: rgba(0,0,0,0.08);
-      --spacing-unit: 20px;
-      --animation-duration: 0.3s;
-    }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      color: var(--text-color);
-      background: var(--bg-color);
-      margin: 0;
-      padding: 2rem;
-      display: flex;
-      justify-content: center;
-      transition: background var(--animation-duration);
-    }
-    #content {
-      background: var(--card-bg);
-      border-radius: var(--border-radius);
-      box-shadow: 0 2px 8px var(--shadow-color);
-      max-width: 720px;
-      width: 100%;
-      padding: 2rem;
-      box-sizing: border-box;
-      word-break: break-word;
-    }
-    /* 追加要素 */
-    .input-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1em;
-      margin-top: 2em;
-      padding: 1.5em;
-      background: #f5f5f7;
-      border: 1px solid #e5e5e7;
-      border-radius: var(--border-radius);
-      box-shadow: 0 1px 4px var(--shadow-color);
-    }
-    .input-box {
-      background: #fff;
-      border-radius: 8px;
-      padding: 0.8em 1em;
-      font-size: 1.1em;
-      border: 1px solid #d2d2d7;
-      width: 260px;
-      text-align: center;
-    }
-    .button-next {
-      background: #007aff;
-      border: none;
-      border-radius: 8px;
-      padding: 0.8em 1.5em;
-      font-size: 1em;
-      color: #fff;
-      cursor: pointer;
-      box-shadow: 0 1px 4px var(--shadow-color);
-    }
-    /* dark mode */
-    body.dark-mode, .dark-mode #content {
-      --bg-color: #1a1a1a;
-      --text-color: #fff;
-      --card-bg: #222;
-      --shadow-color: rgba(0,0,0,0.3);
-    }
+    /* === Pickramu Common Styles (inlined for self-containment) === */
+${STYLE_CSS.replace(/\n/g,'\n     ')}
   </style>
 </head>
 <body>
   <div id="content">
 ${bodyHtml}
   </div>
+  <!-- Pickramu DOM helper (inlined) -->
   <script>
-  // DOM helper (was added during client-side compilation)
-  if (!window.dom) {
-    window.dom = {
-      back: function() {
-        if (window.history && window.history.back) {
-          window.history.back();
-        }
-      },
-      Tag: function (tagName) {
-        const element = document.getElementById(tagName);
-        return {
-          style: {
-            display: function (value, important) {
-              if (!element) return;
-              element.style.display = value;
-              if (important === 'auto') {
-                element.style.setProperty('display', value, 'important');
-              }
-            }
-          }
-        };
-      }
-    };
-  }
+${DOM_JS.replace(/\n/g,'\n')}
   </script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
