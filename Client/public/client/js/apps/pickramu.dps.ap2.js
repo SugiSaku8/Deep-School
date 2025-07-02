@@ -538,8 +538,23 @@ export function appInit(shell) {
     const select = document.getElementById('pickramu-unit-select');
     if (select) {
       const path = select.value;
+      // ▼ 追加: まずコンパイル済み HTML があればそれをロードする
+      const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+      const baseHtmlPath = isLocal ? '/Pickramu/compiled_html/' : 'https://sugisaku8.github.io/Deep-School/Pickramu/compiled_html/';
+      const compiledUrl = baseHtmlPath + path.replace(/\.txt$/i, '.html');
       try {
-        const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+        const compiledHead = await fetch(compiledUrl, { method: 'HEAD' });
+        if (compiledHead.ok) {
+          const iframe = document.getElementById('pickramu_iframe');
+          iframe.src = compiledUrl;
+          iframe.removeAttribute('srcdoc'); // 念のため srcdoc を削除
+          return; // HTML をロードできたのでここで終了
+        }
+      } catch (e) {
+        console.warn('Compiled HTML not found, fallback to client-side conversion', e);
+      }
+      // ▲ 追加ここまで
+      try {
         const basePath = isLocal ? '/Pickramu/data/' : 'https://sugisaku8.github.io/Deep-School/client/Pickramu/data/';
         const fetchUrl = basePath + path;
         const res = await fetch(fetchUrl);
