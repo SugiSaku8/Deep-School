@@ -539,7 +539,7 @@ export function appInit(shell) {
     if (!select) return;
 
     const path = select.value.replace(/\.(txt|md)$/i, '.html');
-    const baseHtmlPath = 'https://sugisaku8.github.io/Deep-School/Pickramu/data/';
+    const baseHtmlPath = 'https://sugisaku8.github.io/Deep-School/client/Pickramu/data/';
     document.getElementById('pickramu_iframe').src = baseHtmlPath + path;
   };
 
