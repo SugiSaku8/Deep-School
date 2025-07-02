@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+  <style>
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji';margin:0;padding:2rem;background:#f5f5f7;color:#222;}
+    #content{max-width:720px;margin:0 auto;background:#fff;padding:2rem;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+    button{cursor:pointer;}
+  </style>
+</head>
+<body>
+  <div id="content">
+<div id="unit-title" class="">
+</div>
+<div id="chapter-title" class="">
+</div>
+<div id="n1" class="">
+
+<div id="question" class="">
+$ x=2 $,$ y=-3 $のとき、$ 7x+9y-6x+2y $の値を求めましょう。
+</div>
+
+<div id="answer" class="">
+
+<div class="input-container">
+<div id="q1_input">
+<input type="text" class="input-box" placeholder="答えを入力" id="q1_input_input">
+回答を入力してください。
+<button id="set" class="button-next">回答する</button>
+</div>
+</div>
+
+<div id="q1_answer" style="display: none;">
+正解は「$ -31 $」です。
+$7x+9y-6x+2y = x + 11y = 2  + 11\times(-3)$<br>
+$=2-33 = -31$
+
+</div>
+
+<button id="next1" class="button-next">次へ</button>
+<script>
+(function() {
+  var btn = document.getElementById("next1");
+  if (btn) {
+    btn.setAttribute('data-priority', 'high');
+    btn.onclick = function() {
+      var doc = document;
+      var allInputs = Array.from(doc.querySelectorAll('.input-container input')).filter(i => {
+        var container = i.closest('.input-container');
+        return container && window.getComputedStyle(container).display !== 'none';
+      });
+      if (!allInputs.length) return;
+      var current = allInputs.findIndex(i => i === doc.activeElement);
+      if (current === -1) {
+        var next = allInputs.find(i => !i.value);
+        if (next) {
+          next.focus();
+          next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          allInputs[0].focus();
+          allInputs[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } else if (allInputs[current + 1]) {
+        allInputs[current + 1].focus();
+        allInputs[current + 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    };
+  }
+})();
+</script>
+
+</div>
+
+<script>
+(function() {
+  function initScript() {
+    const element = document.getElementById("next1");
+    if (element) {
+      element.onclick = null;
+      element.onclick = function() {
+        dom.Tag("n1").style.display('none','auto');
+dom.Tag("n2").style.display('block','auto');
+        /* 自動スクロール: 表示された次のブロックへスムーズに移動 */
+        setTimeout(function() {
+          const firstVisible = document.querySelector('#content > div[id^="n"]:not([style*="display: none"])');
+          if (firstVisible) {
+            firstVisible.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 20);
+      };
+    }
+  }
+  initScript();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScript);
+  }
+})();
+</script>
+
+<div id="n2" class="">
+
+<div id="question" class="">
+$ x=-1 $,$ y=-\frac{1}{2} $のとき、$ 2(x-5y)-9(-5x+2y) $の値を求めましょう。
+</div>
+
+<div id="answer" class="">
+
+<div class="input-container">
+<div id="q2_input">
+<input type="text" class="input-box" placeholder="答えを入力" id="q2_input_input">
+回答を入力してください。
+<button id="set" class="button-next">回答する</button>
+</div>
+</div>
+
+<div id="q2_answer" style="display: none;">
+正解は「$ -33 $」です。
+$2(x-5y)-9(-5x+2y)=2x-10y+45x-18y$<br>
+$=47x-28y=-47+14=-33$
+
+</div>
+
+<button id="next2" class="button-next">次へ</button>
+<script>
+(function() {
+  var btn = document.getElementById("next2");
+  if (btn) {
+    btn.setAttribute('data-priority', 'high');
+    btn.onclick = function() {
+      var doc = document;
+      var allInputs = Array.from(doc.querySelectorAll('.input-container input')).filter(i => {
+        var container = i.closest('.input-container');
+        return container && window.getComputedStyle(container).display !== 'none';
+      });
+      if (!allInputs.length) return;
+      var current = allInputs.findIndex(i => i === doc.activeElement);
+      if (current === -1) {
+        var next = allInputs.find(i => !i.value);
+        if (next) {
+          next.focus();
+          next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          allInputs[0].focus();
+          allInputs[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } else if (allInputs[current + 1]) {
+        allInputs[current + 1].focus();
+        allInputs[current + 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    };
+  }
+})();
+</script>
+
+</div>
+
+<script>
+(function() {
+  function initScript() {
+    const element = document.getElementById("next2");
+    if (element) {
+      element.onclick = null;
+      element.onclick = function() {
+        dom.Tag("n2").style.display('none','auto');
+dom.Tag("n3").style.display('block','auto');
+        /* 自動スクロール: 表示された次のブロックへスムーズに移動 */
+        setTimeout(function() {
+          const firstVisible = document.querySelector('#content > div[id^="n"]:not([style*="display: none"])');
+          if (firstVisible) {
+            firstVisible.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 20);
+      };
+    }
+  }
+  initScript();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScript);
+  }
+})();
+</script>
+
+<div id="n3" class="">
+
+<div id="question" class="">
+$ x=-\frac{1}{2} $,$ y=\frac{2}{5} $のとき、$ 12x^3y^3 \div \frac{3}{4}x^2y^2 \times \frac{4}{8}y $を求めましょう。<br>
+ヒント:自分の回答に自信をもって! by問題作ってる人
+</div>
+
+<div id="answer" class="">
+
+<div class="input-container">
+<div id="q3_input">
+<input type="text" class="input-box" placeholder="答えを入力" id="q3_input_input">
+回答を入力してください。
+<button id="set" class="button-next">回答する</button>
+</div>
+</div>
+
+<div id="q3_answer" style="display: none;">
+正解は「$ -\frac{16}{25} $」です。
+$12x^3y^3 \div \frac{3}{4}x^2y^2 \times \frac{4}{8}y$<br>
+$=\frac{\cancelto{\cancel4}{12}x^\cancel3y^\cancel3\times4\times\cancelto24y}{\cancel3\cancel{x^2}\cancel{y^2}\times\cancelto{\cancel2}{8}}=8xy^2$<br>
+$=8\times-\frac12\times(\frac25)^2$<br>
+$=8\times-\frac12\times\frac4{25}$<br>
+$=-\frac{\cancelto48\times1\times4}{\cancel2\times25}=-\frac{16}{25}$<br>
+いつも解説してる人から : <br>
+問題作ったやつまじで許さない<br>
+入力大変すg<br>
+...メッセージはここでとぎれているようだ
+
+</div>
+
+<button id="next3" class="button-next">おしまい</button>
+
+</div>
+
+<script>
+(function() {
+  function initScript() {
+    const element = document.getElementById("next3");
+    if (element) {
+      element.onclick = null;
+      element.onclick = function() {
+        dom.back();
+        /* 自動スクロール: 表示された次のブロックへスムーズに移動 */
+        setTimeout(function() {
+          const firstVisible = document.querySelector('#content > div[id^="n"]:not([style*="display: none"])');
+          if (firstVisible) {
+            firstVisible.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 20);
+      };
+    }
+  }
+  initScript();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScript);
+  }
+})();
+</script>
+
+
+
+
+
+
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\(', right: '\)', display: true},
+            {left: '\[', right: '\]', display: true}
+          ],
+          throwOnError: false
+        });
+      }
+    });
+  </script>
+</body>
+</html>

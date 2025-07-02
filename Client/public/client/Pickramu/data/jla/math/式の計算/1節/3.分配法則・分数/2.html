@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+  <style>
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji';margin:0;padding:2rem;background:#f5f5f7;color:#222;}
+    #content{max-width:720px;margin:0 auto;background:#fff;padding:2rem;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+    button{cursor:pointer;}
+  </style>
+</head>
+<body>
+  <div id="content">
+<div id="unit-title" class="">
+</div>
+<div id="chapter-title" class="">
+</div>
+
+<div id="n1" class="">
+
+<div id="question" class="">
+はい。分数祭りです。<br>
+みんな大好き分数祭りです。<br>
+がんばれ
+</div>
+
+<button id="next1" class="button-next">次へ</button>
+<script>
+(function() {
+  var btn = document.getElementById("next1");
+  if (btn) {
+    btn.setAttribute('data-priority', 'high');
+    btn.onclick = function() {
+      var doc = document;
+      var allInputs = Array.from(doc.querySelectorAll('.input-container input')).filter(i => {
+        var container = i.closest('.input-container');
+        return container && window.getComputedStyle(container).display !== 'none';
+      });
+      if (!allInputs.length) return;
+      var current = allInputs.findIndex(i => i === doc.activeElement);
+      if (current === -1) {
+        var next = allInputs.find(i => !i.value);
+        if (next) {
+          next.focus();
+          next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          allInputs[0].focus();
+          allInputs[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } else if (allInputs[current + 1]) {
+        allInputs[current + 1].focus();
+        allInputs[current + 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    };
+  }
+})();
+</script>
+
+</div>
+
+<div id="n2" class="">
+
+<div id="question" class="">
+とりあえず、通分を思い出そう。<br>
+$\frac23+\frac12$ってあったときに、<br>
+分母$3$と$2$をそろえてあげる。なんかかけて。<br>
+そのとき、上の分子さんも同じ数をかけてあげる。<br>
+$\frac23+\frac12=\frac{2\times2}{3\times2}+\frac{1\times3}{2\times3}=\frac46+\frac36=\frac76$
+</div>
+
+<button id="next2" class="button-next">次へ</button>
+<script>
+(function() {
+  var btn = document.getElementById("next2");
+  if (btn) {
+    btn.setAttribute('data-priority', 'high');
+    btn.onclick = function() {
+      var doc = document;
+      var allInputs = Array.from(doc.querySelectorAll('.input-container input')).filter(i => {
+        var container = i.closest('.input-container');
+        return container && window.getComputedStyle(container).display !== 'none';
+      });
+      if (!allInputs.length) return;
+      var current = allInputs.findIndex(i => i === doc.activeElement);
+      if (current === -1) {
+        var next = allInputs.find(i => !i.value);
+        if (next) {
+          next.focus();
+          next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          allInputs[0].focus();
+          allInputs[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } else if (allInputs[current + 1]) {
+        allInputs[current + 1].focus();
+        allInputs[current + 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    };
+  }
+})();
+</script>
+
+</div>
+
+
+<div id="n3" class="">
+
+<div id="question" class="">
+もし、これに文字が入っても同じ！<br>
+分子、分母の両方に同じ数をかけてあげる！<br>
+$\frac x2+\frac x3=\frac{x\times3}{2\times3}+\frac{x\times2}{3\times2}=\frac{3x}{6}+\frac{2x}{6}=\frac{5}{6}x$<br>
+まあわざわざ$x$を分数の外に出してあげたのは、<br>
+自分の趣味です。きれいになる。
+</div>
+
+<button id="next3" class="button-next">次へ</button>
+<script>
+(function() {
+  var btn = document.getElementById("next3");
+  if (btn) {
+    btn.setAttribute('data-priority', 'high');
+    btn.onclick = function() {
+      var doc = document;
+      var allInputs = Array.from(doc.querySelectorAll('.input-container input')).filter(i => {
+        var container = i.closest('.input-container');
+        return container && window.getComputedStyle(container).display !== 'none';
+      });
+      if (!allInputs.length) return;
+      var current = allInputs.findIndex(i => i === doc.activeElement);
+      if (current === -1) {
+        var next = allInputs.find(i => !i.value);
+        if (next) {
+          next.focus();
+          next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          allInputs[0].focus();
+          allInputs[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } else if (allInputs[current + 1]) {
+        allInputs[current + 1].focus();
+        allInputs[current + 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    };
+  }
+})();
+</script>
+
+</div>
+
+<div id="n4" class="">
+
+<div id="question" class="">
+分子の文字数が増えたときは、<br>
+全ての項にかけてあげることが大切！<br>
+$\frac{x+2y}2-\frac{-x+3y}3$<br>
+こんな見た目のやつが今回のメイン。
+</div>
+
+<button id="next4" class="button-next">次へ</button>
+<script>
+(function() {
+  var btn = document.getElementById("next4");
+  if (btn) {
+    btn.setAttribute('data-priority', 'high');
+    btn.onclick = function() {
+      var doc = document;
+      var allInputs = Array.from(doc.querySelectorAll('.input-container input')).filter(i => {
+        var container = i.closest('.input-container');
+        return container && window.getComputedStyle(container).display !== 'none';
+      });
+      if (!allInputs.length) return;
+      var current = allInputs.findIndex(i => i === doc.activeElement);
+      if (current === -1) {
+        var next = allInputs.find(i => !i.value);
+        if (next) {
+          next.focus();
+          next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          allInputs[0].focus();
+          allInputs[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } else if (allInputs[current + 1]) {
+        allInputs[current + 1].focus();
+        allInputs[current + 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    };
+  }
+})();
+</script>
+
+</div>
+
+<div id="n5" class="">
+
+<div id="question" class="">
+自分のおすすめは、でかい分数にする！<br>
+$\frac{x+2y}2-\frac{-x+3y}3=\frac{3(x+2y)-2(-x+3y)}{6}=\frac{3x+6y+2x-6y}{6}=\frac{5}{6}x$<br>
+わかるかな？通分をしながらでかい分数にしちゃった。<br>
+まあ通分で$3(x+2y)$...ってなったのはわかる？と思いたいけど、<br>
+なんで$-2()$になったのか？っていうと、もともと引き算だったから。<br>
+全部の数にマイナスつけないとだめだからね。
+</div>
+
+<button id="next5" class="button-next">次へ</button>
+<script>
+(function() {
+  var btn = document.getElementById("next5");
+  if (btn) {
+    btn.setAttribute('data-priority', 'high');
+    btn.onclick = function() {
+      var doc = document;
+      var allInputs = Array.from(doc.querySelectorAll('.input-container input')).filter(i => {
+        var container = i.closest('.input-container');
+        return container && window.getComputedStyle(container).display !== 'none';
+      });
+      if (!allInputs.length) return;
+      var current = allInputs.findIndex(i => i === doc.activeElement);
+      if (current === -1) {
+        var next = allInputs.find(i => !i.value);
+        if (next) {
+          next.focus();
+          next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          allInputs[0].focus();
+          allInputs[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } else if (allInputs[current + 1]) {
+        allInputs[current + 1].focus();
+        allInputs[current + 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    };
+  }
+})();
+</script>
+
+</div>
+
+<div id="n6" class="">
+
+<div id="question" class="">
+いったん問題解こう。
+$\frac{x-y}{2}-\frac{-x+y}{3}$
+</div>
+
+<div id="answer" class="">
+
+<div class="input-container">
+<div id="q1_input">
+<input type="text" class="input-box" placeholder="答えを入力" id="q1_input_input">
+がんばれ。
+<button id="set" class="button-next">回答する</button>
+</div>
+</div>
+
+<div id="q1_answer" style="display: none;">
+$\frac{x-y}{2}-\frac{-x+y}{3}=\frac{3x-3y+2x-2y}{6}=\frac{5x-5y}{6}$<br>
+うーん、まあこのくらいの途中式だとミスりそうだな...<br>
+怖い人は、ていねいに通分の様子書いた方がいいかも。<br>
+上級者むけの途中式です。
+
+</div>
+
+
+<button id="next6" class="button-next">次へ</button>
+<script>
+(function() {
+  var btn = document.getElementById("next6");
+  if (btn) {
+    btn.setAttribute('data-priority', 'high');
+    btn.onclick = function() {
+      var doc = document;
+      var allInputs = Array.from(doc.querySelectorAll('.input-container input')).filter(i => {
+        var container = i.closest('.input-container');
+        return container && window.getComputedStyle(container).display !== 'none';
+      });
+      if (!allInputs.length) return;
+      var current = allInputs.findIndex(i => i === doc.activeElement);
+      if (current === -1) {
+        var next = allInputs.find(i => !i.value);
+        if (next) {
+          next.focus();
+          next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          allInputs[0].focus();
+          allInputs[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } else if (allInputs[current + 1]) {
+        allInputs[current + 1].focus();
+        allInputs[current + 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    };
+  }
+})();
+</script>
+
+</div>
+
+<div id="n7" class="">
+
+<div id="question" class="">
+問題にはしないけど補足<br>
+$x-y\frac{x+y}{2}$ってどうすればいいかわかる？<br>
+思い出してほしいのは、$x-y=\frac x1 -\frac y1$だということ。<br>
+あとは、$2$をかければいいよね。<br>
+$\frac{2x-2y+x+y}{2}=\frac{3x-y}{2}$
+</div>
+
+<button id="next7" class="button-next">次へ</button>
+<script>
+(function() {
+  var btn = document.getElementById("next7");
+  if (btn) {
+    btn.setAttribute('data-priority', 'high');
+    btn.onclick = function() {
+      var doc = document;
+      var allInputs = Array.from(doc.querySelectorAll('.input-container input')).filter(i => {
+        var container = i.closest('.input-container');
+        return container && window.getComputedStyle(container).display !== 'none';
+      });
+      if (!allInputs.length) return;
+      var current = allInputs.findIndex(i => i === doc.activeElement);
+      if (current === -1) {
+        var next = allInputs.find(i => !i.value);
+        if (next) {
+          next.focus();
+          next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          allInputs[0].focus();
+          allInputs[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } else if (allInputs[current + 1]) {
+        allInputs[current + 1].focus();
+        allInputs[current + 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    };
+  }
+})();
+</script>
+
+</div>
+
+<div id="n8" class="">
+
+<div id="question" class="">
+あー忘れてた<br>
+約分の話だけど、平等にわらないとだめ。<br>
+だから、分子の片方だけわるとかは、平等じゃない。<br>
+全部で約分できるときだけ約分する。<br>
+数字で見せたほうが早いか。
+</div>
+
+<button id="next8" class="button-next">次へ</button>
+<script>
+(function() {
+  var btn = document.getElementById("next8");
+  if (btn) {
+    btn.setAttribute('data-priority', 'high');
+    btn.onclick = function() {
+      var doc = document;
+      var allInputs = Array.from(doc.querySelectorAll('.input-container input')).filter(i => {
+        var container = i.closest('.input-container');
+        return container && window.getComputedStyle(container).display !== 'none';
+      });
+      if (!allInputs.length) return;
+      var current = allInputs.findIndex(i => i === doc.activeElement);
+      if (current === -1) {
+        var next = allInputs.find(i => !i.value);
+        if (next) {
+          next.focus();
+          next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          allInputs[0].focus();
+          allInputs[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } else if (allInputs[current + 1]) {
+        allInputs[current + 1].focus();
+        allInputs[current + 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    };
+  }
+})();
+</script>
+
+</div>
+
+<div id="n9" class="">
+
+<div id="question" class="">
+$\frac{4x+3y}{2}$っていうのは、<br>
+まあ確かに、$4x$は$2$でわれるけど、<br>
+$3y$は$2$でわれないよねっていうこと。<br>
+だからこいつは約分しなくてもいい。
+</div>
+
+<button id="next9" class="button-next">次へ</button>
+<script>
+(function() {
+  var btn = document.getElementById("next9");
+  if (btn) {
+    btn.setAttribute('data-priority', 'high');
+    btn.onclick = function() {
+      var doc = document;
+      var allInputs = Array.from(doc.querySelectorAll('.input-container input')).filter(i => {
+        var container = i.closest('.input-container');
+        return container && window.getComputedStyle(container).display !== 'none';
+      });
+      if (!allInputs.length) return;
+      var current = allInputs.findIndex(i => i === doc.activeElement);
+      if (current === -1) {
+        var next = allInputs.find(i => !i.value);
+        if (next) {
+          next.focus();
+          next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          allInputs[0].focus();
+          allInputs[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } else if (allInputs[current + 1]) {
+        allInputs[current + 1].focus();
+        allInputs[current + 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    };
+  }
+})();
+</script>
+
+</div>
+
+<div id="n10" class="">
+
+<div id="question" class="">
+どうしても約分したい人は、<br>
+別々の分数にすればいい。<br>
+$\frac{4x+3y}{2}=2x+\frac{3}{2}y$って感じ。<br>
+まあわざわざやらなくてもいいかも。
+</div>
+
+<button id="next10" class="button-next">次へ</button>
+<script>
+(function() {
+  var btn = document.getElementById("next10");
+  if (btn) {
+    btn.setAttribute('data-priority', 'high');
+    btn.onclick = function() {
+      var doc = document;
+      var allInputs = Array.from(doc.querySelectorAll('.input-container input')).filter(i => {
+        var container = i.closest('.input-container');
+        return container && window.getComputedStyle(container).display !== 'none';
+      });
+      if (!allInputs.length) return;
+      var current = allInputs.findIndex(i => i === doc.activeElement);
+      if (current === -1) {
+        var next = allInputs.find(i => !i.value);
+        if (next) {
+          next.focus();
+          next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          allInputs[0].focus();
+          allInputs[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } else if (allInputs[current + 1]) {
+        allInputs[current + 1].focus();
+        allInputs[current + 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    };
+  }
+})();
+</script>
+
+</div>
+
+<div id="n11" class="">
+
+<div id="question" class="">
+約分できるパターンはこれ。<br>
+$\frac{4x-6y}{4}=\frac{2x-3y}{2}$<br>
+両方を$2$でわってあげた。
+</div>
+
+<button id="next11" class="button-next">次へ</button>
+<script>
+(function() {
+  var btn = document.getElementById("next11");
+  if (btn) {
+    btn.setAttribute('data-priority', 'high');
+    btn.onclick = function() {
+      var doc = document;
+      var allInputs = Array.from(doc.querySelectorAll('.input-container input')).filter(i => {
+        var container = i.closest('.input-container');
+        return container && window.getComputedStyle(container).display !== 'none';
+      });
+      if (!allInputs.length) return;
+      var current = allInputs.findIndex(i => i === doc.activeElement);
+      if (current === -1) {
+        var next = allInputs.find(i => !i.value);
+        if (next) {
+          next.focus();
+          next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          allInputs[0].focus();
+          allInputs[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } else if (allInputs[current + 1]) {
+        allInputs[current + 1].focus();
+        allInputs[current + 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    };
+  }
+})();
+</script>
+
+</div>
+
+
+<div id="n12" class="">
+
+<div id="question" class="">
+まとめ！<br>
+でかい分数つくっとけ！<br>
+約分は、みんなに平等に！
+</div>
+
+<button id="next12" class="button-next">おしまい</button>
+
+</div>
+
+<script>
+(function() {
+  function initScript() {
+    const element = document.getElementById("next1");
+    if (element) {
+      element.onclick = null;
+      element.onclick = function() {
+        dom.Tag("n1").style.display('none','auto');
+dom.Tag("n2").style.display('block','auto');
+        /* 自動スクロール: 表示された次のブロックへスムーズに移動 */
+        setTimeout(function() {
+          const firstVisible = document.querySelector('#content > div[id^="n"]:not([style*="display: none"])');
+          if (firstVisible) {
+            firstVisible.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 20);
+      };
+    }
+  }
+  initScript();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScript);
+  }
+})();
+</script>
+
+<script>
+(function() {
+  function initScript() {
+    const element = document.getElementById("next2");
+    if (element) {
+      element.onclick = null;
+      element.onclick = function() {
+        dom.Tag("n2").style.display('none','auto');
+dom.Tag("n3").style.display('block','auto');
+        /* 自動スクロール: 表示された次のブロックへスムーズに移動 */
+        setTimeout(function() {
+          const firstVisible = document.querySelector('#content > div[id^="n"]:not([style*="display: none"])');
+          if (firstVisible) {
+            firstVisible.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 20);
+      };
+    }
+  }
+  initScript();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScript);
+  }
+})();
+</script>
+
+<script>
+(function() {
+  function initScript() {
+    const element = document.getElementById("next3");
+    if (element) {
+      element.onclick = null;
+      element.onclick = function() {
+        dom.Tag("n3").style.display('none','auto');
+dom.Tag("n4").style.display('block','auto');
+        /* 自動スクロール: 表示された次のブロックへスムーズに移動 */
+        setTimeout(function() {
+          const firstVisible = document.querySelector('#content > div[id^="n"]:not([style*="display: none"])');
+          if (firstVisible) {
+            firstVisible.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 20);
+      };
+    }
+  }
+  initScript();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScript);
+  }
+})();
+</script>
+
+<script>
+(function() {
+  function initScript() {
+    const element = document.getElementById("next4");
+    if (element) {
+      element.onclick = null;
+      element.onclick = function() {
+        dom.Tag("n4").style.display('none','auto');
+dom.Tag("n5").style.display('block','auto');
+        /* 自動スクロール: 表示された次のブロックへスムーズに移動 */
+        setTimeout(function() {
+          const firstVisible = document.querySelector('#content > div[id^="n"]:not([style*="display: none"])');
+          if (firstVisible) {
+            firstVisible.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 20);
+      };
+    }
+  }
+  initScript();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScript);
+  }
+})();
+</script>
+
+<script>
+(function() {
+  function initScript() {
+    const element = document.getElementById("next5");
+    if (element) {
+      element.onclick = null;
+      element.onclick = function() {
+        dom.Tag("n5").style.display('none','auto');
+dom.Tag("n6").style.display('block','auto');
+        /* 自動スクロール: 表示された次のブロックへスムーズに移動 */
+        setTimeout(function() {
+          const firstVisible = document.querySelector('#content > div[id^="n"]:not([style*="display: none"])');
+          if (firstVisible) {
+            firstVisible.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 20);
+      };
+    }
+  }
+  initScript();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScript);
+  }
+})();
+</script>
+
+<script>
+(function() {
+  function initScript() {
+    const element = document.getElementById("next6");
+    if (element) {
+      element.onclick = null;
+      element.onclick = function() {
+        dom.Tag("n6").style.display('none','auto');
+dom.Tag("n7").style.display('block','auto');
+        /* 自動スクロール: 表示された次のブロックへスムーズに移動 */
+        setTimeout(function() {
+          const firstVisible = document.querySelector('#content > div[id^="n"]:not([style*="display: none"])');
+          if (firstVisible) {
+            firstVisible.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 20);
+      };
+    }
+  }
+  initScript();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScript);
+  }
+})();
+</script>
+
+<script>
+(function() {
+  function initScript() {
+    const element = document.getElementById("next7");
+    if (element) {
+      element.onclick = null;
+      element.onclick = function() {
+        dom.Tag("n7").style.display('none','auto');
+dom.Tag("n8").style.display('block','auto');
+        /* 自動スクロール: 表示された次のブロックへスムーズに移動 */
+        setTimeout(function() {
+          const firstVisible = document.querySelector('#content > div[id^="n"]:not([style*="display: none"])');
+          if (firstVisible) {
+            firstVisible.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 20);
+      };
+    }
+  }
+  initScript();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScript);
+  }
+})();
+</script>
+
+<script>
+(function() {
+  function initScript() {
+    const element = document.getElementById("next8");
+    if (element) {
+      element.onclick = null;
+      element.onclick = function() {
+        dom.Tag("n8").style.display('none','auto');
+dom.Tag("n9").style.display('block','auto');
+        /* 自動スクロール: 表示された次のブロックへスムーズに移動 */
+        setTimeout(function() {
+          const firstVisible = document.querySelector('#content > div[id^="n"]:not([style*="display: none"])');
+          if (firstVisible) {
+            firstVisible.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 20);
+      };
+    }
+  }
+  initScript();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScript);
+  }
+})();
+</script>
+
+<script>
+(function() {
+  function initScript() {
+    const element = document.getElementById("next9");
+    if (element) {
+      element.onclick = null;
+      element.onclick = function() {
+        dom.Tag("n9").style.display('none','auto');
+dom.Tag("n10").style.display('block','auto');
+        /* 自動スクロール: 表示された次のブロックへスムーズに移動 */
+        setTimeout(function() {
+          const firstVisible = document.querySelector('#content > div[id^="n"]:not([style*="display: none"])');
+          if (firstVisible) {
+            firstVisible.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 20);
+      };
+    }
+  }
+  initScript();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScript);
+  }
+})();
+</script>
+
+<script>
+(function() {
+  function initScript() {
+    const element = document.getElementById("next10");
+    if (element) {
+      element.onclick = null;
+      element.onclick = function() {
+        dom.Tag("n10").style.display('none','auto');
+dom.Tag("n11").style.display('block','auto');
+        /* 自動スクロール: 表示された次のブロックへスムーズに移動 */
+        setTimeout(function() {
+          const firstVisible = document.querySelector('#content > div[id^="n"]:not([style*="display: none"])');
+          if (firstVisible) {
+            firstVisible.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 20);
+      };
+    }
+  }
+  initScript();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScript);
+  }
+})();
+</script>
+
+<script>
+(function() {
+  function initScript() {
+    const element = document.getElementById("next11");
+    if (element) {
+      element.onclick = null;
+      element.onclick = function() {
+        dom.Tag("n11").style.display('none','auto');
+dom.Tag("n12").style.display('block','auto');
+        /* 自動スクロール: 表示された次のブロックへスムーズに移動 */
+        setTimeout(function() {
+          const firstVisible = document.querySelector('#content > div[id^="n"]:not([style*="display: none"])');
+          if (firstVisible) {
+            firstVisible.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 20);
+      };
+    }
+  }
+  initScript();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScript);
+  }
+})();
+</script>
+
+<script>
+(function() {
+  function initScript() {
+    const element = document.getElementById("next12");
+    if (element) {
+      element.onclick = null;
+      element.onclick = function() {
+        dom.back();
+        /* 自動スクロール: 表示された次のブロックへスムーズに移動 */
+        setTimeout(function() {
+          const firstVisible = document.querySelector('#content > div[id^="n"]:not([style*="display: none"])');
+          if (firstVisible) {
+            firstVisible.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 20);
+      };
+    }
+  }
+  initScript();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScript);
+  }
+})();
+</script>
+
+
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\(', right: '\)', display: true},
+            {left: '\[', right: '\]', display: true}
+          ],
+          throwOnError: false
+        });
+      }
+    });
+  </script>
+</body>
+</html>

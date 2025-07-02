@@ -458,17 +458,17 @@ export function appInit(shell) {
             <div class="pickramu-select-group">
               <label for="pickramu-unit-select" class="pickramu-select-label">学習する教材を選択してください：</label>
               <select id="pickramu-unit-select" class="pickramu-select-dropdown">
-                <option value="jla/math/式の計算/1節/1.用語/1.txt">数学: 式の計算・1節・用語 (1)</option>
-                <option value="jla/math/式の計算/1節/1.用語/2.txt">数学: 式の計算・1節・用語 (2)</option>
-                <option value="jla/math/式の計算/1節/2.加法・減法/1.txt">数学: 式の計算・1節・加法・減法 (1)</option>
-                <option value="jla/math/式の計算/1節/2.加法・減法/2.txt">数学: 式の計算・1節・加法・減法 (2)</option>
-                <option value="jla/math/式の計算/1節/3.分配法則・分数/1.txt">数学: 式の計算・1節・分配法則・分数 (1)</option>
-                <option value="jla/math/式の計算/1節/3.分配法則・分数/2.txt">数学: 式の計算・1節・分配法則・分数 (2)</option>
-                <option value="jla/math/式の計算/1節/3.分配法則・分数/3.txt">数学: 式の計算・1節・分配法則・分数 (3)</option>
-                <option value="jla/math/式の計算/1節/4.乗法・除法/1.txt">数学: 式の計算・1節・乗法・除法 (1)</option>
-                <option value="jla/math/式の計算/1節/4.乗法・除法/2.txt">数学: 式の計算・1節・乗法・除法 (2)</option>
-                <option value="jla/math/式の計算/1節/5.式の値/1.txt">数学: 式の計算・1節・式の値 (1)</option>
-                <option value="jla/math/式の計算/1節/5.式の値/2.txt">数学: 式の計算・1節・式の値 (2)</option>
+                <option value="jla/math/式の計算/1節/1.用語/1.html">数学: 式の計算・1節・用語 (1)</option>
+                <option value="jla/math/式の計算/1節/1.用語/2.html">数学: 式の計算・1節・用語 (2)</option>
+                <option value="jla/math/式の計算/1節/2.加法・減法/1.html">数学: 式の計算・1節・加法・減法 (1)</option>
+                <option value="jla/math/式の計算/1節/2.加法・減法/2.html">数学: 式の計算・1節・加法・減法 (2)</option>
+                <option value="jla/math/式の計算/1節/3.分配法則・分数/1.html">数学: 式の計算・1節・分配法則・分数 (1)</option>
+                <option value="jla/math/式の計算/1節/3.分配法則・分数/2.html">数学: 式の計算・1節・分配法則・分数 (2)</option>
+                <option value="jla/math/式の計算/1節/3.分配法則・分数/3.html">数学: 式の計算・1節・分配法則・分数 (3)</option>
+                <option value="jla/math/式の計算/1節/4.乗法・除法/1.html">数学: 式の計算・1節・乗法・除法 (1)</option>
+                <option value="jla/math/式の計算/1節/4.乗法・除法/2.html">数学: 式の計算・1節・乗法・除法 (2)</option>
+                <option value="jla/math/式の計算/1節/5.式の値/1.html">数学: 式の計算・1節・式の値 (1)</option>
+                <option value="jla/math/式の計算/1節/5.式の値/2.html">数学: 式の計算・1節・式の値 (2)</option>
               </select>
               <button class="pickramu-load-button" id="pickramu-load-btn" data-lang-key="load">
                 <span class="button-text">教材を読み込む</span>
@@ -539,8 +539,7 @@ export function appInit(shell) {
     if (!select) return;
 
     const path = select.value.replace(/\.(txt|md)$/i, '.html');
-    const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-    const baseHtmlPath = isLocal ? '/Pickramu/compiled_html/' : 'https://sugisaku8.github.io/Deep-School/Pickramu/compiled_html/';
+    const baseHtmlPath = 'https://sugisaku8.github.io/Deep-School/Pickramu/data/';
     document.getElementById('pickramu_iframe').src = baseHtmlPath + path;
   };
 

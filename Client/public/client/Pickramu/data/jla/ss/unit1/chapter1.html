@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+  <style>
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji';margin:0;padding:2rem;background:#f5f5f7;color:#222;}
+    #content{max-width:720px;margin:0 auto;background:#fff;padding:2rem;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+    button{cursor:pointer;}
+  </style>
+</head>
+<body>
+  <div id="content">
+<div id="unit-title" class="">
+</div>
+<div id="chapter-title" class="">
+</div>
+<div id="n1" class="">
+<div id="question" class="">
+約 10 万年前ごろのものと見られる人類の痕跡が日本列島から見つかりました。
+この頃の人類は、動物を狩って生活していました。
+</div>
+<div id="answer" class="">
+<div class="input-container">
+<div id="n1_input">
+<input type="text" class="input-box" placeholder="答えを入力" id="n1_input_input">
+この時代のことをなんというか答えなさい。
+</div>
+</div>
+<div id="n1_asnwer_futter" style="display: none;">
+この時代のことは、旧石器時代と言います。
+</div>
+<button id="btn1" class="button-next">次へ</button>
+<script>
+(function() {
+  var btn = document.getElementById("btn1");
+  if (btn) {
+    btn.setAttribute('data-priority', 'high');
+    btn.onclick = function() {
+      var doc = document;
+      var allInputs = Array.from(doc.querySelectorAll('.input-container input')).filter(i => {
+        var container = i.closest('.input-container');
+        return container && window.getComputedStyle(container).display !== 'none';
+      });
+      if (!allInputs.length) return;
+      var current = allInputs.findIndex(i => i === doc.activeElement);
+      if (current === -1) {
+        var next = allInputs.find(i => !i.value);
+        if (next) {
+          next.focus();
+          next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          allInputs[0].focus();
+          allInputs[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } else if (allInputs[current + 1]) {
+        allInputs[current + 1].focus();
+        allInputs[current + 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    };
+  }
+})();
+</script>
+
+</div>
+
+<div id="question" class="">
+約 1 万年前、日本列島が大陸から分離しました。
+紀元前 3000 年ごろ、稲作が日本列島に伝わりました。
+</div>
+<button id="btn2" class="button-next">次へ</button>
+<script>
+(function() {
+  var btn = document.getElementById("btn2");
+  if (btn) {
+    btn.setAttribute('data-priority', 'high');
+    btn.onclick = function() {
+      var doc = document;
+      var allInputs = Array.from(doc.querySelectorAll('.input-container input')).filter(i => {
+        var container = i.closest('.input-container');
+        return container && window.getComputedStyle(container).display !== 'none';
+      });
+      if (!allInputs.length) return;
+      var current = allInputs.findIndex(i => i === doc.activeElement);
+      if (current === -1) {
+        var next = allInputs.find(i => !i.value);
+        if (next) {
+          next.focus();
+          next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          allInputs[0].focus();
+          allInputs[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } else if (allInputs[current + 1]) {
+        allInputs[current + 1].focus();
+        allInputs[current + 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    };
+  }
+})();
+</script>
+<script>
+(function() {
+  function initScript() {
+    const element = document.getElementById("btn1");
+    if (element) {
+      element.onclick = null;
+      element.onclick = function() {
+        dom.Tag("n1").style.display('none','auto');
+dom.Tag("n2").style.display('block','auto');
+        /* 自動スクロール: 表示された次のブロックへスムーズに移動 */
+        setTimeout(function() {
+          const firstVisible = document.querySelector('#content > div[id^="n"]:not([style*="display: none"])');
+          if (firstVisible) {
+            firstVisible.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 20);
+      };
+    }
+  }
+  initScript();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScript);
+  }
+})();
+</script>
+
+<script>
+(function() {
+  function initScript() {
+    const element = document.getElementById("btn2");
+    if (element) {
+      element.onclick = null;
+      element.onclick = function() {
+        dom.back();
+        /* 自動スクロール: 表示された次のブロックへスムーズに移動 */
+        setTimeout(function() {
+          const firstVisible = document.querySelector('#content > div[id^="n"]:not([style*="display: none"])');
+          if (firstVisible) {
+            firstVisible.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 20);
+      };
+    }
+  }
+  initScript();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScript);
+  }
+})();
+</script>
+
+
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false},
+            {left: '\(', right: '\)', display: true},
+            {left: '\[', right: '\]', display: true}
+          ],
+          throwOnError: false
+        });
+      }
+    });
+  </script>
+</body>
+</html>
