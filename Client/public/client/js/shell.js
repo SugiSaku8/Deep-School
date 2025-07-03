@@ -34,6 +34,7 @@ import * as loginApp from './apps/login.dps.ap2.js';
 import * as menuApp from './apps/menu.dps.ap2.js';
 import * as estoreApp from './apps/estore.dps.ap2.js';
 import * as eguideApp from './apps/eguide.dps.ap2.js';
+import * as tutorialApp from './apps/tutorial.app.js';
 
 const appModules = {
   chat: chatApp,
@@ -44,6 +45,7 @@ const appModules = {
   menu: menuApp,
   estore: estoreApp,
   eguide: eguideApp,
+  tutorial: tutorialApp,
 };
 
 // Deep-School ログシステム

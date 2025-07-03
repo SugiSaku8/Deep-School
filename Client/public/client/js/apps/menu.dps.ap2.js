@@ -7,6 +7,30 @@ export const appMeta = {
 export function appInit(shell) {
   shell.log({from: 'dp.app.menu.out', message: 'MenuApp: 初期化開始', level: 'info'});
 
+  // チュートリアル進行用ステップ
+  const tutorialSteps = [
+    {
+      app: 'chat',
+      title: 'ToasterMachineへようこそ',
+      desc: 'AIチャットで質問や相談ができます。まずはここから始めましょう。',
+    },
+    {
+      app: 'pickramu',
+      title: 'Pickramu（教材ワーク）',
+      desc: '教材を選んで学習・演習ができます。自分のペースで進めましょう。',
+    },
+    {
+      app: 'scr',
+      title: 'SCR（学習記録・交流）',
+      desc: '学習の記録や他のユーザーとの交流ができます。積極的に活用しましょう。',
+    },
+  ];
+
+  // チュートリアル表示条件
+  const isDemoUser = window.isDemoUser;
+  const tutorialCompleted = localStorage.getItem('tutorialCompleted');
+  const shouldShowTutorial = isDemoUser || !tutorialCompleted;
+
   // HTMLを#app-rootに描画
   const root = document.getElementById('app-root');
   if (!root) {
@@ -40,7 +64,7 @@ export function appInit(shell) {
     </div>
     
     <div class="copyright-container horizontal-copyright">
-      <p class="copyright chalk-text left-align" data-lang-key="copyright">(c) 2022-2025 Carnation Studio v0.3.0 25C962X1</p>
+      <p class="copyright chalk-text left-align" data-lang-key="copyright">(c) 2022-2025 Carnation Studio v0.3.0 25C991X1</p>
     </div>
   
   <style>
@@ -466,6 +490,59 @@ export function appInit(shell) {
   // ユーザー情報の表示（ログイン済みの場合）
   if (window.googleUserName) {
     shell.log({from: 'dp.app.menu.out', message: 'MenuApp: ユーザー情報 ' + JSON.stringify({name: window.googleUserName, id: window.googleUserId}), level: 'info'});
+  }
+
+  // チュートリアルUI挿入
+  if (shouldShowTutorial) {
+    let step = 0;
+    function showTutorialStep(idx) {
+      const s = tutorialSteps[idx];
+      // アプリを自動で開く
+      shell.loadApp(s.app);
+      // モーダルUI生成
+      setTimeout(() => {
+        const modal = document.createElement('div');
+        modal.className = 'ds-tutorial-modal';
+        modal.innerHTML = `
+          <div class="ds-tutorial-content" role="dialog" aria-modal="true" tabindex="-1">
+            <h2 class="ds-tutorial-title">${s.title}</h2>
+            <p class="ds-tutorial-desc">${s.desc}</p>
+            <button class="ds-tutorial-next" id="ds-tutorial-next-btn">${idx < tutorialSteps.length - 1 ? '次へ' : '完了'}</button>
+          </div>
+        `;
+        Object.assign(modal.style, {
+          position: 'fixed', zIndex: 9999, top: 0, left: 0, width: '100vw', height: '100vh',
+          background: 'rgba(0,0,0,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        });
+        const content = modal.querySelector('.ds-tutorial-content');
+        Object.assign(content.style, {
+          background: 'rgba(30,30,40,0.98)', color: '#fff', borderRadius: '24px', boxShadow: '0 8px 32px rgba(0,0,0,0.25)',
+          padding: '2.5rem 2rem', maxWidth: '90vw', minWidth: '320px', textAlign: 'center', outline: 'none',
+        });
+        content.querySelector('.ds-tutorial-title').style.fontSize = '2rem';
+        content.querySelector('.ds-tutorial-title').style.fontWeight = '700';
+        content.querySelector('.ds-tutorial-desc').style.fontSize = '1.1rem';
+        content.querySelector('.ds-tutorial-desc').style.margin = '1.5rem 0 2rem 0';
+        const nextBtn = content.querySelector('#ds-tutorial-next-btn');
+        Object.assign(nextBtn.style, {
+          fontSize: '1.1rem', fontWeight: '600', borderRadius: '16px', padding: '0.8em 2.2em', border: 'none',
+          background: '#ced8eb', color: '#222', boxShadow: '0 2px 8px rgba(0,0,0,0.10)', cursor: 'pointer',
+        });
+        nextBtn.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') nextBtn.click(); };
+        nextBtn.onclick = () => {
+          document.body.removeChild(modal);
+          if (idx < tutorialSteps.length - 1) {
+            showTutorialStep(idx + 1);
+          } else {
+            localStorage.setItem('tutorialCompleted', '1');
+            shell.loadApp('menu');
+          }
+        };
+        document.body.appendChild(modal);
+        nextBtn.focus();
+      }, 350); // アプリ切替後にモーダルを出す
+    }
+    showTutorialStep(0);
   }
 
   shell.log({from: 'dp.app.menu.out', message: 'MenuApp: 初期化完了', level: 'info'});
