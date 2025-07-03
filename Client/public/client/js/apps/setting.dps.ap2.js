@@ -152,6 +152,10 @@ export function appInit(shell) {
             <input type="checkbox" id="pickramu-eguide-toggle">
           </div>
         </div>
+        <div class="form-group">
+          <label for="scr_url_setting">SCRサーバーURL</label>
+          <input type="text" id="scr_url_setting" value="${localStorage.getItem('scr_url') || 'https://deep-school.onrender.com'}" placeholder="https://deep-school.onrender.com" />
+        </div>
       </div>
     </div>
   `;
@@ -211,6 +215,9 @@ export function appInit(shell) {
     shell.log({from: 'dp.app.setting.out', message: 'SettingApp: Parallax effects initialized', level: 'info'});
   }
 
+  // SCRサーバーURL入力欄を設定画面に追加
+  renderSCRUrlSetting();
+
   shell.log({from: 'dp.app.setting.out', message: 'SettingApp: 初期化完了', level: 'info'});
 }
 
@@ -241,7 +248,7 @@ function updateUserInfo() {
   
   // バージョン情報を設定
   if (versionElement) versionElement.textContent = '0.3.0';
-  if (buildElement) buildElement.textContent = '25C991X1';
+  if (buildElement) buildElement.textContent = '25C993X1';
   if (updatedElement) updatedElement.textContent = '2025-07-03';
 }
 
@@ -332,6 +339,16 @@ function saveSettings() {
     
     // 設定を実際に適用
     applySettings(settings);
+    
+    // SCRサーバーURL保存
+    const scrInput = document.getElementById('scr_url_setting');
+    if (scrInput) {
+      const scrUrl = scrInput.value.trim();
+      if (scrUrl) {
+        localStorage.setItem('scr_url', scrUrl);
+        window.scr_url = scrUrl;
+      }
+    }
     
     shell.log({from: 'dp.app.setting.out', message: 'SettingApp: 設定を保存しました', level: 'info'});
   } catch (error) {
@@ -756,7 +773,7 @@ function createBackup() {
       userData: JSON.parse(localStorage.getItem('deep-school-user-data') || '{}'),
       autoSave: localStorage.getItem('deep-school-auto-save'),
       timestamp: new Date().toISOString(),
-      version: '1.0.32'
+      version: '0.3.0'
     };
     
     const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
@@ -902,5 +919,15 @@ function applyPickramuEguide(enabled) {
     console.log('eGuideがPickramuで有効になりました');
   } else {
     console.log('eGuideがPickramuで無効になりました');
+  }
+}
+
+// SCRサーバーURL入力欄を設定画面に追加
+function renderSCRUrlSetting() {
+  const settingRoot = document.getElementById('setting-root') || document.body;
+  if (!document.getElementById('scr_url_setting')) {
+    const scrUrl = localStorage.getItem('scr_url') || 'https://deep-school.onrender.com';
+    const html = `<div class="form-group"><label for="scr_url_setting">SCRサーバーURL</label><input type="text" id="scr_url_setting" value="${scrUrl}" placeholder="https://deep-school.onrender.com" /></div>`;
+    settingRoot.insertAdjacentHTML('beforeend', html);
   }
 } 

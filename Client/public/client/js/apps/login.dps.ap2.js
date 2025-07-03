@@ -33,7 +33,7 @@ export function appInit(shell) {
         </div>
       </div>
       <div class="copyright-container">
-        <p class="copyright chalk-text" data-lang-key="copyright">(c) 2022-2025 Carnation Studio v0.3.0 25C991X1</p>
+        <p class="copyright chalk-text" data-lang-key="copyright">(c) 2022-2025 Carnation Studio v0.3.0 25C993X1</p>
       </div>
     </div>
   
@@ -307,12 +307,32 @@ export function appInit(shell) {
       }
       shell.log({from: 'dp.app.login.in', message: `LoginApp: 学校ID "${schoolId}" でログイン試行`, level: 'info'});
       try {
+        // SCRサーバーURL入力欄を追加
+        const scrUrlDefault = window.isDemoUser ? 'https://deep-school.onrender.com' : (localStorage.getItem('scr_url') || '');
+        const scrUrlInputHtml = `<div class="form-group"><label for="scr_url_input">SCRサーバーURL</label><input type="text" id="scr_url_input" value="${scrUrlDefault}" placeholder="https://deep-school.onrender.com" /></div>`;
+        const loginForm = document.getElementById('loginForm');
+        if (loginForm && !document.getElementById('scr_url_input')) {
+          loginForm.insertAdjacentHTML('beforeend', scrUrlInputHtml);
+        }
+        if (window.isDemoUser) {
+          setTimeout(() => {
+            const scrInput = document.getElementById('scr_url_input');
+            if (scrInput) scrInput.value = 'https://deep-school.onrender.com';
+          }, 100);
+        }
+        const scrInput = document.getElementById('scr_url_input');
+        const scrUrl = scrInput ? scrInput.value.trim() : '';
+        if (scrUrl) {
+          localStorage.setItem('scr_url', scrUrl);
+          window.scr_url = scrUrl;
+        }
         // 学校認証サーバーのテスト
         const authServer = new SchoolAuthServer(schoolId);
         const connectionResult = await authServer.testConnection();
         if (connectionResult) {
           shell.log({from: 'dp.app.login.out', message: 'LoginApp: 学校認証サーバー接続成功', level: 'info'});
           window.scr_url = authServer.url;
+          localStorage.setItem('scr_url', authServer.url);
           // loadFeed関数が定義されている場合のみ実行
           if (typeof window.loadFeed === 'function') {
             await window.loadFeed();
