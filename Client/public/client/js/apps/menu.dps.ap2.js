@@ -533,10 +533,10 @@ export function appInit(shell) {
         const modal = document.createElement('div');
         modal.id = 'ds-tutorial-modal';
         modal.innerHTML = `
-          <div class="ds-tutorial-content" role="dialog" aria-modal="true" tabindex="-1">
-            <h2 class="ds-tutorial-title">${s.title}</h2>
-            <p class="ds-tutorial-desc">${s.desc}</p>
-            <button class="ds-tutorial-next" id="ds-tutorial-next-btn">${idx < tutorialSteps.length - 1 ? '次へ' : '完了'}</button>
+          <div class=\"ds-tutorial-content\" role=\"dialog\" aria-modal=\"true\" tabindex=\"-1\">
+            <h2 class=\"ds-tutorial-title\">${s.title}</h2>
+            <p class=\"ds-tutorial-desc\">${s.desc}</p>
+            <button class=\"ds-tutorial-next button-chalk\" id=\"ds-tutorial-next-btn\">${idx < tutorialSteps.length - 1 ? '次へ' : '完了'}</button>
           </div>
         `;
         Object.assign(modal.style, {
@@ -550,6 +550,12 @@ export function appInit(shell) {
         nextBtn.onclick = () => showTutorialStep(idx + 1);
         nextBtn.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') nextBtn.click(); };
         nextBtn.focus();
+        // ボタンの追加スタイル
+        Object.assign(nextBtn.style, {
+          fontSize: '1.1rem', fontWeight: '600', borderRadius: '16px', padding: '0.8em 2.2em', border: 'none',
+          background: '#ced8eb', color: '#222', boxShadow: '0 2px 8px rgba(0,0,0,0.10)', cursor: 'pointer',
+          marginTop: '1.5rem',
+        });
         // スクロールして強調アイコンを中央付近に
         setTimeout(() => {
           el.scrollIntoView({behavior: 'smooth', block: 'center'});
