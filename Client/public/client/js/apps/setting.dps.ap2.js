@@ -135,7 +135,7 @@ export function appInit(shell) {
           </div>
           <div class="setting-item">
             <label>ビルド番号:</label>
-            <span id="setting-build">25C991X1</span>
+            <span id="setting-build">25C995X1</span>
           </div>
           <div class="setting-item">
             <label>最終更新:</label>
@@ -248,7 +248,7 @@ function updateUserInfo() {
   
   // バージョン情報を設定
   if (versionElement) versionElement.textContent = '0.3.0';
-  if (buildElement) buildElement.textContent = '25C993X1';
+  if (buildElement) buildElement.textContent = '25C995X1';
   if (updatedElement) updatedElement.textContent = '2025-07-03';
 }
 

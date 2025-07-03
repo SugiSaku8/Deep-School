@@ -64,7 +64,7 @@ export function appInit(shell) {
     </div>
     
     <div class="copyright-container horizontal-copyright">
-      <p class="copyright chalk-text left-align" data-lang-key="copyright">(c) 2022-2025 Carnation Studio v0.3.0 25C993X1</p>
+      <p class="copyright chalk-text left-align" data-lang-key="copyright">(c) 2022-2025 Carnation Studio v0.3.0 25C995X1</p>
     </div>
   
   <style>
@@ -459,20 +459,7 @@ export function appInit(shell) {
     const menuItem = document.getElementById(id);
     if (id === 'menu-scr') {
       menuItem.onclick = () => {
-        if (window.isDemoUser) {
-            root.innerHTML = `
-              <div class="pickramu-modal-overlay">
-                <div class="pickramu-modal">
-                  <div class="pickramu-modal-message">SCRは、現在利用できません</div>
-                  <button class="button-chalk pickramu-modal-close">閉じる</button>
-                </div>
-              </div>
-            `;
-            root.querySelector('.pickramu-modal-close').onclick = () => shell.loadApp('menu');
-            return;
-          }else {
             handler();
-          }
       };
     } else {
       menuItem.onclick = handler;

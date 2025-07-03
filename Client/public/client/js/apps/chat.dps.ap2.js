@@ -22,7 +22,7 @@ export function appInit(shell) {
         <div class="version">v0.1.2</div>
         <div class="input-group">
           <input id="user-input" type="text" placeholder="ここに質問を入力" data-lang-key="ask_placeholder" />
-          <button id="submit-btn" class="button-chalk" data-lang-key="send">送信</button>
+          <button id="submit-btn" class="button-chalk" data-lang-key="send">→</button>
         </div>
       </div>
     </div>
@@ -32,7 +32,7 @@ export function appInit(shell) {
       <div class="chat-input-container">
         <div class="input-group">
           <input id="chat-input" type="text" placeholder="メッセージを入力" data-lang-key="chat_placeholder" />
-          <button id="chat-submit-btn" class="button-chalk" data-lang-key="send">送信</button>
+          <button id="chat-submit-btn" class="button-chalk" data-lang-key="send">→</button>
         </div>
       </div>
     </div>
