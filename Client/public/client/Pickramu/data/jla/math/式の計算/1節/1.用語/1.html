@@ -242,53 +242,48 @@ $3a$と$3a^2$は、$a$と$a^2$で違うから、同類項じゃない。
 <button id="next12">おしまい</button>
 </div>
 <script>
-document.getElementById('next1').addEventListener('click', function() {
-dom.Tag("n1").style.display('none','auto');
-dom.Tag("n2").style.display('block','auto');
-});
-document.getElementById('next2').addEventListener('click', function() {
-dom.Tag("n2").style.display('none','auto');
-dom.Tag("n3").style.display('block','auto');
-});
-document.getElementById('next3').addEventListener('click', function() {
-dom.Tag("n3").style.display('none','auto');
-dom.Tag("n4").style.display('block','auto');
-});
-document.getElementById('next4').addEventListener('click', function() {
-dom.Tag("n4").style.display('none','auto');
-dom.Tag("n5").style.display('block','auto');
-});
-document.getElementById('next5').addEventListener('click', function() {
-dom.Tag("n5").style.display('none','auto');
-dom.Tag("n6").style.display('block','auto');
-});
-document.getElementById('next6').addEventListener('click', function() {
-dom.Tag("n6").style.display('none','auto');
-dom.Tag("n7").style.display('block','auto');
-});
-document.getElementById('next7').addEventListener('click', function() {
-dom.Tag("n7").style.display('none','auto');
-dom.Tag("n8").style.display('block','auto');
-});
-document.getElementById('next8').addEventListener('click', function() {
-dom.Tag("n8").style.display('none','auto');
-dom.Tag("n9").style.display('block','auto');
-});
-document.getElementById('next9').addEventListener('click', function() {
-dom.Tag("n9").style.display('none','auto');
-dom.Tag("n10").style.display('block','auto');
-});
-document.getElementById('next10').addEventListener('click', function() {
-dom.Tag("n10").style.display('none','auto');
-dom.Tag("n11").style.display('block','auto');
-});
-document.getElementById('next11').addEventListener('click', function() {
-dom.Tag("n11").style.display('none','auto');
-dom.Tag("n12").style.display('block','auto');
-});
-document.getElementById('next12').addEventListener('click', function() {
-dom.back();
-});
-</script>
+  // 次へボタン
+  function showNext(current, next) {
+    document.getElementById(current).style.display = 'none';
+    document.getElementById(next).style.display = 'block';
+  }
+  document.getElementById('next1').addEventListener('click', function() {
+    showNext('n1', 'n2');
+  });
+  document.getElementById('next2').addEventListener('click', function() {
+    showNext('n2', 'n3');
+  });
+  document.getElementById('next3').addEventListener('click', function() {
+    showNext('n3', 'n4');
+  });
+  document.getElementById('next4').addEventListener('click', function() {
+    showNext('n4', 'n5');
+  });
+  document.getElementById('next5').addEventListener('click', function() {
+    showNext('n5', 'n6');
+  });
+  document.getElementById('next6').addEventListener('click', function() {
+    showNext('n6', 'n7');
+  });
+  document.getElementById('next7').addEventListener('click', function() {
+    showNext('n7', 'n8');
+  });
+  document.getElementById('next8').addEventListener('click', function() { 
+    showNext('n8', 'n9');
+  });
+  document.getElementById('next9').addEventListener('click', function() {
+    showNext('n9', 'n10');
+  });
+  document.getElementById('next10').addEventListener('click', function() {
+    showNext('n10', 'n11');
+  });
+  document.getElementById('next11').addEventListener('click', function() {
+    showNext('n11', 'n12');
+  });
+  document.getElementById('next12').addEventListener('click', function() {
+    showNext('n12', 'n13');
+  });
+
+  </script>
 </body>
 </html>
