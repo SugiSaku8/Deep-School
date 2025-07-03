@@ -6,7 +6,7 @@ import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb+srv://sugisakug:<db_password>@open-lckschool.vxig2ua.mongodb.net/?retryWrites=true&w=majority&appName=Open-LCKSchool'),
+    MongooseModule.forRoot(process.env.MONGODB_URI),
     PostsModule,
     ChatModule,
   ],

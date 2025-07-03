@@ -17,7 +17,7 @@ async function bootstrap() {
   const postsService = app.get(PostsService);
   await postsService.scanAndMaskProfanity(); // スキャンを実行
 
-  await app.listen(8080);
-  console.log(`Deep-Schoolerサーバーがポート8080で起動しました`);
+  await app.listen(process.env.PORT || 8080);
+  console.log(`Deep-Schoolerサーバーがポート${process.env.PORT || 8080}で起動しました`);
 }
 bootstrap();
