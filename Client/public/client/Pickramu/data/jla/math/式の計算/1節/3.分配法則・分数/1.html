@@ -6,196 +6,173 @@
 <style>body{font-family:sans-serif;line-height:1.7;}button{margin:8px;}</style>
 </head>
 <body>
-<div class="unit-title" id="unit-title">
-</div>
-<div class="chapter-title" id="chapter-title">
-</div>
+<div class="unit-title" id="unit-title"></div>
+<div class="chapter-title" id="chapter-title"></div>
 <div class="n1" id="n1">
-<div class="question" id="question">
-分配法則だよ！あの！分配法則！！！<br>
-かっこ外すやつ！覚えてるよね！！！<br>
-はい解説していきまーす
+  <div class="question" id="question_n1">
+    分配法則だよ！あの！分配法則！！！<br>
+    かっこ外すやつ！覚えてるよね！！！<br>
+    はい解説していきまーす
+  </div>
+  <button id="next1">次へ</button>
 </div>
-<button id="next1">次へ</button>
+<div class="n2" id="n2" style="display:none;">
+  <div class="question" id="question_n2">
+    分配法則を文字であらわすと、<br>
+    $a(x+y) = ax + ay$<br>
+    もともと$a(x+y)$っていうのは、$a\times(x+y)$だから。<br>
+    $(x+y)$の$x$と$y$の両方に、$a$をかけてあげれば、<br>
+    $()$をこの世から消し去れるってわけ。
+  </div>
+  <button id="next2">次へ</button>
 </div>
-<div class="n2" id="n2">
-<div class="question" id="question">
-分配法則を文字であらわすと、<br>
-$a(x+y) = ax + ay$<br>
-もともと$a(x+y)$っていうのは、$a\times(x+y)$だから。<br>
-$(x+y)$の$x$と$y$の両方に、$a$をかけてあげれば、<br>
-$()$をこの世から消し去れるってわけ。
+<div class="n3" id="n3" style="display:none;">
+  <div class="question" id="question_n3">
+    実際に数字で見ると、<br>
+    $3(1+2)=3\times1+3\times2=9$<br>
+    まあ計算すればわかるけど、どっちも同じ！
+  </div>
+  <button id="next3">次へ</button>
 </div>
-<button id="next2">次へ</button>
+<div class="n4" id="n4" style="display:none;">
+  <div class="question" id="question_n4">
+    $()$の中の数が増えても同じ。<br>
+    全部にかけてあげることが大切。<br>
+    $3(1+2+4)=3\times1+3\times2+3\times4 = 21$
+  </div>
+  <button id="next4">次へ</button>
 </div>
-<div class="n3" id="n3">
-<div class="question" id="question">
-実際に数字で見ると、<br>
-$3(1+2)=3\times1+3\times2=9$<br>
-まあ計算すればわかるけど、どっちも同じ！
+<div class="n5" id="n5" style="display:none;">
+  <div class="question" id="question_n5">
+    これマイナスがついたときが大変でね。<br>
+    計算ミスさせるためにマイナスつけるんですよね<br>
+    問題作る人は。まあ僕も作るけど。問題。<br>
+    全部にマイナスをかけるのも忘れずに。<br>
+    $-2(1-3)=-2\times1-2\times-3 = 4$
+  </div>
+  <button id="next5">次へ</button>
 </div>
-<button id="next3">次へ</button>
+<div class="n6" id="n6" style="display:none;">
+  <div class="question" id="question_n6">
+    そしてこれが文字になっても同じ！！<br>
+    これがわかればok！！！！<br>
+    ちなみにわかっててもたまにミスる！！！<br>
+    $-3(2x+4y)=-3\times2x-3\times4y=-6x-12y$
+  </div>
+  <button id="next6">次へ</button>
 </div>
-<div class="n4" id="n4">
-<div class="question" id="question">
-$()$の中の数が増えても同じ。<br>
-全部にかけてあげることが大切。
-$3(1+2+4)=3\times1+3\times2+3\times4 = 21$
+<div class="n7" id="n7" style="display:none;">
+  <div class="question" id="question_n7">
+    解いてみよう！<br>
+    $-2(-x+2y)$
+  </div>
+  <div class="answer" id="answer_n7">
+    <div id="inputer_n7">
+      <input id="q1_input">
+      がんばれ。
+      <button id="set1">回答する</button>
+    </div>
+    <div id="q1_answer" style="display:none;">
+      $2x-4y$だね。まあ符号ミスしやすいんだよこれが。<br>
+      途中式、自分はあんまかかない。<br>
+      $-2(-x+2y)=2x-4y$ってかいてる。<br>
+      ミスしそうなら、かけ算の形にしてもいいけど。
+    </div>
+    <button id="next7">次へ</button>
+  </div>
 </div>
-<button id="next4">次へ</button>
+<div class="n8" id="n8" style="display:none;">
+  <div class="question" id="question_n8">
+    後は応用。<br>
+    わり算は、両方わってあげればいい。<br>
+    $(2x + 3y) \div -3 = 2x\div-3+3y\div-3=-\frac{2}{3}x-y$<br>
+    まあ余裕で分数はでてくるよね…
+  </div>
+  <button id="next8">次へ</button>
 </div>
-<div class="n5" id="n5">
-<div class="question" id="question">
-これマイナスがついたときが大変でね。<br>
-計算ミスさせるためにマイナスつけるんですよね<br>
-問題作る人は。まあ僕も作るけど。問題。<br>
-全部にマイナスをかけるのも忘れずに。<br>
-$-2(1-3)=-2\times1-2\times-3 = 4$
+<div class="n9" id="n9" style="display:none;">
+  <div class="question" id="question_n9">
+    あとは、逆数にしてかける！っていう方法もあるね。<br>
+    整数でわるときは、普通にわった方が速いけど、<br>
+    分数でわるときに役立つ。<br>
+    $(3x-6y)\div\frac{3}{2}=(3x-6y)\times\frac{2}{3}=3x\times\frac{2}{3}-6y\times\frac{2}{3}=2x-4y$
+  </div>
+  <button id="next9">次へ</button>
 </div>
-<button id="next5">次へ</button>
+<div class="n10" id="n10" style="display:none;">
+  <div class="question" id="question_n10">
+    解いてみよう！<br>
+    $(4x^2-2x)\div\frac{2}{3}$
+  </div>
+  <div class="answer" id="answer_n10">
+    <div id="inputer_n10">
+      <input id="q2_input">
+      がんばれ。
+      <button id="set2">回答する</button>
+    </div>
+    <div id="q2_answer" style="display:none;">
+      $(4x^2-2x)\div\frac{2}{3}=(4x^2-2x)\times\frac{3}{2}=6x^2-3x$<br>
+      自分が書くならこんな感じにかく。<br>
+      ちなみに頭の中で、分数のかけ算は、<br>
+      その数を分母$2$で割って、分子$3$をかけてる。<br>
+      $4x^2 \div 2 \times 3 = 6x^2$って感じ。
+    </div>
+    <button id="next10">次へ</button>
+  </div>
 </div>
-<div class="n6" id="n6">
-<div class="question" id="question">
-そしてこれが文字になっても同じ！！<br>
-これがわかればok！！！！<br>
-ちなみにわかっててもたまにミスる！！！<br>
-$-3(2x+4y)=-3\times2x-3\times4y=-6x-12y$
+<div class="n11" id="n11" style="display:none;">
+  <div class="question" id="question_n11">
+    まあさっきのができれば、これもいけるはず。<br>
+    $-$をかけ忘れないようにどうぞ。<br>
+    $2(3x-2y)-3(2x-\frac{4}{3}y)$
+  </div>
+  <div class="answer" id="answer_n11">
+    <div id="inputer_n11">
+      <input id="q3_input">
+      答え綺麗なはず。
+      <button id="set3">回答する</button>
+    </div>
+    <div id="q3_answer" style="display:none;">
+      $2(3x-2y)-3(2x-\frac{4}{3}y)=6x-4y-6x+4y=0$<br>
+      はい。作るのさぼりました。0。<br>
+      まあ、$2$を$(3x-2y)$の両方に、$-3$を$(2x-\frac{4}{3}y)$の両方にかけた。
+    </div>
+    <button id="next11">次へ</button>
+  </div>
 </div>
-<button id="next6">次へ</button>
-</div>
-<div class="n7" id="n7">
-<div class="question" id="question">
-解いてみよう！
-$-2(-x+2y)$
-</div>
-<div class="answer" id="answer">
-@input q1_input [open]
-がんばれ。
-@btn on=^set^ 回答する
-@input q1_input futter=q1_answer [close] 
-@futter q1_answer futter=q1_answer [open]
-$2x-4y$だね。まあ符号ミスしやすいんだよこれが。<br>
-途中式、自分はあんまかかない。<br>
-$-2(-x+2y)=2x-4y$ってかいてる。<br>
-ミスしそうなら、かけ算の形にしてもいいけど。
-@futter q1_answer futter=q1_answer [close]
-</div>
-<button id="next7">次へ</button>
-</div>
-<div class="n8" id="n8">
-<div class="question" id="question">
-後は応用。<br>
-わり算は、両方わってあげればいい。<br>
-$(2x + 3y) \div -3 = 2x\div-3+3y\div-3=-\frac{2}{3}x-y$<br>
-まあ余裕で分数はでてくるよね…
-</div>
-<button id="next8">次へ</button>
-</div>
-<div class="n9" id="n9">
-<div class="question" id="question">
-あとは、逆数にしてかける！っていう方法もあるね。<br>
-整数でわるときは、普通にわった方が速いけど、<br>
-分数でわるときに役立つ。<br>
-$(3x-6y)\div\frac{3}{2}=(3x-6y)\times\frac{2}{3}=3x\times\frac{2}{3}-6y\times\frac{2}{3}=2x-4y$
-</div>
-<button id="next9">次へ</button>
-</div>
-<div class="n10" id="n10">
-<div class="question" id="question">
-解いてみよう！<br>
-$(4x^2-2x)\div\frac{2}{3}$
-</div>
-<div class="answer" id="answer">
-@input q2_input [open]
-がんばれ。
-@btn on=^set^ 回答する
-@input q2_input futter=q2_answer [close] 
-@futter q2_answer futter=q2_answer [open]
-$(4x^2-2x)\div\frac{2}{3}=(4x^2-2x)\times\frac{3}{2}=6x^2-3x$<br>
-自分が書くならこんな感じにかく。<br>
-ちなみに頭の中で、分数のかけ算は、<br>
-その数を分母$2$で割って、分子$3$をかけてる。<br>
-$4x^2 \div 2 \times 3 = 6x^2$って感じ。
-@futter q2_answer futter=q2_answer [close]
-</div>
-<button id="next10">次へ</button>
-</div>
-<div class="n11" id="n11">
-<div class="question" id="question">
-まあさっきのができれば、これもいけるはず。<br>
-$-$をかけ忘れないようにどうぞ。
-$2(3x-2y)-3(2x-\frac{4}{3}y)$
-</div>
-<div class="answer" id="answer">
-@input q3_input [open]
-答え綺麗なはず。
-@btn on=^set^ 回答する
-@input q3_input futter=q3_answer [close] 
-@futter q3_answer futter=q3_answer [open]
-$2(3x-2y)-3(2x-\frac{4}{3}y)=6x-4y-6x+4y=0$<br>
-はい。作るのさぼりました。0。<br>
-まあ、$2$を$(3x-2y)$の両方に、$-3$を$(2x-\frac{4}{3}y)$の両方にかけた。
-@futter q3_answer futter=q3_answer [close]
-</div>
-<button id="next11">次へ</button>
-</div>
-<div class="n12" id="n12">
-<div class="question" id="question">
-まとめ！<br>
-とにかく分配法則！！！！！！！！！！！！！<br>
-！！！！！！！！！！！！！！！！！！！！！<br>
-わりざんも！！逆数使って分配法則！！！！！！！
-</div>
-<button id="next12">おしまい</button>
+<div class="n12" id="n12" style="display:none;">
+  <div class="question" id="question_n12">
+    まとめ！<br>
+    とにかく分配法則！！！！！！！！！！！！！<br>
+    ！！！！！！！！！！！！！！！！！！！！！<br>
+    わりざんも！！逆数使って分配法則！！！！！！！
+  </div>
+  <button id="next12">おしまい</button>
 </div>
 <script>
-document.getElementById('next1').addEventListener('click', function() {
-dom.Tag("n1").style.display('none','auto');
-dom.Tag("n2").style.display('block','auto');
-});
-document.getElementById('next2').addEventListener('click', function() {
-dom.Tag("n2").style.display('none','auto');
-dom.Tag("n3").style.display('block','auto');
-});
-document.getElementById('next3').addEventListener('click', function() {
-dom.Tag("n3").style.display('none','auto');
-dom.Tag("n4").style.display('block','auto');
-});
-document.getElementById('next4').addEventListener('click', function() {
-dom.Tag("n4").style.display('none','auto');
-dom.Tag("n5").style.display('block','auto');
-});
-document.getElementById('next5').addEventListener('click', function() {
-dom.Tag("n5").style.display('none','auto');
-dom.Tag("n6").style.display('block','auto');
-});
-document.getElementById('next6').addEventListener('click', function() {
-dom.Tag("n6").style.display('none','auto');
-dom.Tag("n7").style.display('block','auto');
-});
-document.getElementById('next7').addEventListener('click', function() {
-dom.Tag("n7").style.display('none','auto');
-dom.Tag("n8").style.display('block','auto');
-});
-document.getElementById('next8').addEventListener('click', function() {
-dom.Tag("n8").style.display('none','auto');
-dom.Tag("n9").style.display('block','auto');
-});
-document.getElementById('next9').addEventListener('click', function() {
-dom.Tag("n9").style.display('none','auto');
-dom.Tag("n10").style.display('block','auto');
-});
-document.getElementById('next10').addEventListener('click', function() {
-dom.Tag("n10").style.display('none','auto');
-dom.Tag("n11").style.display('block','auto');
-});
-document.getElementById('next11').addEventListener('click', function() {
-dom.Tag("n11").style.display('none','auto');
-dom.Tag("n12").style.display('block','auto');
-});
-document.getElementById('next12').addEventListener('click', function() {
-dom.back();
-});
+function showNext(current, next) {
+  document.getElementById(current).style.display = 'none';
+  document.getElementById(next).style.display = 'block';
+}
+document.getElementById('next1').addEventListener('click', function() { showNext('n1', 'n2'); });
+document.getElementById('next2').addEventListener('click', function() { showNext('n2', 'n3'); });
+document.getElementById('next3').addEventListener('click', function() { showNext('n3', 'n4'); });
+document.getElementById('next4').addEventListener('click', function() { showNext('n4', 'n5'); });
+document.getElementById('next5').addEventListener('click', function() { showNext('n5', 'n6'); });
+document.getElementById('next6').addEventListener('click', function() { showNext('n6', 'n7'); });
+document.getElementById('next7').addEventListener('click', function() { showNext('n7', 'n8'); });
+document.getElementById('next8').addEventListener('click', function() { showNext('n8', 'n9'); });
+document.getElementById('next9').addEventListener('click', function() { showNext('n9', 'n10'); });
+document.getElementById('next10').addEventListener('click', function() { showNext('n10', 'n11'); });
+document.getElementById('next11').addEventListener('click', function() { showNext('n11', 'n12'); });
+document.getElementById('next12').addEventListener('click', function() { if (typeof dom !== 'undefined' && dom.back) { dom.back(); } });
+function setAnswer(inputerId, answerId) {
+  document.getElementById(inputerId).style.display = 'none';
+  document.getElementById(answerId).style.display = 'block';
+}
+document.getElementById('set1').addEventListener('click', function() { setAnswer('inputer_n7', 'q1_answer'); });
+document.getElementById('set2').addEventListener('click', function() { setAnswer('inputer_n10', 'q2_answer'); });
+document.getElementById('set3').addEventListener('click', function() { setAnswer('inputer_n11', 'q3_answer'); });
 </script>
 </body>
 </html>

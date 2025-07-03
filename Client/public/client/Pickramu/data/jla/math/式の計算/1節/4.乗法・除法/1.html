@@ -6,214 +6,194 @@
 <style>body{font-family:sans-serif;line-height:1.7;}button{margin:8px;}</style>
 </head>
 <body>
-<div class="unit-title" id="unit-title">
-</div>
-<div class="chapter-title" id="chapter-title">
-</div>
+<div class="unit-title" id="unit-title"></div>
+<div class="chapter-title" id="chapter-title"></div>
 <div class="n1" id="n1">
-<div class="question" id="question">
-今度は乗法・除法でーす<br>
-個人的にはこっちのほうが<br>
-なんかすっきりして好き。うん。<br>
+  <div class="question" id="question_n1">
+    今度は乗法・除法でーす<br>
+    個人的にはこっちのほうが<br>
+    なんかすっきりして好き。うん。<br>
+  </div>
+  <button id="next1">次へ</button>
 </div>
-<button id="next1">次へ</button>
+<div class="n2" id="n2" style="display:none;">
+  <div class="question" id="question_n2">
+    乗法($\times$)はー、<br>
+    数字と文字に分けてあげるんだけど<br>
+    こんな感じですねー<br>
+    $3x \times 2x = 3\times2 \times x\times x = 6x^2$<br>
+  </div>
+  <button id="next2">次へ</button>
 </div>
-<div class="n2" id="n2">
-<div class="question" id="question">
-乗法($\times$)はー、<br>
-数字と文字に分けてあげるんだけど<br>
-こんな感じですねー<br>
-$3x \times 2x = 3\times2 \times x\times x = 6x^2$<br>
+<div class="n3" id="n3" style="display:none;">
+  <div class="question" id="question_n3">
+    文字の種類が増えても<br>
+    それぞれの文字が何個ずつあるか<br>
+    しっかり数えてあげればOK<br>
+    $3x^2y \times 4x^3y^2 = 12x^5y^3$
+  </div>
+  <button id="next3">次へ</button>
 </div>
-<button id="next2">次へ</button>
+<div class="n4" id="n4" style="display:none;">
+  <div class="question" id="question_n4">
+    というわけで解いてみよう！！<br>
+    $4x^2yz^3 \times 2x^2y^3z$
+  </div>
+  <div class="answer" id="answer_n4">
+    <div id="inputer_n4">
+      <input id="q1_input">
+      がんばれ。
+      <button id="set1">回答する</button>
+    </div>
+    <div id="q1_answer" style="display:none;">
+      $4x^2yz^3 \times 2x^2y^3z = 8x^4y^4z^4$<br>
+      4乗を並べたかっただけです。
+    </div>
+    <button id="next4">次へ</button>
+  </div>
 </div>
-<div class="n3" id="n3">
-<div class="question" id="question">
-文字の種類が増えても<br>
-それぞれの文字が何個ずつあるか<br>
-しっかり数えてあげればOK<br>
-$3x^2y \times 4x^3y^2 = 12x^5y^3$
+<div class="n5" id="n5" style="display:none;">
+  <div class="question" id="question_n5">
+    除法はー･･･<br>
+    まあ分数にしてあげればいいんだけど<br>
+    $6x^2 \div 3x$だったら、<br>
+    $\div$の右の$3x$を分数の下にいれる<br>
+    $\frac{6x^2}{3x}=\frac{\cancelto26x^\cancel 2}{\cancel3\cancel x}=$<br>
+    まああとはご覧の通り<br>
+    約分祭りですよね<br>
+    $x^2 = x \times x$と分解すればわかるでしょう。<br>
+    あとここら辺解説さぼってるから<br>
+    わかんなかったら質問してね<br>
+  </div>
+  <button id="next5">次へ</button>
 </div>
-<button id="next3">次へ</button>
+<div class="n6" id="n6" style="display:none;">
+  <div class="question" id="question_n6">
+    で、乗法と除法が混ざるととても<br>
+    ...厄介なんですよ。<br>
+    まあ分数になるんですけど<br>
+    まず、$\times$とか$\div$の前で区切るんですよ<br>
+    $4x^4 \mid\div 2x^2 \mid\times 6y^3 \mid\div 3y$<br>
+    で、最初のかたまりと$\times$のかたまりは上に、<br>
+    $\div$のかたまりは下に移動させます。<br>
+    で、そいつらはとりあえず$\times$でつないでおく<br>
+    $\frac{4x^4\times6y^3}{2x^2\times3y}$<br>
+    で約分パーティー<br>
+    $\frac{\cancelto24x^\cancelto24\times\cancelto26y^\cancel3}{\cancel{2}\cancel{x^2}\times\cancel3 \cancel y}=2x^2\times2y = 4x^2y$<br>
+    ((数式入力するのめんどい))
+  </div>
+  <button id="next6">次へ</button>
 </div>
-<div class="n4" id="n4">
-<div class="question" id="question">
-というわけで解いてみよう！！<br>
-$4x^2yz^3 \times 2x^2y^3z$
+<div class="n7" id="n7" style="display:none;">
+  <div class="question" id="question_n7">
+    解いてみよう！<br>
+    めんどくさい? <br>
+    いや作ってる側もめんどｋ<br>
+    $12x^3 \div 2xy \times 3y^2$
+  </div>
+  <div class="answer" id="answer_n7">
+    <div id="inputer_n7">
+      <input id="q2_input">
+      がんばれ。
+      <button id="set2">回答する</button>
+    </div>
+    <div id="q2_answer" style="display:none;">
+      $12x^3 \div 2xy \times 3y^2= \frac{\cancelto6{12}x^\cancelto23\times3y^\cancel2}{\cancel2\cancel x\cancel y}= 18x^2y$<br>
+      はい。うん。まあ。ね。<br>
+      制作者もミスる可能性ある。約分で。<br>
+      分数にするとき$3y^2$を下にしないよう注意。
+    </div>
+    <button id="next7">次へ</button>
+  </div>
 </div>
-<div class="answer" id="answer">
-@input q1_input [open]
-がんばれ。
-@btn on=^set^ 回答する
-@input q1_input futter=q1_answer [close] 
-@futter q1_answer futter=q1_answer [open]
-$4x^2yz^3 \times 2x^2y^3z = 8x^4y^4z^4$<br>
-4乗を並べたかっただけです。
-@futter q1_answer futter=q1_answer [close]
+<div class="n8" id="n8" style="display:none;">
+  <div class="question" id="question_n8">
+    えっと...<br>
+    基本はさっきので終わり...<br>
+    なんだけど、ひっかけがあってね<br>
+    まず問題文に分数がある時は、<br>
+    $4x^2 \times \frac{3y}{2x} = \frac{4x^2\times3y}{2x}$<br>
+    $\frac{3y}{2x}$の上($3y$)はでかい分数の上に<br>
+    $\frac{3y}{2x}$の下($2x$)はでかい分数の下に<br>
+    入れてあげればいい。<br>
+    分数で割り算の時は...<br>
+    逆数にするんでしたね！<br>
+  </div>
+  <button id="next8">次へ</button>
 </div>
-<button id="next4">次へ</button>
+<div class="n9" id="n9" style="display:none;">
+  <div class="question" id="question_n9">
+    でもちょっと注意が必要で、<br>
+    $\frac{3}{2}x^2$の逆数は<br>
+    $\frac{2}{3}x^2$じゃないんですよ。<br>
+    $\frac{3}{2}x^2$って$\frac{3 x^2}{2}$だから...<br>
+    $\frac{2}{3x^2}$が正しいんですよね。<br>
+    これは注意。<br>
+    ミスりそうな人はこうするといいかも？<br>
+    $\frac{3}{2}\llcorner\underline {x^2}$<br>
+    うまく数式で表せないけど、<br>
+    分数の線を$x^2$の下まで延長してあげる
+  </div>
+  <button id="next9">次へ</button>
 </div>
-<div class="n5" id="n5">
-<div class="question" id="question">
-除法はー･･･<br>
-まあ分数にしてあげればいいんだけど<br>
-$6x^2 \div 3x$だったら、<br>
-$\div$の右の$3x$を分数の下にいれる<br>
-$\frac{6x^2}{3x}=\frac{\cancelto26x^\cancel 2}{\cancel3\cancel x}=$<br>
-まああとはご覧の通り<br>
-約分祭りですよね<br>
-$x^2 = x \times x$と分解すればわかるでしょう。<br>
-あとここら辺解説さぼってるから<br>
-わかんなかったら質問してね<br>
+<div class="n10" id="n10" style="display:none;">
+  <div class="question" id="question_n10">
+    解いてみy！<br>
+    e? めんどくさい？<br>
+    いやだからこっちもめｎ<br>
+    $5x^2 \div\frac{5}{3}xy \times \frac{2y}{3}$<br>
+    一応言っておくけど、<br>
+    逆数にするのは$\frac{5}{3}xy$だけだね。
+  </div>
+  <div class="answer" id="answer_n10">
+    <div id="inputer_n10">
+      <input id="q3_input">
+      わかる？めんd
+      <button id="set3">回答する</button>
+    </div>
+    <div id="q3_answer" style="display:none;">
+      $5x^2 \div\frac{5}{3}xy \times \frac{2y}{3} (=5x^2\times\frac{3}{5xy}\times\frac{2y}{3})$<br>
+      $=\frac{\cancel5x^\cancel2\times\cancel 3\times2\cancel y}{\cancel5\cancel x\cancel y\times\cancel3}=2x$<br>
+      えっとー長いね。<br>
+      慣れてきたら$()$の式は書かなくてもいける<br>
+      と思う。多分(テストでミスっても責任は負いません。)
+    </div>
+    <button id="next10">次へ</button>
+  </div>
 </div>
-<button id="next5">次へ</button>
-</div>
-<div class="n6" id="n6">
-<div class="question" id="question">
-で、乗法と除法が混ざるととても<br>
-...厄介なんですよ。<br>
-まあ分数になるんですけど<br>
-まず、$\times$とか$\div$の前で区切るんですよ<br>
-$4x^4 \mid\div 2x^2 \mid\times 6y^3 \mid\div 3y$<br>
-で、最初のかたまりと$\times$のかたまりは上に、<br>
-$\div$のかたまりは下に移動させます。<br>
-で、そいつらはとりあえず$\times$でつないでおく<br>
-$\frac{4x^4\times6y^3}{2x^2\times3y}$<br>
-で約分パーティー<br>
-$\frac{\cancelto24x^\cancelto24\times\cancelto26y^\cancel3}{\cancel{2}\cancel{x^2}\times\cancel3 \cancel y}=2x^2\times2y = 4x^2y$<br>
-((数式入力するのめんどい))
-</div>
-<button id="next6">次へ</button>
-</div>
-<div class="n7" id="n7">
-<div class="question" id="question">
-解いてみよう！<br>
-めんどくさい? <br>
-いや作ってる側もめんどｋ<br>
-$12x^3 \div 2xy \times 3y^2$
-</div>
-<div class="answer" id="answer">
-@input q1_input [open]
-がんばれ。
-@btn on=^set^ 回答する
-@input q1_input futter=q1_answer [close] 
-@futter q1_answer futter=q1_answer [open]
-$12x^3 \div 2xy \times 3y^2= \frac{\cancelto6{12}x^\cancelto23\times3y^\cancel2}{\cancel2\cancel x\cancel y}= 18x^2y$<br>
-はい。うん。まあ。ね。<br>
-制作者もミスる可能性ある。約分で。<br>
-分数にするとき$3y^2$を下にしないよう注意。
-@futter q1_answer futter=q1_answer [close]
-</div>
-<button id="next7">次へ</button>
-</div>
-<div class="n8" id="n8">
-<div class="question" id="question">
-えっと...<br>
-基本はさっきので終わり...<br>
-なんだけど、ひっかけがあってね<br>
-まず問題文に分数がある時は、<br>
-$4x^2 \times \frac{3y}{2x} = \frac{4x^2\times3y}{2x}$<br>
-$\frac{3y}{2x}$の上($3y$)はでかい分数の上に<br>
-$\frac{3y}{2x}$の下($2x$)はでかい分数の下に<br>
-入れてあげればいい。<br>
-分数で割り算の時は...<br>
-逆数にするんでしたね！<br>
-</div>
-<button id="next8">次へ</button>
-</div>
-<div class="n9" id="n9">
-<div class="question" id="question">
-でもちょっと注意が必要で、<br>
-$\frac{3}{2}x^2$の逆数は<br>
-$\frac{2}{3}x^2$じゃないんですよ。<br>
-$\frac{3}{2}x^2$って$\frac{3 x^2}{2}$だから...<br>
-$\frac{2}{3x^2}$が正しいんですよね。<br>
-これは注意。<br>
-ミスりそうな人はこうするといいかも？<br>
-$\frac{3}{2}\llcorner\underline {x^2}$<br>
-うまく数式で表せないけど、<br>
-分数の線を$x^2$の下まで延長してあげる
-</div>
-<button id="next9">次へ</button>
-</div>
-<div class="n10" id="n10">
-<div class="question" id="question">
-解いてみy！<br>
-e? めんどくさい？<br>
-いやだからこっちもめｎ<br>
-$5x^2 \div\frac{5}{3}xy \times \frac{2y}{3}$
-一応言っておくけど、<br>
-逆数にするのは$\frac{5}{3}xy$だけだね。
-</div>
-<div class="answer" id="answer">
-@input q2_input [open]
-わかる？めんd
-@btn on=^set^ 回答する
-@input q2_input futter=q2_answer [close] 
-@futter q2_answer futter=q2_answer [open]
-$5x^2 \div\frac{5}{3}xy \times \frac{2y}{3} (=5x^2\times\frac{3}{5xy}\times\frac{2y}{3})$<br>
-$=\frac{\cancel5x^\cancel2\times\cancel 3\times2\cancel y}{\cancel5\cancel x\cancel y\times\cancel3}=2x$<br>
-えっとー長いね。<br>
-慣れてきたら$()$の式は書かなくてもいける<br>
-と思う。多分(テストでミスっても責任は負いません。)
-@futter q2_answer futter=q2_answer [close]
-</div>
-<button id="next10">次へ</button>
-</div>
-<div class="n11" id="n11">
-<div class="question" id="question">
-なんかこの回パーティとか<br>
-祭りとかたくさん言ってる気がする。<br>
-まとめ<br>
-でかい分数、約分は楽しい<br>
-けどミスると地獄<br>
-</div>
-<button id="next11">おしまい</button>
+<div class="n11" id="n11" style="display:none;">
+  <div class="question" id="question_n11">
+    なんかこの回パーティとか<br>
+    祭りとかたくさん言ってる気がする。<br>
+    まとめ<br>
+    でかい分数、約分は楽しい<br>
+    けどミスると地獄<br>
+  </div>
+  <button id="next11">おしまい</button>
 </div>
 <script>
-document.getElementById('next1').addEventListener('click', function() {
-dom.Tag("n1").style.display('none','auto');
-dom.Tag("n2").style.display('block','auto');
-});
-document.getElementById('next2').addEventListener('click', function() {
-dom.Tag("n2").style.display('none','auto');
-dom.Tag("n3").style.display('block','auto');
-});
-document.getElementById('next3').addEventListener('click', function() {
-dom.Tag("n3").style.display('none','auto');
-dom.Tag("n4").style.display('block','auto');
-});
-document.getElementById('next4').addEventListener('click', function() {
-dom.Tag("n4").style.display('none','auto');
-dom.Tag("n5").style.display('block','auto');
-});
-document.getElementById('next5').addEventListener('click', function() {
-dom.Tag("n5").style.display('none','auto');
-dom.Tag("n6").style.display('block','auto');
-});
-document.getElementById('next6').addEventListener('click', function() {
-dom.Tag("n6").style.display('none','auto');
-dom.Tag("n7").style.display('block','auto');
-});
-document.getElementById('next7').addEventListener('click', function() {
-dom.Tag("n7").style.display('none','auto');
-dom.Tag("n8").style.display('block','auto');
-});
-document.getElementById('next8').addEventListener('click', function() {
-dom.Tag("n8").style.display('none','auto');
-dom.Tag("n9").style.display('block','auto');
-});
-document.getElementById('next9').addEventListener('click', function() {
-dom.Tag("n9").style.display('none','auto');
-dom.Tag("n10").style.display('block','auto');
-});
-document.getElementById('next10').addEventListener('click', function() {
-dom.Tag("n10").style.display('none','auto');
-dom.Tag("n11").style.display('block','auto');
-});
-document.getElementById('next11').addEventListener('click', function() {
-dom.back();
-});
+function showNext(current, next) {
+  document.getElementById(current).style.display = 'none';
+  document.getElementById(next).style.display = 'block';
+}
+document.getElementById('next1').addEventListener('click', function() { showNext('n1', 'n2'); });
+document.getElementById('next2').addEventListener('click', function() { showNext('n2', 'n3'); });
+document.getElementById('next3').addEventListener('click', function() { showNext('n3', 'n4'); });
+document.getElementById('next4').addEventListener('click', function() { showNext('n4', 'n5'); });
+document.getElementById('next5').addEventListener('click', function() { showNext('n5', 'n6'); });
+document.getElementById('next6').addEventListener('click', function() { showNext('n6', 'n7'); });
+document.getElementById('next7').addEventListener('click', function() { showNext('n7', 'n8'); });
+document.getElementById('next8').addEventListener('click', function() { showNext('n8', 'n9'); });
+document.getElementById('next9').addEventListener('click', function() { showNext('n9', 'n10'); });
+document.getElementById('next10').addEventListener('click', function() { showNext('n10', 'n11'); });
+document.getElementById('next11').addEventListener('click', function() { if (typeof dom !== 'undefined' && dom.back) { dom.back(); } });
+function setAnswer(inputerId, answerId) {
+  document.getElementById(inputerId).style.display = 'none';
+  document.getElementById(answerId).style.display = 'block';
+}
+document.getElementById('set1').addEventListener('click', function() { setAnswer('inputer_n4', 'q1_answer'); });
+document.getElementById('set2').addEventListener('click', function() { setAnswer('inputer_n7', 'q2_answer'); });
+document.getElementById('set3').addEventListener('click', function() { setAnswer('inputer_n10', 'q3_answer'); });
 </script>
 </body>
 </html>
