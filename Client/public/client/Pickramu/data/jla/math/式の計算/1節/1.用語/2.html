@@ -4,176 +4,144 @@
 <meta charset="UTF-8">
 <title>Converted</title>
 <style>
-    :root {
-      --bg-color: transparent;
-      --text-color: #222;
-      --card-bg: #fff;
-      --border-radius: 12px;
-      --shadow-color: rgba(0,0,0,0.08);
-      --spacing-unit: 20px;
-      --animation-duration: 0.3s;
-    }
+  :root {
+    --bg-color: transparent;
+    --text-color: #222;
+    --card-bg: #fff;
+    --border-radius: 12px;
+    --shadow-color: rgba(0,0,0,0.08);
+    --spacing-unit: 20px;
+    --animation-duration: 0.3s;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--text-color);
+    background: var(--bg-color);
+    margin: 0;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    transition: background var(--animation-duration);
+  }
+  #content {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 8px var(--shadow-color);
+    max-width: 720px;
+    width: 100%;
+    padding: 2rem;
+    box-sizing: border-box;
+    word-break: break-word;
+  }
+  .input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+    margin-top: 2em;
+    padding: 1.5em;
+    background: #f5f5f7;
+    border: 1px solid #e5e5e7;
+    border-radius: var(--border-radius);
+    box-shadow: 0 1px 4px var(--shadow-color);
+  }
+  .input-box {
+    background: #fff;
+    border-radius: 8px;
+    padding: 0.8em 1em;
+    font-size: 1.1em;
+    border: 1px solid #d2d2d7;
+    width: 260px;
+    text-align: center;
+  }
+  .button-next {
+    background: #007aff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.8em 1.5em;
+    font-size: 1em;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 1px 4px var(--shadow-color);
+    transition: background 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  .button-next:focus {
+    box-shadow: 0 0 0 3px #aad8ff;
+  }
+  .button-next:active {
+    background: #005bb5;
+  }
+  body.dark-mode, .dark-mode #content {
+    --bg-color: #1a1a1a;
+    --text-color: #fff;
+    --card-bg: #222;
+    --shadow-color: rgba(0,0,0,0.3);
+  }
+  #n2, #n3, #n4, #n5, #n6, #n7, #n8, #n9, #n10, #n11, #n12, #n13, #n14, #n15, #n16, #n17, #n18, #n19, #n20,
+  #n21, #n22, #n23, #n24, #n25, #n26, #n27, #n28, #n29, #n30, #n31, #n32, #n33, #n34, #n35, #n36, #n37, #n38, #n39, #n40,
+  #n41, #n42, #n43, #n44, #n45, #n46, #n47, #n48, #n49, #n50, #n51, #n52, #n53, #n54, #n55, #n56, #n57, #n58, #n59, #n60,
+  #n61, #n62, #n63, #n64, #n65, #n66, #n67, #n68, #n69, #n70, #n71, #n72, #n73, #n74, #n75, #n76, #n77, #n78, #n79, #n80,
+  #n81, #n82, #n83, #n84, #n85, #n86, #n87, #n88, #n89, #n90, #n91, #n92, #n93, #n94, #n95, #n96, #n97, #n98, #n99, #n100 {
+    display: none;
+  }
+  #unit-title, #chapter-title {
+    font-weight: 600;
+    font-size: 1.3em;
+    margin-bottom: 1.2em;
+    letter-spacing: 0.02em;
+    color: var(--text-color);
+  }
+  #question {
+    font-size: 1.1em;
+    margin-bottom: 1.2em;
+    line-height: 1.7;
+    color: var(--text-color);
+  }
+  button:focus-visible, input:focus-visible {
+    outline: 2px solid #007aff;
+    outline-offset: 2px;
+  }
+  #n1, #n2, #n3, #n4, #n5, #n6, #n7, #n8, #n9, #n10, #n11, #n12 {
+    border-radius: var(--border-radius);
+    margin-bottom: 2rem;
+    box-shadow: 0 1px 4px var(--shadow-color);
+    background: var(--card-bg);
+    padding: 1.2em 1.5em;
+  }
+  @media (max-width: 600px) {
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      color: var(--text-color);
-      background: var(--bg-color);
-      margin: 0;
-      padding: 2rem;
-      display: flex;
-      justify-content: center;
-      transition: background var(--animation-duration);
+      padding: 0.5rem;
     }
     #content {
-      background: var(--card-bg);
-      border-radius: var(--border-radius);
-      box-shadow: 0 2px 8px var(--shadow-color);
-      max-width: 720px;
-      width: 100%;
-      padding: 2rem;
-      box-sizing: border-box;
-      word-break: break-word;
+      padding: 1rem;
     }
-    /* 追加要素 */
-    .input-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1em;
-      margin-top: 2em;
-      padding: 1.5em;
-      background: #f5f5f7;
-      border: 1px solid #e5e5e7;
-      border-radius: var(--border-radius);
-      box-shadow: 0 1px 4px var(--shadow-color);
+    #n1, #n2, #n3, #n4, #n5, #n6, #n7, #n8, #n9, #n10, #n11, #n12 {
+      padding: 0.7em 0.5em;
     }
-    .input-box {
-      background: #fff;
-      border-radius: 8px;
-      padding: 0.8em 1em;
-      font-size: 1.1em;
-      border: 1px solid #d2d2d7;
-      width: 260px;
-      text-align: center;
-    }
-    .button-next {
-      background: #007aff;
-      border: none;
-      border-radius: 8px;
-      padding: 0.8em 1.5em;
-      font-size: 1em;
-      color: #fff;
-      cursor: pointer;
-      box-shadow: 0 1px 4px var(--shadow-color);
-    }
-    /* dark mode */
-    body.dark-mode, .dark-mode #content {
-      --bg-color: #1a1a1a;
-      --text-color: #fff;
-      --card-bg: #222;
-      --shadow-color: rgba(0,0,0,0.3);
-    }
-    #content #n2,
-#content #n3,
-#content #n4,
-#content #n5,
-#content #n6,
-#content #n7,
-#content #n8,
-#content #n9,
-#content #n10,
-#content #n11,
-#content #n12,
-#content #n13,
-#content #n14,
-#content #n15,
-#content #n16,
-#content #n17,
-#content #n18,
-#content #n19,
-#content #n20,
-#content #n21,
-#content #n22,
-#content #n23,
-#content #n24,
-#content #n25,
-#content #n26,
-#content #n27,
-#content #n28,
-#content #n29,
-#content #n30,
-#content #n31,
-#content #n32,
-#content #n33,
-#content #n34,
-#content #n35,
-#content #n36,
-#content #n37,
-#content #n38,
-#content #n39,
-#content #n40,
-#content #n41,
-#content #n42,
-#content #n43,
-#content #n44,
-#content #n45,
-#content #n46,
-#content #n47,
-#content #n48,
-#content #n49,
-#content #n50,
-#content #n51,
-#content #n52,
-#content #n53,
-#content #n54,
-#content #n55,
-#content #n56,
-#content #n57,
-#content #n58,
-#content #n59,
-#content #n60,
-#content #n61,
-#content #n62,
-#content #n63,
-#content #n64,
-#content #n65,
-#content #n66,
-#content #n67,
-#content #n68,
-#content #n69,
-#content #n70,
-#content #n71,
-#content #n72,
-#content #n73,
-#content #n74,
-#content #n75,
-#content #n76,
-#content #n77,
-#content #n78,
-#content #n79,
-#content #n80,
-#content #n81,
-#content #n82,
-#content #n83,
-#content #n84,
-#content #n85,
-#content #n86,
-#content #n87,
-#content #n88,
-#content #n89,
-#content #n90,
-#content #n91,
-#content #n92,
-#content #n93,
-#content #n94,
-#content #n95,
-#content #n96,
-#content #n97,
-#content #n98,
-#content #n99,
-#content #n100 {
-  display: none;
-}
+  }
 </style>
+<script>
+const dom = {
+Tag: function(ID) {
+const el = document.getElementById(ID);
+return {
+  style: {
+    display: function(state, auto) {
+      if (!el) return;
+      if (state === 'block' || state === 'none') {
+        el.style.display = state;
+      }
+      // 'auto' オプションが指定された場合の追加処理
+      if (auto === 'auto' && state === 'block') {
+        el.style.display = '';
+      }
+    }
+  }
+};
+}
+};
+</script>
 </head>
 <body>
 <div class="unit-title" id="unit-title">
