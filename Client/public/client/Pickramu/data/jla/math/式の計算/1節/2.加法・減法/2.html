@@ -128,27 +128,6 @@
     }
   }
 </style>
-<script>
-const dom = {
-Tag: function(ID) {
-const el = document.getElementById(ID);
-return {
-  style: {
-    display: function(state, auto) {
-      if (!el) return;
-      if (state === 'block' || state === 'none') {
-        el.style.display = state;
-      }
-      // 'auto' オプションが指定された場合の追加処理
-      if (auto === 'auto' && state === 'block') {
-        el.style.display = '';
-      }
-    }
-  }
-};
-}
-};
-</script>
 </head>
 <body>
 <div class="unit-title" id="unit-title"></div>
