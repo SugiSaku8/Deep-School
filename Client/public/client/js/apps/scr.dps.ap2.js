@@ -298,6 +298,9 @@ export function appInit(shell) {
       max-width: 700px;
       margin-left: auto;
       margin-right: auto;
+      margin-top: 12px;
+      z-index: 10;
+      position: relative;
     }
     .prominent-post-btn {
       background: linear-gradient(90deg, #007aff 60%, #4fc3f7 100%);
@@ -423,12 +426,15 @@ export function appInit(shell) {
     }
     .scr-post-modal {
       background: rgba(0,0,0,0.18);
-      z-index: 1000;
-      display: flex;
+      z-index: 2000;
+      display: none;
       align-items: center;
       justify-content: center;
       position: fixed;
       left: 0; top: 0; right: 0; bottom: 0;
+    }
+    .scr-post-modal[style*='display:flex'] {
+      display: flex !important;
     }
     .scr-post-form {
       background: #f9f9fb;
@@ -558,8 +564,6 @@ export function appInit(shell) {
     }
     .scr-post-icon-btn:hover, .scr-post-icon-btn:focus {
       background: #3290f4;
-      box-shadow: 0 4px 16px #3290f488;
-      outline: 2px solid #3290f4;
     }
   `;
   document.head.appendChild(style);
