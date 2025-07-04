@@ -13,13 +13,13 @@ export function appInit(shell) {
     return;
   }
   root.innerHTML = `
-    <div class="page-container">
+    <div class="page-container full-screen">
       <button class="go-back-button" id="scr-back-btn" data-lang-key="back">←</button>
       <h1 class="page-title" data-lang-key="scr_note">SCR</h1>
       <button id="scr-open-post-modal" class="scr-post-icon-btn" title="新規ポスト" aria-label="新規ポスト">
         <img src="re/ico/note.svg" alt="新規ポスト" style="width:32px;height:32px;vertical-align:middle;">
       </button>
-      <div id="feed" class="scr-feed">
+      <div id="feed" class="scr-feed full-screen-feed">
         <h2>フィード</h2>
         <!-- 常設投稿フォーム -->
         <form id="scr-post-form" class="scr-post-form">
@@ -178,26 +178,26 @@ export function appInit(shell) {
   const API_BASE = '/posts'; // 必要に応じて修正
 
   // フィード取得関数
-  async function fetchFeed() {
+  async function fetchFeed(highlightId) {
     try {
       const res = await fetch(API_BASE);
       if (!res.ok) throw new Error('フィード取得失敗');
       const posts = await res.json();
-      renderFeed(posts);
+      renderFeed(posts, highlightId);
     } catch (e) {
       document.getElementById('feed-content').innerHTML = `<div class="scr-feed-error">フィードの取得に失敗しました</div>`;
     }
   }
 
   // フィード描画関数
-  function renderFeed(posts) {
+  function renderFeed(posts, highlightId) {
     const feed = document.getElementById('feed-content');
     if (!Array.isArray(posts) || posts.length === 0) {
       feed.innerHTML = '<div class="scr-feed-empty">投稿はまだありません</div>';
       return;
     }
     feed.innerHTML = posts.map(post => `
-      <div class="scr-feed-card" tabindex="0" aria-label="投稿">
+      <div class="scr-feed-card${highlightId && post._id === highlightId ? ' active' : ''}" tabindex="0" aria-label="投稿" data-postid="${post._id || ''}">
         <div class="scr-feed-card-header">
           <span class="scr-feed-username">${escapeHTML(post.username)}</span>
           <span class="scr-feed-userid">@${escapeHTML(post.userid)}</span>
@@ -207,6 +207,13 @@ export function appInit(shell) {
         <div class="scr-feed-date">${formatDate(post.createdAt)}</div>
       </div>
     `).join('');
+    // アニメーション解除用
+    if (highlightId) {
+      const el = feed.querySelector('.scr-feed-card.active');
+      if (el) {
+        setTimeout(() => el.classList.remove('active'), 1800);
+      }
+    }
   }
 
   // HTMLエスケープ
@@ -229,7 +236,10 @@ export function appInit(shell) {
         body: JSON.stringify({ username, userid, postname, postdata })
       });
       if (!res.ok) throw new Error('投稿失敗');
-      await fetchFeed(); // 投稿後にフィード再取得
+      // 新規投稿ID取得
+      const newPost = await res.json();
+      // フィード再取得＋新規投稿をハイライト
+      await fetchFeed(newPost._id);
     } catch (e) {
       alert('投稿に失敗しました');
     }
@@ -387,6 +397,45 @@ export function appInit(shell) {
       align-self: flex-end;
       margin-top: 4px;
       min-width: 120px;
+    }
+    html, body, .page-container.full-screen {
+      height: 100%;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      box-sizing: border-box;
+      background: #f4f6fa;
+    }
+    .scr-feed.full-screen-feed {
+      width: 100%;
+      max-width: 700px;
+      margin: 0 auto;
+      min-height: 80vh;
+      padding: 0 0 40px 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .scr-feed-card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin: 18px 0;
+      padding: 18px 20px 14px 20px;
+      transition: box-shadow 0.3s, transform 0.3s, background 0.3s;
+      outline: none;
+    }
+    .scr-feed-card.active {
+      box-shadow: 0 8px 32px rgba(0,122,255,0.18), 0 2px 8px rgba(0,0,0,0.08);
+      background: #eaf3ff;
+      transform: scale(1.04) translateY(-6px);
+      z-index: 10;
+    }
+    @media (max-width: 800px) {
+      .scr-feed.full-screen-feed {
+        max-width: 100vw;
+        padding: 0 2vw 40px 2vw;
+      }
     }
   `;
   document.head.appendChild(style);
