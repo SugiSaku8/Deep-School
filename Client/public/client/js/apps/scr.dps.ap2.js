@@ -21,8 +21,8 @@ export function appInit(shell) {
       </button>
       <div id="feed" class="scr-feed full-screen-feed">
         <h2>フィード</h2>
-        <!-- 常設投稿フォーム（デフォルト非表示） -->
-        <form id="scr-post-form" class="scr-post-form" style="display:none;">
+        <!-- 常設投稿フォーム（常に表示） -->
+        <form id="scr-post-form" class="scr-post-form" style="display:flex;">
           <div class="scr-post-form-row">
             <input type="text" id="username" placeholder="ユーザー名" required autocomplete="username">
             <input type="text" id="userid" placeholder="ユーザーID" required autocomplete="userid">
@@ -75,13 +75,16 @@ export function appInit(shell) {
   const closeModalBtn = document.getElementById('scr-post-modal-close');
   if (openModalBtn && modal) {
     openModalBtn.onclick = () => {
-      const postForm = document.getElementById('scr-post-form');
-      if (postForm.style.display === 'none') {
-        postForm.style.display = 'flex';
-        postForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      } else {
-        postForm.style.display = 'none';
-      }
+      // 投稿フォームのトグルは不要になったので削除
+      // const postForm = document.getElementById('scr-post-form');
+      // if (postForm.style.display === 'none') {
+      //   postForm.style.display = 'flex';
+      //   postForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // } else {
+      //   postForm.style.display = 'none';
+      // }
+      // 代わりにモーダルを開く
+      modal.style.display = 'flex';
     };
   }
   if (closeModalBtn && modal) {
@@ -409,7 +412,7 @@ export function appInit(shell) {
       padding: 0;
       width: 100vw;
       box-sizing: border-box;
-      background: #f4f6fa;
+      /* background: #f4f6fa; ← ここを削除してbody継承に */
     }
     .scr-feed.full-screen-feed {
       width: 100%;
@@ -447,12 +450,11 @@ export function appInit(shell) {
       width: 100vw;
       position: relative;
       z-index: 0;
+      /* background: none; ← ここを削除 */
     }
     .scr-bg::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 0; right: 0; bottom: 0;
-      background: rgba(244,246,250,0.85);
+      content: none !important;
+      /* background: none; ← ここを削除 */
       z-index: 1;
       pointer-events: none;
     }
