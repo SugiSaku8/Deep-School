@@ -37,7 +37,7 @@ export function appInit(shell) {
         </form>
         <input type="text" id="scr-search-input" placeholder="検索ワード">
         <button id="scr-search-btn" class="button-chalk submit-button">検索</button>
-        <div id="feed-content"></div>
+        <div id="feed-content" class="scr-feed-scrollable" tabindex="0" aria-label="投稿フィード"></div>
       </div>
       <div id="scr-post-modal" class="scr-post-modal" style="display:none;">
         <div class="scr-post-modal-content">
@@ -283,6 +283,30 @@ export function appInit(shell) {
       padding: 18px 20px 14px 20px;
       transition: box-shadow 0.2s;
       outline: none;
+    }
+    /* スクロール可能なフィード */
+    .scr-feed-scrollable {
+      max-height: 60vh;
+      min-height: 200px;
+      overflow-y: auto;
+      padding-right: 4px;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+    .scr-feed-scrollable::-webkit-scrollbar {
+      width: 8px;
+      background: transparent;
+    }
+    .scr-feed-scrollable::-webkit-scrollbar-thumb {
+      background: #e0e4ea;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .scr-feed-scrollable:focus {
+      outline: 2px solid #007aff;
+      outline-offset: -2px;
     }
     .scr-feed-card:focus {
       box-shadow: 0 0 0 3px #007aff33, 0 2px 8px rgba(0,0,0,0.08);
