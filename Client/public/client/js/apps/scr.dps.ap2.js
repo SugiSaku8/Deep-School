@@ -320,21 +320,21 @@ export function appInit(shell) {
       font-size: 1.1em;
     }
     .scr-post-icon-btn {
-      position: fixed;
-      top: 24px;
-      right: 32px;
+      position: fixed !important;
+      top: 16px !important;
+      right: 16px !important;
       background: #007bff;
       border: none;
       border-radius: 50%;
-      width: 48px;
-      height: 48px;
+      width: 52px;
+      height: 52px;
       display: flex;
       align-items: center;
       justify-content: center;
       box-shadow: none;
       cursor: pointer;
       transition: none;
-      z-index: 9999;
+      z-index: 10000 !important;
     }
     .scr-post-icon-btn:hover, .scr-post-icon-btn:focus, .scr-post-icon-btn:active {
       background: #3290f4;
@@ -342,6 +342,14 @@ export function appInit(shell) {
       outline: none;
       transition: none;
       transform: none;
+    }
+    @media (max-width: 600px) {
+      .scr-post-icon-btn {
+        top: 8px !important;
+        right: 8px !important;
+        width: 44px;
+        height: 44px;
+      }
     }
     .scr-post-modal {
       background: rgba(0,0,0,0.3);
