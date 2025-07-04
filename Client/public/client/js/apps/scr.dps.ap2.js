@@ -1,4 +1,5 @@
 import { initializeSCR } from '../data/scr.client.mjs';
+import { SCR_URL, setSCRUrl } from '../core/config.js';
 
 export const appMeta = {
   name: "scr",
@@ -182,12 +183,21 @@ export function appInit(shell) {
   }
 
   // --- 投稿・フィードAPIエンドポイント ---
-  const API_BASE = '/posts'; // 必要に応じて修正
+  function getApiBase() {
+    // SCR_URLがnullならlocalStorageやデフォルトを参照
+    if (SCR_URL) return SCR_URL;
+    const local = localStorage.getItem('scr_url');
+    if (local) {
+      setSCRUrl(local);
+      return local;
+    }
+    return '/posts';
+  }
 
   // フィード取得関数
   async function fetchFeed(highlightId) {
     try {
-      const res = await fetch(API_BASE);
+      const res = await fetch(getApiBase());
       if (!res.ok) throw new Error('フィード取得失敗');
       const posts = await res.json();
       renderFeed(posts, highlightId);
@@ -237,7 +247,7 @@ export function appInit(shell) {
   // 投稿送信関数
   async function submitPost({username, userid, postname, postdata}) {
     try {
-      const res = await fetch(API_BASE, {
+      const res = await fetch(getApiBase(), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, userid, postname, postdata })
@@ -262,7 +272,7 @@ export function appInit(shell) {
       const q = document.getElementById('scr-search-input').value.trim();
       if (!q) return fetchFeed();
       try {
-        const res = await fetch(`${API_BASE}?q=${encodeURIComponent(q)}`);
+        const res = await fetch(`${getApiBase()}?q=${encodeURIComponent(q)}`);
         if (!res.ok) throw new Error('検索失敗');
         const posts = await res.json();
         renderFeed(posts);
