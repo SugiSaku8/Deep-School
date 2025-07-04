@@ -186,13 +186,7 @@ export function appInit(shell) {
 
   // --- 投稿・フィードAPIエンドポイント ---
   function getApiBase() {
-    // SCR_URLがnullならlocalStorageやデフォルトを参照
-    if (SCR_URL) return SCR_URL;
-    const local = localStorage.getItem('scr_url');
-    if (local) {
-      setSCRUrl(local);
-      return local;
-    }
+    if (window.scr_url) return window.scr_url;
     return '/posts';
   }
 

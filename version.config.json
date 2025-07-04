@@ -1,6 +1,6 @@
 {
   "deepSchoolFamily": {
-    "version": "25C1000X1",
+    "version": "25C1010X1",
     "status": "beta",
     "lastUpdated": "2025-07-04",
     "description": "Deep-School Family Software - Initial release"
@@ -87,12 +87,12 @@
     "description": "ToasterMachine - Toaster Machine is AI tools for Deep-School - Initial beta release"
   },
   "scr": {
-    "version": "0.1.6",
+    "version": "0.1.9",
     "status": "beta",
     "cycle": 0,
     "release": 1,
     "revision": 0,
-    "lastUpdated": "2025-06-30",
+    "lastUpdated": "2025-07-04",
     "description": "SCR - Screen Capture and Recording tool - Initial beta release"
   },
   "releaseSchedule": {
