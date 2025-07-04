@@ -534,6 +534,33 @@ export function appInit(shell) {
       padding: 0 !important;
       margin: 0 !important;
     }
+    .page-container.full-screen.scr-bg {
+      position: relative;
+    }
+    .scr-post-icon-btn {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: #007bff;
+      border: none;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px #0002;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s;
+      z-index: 100;
+      /* debug: */
+      /* background: red !important; */
+    }
+    .scr-post-icon-btn:hover, .scr-post-icon-btn:focus {
+      background: #3290f4;
+      box-shadow: 0 4px 16px #3290f488;
+      outline: 2px solid #3290f4;
+    }
   `;
   document.head.appendChild(style);
 
