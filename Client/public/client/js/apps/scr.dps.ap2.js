@@ -13,7 +13,7 @@ export function appInit(shell) {
     return;
   }
   root.innerHTML = `
-    <div class="page-container full-screen">
+    <div class="page-container full-screen scr-bg">
       <button class="go-back-button" id="scr-back-btn" data-lang-key="back">←</button>
       <h1 class="page-title" data-lang-key="scr_note">SCR</h1>
       <button id="scr-open-post-modal" class="scr-post-icon-btn" title="新規ポスト" aria-label="新規ポスト">
@@ -21,8 +21,8 @@ export function appInit(shell) {
       </button>
       <div id="feed" class="scr-feed full-screen-feed">
         <h2>フィード</h2>
-        <!-- 常設投稿フォーム -->
-        <form id="scr-post-form" class="scr-post-form">
+        <!-- 常設投稿フォーム（デフォルト非表示） -->
+        <form id="scr-post-form" class="scr-post-form" style="display:none;">
           <div class="scr-post-form-row">
             <input type="text" id="username" placeholder="ユーザー名" required autocomplete="username">
             <input type="text" id="userid" placeholder="ユーザーID" required autocomplete="userid">
@@ -74,7 +74,15 @@ export function appInit(shell) {
   const modal = document.getElementById('scr-post-modal');
   const closeModalBtn = document.getElementById('scr-post-modal-close');
   if (openModalBtn && modal) {
-    openModalBtn.onclick = () => { modal.style.display = 'flex'; };
+    openModalBtn.onclick = () => {
+      const postForm = document.getElementById('scr-post-form');
+      if (postForm.style.display === 'none') {
+        postForm.style.display = 'flex';
+        postForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        postForm.style.display = 'none';
+      }
+    };
   }
   if (closeModalBtn && modal) {
     closeModalBtn.onclick = () => { modal.style.display = 'none'; };
@@ -434,6 +442,39 @@ export function appInit(shell) {
       }
     }
     .scr-post-form-row input#username, .scr-post-form-row input#userid { display: none !important; }
+    .scr-bg {
+      background: url('re/img/noise_release_may_14t.webp') center center/cover no-repeat fixed !important;
+      min-height: 100vh;
+      width: 100vw;
+      position: relative;
+      z-index: 0;
+    }
+    .scr-bg::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; right: 0; bottom: 0;
+      background: rgba(244,246,250,0.85);
+      z-index: 1;
+      pointer-events: none;
+    }
+    .page-container.full-screen.scr-bg > * {
+      position: relative;
+      z-index: 2;
+    }
+    .scr-post-form {
+      transition: opacity 0.3s, transform 0.3s;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .scr-post-form[style*='display:none'] {
+      opacity: 0;
+      transform: translateY(-20px);
+      pointer-events: none;
+      height: 0 !important;
+      min-height: 0 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
   `;
   document.head.appendChild(style);
 
