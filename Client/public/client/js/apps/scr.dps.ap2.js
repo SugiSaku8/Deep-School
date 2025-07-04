@@ -443,7 +443,7 @@ export function appInit(shell) {
     }
     .scr-post-form-row input#username, .scr-post-form-row input#userid { display: none !important; }
     .scr-bg {
-      background: url('re/img/noise_release_may_14t.webp') center center/cover no-repeat fixed !important;
+      background: linear-gradient(135deg, #2e5e3e 0%, #3e7e5e 100%) !important;
       min-height: 100vh;
       width: 100vw;
       position: relative;
