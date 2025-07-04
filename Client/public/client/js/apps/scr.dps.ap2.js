@@ -78,24 +78,15 @@ export function appInit(shell) {
   const closeModalBtn = document.getElementById('scr-post-modal-close');
   if (openModalBtn && modal) {
     openModalBtn.onclick = () => {
-      // 投稿フォームのトグルは不要になったので削除
-      // const postForm = document.getElementById('scr-post-form');
-      // if (postForm.style.display === 'none') {
-      //   postForm.style.display = 'flex';
-      //   postForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      // } else {
-      //   postForm.style.display = 'none';
-      // }
-      // 代わりにモーダルを開く
-      modal.style.display = 'flex';
+      modal.style.setProperty('display', 'flex', 'important');
     };
   }
   if (closeModalBtn && modal) {
-    closeModalBtn.onclick = () => { modal.style.display = 'none'; };
+    closeModalBtn.onclick = () => { modal.style.setProperty('display', 'none', 'important'); };
   }
   // モーダル外クリックで閉じる
   if (modal) {
-    modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+    modal.onclick = (e) => { if (e.target === modal) modal.style.setProperty('display', 'none', 'important'); };
   }
 
   // モーダルのポストフォーム送信
@@ -107,7 +98,7 @@ export function appInit(shell) {
       const postname = document.getElementById('postname-modal').value;
       const postdata = document.getElementById('postdata-modal').value;
       await submitPost({ username, userid, postname, postdata });
-      modal.style.display = 'none';
+      modal.style.setProperty('display', 'none', 'important');
       document.getElementById('postname-modal').value = '';
       document.getElementById('postdata-modal').value = '';
     };
@@ -566,7 +557,12 @@ export function appInit(shell) {
       background: #3290f4;
     }
   `;
-  document.head.appendChild(style);
+  document.head.insertBefore(style, document.head.lastChild);
+
+  // innerHTML描画直後に主要要素の存在を確認
+  console.log('[SCR] #scr-open-post-modal:', document.getElementById('scr-open-post-modal'));
+  console.log('[SCR] #scr-post-modal:', document.getElementById('scr-post-modal'));
+  console.log('[SCR] .scr-search-bar:', document.querySelector('.scr-search-bar'));
 
   // --- ユーザー情報の自動設定 ---
   function getUserInfo() {
