@@ -112,68 +112,10 @@ export function appInit(shell) {
   initializeSCR();
 
   // Initialize parallax effects for SCR elements
-  if (window.parallaxManager) {
-    const buttons = document.querySelectorAll('.button-chalk, .auto-btn');
-    const backBtn = document.getElementById('scr-back-btn');
-    const postIconBtn = document.getElementById('scr-open-post-modal');
-    const closeBtn = document.getElementById('scr-post-modal-close');
-    const inputs = document.querySelectorAll('input[type="text"], textarea');
-    const modal = document.getElementById('scr-post-modal');
-    
-    buttons.forEach(btn => {
-      window.parallaxManager.addParallaxEffects(btn, {
-        hover: true,
-        mouse: false,
-        touch: true,
-        ripple: true
-      });
-    });
-    
-    if (backBtn) {
-      window.parallaxManager.addParallaxEffects(backBtn, {
-        hover: true,
-        mouse: false,
-        touch: true,
-        ripple: true
-      });
-    }
-    
-    if (postIconBtn) {
-      window.parallaxManager.addParallaxEffects(postIconBtn, {
-        hover: true,
-        mouse: false,
-        touch: true,
-        ripple: true
-      });
-    }
-    
-    if (closeBtn) {
-      window.parallaxManager.addParallaxEffects(closeBtn, {
-        hover: true,
-        mouse: false,
-        touch: true,
-        ripple: true
-      });
-    }
-    
-    inputs.forEach(input => {
-      window.parallaxManager.addParallaxEffects(input, {
-        hover: true,
-        mouse: false,
-        touch: false
-      });
-    });
-    
-    if (modal) {
-      window.parallaxManager.addParallaxEffects(modal, {
-        hover: false,
-        mouse: false,
-        touch: false
-      });
-    }
-    
-    shell.log({from: 'dp.app.scr.out', message: 'SCRApp: Parallax effects initialized', level: 'info'});
-  }
+  // parallaxManagerによる効果を無効化
+  // if (window.parallaxManager) {
+  //   ...
+  // }
 
   // --- 投稿・フィードAPIエンドポイント ---
   function getApiBase() {
@@ -377,55 +319,54 @@ export function appInit(shell) {
       margin: 32px 0;
       font-size: 1.1em;
     }
+    .scr-post-icon-btn {
+      position: fixed;
+      top: 24px;
+      right: 32px;
+      background: #007bff;
+      border: none;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: none;
+      cursor: pointer;
+      transition: none;
+      z-index: 9999;
+    }
+    .scr-post-icon-btn:hover, .scr-post-icon-btn:focus, .scr-post-icon-btn:active {
+      background: #3290f4;
+      box-shadow: none;
+      outline: none;
+      transition: none;
+      transform: none;
+    }
+    .scr-post-modal {
+      background: rgba(0,0,0,0.3);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      left: 0; top: 0; right: 0; bottom: 0;
+      width: 100vw;
+      height: 100vh;
+    }
+    .scr-post-modal[style*='display:flex'] {
+      display: flex !important;
+    }
     .scr-post-modal-content {
       border-radius: 18px;
       box-shadow: 0 4px 24px rgba(0,0,0,0.13);
       background: #fff;
       padding: 32px 24px 24px 24px;
       max-width: 400px;
+      width: 90vw;
       margin: 40px auto;
-    }
-    .modal-form-group input, .modal-form-group textarea {
-      border-radius: 10px;
-      border: 1px solid #ddd;
-      padding: 8px 12px;
-      margin-top: 4px;
-      margin-bottom: 12px;
-      width: 100%;
-      font-size: 1em;
-      box-sizing: border-box;
-    }
-    .modal-form-group label {
-      font-size: 0.98em;
-      color: #333;
-      font-weight: 500;
-    }
-    .modal-post-btn {
-      background: #007aff;
-      color: #fff;
-      border-radius: 10px;
-      border: none;
-      padding: 10px 24px;
-      font-size: 1.08em;
-      font-weight: 600;
-      box-shadow: 0 2px 8px rgba(0,122,255,0.08);
-      transition: background 0.2s;
-      margin-top: 8px;
-    }
-    .modal-post-btn:active {
-      background: #005ecb;
-    }
-    .scr-post-modal {
-      background: rgba(0,0,0,0.18);
-      z-index: 2000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      position: fixed;
-      left: 0; top: 0; right: 0; bottom: 0;
-    }
-    .scr-post-modal[style*='display:flex'] {
-      display: flex !important;
+      z-index: 10000;
+      position: relative;
     }
     .scr-post-form {
       background: #f9f9fb;
@@ -533,28 +474,6 @@ export function appInit(shell) {
     }
     .page-container.full-screen.scr-bg {
       position: relative;
-    }
-    .scr-post-icon-btn {
-      position: absolute;
-      top: 18px;
-      right: 18px;
-      background: #007bff;
-      border: none;
-      border-radius: 50%;
-      width: 44px;
-      height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 8px #0002;
-      cursor: pointer;
-      transition: background 0.2s, box-shadow 0.2s;
-      z-index: 100;
-      /* debug: */
-      /* background: red !important; */
-    }
-    .scr-post-icon-btn:hover, .scr-post-icon-btn:focus {
-      background: #3290f4;
     }
   `;
   document.head.insertBefore(style, document.head.lastChild);
