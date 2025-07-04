@@ -236,5 +236,18 @@ document.getElementById('set3').addEventListener('click', function() { setAnswer
 document.getElementById('set4').addEventListener('click', function() { setAnswer('inputer_n4', 'q4_answer'); });
 document.getElementById('set5').addEventListener('click', function() { setAnswer('inputer_n5', 'q5_answer'); });
 </script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    if (typeof renderMathInElement === "function") {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false}
+        ],
+        throwOnError: false
+      });
+    }
+  });
+</script>
 </body>
 </html>

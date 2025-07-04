@@ -110,5 +110,18 @@ document.getElementById('next5').addEventListener('click', function() {
 dom.back();
 });
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+if (typeof renderMathInElement === "function") {
+renderMathInElement(document.body, {
+delimiters: [
+{left: "$$", right: "$$", display: true},
+{left: "$", right: "$", display: false}
+],
+throwOnError: false
+});
+}
+});
+</script>
 </body>
 </html>

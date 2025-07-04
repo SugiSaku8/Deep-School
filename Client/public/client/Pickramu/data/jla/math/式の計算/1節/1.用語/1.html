@@ -287,6 +287,17 @@ $3a$と$3a^2$は、$a$と$a^2$で違うから、同類項じゃない。
     showNext('n12', 'n13');
   });
 
-  </script>
+  document.addEventListener("DOMContentLoaded", function() {
+    if (typeof renderMathInElement === "function") {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false}
+        ],
+        throwOnError: false
+      });
+    }
+  });
+</script>
 </body>
 </html>

@@ -300,5 +300,18 @@ document.getElementById('set1').addEventListener('click', function() { setAnswer
 document.getElementById('set2').addEventListener('click', function() { setAnswer('inputer_n7', 'q2_answer'); });
 document.getElementById('set3').addEventListener('click', function() { setAnswer('inputer_n10', 'q3_answer'); });
 </script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    if (typeof renderMathInElement === "function") {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false}
+        ],
+        throwOnError: false
+      });
+    }
+  });
+</script>
 </body>
 </html>
