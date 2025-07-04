@@ -89,15 +89,11 @@ export function appInit(shell) {
   if (postFormModal) {
     postFormModal.onsubmit = async (e) => {
       e.preventDefault();
-      const username = document.getElementById('username-modal').value;
-      const userid = document.getElementById('userid-modal').value;
+      const { username, userid } = await ensureUserInfo();
       const postname = document.getElementById('postname-modal').value;
       const postdata = document.getElementById('postdata-modal').value;
       await submitPost({ username, userid, postname, postdata });
       modal.style.display = 'none';
-      // 入力欄クリア
-      document.getElementById('username-modal').value = '';
-      document.getElementById('userid-modal').value = '';
       document.getElementById('postname-modal').value = '';
       document.getElementById('postdata-modal').value = '';
     };
@@ -437,22 +433,68 @@ export function appInit(shell) {
         padding: 0 2vw 40px 2vw;
       }
     }
+    .scr-post-form-row input#username, .scr-post-form-row input#userid { display: none !important; }
   `;
   document.head.appendChild(style);
+
+  // --- ユーザー情報の自動設定 ---
+  function getUserInfo() {
+    let username = localStorage.getItem('scr_username');
+    let userid = localStorage.getItem('scr_userid');
+    return { username, userid };
+  }
+  function setUserInfo(username, userid) {
+    localStorage.setItem('scr_username', username);
+    localStorage.setItem('scr_userid', userid);
+  }
+  async function ensureUserInfo() {
+    let { username, userid } = getUserInfo();
+    if (!username || !userid) {
+      // 入力モーダルを表示
+      return await new Promise(resolve => {
+        const modalBg = document.createElement('div');
+        modalBg.className = 'scr-userinfo-modal-bg';
+        modalBg.innerHTML = `
+          <div class="scr-userinfo-modal">
+            <h2>ユーザー情報の設定</h2>
+            <form id="scr-userinfo-form">
+              <div class="modal-form-group">
+                <label for="scr-username-input">ユーザー名</label>
+                <input type="text" id="scr-username-input" placeholder="ユーザー名" required>
+              </div>
+              <div class="modal-form-group">
+                <label for="scr-userid-input">ユーザーID</label>
+                <input type="text" id="scr-userid-input" placeholder="ユーザーID" required>
+              </div>
+              <button type="submit" class="button-chalk modal-post-btn submit-button">保存</button>
+            </form>
+          </div>
+        `;
+        document.body.appendChild(modalBg);
+        document.getElementById('scr-username-input').focus();
+        document.getElementById('scr-userinfo-form').onsubmit = (e) => {
+          e.preventDefault();
+          const username = document.getElementById('scr-username-input').value;
+          const userid = document.getElementById('scr-userid-input').value;
+          setUserInfo(username, userid);
+          document.body.removeChild(modalBg);
+          resolve({ username, userid });
+        };
+      });
+    }
+    return { username, userid };
+  }
 
   // --- 常設投稿フォームの送信処理 ---
   const postForm = document.getElementById('scr-post-form');
   if (postForm) {
     postForm.onsubmit = async (e) => {
       e.preventDefault();
-      const username = document.getElementById('username').value;
-      const userid = document.getElementById('userid').value;
+      const { username, userid } = await ensureUserInfo();
       const postname = document.getElementById('postname').value;
       const postdata = document.getElementById('postdata').value;
       await submitPost({ username, userid, postname, postdata });
       // 入力欄クリア
-      document.getElementById('username').value = '';
-      document.getElementById('userid').value = '';
       document.getElementById('postname').value = '';
       document.getElementById('postdata').value = '';
     };
