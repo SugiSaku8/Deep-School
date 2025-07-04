@@ -22,24 +22,26 @@ export function appInit(shell) {
       </button>
       <div id="feed" class="scr-feed full-screen-feed">
         <h2>フィード</h2>
-        <!-- 常設投稿フォーム（常に表示） -->
-        <form id="scr-post-form" class="scr-post-form" style="display:flex;">
-          <div class="scr-post-form-row">
-            <input type="text" id="username" placeholder="ユーザー名" required autocomplete="username">
-            <input type="text" id="userid" placeholder="ユーザーID" required autocomplete="userid">
-          </div>
-          <div class="scr-post-form-row">
-            <input type="text" id="postname" placeholder="ポスト名" required>
-          </div>
-          <div class="scr-post-form-row">
-            <textarea id="postdata" placeholder="ポスト内容" required rows="2"></textarea>
-          </div>
-          <button type="submit" id="post-button" class="button-chalk submit-button">ポストする</button>
-        </form>
+      </div>
+      <!-- 投稿フォームと検索バーをフィード外に移動 -->
+      <form id="scr-post-form" class="scr-post-form" style="display:flex;">
+        <div class="scr-post-form-row">
+          <input type="text" id="username" placeholder="ユーザー名" required autocomplete="username">
+          <input type="text" id="userid" placeholder="ユーザーID" required autocomplete="userid">
+        </div>
+        <div class="scr-post-form-row">
+          <input type="text" id="postname" placeholder="ポスト名" required>
+        </div>
+        <div class="scr-post-form-row">
+          <textarea id="postdata" placeholder="ポスト内容" required rows="2"></textarea>
+        </div>
+        <button type="submit" id="post-button" class="button-chalk submit-button prominent-post-btn">ポストする</button>
+      </form>
+      <div class="scr-search-bar">
         <input type="text" id="scr-search-input" placeholder="検索ワード">
         <button id="scr-search-btn" class="button-chalk submit-button">検索</button>
-        <div id="feed-content" class="scr-feed-scrollable" tabindex="0" aria-label="投稿フィード"></div>
       </div>
+      <div id="feed-content" class="scr-feed-scrollable" tabindex="0" aria-label="投稿フィード"></div>
       <div id="scr-post-modal" class="scr-post-modal" style="display:none;">
         <div class="scr-post-modal-content">
           <button class="close-btn" id="scr-post-modal-close" title="閉じる" aria-label="閉じる">×</button>
@@ -293,6 +295,34 @@ export function appInit(shell) {
       padding: 18px 20px 14px 20px;
       transition: box-shadow 0.2s;
       outline: none;
+    }
+    .scr-search-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      align-items: center;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .prominent-post-btn {
+      background: linear-gradient(90deg, #007aff 60%, #4fc3f7 100%);
+      color: #fff;
+      font-size: 1.12em;
+      font-weight: 700;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,122,255,0.13);
+      border: none;
+      padding: 12px 32px;
+      margin-top: 10px;
+      transition: background 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    .prominent-post-btn:focus {
+      box-shadow: 0 0 0 3px #007aff55, 0 4px 16px rgba(0,122,255,0.13);
+    }
+    .prominent-post-btn:active {
+      background: #005ecb;
     }
     /* スクロール可能なフィード */
     .scr-feed-scrollable {
