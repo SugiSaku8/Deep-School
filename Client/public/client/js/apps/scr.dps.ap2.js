@@ -21,6 +21,20 @@ export function appInit(shell) {
       </button>
       <div id="feed" class="scr-feed">
         <h2>フィード</h2>
+        <!-- 常設投稿フォーム -->
+        <form id="scr-post-form" class="scr-post-form">
+          <div class="scr-post-form-row">
+            <input type="text" id="username" placeholder="ユーザー名" required autocomplete="username">
+            <input type="text" id="userid" placeholder="ユーザーID" required autocomplete="userid">
+          </div>
+          <div class="scr-post-form-row">
+            <input type="text" id="postname" placeholder="ポスト名" required>
+          </div>
+          <div class="scr-post-form-row">
+            <textarea id="postdata" placeholder="ポスト内容" required rows="2"></textarea>
+          </div>
+          <button type="submit" id="post-button" class="button-chalk submit-button">ポストする</button>
+        </form>
         <input type="text" id="scr-search-input" placeholder="検索ワード">
         <button id="scr-search-btn" class="button-chalk submit-button">検索</button>
         <div id="feed-content"></div>
@@ -75,20 +89,17 @@ export function appInit(shell) {
   if (postFormModal) {
     postFormModal.onsubmit = async (e) => {
       e.preventDefault();
-      // 値取得
       const username = document.getElementById('username-modal').value;
       const userid = document.getElementById('userid-modal').value;
       const postname = document.getElementById('postname-modal').value;
       const postdata = document.getElementById('postdata-modal').value;
-      // 既存のpost-formのinputにも値をセット
-      document.getElementById('username').value = username;
-      document.getElementById('userid').value = userid;
-      document.getElementById('postname').value = postname;
-      document.getElementById('postdata').value = postdata;
-      // 既存のポストボタンをクリック
-      document.getElementById('post-button').click();
-      // モーダルを閉じる
+      await submitPost({ username, userid, postname, postdata });
       modal.style.display = 'none';
+      // 入力欄クリア
+      document.getElementById('username-modal').value = '';
+      document.getElementById('userid-modal').value = '';
+      document.getElementById('postname-modal').value = '';
+      document.getElementById('postdata-modal').value = '';
     };
   }
 
@@ -161,5 +172,240 @@ export function appInit(shell) {
     }
     
     shell.log({from: 'dp.app.scr.out', message: 'SCRApp: Parallax effects initialized', level: 'info'});
+  }
+
+  // --- 投稿・フィードAPIエンドポイント ---
+  const API_BASE = '/posts'; // 必要に応じて修正
+
+  // フィード取得関数
+  async function fetchFeed() {
+    try {
+      const res = await fetch(API_BASE);
+      if (!res.ok) throw new Error('フィード取得失敗');
+      const posts = await res.json();
+      renderFeed(posts);
+    } catch (e) {
+      document.getElementById('feed-content').innerHTML = `<div class="scr-feed-error">フィードの取得に失敗しました</div>`;
+    }
+  }
+
+  // フィード描画関数
+  function renderFeed(posts) {
+    const feed = document.getElementById('feed-content');
+    if (!Array.isArray(posts) || posts.length === 0) {
+      feed.innerHTML = '<div class="scr-feed-empty">投稿はまだありません</div>';
+      return;
+    }
+    feed.innerHTML = posts.map(post => `
+      <div class="scr-feed-card" tabindex="0" aria-label="投稿">
+        <div class="scr-feed-card-header">
+          <span class="scr-feed-username">${escapeHTML(post.username)}</span>
+          <span class="scr-feed-userid">@${escapeHTML(post.userid)}</span>
+        </div>
+        <div class="scr-feed-title">${escapeHTML(post.postname)}</div>
+        <div class="scr-feed-content">${escapeHTML(post.postdata)}</div>
+        <div class="scr-feed-date">${formatDate(post.createdAt)}</div>
+      </div>
+    `).join('');
+  }
+
+  // HTMLエスケープ
+  function escapeHTML(str) {
+    return String(str).replace(/[&<>'"]/g, tag => ({'&':'&amp;','<':'&lt;','>':'&gt;','\'':'&#39;','"':'&quot;'}[tag]));
+  }
+  // 日付フォーマット
+  function formatDate(dateStr) {
+    if (!dateStr) return '';
+    const d = new Date(dateStr);
+    return d.toLocaleString('ja-JP', { dateStyle: 'short', timeStyle: 'short' });
+  }
+
+  // 投稿送信関数
+  async function submitPost({username, userid, postname, postdata}) {
+    try {
+      const res = await fetch(API_BASE, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, userid, postname, postdata })
+      });
+      if (!res.ok) throw new Error('投稿失敗');
+      await fetchFeed(); // 投稿後にフィード再取得
+    } catch (e) {
+      alert('投稿に失敗しました');
+    }
+  }
+
+  // 初回ロード時にフィード取得
+  fetchFeed();
+
+  // --- 検索機能（オプション） ---
+  const searchBtn = document.getElementById('scr-search-btn');
+  if (searchBtn) {
+    searchBtn.onclick = async () => {
+      const q = document.getElementById('scr-search-input').value.trim();
+      if (!q) return fetchFeed();
+      try {
+        const res = await fetch(`${API_BASE}?q=${encodeURIComponent(q)}`);
+        if (!res.ok) throw new Error('検索失敗');
+        const posts = await res.json();
+        renderFeed(posts);
+      } catch (e) {
+        document.getElementById('feed-content').innerHTML = `<div class="scr-feed-error">検索に失敗しました</div>`;
+      }
+    };
+  }
+
+  // --- Apple HIG風スタイルを追加 ---
+  const style = document.createElement('style');
+  style.innerHTML = `
+    .scr-feed-card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin: 18px 0;
+      padding: 18px 20px 14px 20px;
+      transition: box-shadow 0.2s;
+      outline: none;
+    }
+    .scr-feed-card:focus {
+      box-shadow: 0 0 0 3px #007aff33, 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .scr-feed-card-header {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+    .scr-feed-username {
+      font-weight: 600;
+      color: #222;
+      font-size: 1.08em;
+    }
+    .scr-feed-userid {
+      color: #888;
+      font-size: 0.98em;
+    }
+    .scr-feed-title {
+      font-size: 1.12em;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: #007aff;
+    }
+    .scr-feed-content {
+      font-size: 1.04em;
+      color: #222;
+      margin-bottom: 8px;
+      white-space: pre-wrap;
+    }
+    .scr-feed-date {
+      color: #aaa;
+      font-size: 0.92em;
+      text-align: right;
+    }
+    .scr-feed-empty, .scr-feed-error {
+      color: #888;
+      text-align: center;
+      margin: 32px 0;
+      font-size: 1.1em;
+    }
+    .scr-post-modal-content {
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+      background: #fff;
+      padding: 32px 24px 24px 24px;
+      max-width: 400px;
+      margin: 40px auto;
+    }
+    .modal-form-group input, .modal-form-group textarea {
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      padding: 8px 12px;
+      margin-top: 4px;
+      margin-bottom: 12px;
+      width: 100%;
+      font-size: 1em;
+      box-sizing: border-box;
+    }
+    .modal-form-group label {
+      font-size: 0.98em;
+      color: #333;
+      font-weight: 500;
+    }
+    .modal-post-btn {
+      background: #007aff;
+      color: #fff;
+      border-radius: 10px;
+      border: none;
+      padding: 10px 24px;
+      font-size: 1.08em;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0,122,255,0.08);
+      transition: background 0.2s;
+      margin-top: 8px;
+    }
+    .modal-post-btn:active {
+      background: #005ecb;
+    }
+    .scr-post-modal {
+      background: rgba(0,0,0,0.18);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      left: 0; top: 0; right: 0; bottom: 0;
+    }
+    .scr-post-form {
+      background: #f9f9fb;
+      border-radius: 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      padding: 18px 16px 10px 16px;
+      margin-bottom: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5em;
+    }
+    .scr-post-form-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+    .scr-post-form-row input, .scr-post-form-row textarea {
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      padding: 8px 12px;
+      font-size: 1em;
+      flex: 1;
+      box-sizing: border-box;
+    }
+    .scr-post-form textarea {
+      resize: vertical;
+      min-height: 36px;
+      max-height: 120px;
+    }
+    .scr-post-form .submit-button {
+      align-self: flex-end;
+      margin-top: 4px;
+      min-width: 120px;
+    }
+  `;
+  document.head.appendChild(style);
+
+  // --- 常設投稿フォームの送信処理 ---
+  const postForm = document.getElementById('scr-post-form');
+  if (postForm) {
+    postForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const userid = document.getElementById('userid').value;
+      const postname = document.getElementById('postname').value;
+      const postdata = document.getElementById('postdata').value;
+      await submitPost({ username, userid, postname, postdata });
+      // 入力欄クリア
+      document.getElementById('username').value = '';
+      document.getElementById('userid').value = '';
+      document.getElementById('postname').value = '';
+      document.getElementById('postdata').value = '';
+    };
   }
 } 
