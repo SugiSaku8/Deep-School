@@ -218,15 +218,27 @@ export function appInit(shell) {
   // --- 投稿・フィードAPIエンドポイント ---
   function getApiBase() {
     if (window.scr_url) return window.scr_url;
-    return '/posts';
+    return 'http://localhost:8080/posts';
   }
 
   // 再試行機能付きAPI呼び出し
   async function fetchWithRetry(url, options = {}, maxRetries = 3, delay = 1000) {
+    // CORS設定を追加
+    const defaultOptions = {
+      mode: 'cors',
+      credentials: 'omit',
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+      }
+    };
+    
+    const finalOptions = { ...defaultOptions, ...options };
+    
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
         console.log(`[SCR] API attempt ${attempt}/${maxRetries}: ${url}`);
-        const res = await fetch(url, options);
+        const res = await fetch(url, finalOptions);
         
         if (res.ok) {
           console.log(`[SCR] API success on attempt ${attempt}`);
@@ -255,7 +267,7 @@ export function appInit(shell) {
   // フィード取得関数
   async function fetchFeed(highlightId) {
     try {
-      const res = await fetchWithRetry(getApiBase());
+      const res = await fetchWithRetry(`${getApiBase()}/all`);
       const posts = await res.json();
       renderFeed(posts, highlightId);
     } catch (e) {
@@ -272,14 +284,15 @@ export function appInit(shell) {
       return;
     }
     feed.innerHTML = posts.map(post => `
-      <div class="scr-feed-card${highlightId && post._id === highlightId ? ' active' : ''}" tabindex="0" aria-label="投稿" data-postid="${post._id || ''}">
+      <div class="scr-feed-card${highlightId && post.PostId === highlightId ? ' active' : ''}" tabindex="0" aria-label="投稿" data-postid="${post.PostId || ''}">
         <div class="scr-feed-card-header">
-          <span class="scr-feed-username">${escapeHTML(post.username)}</span>
-          <span class="scr-feed-userid">@${escapeHTML(post.userid)}</span>
+          <span class="scr-feed-username">${escapeHTML(post.UserName)}</span>
+          <span class="scr-feed-userid">@${escapeHTML(post.UserId)}</span>
         </div>
-        <div class="scr-feed-title">${escapeHTML(post.postname)}</div>
-        <div class="scr-feed-content">${escapeHTML(post.postdata)}</div>
-        <div class="scr-feed-date">${formatDate(post.createdAt)}</div>
+        <div class="scr-feed-title">${escapeHTML(post.PostName)}</div>
+        <div class="scr-feed-content">${escapeHTML(post.PostData)}</div>
+        <div class="scr-feed-date">${formatDate(post.PostTime)}</div>
+        <div class="scr-feed-genre">${escapeHTML(post.LikerData || '')}</div>
       </div>
     `).join('');
     // アニメーション解除用
@@ -305,18 +318,30 @@ export function appInit(shell) {
   // 投稿送信関数
   async function submitPost({username, userid, postname, postdata}) {
     try {
-      const res = await fetchWithRetry(getApiBase(), {
+      const currentTime = new Date().toISOString();
+      const postData = {
+        UserName: username,
+        UserId: userid,
+        PostName: postname,
+        PostTime: currentTime,
+        PostData: postdata,
+        Genre: 'general',
+        LinkerData: []
+      };
+      
+      console.log('[SCR] Submitting post:', postData);
+      
+      const res = await fetchWithRetry(`${getApiBase()}/create`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, userid, postname, postdata })
+        body: JSON.stringify(postData)
       });
       
-      // 新規投稿ID取得
-      const newPost = await res.json();
-      console.log('[SCR] Post submitted successfully:', newPost);
+      const result = await res.json();
+      console.log('[SCR] Post submitted successfully:', result);
       
-      // フィード再取得＋新規投稿をハイライト
-      await fetchFeed(newPost._id);
+      // フィード再取得（新規投稿のハイライトは後で実装）
+      await fetchFeed();
     } catch (e) {
       console.error('[SCR] Post submission failed after retries:', e);
       alert(`投稿に失敗しました: ${e.message}`);
@@ -335,9 +360,37 @@ export function appInit(shell) {
     }
   }
 
-  // 初回ロード時にフィード取得とユーザー情報表示
-  fetchFeed();
-  displayUserInfo();
+  // サーバー状態確認
+  async function checkServerStatus() {
+    try {
+      const res = await fetch('http://localhost:8080/');
+      if (res.ok) {
+        console.log('[SCR] Server is running');
+        return true;
+      }
+    } catch (e) {
+      console.error('[SCR] Server connection failed:', e);
+      document.getElementById('feed-content').innerHTML = `
+        <div class="scr-feed-error">
+          <h3>サーバーに接続できません</h3>
+          <p>サーバーが起動しているか確認してください。</p>
+          <p>エラー: ${e.message}</p>
+        </div>
+      `;
+      return false;
+    }
+  }
+
+  // 初回ロード時の処理
+  async function initializeApp() {
+    const serverOk = await checkServerStatus();
+    if (serverOk) {
+      await fetchFeed();
+      await displayUserInfo();
+    }
+  }
+
+  initializeApp();
 
   // --- 検索機能（オプション） ---
   const searchBtn = document.getElementById('scr-search-btn');
@@ -346,7 +399,7 @@ export function appInit(shell) {
       const q = document.getElementById('scr-search-input').value.trim();
       if (!q) return fetchFeed();
       try {
-        const res = await fetchWithRetry(`${getApiBase()}?q=${encodeURIComponent(q)}`);
+        const res = await fetchWithRetry(`${getApiBase()}/search?query=${encodeURIComponent(q)}`);
         const posts = await res.json();
         renderFeed(posts);
       } catch (e) {
@@ -492,6 +545,16 @@ export function appInit(shell) {
       color: #aaa;
       font-size: 0.92em;
       text-align: right;
+    }
+    .scr-feed-genre {
+      color: #007aff;
+      font-size: 0.88em;
+      font-weight: 500;
+      margin-top: 4px;
+      padding: 2px 8px;
+      background: rgba(0, 122, 255, 0.1);
+      border-radius: 8px;
+      display: inline-block;
     }
     .scr-feed-empty, .scr-feed-error {
       color: #888;
