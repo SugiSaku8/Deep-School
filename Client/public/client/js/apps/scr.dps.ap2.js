@@ -72,21 +72,43 @@ export function appInit(shell) {
 
   document.getElementById('scr-back-btn').onclick = () => shell.loadApp('menu');
 
-  // モーダルの開閉
-  const openModalBtn = document.getElementById('scr-open-post-modal');
-  const modal = document.getElementById('scr-post-modal');
-  const closeModalBtn = document.getElementById('scr-post-modal-close');
+  // モーダルの開閉 - 少し遅延させてから設定
+  setTimeout(() => {
+    const openModalBtn = document.getElementById('scr-open-post-modal');
+    const modal = document.getElementById('scr-post-modal');
+    const closeModalBtn = document.getElementById('scr-post-modal-close');
+  
+  console.log('[SCR] Modal elements found:', { openModalBtn, modal, closeModalBtn });
+  
   if (openModalBtn && modal) {
-    openModalBtn.onclick = () => {
+    openModalBtn.onclick = (e) => {
+      console.log('[SCR] Open modal button clicked');
+      e.preventDefault();
+      e.stopPropagation();
       modal.style.setProperty('display', 'flex', 'important');
+      modal.classList.add('show');
+      console.log('[SCR] Modal display set to flex and show class added');
+    };
+  } else {
+    console.error('[SCR] Modal elements not found:', { openModalBtn, modal });
+  }
+  
+  if (closeModalBtn && modal) {
+    closeModalBtn.onclick = (e) => { 
+      e.preventDefault();
+      modal.style.setProperty('display', 'none', 'important'); 
+      modal.classList.remove('show');
     };
   }
-  if (closeModalBtn && modal) {
-    closeModalBtn.onclick = () => { modal.style.setProperty('display', 'none', 'important'); };
-  }
+  
   // モーダル外クリックで閉じる
   if (modal) {
-    modal.onclick = (e) => { if (e.target === modal) modal.style.setProperty('display', 'none', 'important'); };
+    modal.onclick = (e) => { 
+      if (e.target === modal) {
+        modal.style.setProperty('display', 'none', 'important'); 
+        modal.classList.remove('show');
+      }
+    };
   }
 
   // モーダルのポストフォーム送信
@@ -99,14 +121,16 @@ export function appInit(shell) {
       const postdata = document.getElementById('postdata-modal').value;
       await submitPost({ username, userid, postname, postdata });
       modal.style.setProperty('display', 'none', 'important');
+      modal.classList.remove('show');
       document.getElementById('postname-modal').value = '';
       document.getElementById('postdata-modal').value = '';
     };
   }
 
-  // 既存の投稿フォームは非表示に
-  const oldPostForm = document.getElementById('post-form');
-  if (oldPostForm) oldPostForm.style.display = 'none';
+    // 既存の投稿フォームは非表示に
+    const oldPostForm = document.getElementById('post-form');
+    if (oldPostForm) oldPostForm.style.display = 'none';
+  }, 100); // setTimeoutの閉じ括弧
 
   // SCRロジック初期化
   initializeSCR();
@@ -353,7 +377,7 @@ export function appInit(shell) {
     }
     .scr-post-modal {
       background: rgba(0,0,0,0.3);
-      z-index: 9999;
+      z-index: 99999;
       display: none;
       align-items: center;
       justify-content: center;
@@ -361,8 +385,12 @@ export function appInit(shell) {
       left: 0; top: 0; right: 0; bottom: 0;
       width: 100vw;
       height: 100vh;
+      backdrop-filter: blur(4px);
     }
     .scr-post-modal[style*='display:flex'] {
+      display: flex !important;
+    }
+    .scr-post-modal.show {
       display: flex !important;
     }
     .scr-post-modal-content {
