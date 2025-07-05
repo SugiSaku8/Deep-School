@@ -20,10 +20,17 @@ export function appInit(shell) {
       <button id="scr-open-post-modal" class="scr-post-icon-btn" title="新規ポスト" aria-label="新規ポスト">
         <img src="re/ico/note.svg" alt="新規ポスト" style="width:32px;height:32px;vertical-align:middle;">
       </button>
+      <!-- 検索バーを一番上に配置 -->
+      <div class="scr-search-bar">
+        <input type="text" id="scr-search-input" placeholder="検索ワード">
+        <button id="scr-search-btn" class="button-chalk submit-button">検索</button>
+      </div>
+      
       <div id="feed" class="scr-feed full-screen-feed">
         <h2>フィード</h2>
       </div>
-      <!-- 投稿フォームと検索バーをフィード外に移動 -->
+      
+      <!-- 投稿フォームをフィード外に移動 -->
       <form id="scr-post-form" class="scr-post-form" style="display:flex;">
         <div class="scr-post-form-row">
           <input type="text" id="username" placeholder="ユーザー名" required autocomplete="username">
@@ -37,10 +44,7 @@ export function appInit(shell) {
         </div>
         <button type="submit" id="post-button" class="button-chalk submit-button prominent-post-btn">ポストする</button>
       </form>
-      <div class="scr-search-bar">
-        <input type="text" id="scr-search-input" placeholder="検索ワード">
-        <button id="scr-search-btn" class="button-chalk submit-button">検索</button>
-      </div>
+      
       <div id="feed-content" class="scr-feed-scrollable" tabindex="0" aria-label="投稿フィード"></div>
       <div id="scr-post-modal" class="scr-post-modal" style="display:none;">
         <div class="scr-post-modal-content">
@@ -250,14 +254,49 @@ export function appInit(shell) {
     .scr-search-bar {
       display: flex;
       gap: 8px;
-      margin-bottom: 12px;
       align-items: center;
       max-width: 700px;
-      margin-left: auto;
-      margin-right: auto;
-      margin-top: 12px;
-      z-index: 10;
-      position: relative;
+      margin: 0 auto 20px auto;
+      padding: 16px 20px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      z-index: 100;
+      position: sticky;
+      top: 0;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .scr-search-bar input {
+      flex: 1;
+      border: 1px solid #e0e4ea;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 1em;
+      background: #fff;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    
+    .scr-search-bar input:focus {
+      outline: none;
+      border-color: #007aff;
+      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+    }
+    
+    .scr-search-bar button {
+      background: #007aff;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .scr-search-bar button:hover {
+      background: #005ecb;
     }
     .prominent-post-btn {
       background: linear-gradient(90deg, #007aff 60%, #4fc3f7 100%);
@@ -376,8 +415,8 @@ export function appInit(shell) {
       }
     }
     .scr-post-modal {
-      background: rgba(0,0,0,0.3);
-      z-index: 99999;
+      background: rgba(0,0,0,0.4);
+      z-index: 999999;
       display: none;
       align-items: center;
       justify-content: center;
@@ -385,7 +424,7 @@ export function appInit(shell) {
       left: 0; top: 0; right: 0; bottom: 0;
       width: 100vw;
       height: 100vh;
-      backdrop-filter: blur(4px);
+      backdrop-filter: blur(8px);
     }
     .scr-post-modal[style*='display:flex'] {
       display: flex !important;
@@ -395,14 +434,15 @@ export function appInit(shell) {
     }
     .scr-post-modal-content {
       border-radius: 18px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
       background: #fff;
       padding: 32px 24px 24px 24px;
       max-width: 400px;
       width: 90vw;
       margin: 40px auto;
-      z-index: 10000;
+      z-index: 1000000;
       position: relative;
+      border: 1px solid rgba(0, 0, 0, 0.1);
     }
     .scr-post-form {
       background: #f9f9fb;
@@ -450,8 +490,8 @@ export function appInit(shell) {
       width: 100%;
       max-width: 700px;
       margin: 0 auto;
-      min-height: 80vh;
-      padding: 0 0 40px 0;
+      min-height: 70vh;
+      padding: 20px 0 40px 0;
       display: flex;
       flex-direction: column;
     }
