@@ -20,8 +20,7 @@ export function appInit(shell) {
       <button id="scr-open-post-modal" class="scr-post-icon-btn" title="新規ポスト" aria-label="新規ポスト">
         <img src="re/ico/note.svg" alt="新規ポスト" style="width:32px;height:32px;vertical-align:middle;">
       </button>
-      <!-- デバッグ用テストボタン -->
-      <button id="scr-test-modal" style="position:fixed;top:80px;right:16px;background:red;color:white;border:none;padding:8px;border-radius:8px;z-index:10001;">テストモーダル</button>
+ 
       <!-- 検索バーを一番上に配置 -->
       <div class="scr-search-bar">
         <input type="text" id="scr-search-input" placeholder="検索ワード">
@@ -182,33 +181,12 @@ export function appInit(shell) {
   setTimeout(setupModalHandlers, 100);
   setTimeout(setupModalHandlers, 500);
   
-  // デバッグ用テストボタンの設定
-  setTimeout(() => {
-    const testBtn = document.getElementById('scr-test-modal');
-    const modal = document.getElementById('scr-post-modal');
-    if (testBtn && modal) {
-      testBtn.addEventListener('click', () => {
-        console.log('[SCR] Test button clicked');
-        modal.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 999999 !important; position: fixed !important; left: 0 !important; top: 0 !important; right: 0 !important; bottom: 0 !important; width: 100vw !important; height: 100vh !important; background: rgba(0,0,0,0.4) !important; align-items: center !important; justify-content: center !important;';
-        modal.classList.add('show', 'visible');
-        console.log('[SCR] Test modal should be visible now');
-      });
-    }
-  }, 200);
-  
   // 既存の投稿フォームは非表示に
   const oldPostForm = document.getElementById('post-form');
   if (oldPostForm) oldPostForm.style.display = 'none';
 
   // SCRロジック初期化
   initializeSCR();
-
-  // Initialize parallax effects for SCR elements
-  // parallaxManagerによる効果を無効化
-  // if (window.parallaxManager) {
-  //   ...
-  // }
-
   // --- 投稿・フィードAPIエンドポイント ---
   function getApiBase() {
     if (window.scr_url) return window.scr_url;
