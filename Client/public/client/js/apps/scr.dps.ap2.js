@@ -78,6 +78,15 @@ export function appInit(shell) {
   document.getElementById('scr-back-btn').onclick = () => shell.loadApp('menu');
 
   // モーダルの開閉処理を関数として定義
+  function resetModalState(modal) {
+    if (modal) {
+      modal.style.setProperty('display', 'none', 'important');
+      modal.style.setProperty('visibility', 'hidden', 'important');
+      modal.style.setProperty('opacity', '0', 'important');
+      modal.classList.remove('show', 'visible');
+    }
+  }
+  
   function setupModalHandlers() {
     const openModalBtn = document.getElementById('scr-open-post-modal');
     const modal = document.getElementById('scr-post-modal');
@@ -92,12 +101,12 @@ export function appInit(shell) {
       modalId: modal?.id
     });
     
-    if (openModalBtn && modal) {
-      // 既存のイベントリスナーを削除
-      openModalBtn.replaceWith(openModalBtn.cloneNode(true));
-      const newOpenModalBtn = document.getElementById('scr-open-post-modal');
-      
-             newOpenModalBtn.addEventListener('click', (e) => {
+         if (openModalBtn && modal) {
+       // 既存のイベントリスナーを削除して新しい要素を作成
+       const newOpenModalBtn = openModalBtn.cloneNode(true);
+       openModalBtn.parentNode.replaceChild(newOpenModalBtn, openModalBtn);
+       
+       newOpenModalBtn.addEventListener('click', (e) => {
          console.log('[SCR] Open modal button clicked');
          e.preventDefault();
          e.stopPropagation();
@@ -107,16 +116,19 @@ export function appInit(shell) {
          console.log('[SCR] Modal current classes:', modal.className);
          console.log('[SCR] Modal computed style:', window.getComputedStyle(modal).display);
          
-         // 複数の方法でモーダルを表示
-         modal.style.setProperty('display', 'flex', 'important');
-         modal.style.setProperty('visibility', 'visible', 'important');
-         modal.style.setProperty('opacity', '1', 'important');
+         // モーダルをリセットしてから表示
+         resetModalState(modal);
+         
+         // 少し遅延してから表示
+         setTimeout(() => {
+           // デバッグ用ボタンと同じ方法でモーダルを表示
+         modal.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 999999 !important; position: fixed !important; left: 0 !important; top: 0 !important; right: 0 !important; bottom: 0 !important; width: 100vw !important; height: 100vh !important; background: rgba(0,0,0,0.4) !important; align-items: center !important; justify-content: center !important; backdrop-filter: blur(8px) !important;';
          modal.classList.add('show', 'visible');
          
          // 強制的に再描画
          modal.offsetHeight;
          
-         console.log('[SCR] Modal display set to flex and show class added');
+         console.log('[SCR] Modal display set using cssText method');
          console.log('[SCR] Modal new display:', modal.style.display);
          console.log('[SCR] Modal new classes:', modal.className);
          console.log('[SCR] Modal computed style after:', window.getComputedStyle(modal).display);
@@ -126,10 +138,16 @@ export function appInit(shell) {
            const isVisible = window.getComputedStyle(modal).display === 'flex';
            console.log('[SCR] Modal visibility check:', isVisible);
            if (!isVisible) {
-             console.error('[SCR] Modal still not visible, trying alternative method');
-             modal.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 999999 !important;';
+             console.error('[SCR] Modal still not visible, trying force method');
+             // 最後の手段：DOMを直接操作
+             modal.removeAttribute('style');
+             modal.style.display = 'flex';
+             modal.style.visibility = 'visible';
+             modal.style.opacity = '1';
+             modal.style.zIndex = '999999';
            }
          }, 100);
+       }, 50); // モーダル表示の遅延処理の閉じ括弧
        });
       
       console.log('[SCR] Modal open handler attached successfully');
@@ -137,25 +155,29 @@ export function appInit(shell) {
       console.error('[SCR] Modal elements not found:', { openModalBtn, modal });
     }
     
-    if (closeModalBtn && modal) {
-      closeModalBtn.addEventListener('click', (e) => { 
-        e.preventDefault();
-        modal.style.setProperty('display', 'none', 'important'); 
-        modal.classList.remove('show');
-        console.log('[SCR] Modal closed');
-      });
-    }
-    
-    // モーダル外クリックで閉じる
-    if (modal) {
-      modal.addEventListener('click', (e) => { 
-        if (e.target === modal) {
-          modal.style.setProperty('display', 'none', 'important'); 
-          modal.classList.remove('show');
-          console.log('[SCR] Modal closed by outside click');
-        }
-      });
-    }
+         if (closeModalBtn && modal) {
+       closeModalBtn.addEventListener('click', (e) => { 
+         e.preventDefault();
+         modal.style.setProperty('display', 'none', 'important'); 
+         modal.style.setProperty('visibility', 'hidden', 'important');
+         modal.style.setProperty('opacity', '0', 'important');
+         modal.classList.remove('show', 'visible');
+         console.log('[SCR] Modal closed');
+       });
+     }
+     
+     // モーダル外クリックで閉じる
+     if (modal) {
+       modal.addEventListener('click', (e) => { 
+         if (e.target === modal) {
+           modal.style.setProperty('display', 'none', 'important'); 
+           modal.style.setProperty('visibility', 'hidden', 'important');
+           modal.style.setProperty('opacity', '0', 'important');
+           modal.classList.remove('show', 'visible');
+           console.log('[SCR] Modal closed by outside click');
+         }
+       });
+     }
 
     // モーダルのポストフォーム送信
     const postFormModal = document.getElementById('scr-post-form-modal');
@@ -165,11 +187,13 @@ export function appInit(shell) {
         const { username, userid } = await ensureUserInfo();
         const postname = document.getElementById('postname-modal').value;
         const postdata = document.getElementById('postdata-modal').value;
-        await submitPost({ username, userid, postname, postdata });
-        modal.style.setProperty('display', 'none', 'important');
-        modal.classList.remove('show');
-        document.getElementById('postname-modal').value = '';
-        document.getElementById('postdata-modal').value = '';
+                 await submitPost({ username, userid, postname, postdata });
+         modal.style.setProperty('display', 'none', 'important');
+         modal.style.setProperty('visibility', 'hidden', 'important');
+         modal.style.setProperty('opacity', '0', 'important');
+         modal.classList.remove('show', 'visible');
+         document.getElementById('postname-modal').value = '';
+         document.getElementById('postdata-modal').value = '';
       });
     }
   }
