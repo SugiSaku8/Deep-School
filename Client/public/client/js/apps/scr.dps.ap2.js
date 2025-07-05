@@ -20,6 +20,8 @@ export function appInit(shell) {
       <button id="scr-open-post-modal" class="scr-post-icon-btn" title="新規ポスト" aria-label="新規ポスト">
         <img src="re/ico/note.svg" alt="新規ポスト" style="width:32px;height:32px;vertical-align:middle;">
       </button>
+      <!-- デバッグ用テストボタン -->
+      <button id="scr-test-modal" style="position:fixed;top:80px;right:16px;background:red;color:white;border:none;padding:8px;border-radius:8px;z-index:10001;">テストモーダル</button>
       <!-- 検索バーを一番上に配置 -->
       <div class="scr-search-bar">
         <input type="text" id="scr-search-input" placeholder="検索ワード">
@@ -76,65 +78,127 @@ export function appInit(shell) {
 
   document.getElementById('scr-back-btn').onclick = () => shell.loadApp('menu');
 
-  // モーダルの開閉 - 少し遅延させてから設定
-  setTimeout(() => {
+  // モーダルの開閉処理を関数として定義
+  function setupModalHandlers() {
     const openModalBtn = document.getElementById('scr-open-post-modal');
     const modal = document.getElementById('scr-post-modal');
     const closeModalBtn = document.getElementById('scr-post-modal-close');
-  
-  console.log('[SCR] Modal elements found:', { openModalBtn, modal, closeModalBtn });
-  
-  if (openModalBtn && modal) {
-    openModalBtn.onclick = (e) => {
-      console.log('[SCR] Open modal button clicked');
-      e.preventDefault();
-      e.stopPropagation();
-      modal.style.setProperty('display', 'flex', 'important');
-      modal.classList.add('show');
-      console.log('[SCR] Modal display set to flex and show class added');
-    };
-  } else {
-    console.error('[SCR] Modal elements not found:', { openModalBtn, modal });
-  }
-  
-  if (closeModalBtn && modal) {
-    closeModalBtn.onclick = (e) => { 
-      e.preventDefault();
-      modal.style.setProperty('display', 'none', 'important'); 
-      modal.classList.remove('show');
-    };
-  }
-  
-  // モーダル外クリックで閉じる
-  if (modal) {
-    modal.onclick = (e) => { 
-      if (e.target === modal) {
+    
+    console.log('[SCR] Setting up modal handlers...');
+    console.log('[SCR] Modal elements found:', { 
+      openModalBtn: !!openModalBtn, 
+      modal: !!modal, 
+      closeModalBtn: !!closeModalBtn,
+      openModalBtnId: openModalBtn?.id,
+      modalId: modal?.id
+    });
+    
+    if (openModalBtn && modal) {
+      // 既存のイベントリスナーを削除
+      openModalBtn.replaceWith(openModalBtn.cloneNode(true));
+      const newOpenModalBtn = document.getElementById('scr-open-post-modal');
+      
+             newOpenModalBtn.addEventListener('click', (e) => {
+         console.log('[SCR] Open modal button clicked');
+         e.preventDefault();
+         e.stopPropagation();
+         
+         // モーダルの現在の状態を確認
+         console.log('[SCR] Modal current display:', modal.style.display);
+         console.log('[SCR] Modal current classes:', modal.className);
+         console.log('[SCR] Modal computed style:', window.getComputedStyle(modal).display);
+         
+         // 複数の方法でモーダルを表示
+         modal.style.setProperty('display', 'flex', 'important');
+         modal.style.setProperty('visibility', 'visible', 'important');
+         modal.style.setProperty('opacity', '1', 'important');
+         modal.classList.add('show', 'visible');
+         
+         // 強制的に再描画
+         modal.offsetHeight;
+         
+         console.log('[SCR] Modal display set to flex and show class added');
+         console.log('[SCR] Modal new display:', modal.style.display);
+         console.log('[SCR] Modal new classes:', modal.className);
+         console.log('[SCR] Modal computed style after:', window.getComputedStyle(modal).display);
+         
+         // モーダルが実際に表示されているか確認
+         setTimeout(() => {
+           const isVisible = window.getComputedStyle(modal).display === 'flex';
+           console.log('[SCR] Modal visibility check:', isVisible);
+           if (!isVisible) {
+             console.error('[SCR] Modal still not visible, trying alternative method');
+             modal.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 999999 !important;';
+           }
+         }, 100);
+       });
+      
+      console.log('[SCR] Modal open handler attached successfully');
+    } else {
+      console.error('[SCR] Modal elements not found:', { openModalBtn, modal });
+    }
+    
+    if (closeModalBtn && modal) {
+      closeModalBtn.addEventListener('click', (e) => { 
+        e.preventDefault();
         modal.style.setProperty('display', 'none', 'important'); 
         modal.classList.remove('show');
-      }
-    };
+        console.log('[SCR] Modal closed');
+      });
+    }
+    
+    // モーダル外クリックで閉じる
+    if (modal) {
+      modal.addEventListener('click', (e) => { 
+        if (e.target === modal) {
+          modal.style.setProperty('display', 'none', 'important'); 
+          modal.classList.remove('show');
+          console.log('[SCR] Modal closed by outside click');
+        }
+      });
+    }
+
+    // モーダルのポストフォーム送信
+    const postFormModal = document.getElementById('scr-post-form-modal');
+    if (postFormModal) {
+      postFormModal.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const { username, userid } = await ensureUserInfo();
+        const postname = document.getElementById('postname-modal').value;
+        const postdata = document.getElementById('postdata-modal').value;
+        await submitPost({ username, userid, postname, postdata });
+        modal.style.setProperty('display', 'none', 'important');
+        modal.classList.remove('show');
+        document.getElementById('postname-modal').value = '';
+        document.getElementById('postdata-modal').value = '';
+      });
+    }
   }
 
-  // モーダルのポストフォーム送信
-  const postFormModal = document.getElementById('scr-post-form-modal');
-  if (postFormModal) {
-    postFormModal.onsubmit = async (e) => {
-      e.preventDefault();
-      const { username, userid } = await ensureUserInfo();
-      const postname = document.getElementById('postname-modal').value;
-      const postdata = document.getElementById('postdata-modal').value;
-      await submitPost({ username, userid, postname, postdata });
-      modal.style.setProperty('display', 'none', 'important');
-      modal.classList.remove('show');
-      document.getElementById('postname-modal').value = '';
-      document.getElementById('postdata-modal').value = '';
-    };
-  }
-
-    // 既存の投稿フォームは非表示に
-    const oldPostForm = document.getElementById('post-form');
-    if (oldPostForm) oldPostForm.style.display = 'none';
-  }, 100); // setTimeoutの閉じ括弧
+  // 複数回試行してモーダルハンドラーを設定
+  setupModalHandlers();
+  
+  // 少し遅延してから再度試行
+  setTimeout(setupModalHandlers, 100);
+  setTimeout(setupModalHandlers, 500);
+  
+  // デバッグ用テストボタンの設定
+  setTimeout(() => {
+    const testBtn = document.getElementById('scr-test-modal');
+    const modal = document.getElementById('scr-post-modal');
+    if (testBtn && modal) {
+      testBtn.addEventListener('click', () => {
+        console.log('[SCR] Test button clicked');
+        modal.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 999999 !important; position: fixed !important; left: 0 !important; top: 0 !important; right: 0 !important; bottom: 0 !important; width: 100vw !important; height: 100vh !important; background: rgba(0,0,0,0.4) !important; align-items: center !important; justify-content: center !important;';
+        modal.classList.add('show', 'visible');
+        console.log('[SCR] Test modal should be visible now');
+      });
+    }
+  }, 200);
+  
+  // 既存の投稿フォームは非表示に
+  const oldPostForm = document.getElementById('post-form');
+  if (oldPostForm) oldPostForm.style.display = 'none';
 
   // SCRロジック初期化
   initializeSCR();
@@ -425,12 +489,18 @@ export function appInit(shell) {
       width: 100vw;
       height: 100vh;
       backdrop-filter: blur(8px);
+      pointer-events: auto;
     }
     .scr-post-modal[style*='display:flex'] {
       display: flex !important;
     }
     .scr-post-modal.show {
       display: flex !important;
+    }
+    .scr-post-modal.visible {
+      display: flex !important;
+      visibility: visible !important;
+      opacity: 1 !important;
     }
     .scr-post-modal-content {
       border-radius: 18px;
