@@ -1,16 +1,20 @@
-import { initializeSCR } from '../data/scr.client.mjs';
-import { SCR_URL, setSCRUrl } from '../core/config.js';
+import { initializeSCR } from "../data/scr.client.mjs";
+import { SCR_URL, setSCRUrl } from "../core/config.js";
 
 export const appMeta = {
   name: "scr",
   title: "SCR",
-  icon: "re/ico/icon_top.png"
+  icon: "re/ico/icon_top.png",
 };
 
 export function appInit(shell) {
-  const root = document.getElementById('app-root');
+  const root = document.getElementById("app-root");
   if (!root) {
-    ds.log({from: 'dp.app.scr.out', message: 'SCRApp: #app-rootが見つかりません', level: 'error'});
+    ds.log({
+      from: "dp.app.scr.out",
+      message: "SCRApp: #app-rootが見つかりません",
+      level: "error",
+    });
     return;
   }
   root.innerHTML = `
@@ -56,63 +60,64 @@ export function appInit(shell) {
     </div>
   `;
 
-  document.getElementById('scr-back-btn').onclick = () => shell.loadApp('menu');
+  document.getElementById("scr-back-btn").onclick = () => shell.loadApp("menu");
 
   // モーダルの開閉処理を関数として定義
   function resetModalState(modal) {
     if (modal) {
-      modal.style.setProperty('display', 'none', 'important');
-      modal.style.setProperty('visibility', 'hidden', 'important');
-      modal.style.setProperty('opacity', '0', 'important');
-      modal.classList.remove('show', 'visible');
+      modal.style.setProperty("display", "none", "important");
+      modal.style.setProperty("visibility", "hidden", "important");
+      modal.style.setProperty("opacity", "0", "important");
+      modal.classList.remove("show", "visible");
     }
   }
-  
+
   function setupModalHandlers() {
-    const openModalBtn = document.getElementById('scr-open-post-modal');
-    const modal = document.getElementById('scr-post-modal');
-    const closeModalBtn = document.getElementById('scr-post-modal-close');
-    
+    const openModalBtn = document.getElementById("scr-open-post-modal");
+    const modal = document.getElementById("scr-post-modal");
+    const closeModalBtn = document.getElementById("scr-post-modal-close");
+
     if (openModalBtn && modal) {
       // 既存のイベントリスナーを削除して新しい要素を作成
       const newOpenModalBtn = openModalBtn.cloneNode(true);
       openModalBtn.parentNode.replaceChild(newOpenModalBtn, openModalBtn);
-      newOpenModalBtn.addEventListener('click', (e) => {
+      newOpenModalBtn.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
         resetModalState(modal);
         setTimeout(() => {
-          modal.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 999999 !important; position: fixed !important; left: 0 !important; top: 0 !important; right: 0 !important; bottom: 0 !important; width: 100vw !important; height: 100vh !important; background: rgba(0,0,0,0.4) !important; align-items: center !important; justify-content: center !important; backdrop-filter: blur(8px) !important;';
-          modal.classList.add('show', 'visible');
+          modal.style.cssText =
+            "display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 999999 !important; position: fixed !important; left: 0 !important; top: 0 !important; right: 0 !important; bottom: 0 !important; width: 100vw !important; height: 100vh !important; background: rgba(0,0,0,0.4) !important; align-items: center !important; justify-content: center !important; backdrop-filter: blur(8px) !important;";
+          modal.classList.add("show", "visible");
           modal.offsetHeight;
         }, 50);
       });
     }
     if (closeModalBtn && modal) {
-      closeModalBtn.addEventListener('click', (e) => { 
+      closeModalBtn.addEventListener("click", (e) => {
         e.preventDefault();
         resetModalState(modal);
       });
     }
     if (modal) {
-      modal.addEventListener('click', (e) => { 
+      modal.addEventListener("click", (e) => {
         if (e.target === modal) {
           resetModalState(modal);
         }
       });
     }
     // モーダルのポストフォーム送信
-    const postFormModal = document.getElementById('scr-post-form-modal');
+    const postFormModal = document.getElementById("scr-post-form-modal");
     if (postFormModal) {
       postFormModal.onsubmit = async (e) => {
         e.preventDefault();
         const { username, userid } = await ensureUserInfo();
-        const postname = document.getElementById('postname-modal').value;
-        const postdata = document.getElementById('postdata-modal').value;
+        const postname = document.getElementById("postname-modal").value;
+        const postdata = document.getElementById("postdata-modal").value;
         await submitPost({ username, userid, postname, postdata });
         resetModalState(modal);
-        document.getElementById('postname-modal').value = '';
-        document.getElementById('postdata-modal').value = '';
+        document.getElementById("postname-modal").value = "";
+        document.getElementById("postdata-modal").value = "";
       };
     }
   }
@@ -121,8 +126,8 @@ export function appInit(shell) {
   setupModalHandlers();
 
   // 既存の投稿フォームは非表示に
-  const oldPostForm = document.getElementById('post-form');
-  if (oldPostForm) oldPostForm.style.display = 'none';
+  const oldPostForm = document.getElementById("post-form");
+  if (oldPostForm) oldPostForm.style.display = "none";
 
   // SCRロジック初期化
   initializeSCR();
@@ -130,50 +135,57 @@ export function appInit(shell) {
   // --- 投稿・フィードAPIエンドポイント ---
   function getApiBase() {
     if (window.scr_url) return window.scr_url;
-    return 'https://deep-school.onrender.com/posts';
+    return "https://deep-school.onrender.com/posts";
   }
 
   // 再試行機能付きAPI呼び出し
-  async function fetchWithRetry(url, options = {}, maxRetries = 3, delay = 1000) {
+  async function fetchWithRetry(
+    url,
+    options = {},
+    maxRetries = 3,
+    delay = 1000
+  ) {
     // CORS設定を追加
     const defaultOptions = {
-      mode: 'cors',
-      credentials: 'omit',
+      mode: "cors",
+      credentials: "omit",
       headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest',
-        ...options.headers
-      }
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+        ...options.headers,
+      },
     };
-    
+
     const finalOptions = { ...defaultOptions, ...options };
-    
+
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
         console.log(`[SCR] API attempt ${attempt}/${maxRetries}: ${url}`);
         const res = await fetch(url, finalOptions);
-        
+
         if (res.ok) {
           console.log(`[SCR] API success on attempt ${attempt}`);
           return res;
         }
-        
+
         if (res.status === 404) {
           console.warn(`[SCR] 404 error on attempt ${attempt}, retrying...`);
           if (attempt < maxRetries) {
-            await new Promise(resolve => setTimeout(resolve, delay * attempt));
+            await new Promise((resolve) =>
+              setTimeout(resolve, delay * attempt)
+            );
             continue;
           }
         }
-        
+
         throw new Error(`HTTP ${res.status}: ${res.statusText}`);
       } catch (e) {
         console.error(`[SCR] API error on attempt ${attempt}:`, e);
         if (attempt === maxRetries) {
           throw e;
         }
-        await new Promise(resolve => setTimeout(resolve, delay * attempt));
+        await new Promise((resolve) => setTimeout(resolve, delay * attempt));
       }
     }
   }
@@ -185,128 +197,164 @@ export function appInit(shell) {
       const posts = await res.json();
       renderFeed(posts, highlightId);
     } catch (e) {
-      console.error('[SCR] Feed fetch failed after retries:', e);
-      document.getElementById('feed-content').innerHTML = `<div class="scr-feed-error">フィードの取得に失敗しました (${e.message})</div>`;
+      console.error("[SCR] Feed fetch failed after retries:", e);
+      document.getElementById(
+        "feed-content"
+      ).innerHTML = `<div class="scr-feed-error">フィードの取得に失敗しました (${e.message})</div>`;
     }
   }
 
   // フィード描画関数
   function renderFeed(posts, highlightId) {
-    const feed = document.getElementById('feed-content');
+    const feed = document.getElementById("feed-content");
     if (!Array.isArray(posts) || posts.length === 0) {
       feed.innerHTML = '<div class="scr-feed-empty">投稿はまだありません</div>';
       // 現在のフィードを保存
       feed._currentFeed = [];
       return;
     }
-    feed.innerHTML = posts.map(post => {
-      const isReply = post.Genre === '@reply';
-      const replyToPostId = post.LinkerData && post.LinkerData.length > 0 && post.LinkerData[0].replyed;
-      
-      return `
-        <div class="scr-feed-card${highlightId && post.PostId === highlightId ? ' active' : ''}${isReply ? ' scr-reply-card' : ''}" tabindex="0" aria-label="投稿" data-postid="${post.PostId || ''}">
-          ${isReply && replyToPostId ? `<div class="scr-reply-indicator">↳ 返信: ${replyToPostId}</div>` : ''}
+    feed.innerHTML = posts
+      .map((post) => {
+        const isReply = post.Genre === "@reply";
+        const replyToPostId =
+          post.LinkerData &&
+          post.LinkerData.length > 0 &&
+          post.LinkerData[0].replyed;
+
+        return `
+        <div class="scr-feed-card${
+          highlightId && post.PostId === highlightId ? " active" : ""
+        }${
+          isReply ? " scr-reply-card" : ""
+        }" tabindex="0" aria-label="投稿" data-postid="${post.PostId || ""}">
+          ${
+            isReply && replyToPostId
+              ? `<div class="scr-reply-indicator">↳ 返信: ${replyToPostId}</div>`
+              : ""
+          }
           <div class="scr-feed-card-header">
             <span class="scr-feed-username">${escapeHTML(post.UserName)}</span>
             <span class="scr-feed-userid">@${escapeHTML(post.UserId)}</span>
-            ${isReply ? '<span class="scr-reply-badge">返信</span>' : ''}
+            ${isReply ? '<span class="scr-reply-badge">返信</span>' : ""}
           </div>
           <div class="scr-feed-title">${escapeHTML(post.PostName)}</div>
           <div class="scr-feed-content">${escapeHTML(post.PostData)}</div>
           <div class="scr-feed-date">${formatDate(post.PostTime)}</div>
-          <div class="scr-feed-genre">${escapeHTML(post.LikerData || '')}</div>
+          <div class="scr-feed-genre">${escapeHTML(post.LikerData || "")}</div>
           <div class="scr-feed-actions">
-            <button class="scr-reply-btn" data-postid="${post.PostId}" aria-label="返信">
+            <button class="scr-reply-btn" data-postid="${
+              post.PostId
+            }" aria-label="返信">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="9,17 15,17 15,11 21,11 21,5 15,5 15,11 9,11"></polyline>
               </svg>
               返信
             </button>
           </div>
-          <div class="scr-reply-form" id="reply-form-${post.PostId}" style="display:none;">
+          <div class="scr-reply-form" id="reply-form-${
+            post.PostId
+          }" style="display:none;">
             <textarea class="scr-reply-textarea" placeholder="返信を入力してください..." rows="3"></textarea>
             <div class="scr-reply-actions">
-              <button class="scr-reply-submit-btn" data-postid="${post.PostId}">返信を送信</button>
-              <button class="scr-reply-cancel-btn" data-postid="${post.PostId}">キャンセル</button>
+              <button class="scr-reply-submit-btn" data-postid="${
+                post.PostId
+              }">返信を送信</button>
+              <button class="scr-reply-cancel-btn" data-postid="${
+                post.PostId
+              }">キャンセル</button>
             </div>
           </div>
         </div>
       `;
-    }).join('');
-    
+      })
+      .join("");
+
     // 現在のフィードを保存
     feed._currentFeed = posts;
     // 返信ボタンのイベントリスナーを設定
     setupReplyHandlers();
-    
+
     // アニメーション解除用
     if (highlightId) {
-      const el = feed.querySelector('.scr-feed-card.active');
+      const el = feed.querySelector(".scr-feed-card.active");
       if (el) {
-        setTimeout(() => el.classList.remove('active'), 1800);
+        setTimeout(() => el.classList.remove("active"), 1800);
       }
     }
   }
 
   // HTMLエスケープ
   function escapeHTML(str) {
-    return String(str).replace(/[&<>'"]/g, tag => ({'&':'&amp;','<':'&lt;','>':'&gt;','\'':'&#39;','"':'&quot;'}[tag]));
+    return String(str).replace(
+      /[&<>'"]/g,
+      (tag) =>
+        ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          "'": "&#39;",
+          '"': "&quot;",
+        }[tag])
+    );
   }
   // 日付フォーマット
   function formatDate(dateStr) {
-    if (!dateStr) return '';
+    if (!dateStr) return "";
     const d = new Date(dateStr);
-    return d.toLocaleString('ja-JP', { dateStyle: 'short', timeStyle: 'short' });
+    return d.toLocaleString("ja-JP", {
+      dateStyle: "short",
+      timeStyle: "short",
+    });
   }
 
   // 返信ハンドラー設定
   function setupReplyHandlers() {
     // 返信ボタンクリック
-    document.querySelectorAll('.scr-reply-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
+    document.querySelectorAll(".scr-reply-btn").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
         e.preventDefault();
-        const postId = btn.getAttribute('data-postid');
+        const postId = btn.getAttribute("data-postid");
         const replyForm = document.getElementById(`reply-form-${postId}`);
         if (replyForm) {
-          replyForm.style.display = 'block';
-          replyForm.querySelector('.scr-reply-textarea').focus();
+          replyForm.style.display = "block";
+          replyForm.querySelector(".scr-reply-textarea").focus();
         }
       });
     });
 
     // 返信送信ボタンクリック
-    document.querySelectorAll('.scr-reply-submit-btn').forEach(btn => {
-      btn.addEventListener('click', async (e) => {
+    document.querySelectorAll(".scr-reply-submit-btn").forEach((btn) => {
+      btn.addEventListener("click", async (e) => {
         e.preventDefault();
-        const postId = btn.getAttribute('data-postid');
+        const postId = btn.getAttribute("data-postid");
         const replyForm = document.getElementById(`reply-form-${postId}`);
-        const textarea = replyForm.querySelector('.scr-reply-textarea');
+        const textarea = replyForm.querySelector(".scr-reply-textarea");
         const replyText = textarea.value.trim();
-        
+
         if (!replyText) {
-          alert('返信内容を入力してください');
+          alert("返信内容を入力してください");
           return;
         }
-        
+
         await submitReply(postId, replyText);
-        
+
         // フォームをクリアして非表示
-        textarea.value = '';
-        replyForm.style.display = 'none';
+        textarea.value = "";
+        replyForm.style.display = "none";
       });
     });
 
     // 返信キャンセルボタンクリック
-    document.querySelectorAll('.scr-reply-cancel-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
+    document.querySelectorAll(".scr-reply-cancel-btn").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
         e.preventDefault();
-        const postId = btn.getAttribute('data-postid');
+        const postId = btn.getAttribute("data-postid");
         const replyForm = document.getElementById(`reply-form-${postId}`);
-        const textarea = replyForm.querySelector('.scr-reply-textarea');
-        
+        const textarea = replyForm.querySelector(".scr-reply-textarea");
+
         // フォームをクリアして非表示
-        textarea.value = '';
-        replyForm.style.display = 'none';
+        textarea.value = "";
+        replyForm.style.display = "none";
       });
     });
   }
@@ -316,42 +364,42 @@ export function appInit(shell) {
     try {
       const { username, userid } = await ensureUserInfo();
       const currentTime = new Date().toISOString();
-      
+
       const replyData = {
         UserName: username,
         UserId: userid,
         PostName: `返信: ${parentPostId}`,
         PostTime: currentTime,
         PostData: replyText,
-        Genre: '@reply',
+        Genre: "@reply",
         LinkerData: [
           {
-            replyed: parentPostId
-          }
-        ]
+            replyed: parentPostId,
+          },
+        ],
       };
-      
-      console.log('[SCR] Submitting reply:', replyData);
-      
+
+      console.log("[SCR] Submitting reply:", replyData);
+
       const res = await fetchWithRetry(`${getApiBase()}/create`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(replyData)
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(replyData),
       });
-      
+
       const result = await res.json();
-      console.log('[SCR] Reply submitted successfully:', result);
-      
+      console.log("[SCR] Reply submitted successfully:", result);
+
       // フィード再取得
       await fetchFeed();
     } catch (e) {
-      console.error('[SCR] Reply submission failed after retries:', e);
+      console.error("[SCR] Reply submission failed after retries:", e);
       alert(`返信に失敗しました: ${e.message}`);
     }
   }
 
   // 投稿送信関数
-  async function submitPost({username, userid, postname, postdata}) {
+  async function submitPost({ username, userid, postname, postdata }) {
     try {
       const currentTime = new Date().toISOString();
       const postData = {
@@ -360,27 +408,29 @@ export function appInit(shell) {
         PostName: postname,
         PostTime: currentTime,
         PostData: postdata,
-        Genre: 'general',
-        LinkerData: []
+        Genre: "general",
+        LinkerData: [],
       };
-      
-      console.log('[SCR] Submitting post:', postData);
-      
+
+      console.log("[SCR] Submitting post:", postData);
+
       const res = await fetchWithRetry(`${getApiBase()}/create`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(postData)
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(postData),
       });
-      
+
       const result = await res.json();
-      console.log('[SCR] Post submitted successfully:', result);
-      
+      console.log("[SCR] Post submitted successfully:", result);
+
       if (result.post) {
         // 既存のフィードを取得
         let feed = [];
-        const feedDiv = document.getElementById('feed-content');
+        const feedDiv = document.getElementById("feed-content");
         if (feedDiv && feedDiv._currentFeed) {
-          feed = Array.isArray(feedDiv._currentFeed) ? feedDiv._currentFeed : [];
+          feed = Array.isArray(feedDiv._currentFeed)
+            ? feedDiv._currentFeed
+            : [];
         }
         // 先頭に新しい投稿を追加
         feed.unshift(result.post);
@@ -390,10 +440,10 @@ export function appInit(shell) {
         if (feedDiv) feedDiv._currentFeed = feed;
       } else {
         // フォールバック：全件再取得
-      await fetchFeed();
+        await fetchFeed();
       }
     } catch (e) {
-      console.error('[SCR] Post submission failed after retries:', e);
+      console.error("[SCR] Post submission failed after retries:", e);
       alert(`投稿に失敗しました: ${e.message}`);
     }
   }
@@ -401,34 +451,34 @@ export function appInit(shell) {
   // ユーザー情報を表示
   async function displayUserInfo() {
     const { username, userid } = await ensureUserInfo();
-    const userInfoDiv = document.getElementById('scr-user-info');
-    const currentUserSpan = document.getElementById('scr-current-user');
-    
+    const userInfoDiv = document.getElementById("scr-user-info");
+    const currentUserSpan = document.getElementById("scr-current-user");
+
     if (userInfoDiv && currentUserSpan) {
       currentUserSpan.textContent = `${username} (@${userid})`;
-      userInfoDiv.style.display = 'block';
+      userInfoDiv.style.display = "block";
     }
   }
 
   // サーバー状態確認
   async function checkServerStatus() {
     try {
-      const res = await fetch('https://deep-school.onrender.com/', {
-        method: 'GET',
-        mode: 'cors',
-        credentials: 'omit',
+      const res = await fetch("https://deep-school.onrender.com/", {
+        method: "GET",
+        mode: "cors",
+        credentials: "omit",
         headers: {
-          'Accept': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest'
-        }
+          Accept: "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+        },
       });
       if (res.ok) {
-        console.log('[SCR] Server is running');
+        console.log("[SCR] Server is running");
         return true;
       }
     } catch (e) {
-      console.error('[SCR] Server connection failed:', e);
-      document.getElementById('feed-content').innerHTML = `
+      console.error("[SCR] Server connection failed:", e);
+      document.getElementById("feed-content").innerHTML = `
         <div class="scr-feed-error">
           <h3>サーバーに接続できません</h3>
           <p>サーバーが起動しているか確認してください。</p>
@@ -452,24 +502,28 @@ export function appInit(shell) {
   initializeApp();
 
   // --- 検索機能（オプション） ---
-  const searchBtn = document.getElementById('scr-search-btn');
+  const searchBtn = document.getElementById("scr-search-btn");
   if (searchBtn) {
     searchBtn.onclick = async () => {
-      const q = document.getElementById('scr-search-input').value.trim();
+      const q = document.getElementById("scr-search-input").value.trim();
       if (!q) return fetchFeed();
       try {
-        const res = await fetchWithRetry(`${getApiBase()}/search?query=${encodeURIComponent(q)}`);
+        const res = await fetchWithRetry(
+          `${getApiBase()}/search?query=${encodeURIComponent(q)}`
+        );
         const posts = await res.json();
         renderFeed(posts);
       } catch (e) {
-        console.error('[SCR] Search failed after retries:', e);
-        document.getElementById('feed-content').innerHTML = `<div class="scr-feed-error">検索に失敗しました (${e.message})</div>`;
+        console.error("[SCR] Search failed after retries:", e);
+        document.getElementById(
+          "feed-content"
+        ).innerHTML = `<div class="scr-feed-error">検索に失敗しました (${e.message})</div>`;
       }
     };
   }
 
   // --- Apple HIG風スタイルを追加 ---
-  const style = document.createElement('style');
+  const style = document.createElement("style");
   style.innerHTML = `
     .scr-feed-scrollable, #feed-content.scr-feed-scrollable {
       min-height: 200px;
@@ -720,49 +774,155 @@ export function appInit(shell) {
       font-weight: 600;
       margin-left: 8px;
     }
+
+    #scr-open-post-modal,
+    .button-chalk,
+    .modal-post-btn,
+    .submit-button {
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      background: #007aff !important;
+      color: #fff !important;
+      border: none !important;
+      border-radius: 10px !important;
+      font-weight: 600 !important;
+      font-size: 1em !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+      cursor: pointer !important;
+      z-index: 10001 !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+    #scr-open-post-modal {
+      position: fixed !important;
+      top: 16px !important;
+      right: 16px !important;
+      width: 52px !important;
+      height: 52px !important;
+      border-radius: 50% !important;
+      padding: 0 !important;
+      background: #007aff !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+      z-index: 10001 !important;
+    }
+    #scr-open-post-modal img {
+      width: 32px !important;
+      height: 32px !important;
+      filter: none !important;
+    }
   `;
   document.head.insertBefore(style, document.head.lastChild);
 
   // innerHTML描画直後に主要要素の存在を確認
-  console.log('[SCR] #scr-open-post-modal:', document.getElementById('scr-open-post-modal'));
-  console.log('[SCR] #scr-post-modal:', document.getElementById('scr-post-modal'));
-  console.log('[SCR] .scr-search-bar:', document.querySelector('.scr-search-bar'));
+  console.log(
+    "[SCR] #scr-open-post-modal:",
+    document.getElementById("scr-open-post-modal")
+  );
+  console.log(
+    "[SCR] #scr-post-modal:",
+    document.getElementById("scr-post-modal")
+  );
+  console.log(
+    "[SCR] .scr-search-bar:",
+    document.querySelector(".scr-search-bar")
+  );
 
   // --- ユーザー情報の自動設定 ---
   function generateUserInfo() {
     // ランダムなユーザー名とIDを生成
-    const adjectives = ['Happy', 'Smart', 'Creative', 'Friendly', 'Bright', 'Clever', 'Wise', 'Kind', 'Brave', 'Calm'];
-    const nouns = ['User', 'Person', 'Friend', 'Student', 'Learner', 'Explorer', 'Creator', 'Thinker', 'Dreamer', 'Builder'];
+    const adjectives = [
+      "Happy",
+      "Smart",
+      "Creative",
+      "Friendly",
+      "Bright",
+      "Clever",
+      "Wise",
+      "Kind",
+      "Brave",
+      "Calm",
+      "Speaking",
+      "InTheMorning",
+      "Wanted!",
+      "Whoo",
+      "Love Me",
+      "Love You",
+      "Ao To Natsu",
+      "Tenbyou",
+      "Romanticism",
+      "Soranji",
+      "I'm",
+      "Invincible",
+      "Inferno",
+      "On My MiND",
+      "Lilac",
+      "KUSUSHIKI",
+      "breakfast",
+      "Heaven",
+      "Darling",
+      "Bitter",
+      "Vacances",
+      "familie",
+      "Carrying",
+      "QueSeraSera",
+      "Magic",
+      "天国",
+      "Lion",
+      "OmochaNoHeitai",
+      "ZesseiSeibutsu",
+      "soFtdRink",
+      "KujiraNoUta",
+      "Ubu",
+      "SamamaFestival!",
+      "Oz",
+      "JustAFriend",
+      "FACTORY",
+      "umbrella",
+      "JOURNEY",
+    ];
+    const nouns = [
+      "User",
+      "Person",
+      "Friend",
+      "Student",
+      "Learner",
+      "Explorer",
+      "Creator",
+      "Thinker",
+      "Dreamer",
+      "Builder",
+    ];
     const numbers = Math.floor(Math.random() * 9999) + 1000;
-    
-    const username = `${adjectives[Math.floor(Math.random() * adjectives.length)]}${nouns[Math.floor(Math.random() * nouns.length)]}`;
+
+    const username = `${
+      adjectives[Math.floor(Math.random() * adjectives.length)]
+    }${nouns[Math.floor(Math.random() * nouns.length)]}`;
     const userid = `user_${numbers}`;
-    
+
     return { username, userid };
   }
-  
+
   function getUserInfo() {
-    let username = localStorage.getItem('scr_username');
-    let userid = localStorage.getItem('scr_userid');
+    let username = localStorage.getItem("scr_username");
+    let userid = localStorage.getItem("scr_userid");
     return { username, userid };
   }
-  
+
   function setUserInfo(username, userid) {
-    localStorage.setItem('scr_username', username);
-    localStorage.setItem('scr_userid', userid);
+    localStorage.setItem("scr_username", username);
+    localStorage.setItem("scr_userid", userid);
   }
-  
+
   async function ensureUserInfo() {
     let { username, userid } = getUserInfo();
     if (!username || !userid) {
       // 自動的にユーザー情報を生成
       const generated = generateUserInfo();
       setUserInfo(generated.username, generated.userid);
-      console.log('[SCR] Auto-generated user info:', generated);
+      console.log("[SCR] Auto-generated user info:", generated);
       return generated;
     }
     return { username, userid };
   }
-
- 
-} 
+}
