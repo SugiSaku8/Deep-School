@@ -71,7 +71,7 @@ export class AppController {
       </head>
       <body>
         <div class="card">
-          <img src="https://developer.apple.com/design/human-interface-guidelines/images/intro/hig-apple-design.svg" alt="Deep School Logo" class="logo" />
+          <img src="https://github.com/SugiSaku8/Deep-School/blob/d64c25f86977788d9edbba8c97a26cd31d2e387d/Client/public/ico/icon_top.png" alt="Deep School Logo" class="logo" />
           <h1>Deep School Server</h1>
           <p>サーバーは正常に稼働しています。</p>
           <span class="status">Online</span>
