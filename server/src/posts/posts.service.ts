@@ -32,7 +32,7 @@ export class PostsService {
   }
 
   async getAllPosts(): Promise<Post[]> {
-    return await this.postModel.find().exec();
+    return await this.postModel.find().sort({ PostTime: -1 }).limit(25).exec();
   }
 
   async getPostByQuery(query: string): Promise<Post | null> {
@@ -58,6 +58,6 @@ export class PostsService {
         { PostName: regex },
         { PostData: regex }
       ]
-    }).exec();
+    }).sort({ PostTime: -1 }).limit(25).exec();
   }
 }
