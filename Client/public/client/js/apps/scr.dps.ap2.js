@@ -218,7 +218,7 @@ export function appInit(shell) {
   // --- 投稿・フィードAPIエンドポイント ---
   function getApiBase() {
     if (window.scr_url) return window.scr_url;
-    return 'http://localhost:8080/posts';
+    return 'https://deep-school.onrender.com/posts';
   }
 
   // 再試行機能付きAPI呼び出し
