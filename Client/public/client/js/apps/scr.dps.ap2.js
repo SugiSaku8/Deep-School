@@ -867,7 +867,7 @@ export function appInit(shell) {
       "Carrying",
       "QueSeraSera",
       "Magic",
-      "天国",
+      "Heaven",
       "Lion",
       "OmochaNoHeitai",
       "ZesseiSeibutsu",
