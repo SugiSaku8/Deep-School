@@ -894,11 +894,19 @@ export function appInit(shell) {
       "Dreamer",
       "Builder",
     ];
-    const numbers = Math.floor(Math.random() * 9999) + 1000;
 
+    // Secure random integer generator
+    function secureRandomInt(min, max) {
+      const range = max - min + 1;
+      const maxUint32 = 0xffffffff;
+      const rand = window.crypto.getRandomValues(new Uint32Array(1))[0];
+      return min + Math.floor((rand / (maxUint32 + 1)) * range);
+    }
+
+    const numbers = secureRandomInt(1000, 10998); // 9999 + 1000 = 10999, but upper bound is exclusive
     const username = `${
-      adjectives[Math.floor(Math.random() * adjectives.length)]
-    }${nouns[Math.floor(Math.random() * nouns.length)]}`;
+      adjectives[secureRandomInt(0, adjectives.length - 1)]
+    }${nouns[secureRandomInt(0, nouns.length - 1)]}`;
     const userid = `user_${numbers}`;
 
     return { username, userid };

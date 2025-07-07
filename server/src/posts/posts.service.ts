@@ -51,8 +51,15 @@ export class PostsService {
     }
   }
 
+  // ユーザー入力を正規表現に使う前にエスケープ
+  function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
   async searchPosts(query: string): Promise<Post[]> {
-    const regex = new RegExp(query, 'i');
+    // 入力値を正規表現としてエスケープ
+    const safeQuery = escapeRegExp(query);
+    const regex = new RegExp(safeQuery, 'i');
     return await this.postModel.find({
       $or: [
         { PostName: regex },

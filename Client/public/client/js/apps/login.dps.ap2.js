@@ -309,7 +309,8 @@ export function appInit(shell) {
       try {
         // SCRサーバーURL入力欄を追加
         const scrUrlDefault = window.isDemoUser ? 'https://deep-school.onrender.com' : (localStorage.getItem('scr_url') || '');
-        const scrUrlInputHtml = `<div class="form-group"><label for="scr_url_input">SCRサーバーURL</label><input type="text" id="scr_url_input" value="${scrUrlDefault}" placeholder="https://deep-school.onrender.com" /></div>`;
+        const safeScrUrlDefault = escapeHTML(scrUrlDefault);
+        const scrUrlInputHtml = `<div class="form-group"><label for="scr_url_input">SCRサーバーURL</label><input type="text" id="scr_url_input" value="${safeScrUrlDefault}" placeholder="https://deep-school.onrender.com" /></div>`;
         const loginForm = document.getElementById('loginForm');
         if (loginForm && !document.getElementById('scr_url_input')) {
           loginForm.insertAdjacentHTML('beforeend', scrUrlInputHtml);
@@ -416,7 +417,14 @@ export function appInit(shell) {
         'fox', 'cat', 'dog', 'fish', 'rain', 'snow', 'fire', 'earth', 'mountain', 'ocean'
       ];
       const now = Date.now();
-      const randomWord = words[Math.floor(Math.random() * words.length)];
+      // Secure random integer generator
+      function secureRandomInt(min, max) {
+        const range = max - min + 1;
+        const maxUint32 = 0xffffffff;
+        const rand = window.crypto.getRandomValues(new Uint32Array(1))[0];
+        return min + Math.floor((rand / (maxUint32 + 1)) * range);
+      }
+      const randomWord = words[secureRandomInt(0, words.length - 1)];
       window.googleUserId = `${now}.${randomWord}.demo_user`;
       window.googleUserName = 'Demo_USER';
       window.isDemoUser = true;
@@ -427,4 +435,12 @@ export function appInit(shell) {
   }
 
   shell.log({from: 'dp.app.login.out', message: 'LoginApp: 初期化完了', level: 'info'});
+}
+
+function escapeHTML(str) {
+  return String(str).replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 } 

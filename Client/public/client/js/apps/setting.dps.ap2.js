@@ -923,11 +923,20 @@ function applyPickramuEguide(enabled) {
 }
 
 // SCRサーバーURL入力欄を設定画面に追加
+function escapeHTML(str) {
+  return String(str).replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function renderSCRUrlSetting() {
   const settingRoot = document.getElementById('setting-root') || document.body;
   if (!document.getElementById('scr_url_setting')) {
     const scrUrl = localStorage.getItem('scr_url') || 'https://deep-school.onrender.com';
-    const html = `<div class="form-group"><label for="scr_url_setting">SCRサーバーURL</label><input type="text" id="scr_url_setting" value="${scrUrl}" placeholder="https://deep-school.onrender.com" /></div>`;
+    const safeScrUrl = escapeHTML(scrUrl);
+    const html = `<div class="form-group"><label for="scr_url_setting">SCRサーバーURL</label><input type="text" id="scr_url_setting" value="${safeScrUrl}" placeholder="https://deep-school.onrender.com" /></div>`;
     settingRoot.insertAdjacentHTML('beforeend', html);
   }
 } 
