@@ -623,9 +623,8 @@ export function appInit(shell) {
     }
     /* スクロール可能なフィード */
     .scr-feed-scrollable {
-      max-height: 60vh;
   min-height: 200px;
-  height: 60vh; /* 追加: 必ず高さを持たせる */
+  height: auto; /* 追加: 必ず高さを持たせる */
   overflow-y: auto !important;
   overflow-x: hidden;
   margin-top: 8px;
