@@ -479,7 +479,7 @@ export function appInit(shell) {
         if (feedDiv) feedDiv._currentFeed = feed;
       } else {
         // フォールバック：全件再取得
-        await fetchFeed();
+      await fetchFeed();
       }
     } catch (e) {
       console.error('[SCR] Post submission failed after retries:', e);
