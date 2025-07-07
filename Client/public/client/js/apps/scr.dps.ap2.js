@@ -73,138 +73,63 @@ export function appInit(shell) {
     const modal = document.getElementById('scr-post-modal');
     const closeModalBtn = document.getElementById('scr-post-modal-close');
     
-    console.log('[SCR] Setting up modal handlers...');
-    console.log('[SCR] Modal elements found:', { 
-      openModalBtn: !!openModalBtn, 
-      modal: !!modal, 
-      closeModalBtn: !!closeModalBtn,
-      openModalBtnId: openModalBtn?.id,
-      modalId: modal?.id
-    });
-    
-         if (openModalBtn && modal) {
-       // 既存のイベントリスナーを削除して新しい要素を作成
-       const newOpenModalBtn = openModalBtn.cloneNode(true);
-       openModalBtn.parentNode.replaceChild(newOpenModalBtn, openModalBtn);
-       
-       newOpenModalBtn.addEventListener('click', (e) => {
-         console.log('[SCR] Open modal button clicked');
-         e.preventDefault();
-         e.stopPropagation();
-         
-         // モーダルの現在の状態を確認
-         console.log('[SCR] Modal current display:', modal.style.display);
-         console.log('[SCR] Modal current classes:', modal.className);
-         console.log('[SCR] Modal computed style:', window.getComputedStyle(modal).display);
-         
-         // モーダルをリセットしてから表示
-         resetModalState(modal);
-         
-         // 少し遅延してから表示
-         setTimeout(() => {
-           // デバッグ用ボタンと同じ方法でモーダルを表示
-         modal.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 999999 !important; position: fixed !important; left: 0 !important; top: 0 !important; right: 0 !important; bottom: 0 !important; width: 100vw !important; height: 100vh !important; background: rgba(0,0,0,0.4) !important; align-items: center !important; justify-content: center !important; backdrop-filter: blur(8px) !important;';
-         modal.classList.add('show', 'visible');
-         
-         // 強制的に再描画
-         modal.offsetHeight;
-         
-         console.log('[SCR] Modal display set using cssText method');
-         console.log('[SCR] Modal new display:', modal.style.display);
-         console.log('[SCR] Modal new classes:', modal.className);
-         console.log('[SCR] Modal computed style after:', window.getComputedStyle(modal).display);
-         
-         // モーダルが実際に表示されているか確認
-         setTimeout(() => {
-           const isVisible = window.getComputedStyle(modal).display === 'flex';
-           console.log('[SCR] Modal visibility check:', isVisible);
-           if (!isVisible) {
-             console.error('[SCR] Modal still not visible, trying force method');
-             // 最後の手段：DOMを直接操作
-             modal.removeAttribute('style');
-             modal.style.display = 'flex';
-             modal.style.visibility = 'visible';
-             modal.style.opacity = '1';
-             modal.style.zIndex = '999999';
-           }
-         }, 100);
-       }, 50); // モーダル表示の遅延処理の閉じ括弧
-       });
-      
-      console.log('[SCR] Modal open handler attached successfully');
-    } else {
-      console.error('[SCR] Modal elements not found:', { openModalBtn, modal });
+    if (openModalBtn && modal) {
+      // 既存のイベントリスナーを削除して新しい要素を作成
+      const newOpenModalBtn = openModalBtn.cloneNode(true);
+      openModalBtn.parentNode.replaceChild(newOpenModalBtn, openModalBtn);
+      newOpenModalBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        resetModalState(modal);
+        setTimeout(() => {
+          modal.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important; z-index: 999999 !important; position: fixed !important; left: 0 !important; top: 0 !important; right: 0 !important; bottom: 0 !important; width: 100vw !important; height: 100vh !important; background: rgba(0,0,0,0.4) !important; align-items: center !important; justify-content: center !important; backdrop-filter: blur(8px) !important;';
+          modal.classList.add('show', 'visible');
+          modal.offsetHeight;
+        }, 50);
+      });
     }
-    
-         if (closeModalBtn && modal) {
-       closeModalBtn.addEventListener('click', (e) => { 
-         e.preventDefault();
-         modal.style.setProperty('display', 'none', 'important'); 
-         modal.style.setProperty('visibility', 'hidden', 'important');
-         modal.style.setProperty('opacity', '0', 'important');
-         modal.classList.remove('show', 'visible');
-         console.log('[SCR] Modal closed');
-       });
-     }
-     
-     // モーダル外クリックで閉じる
-     if (modal) {
-       modal.addEventListener('click', (e) => { 
-         if (e.target === modal) {
-           modal.style.setProperty('display', 'none', 'important'); 
-           modal.style.setProperty('visibility', 'hidden', 'important');
-           modal.style.setProperty('opacity', '0', 'important');
-           modal.classList.remove('show', 'visible');
-           console.log('[SCR] Modal closed by outside click');
-         }
-       });
-     }
-
-        // モーダルのポストフォーム送信
+    if (closeModalBtn && modal) {
+      closeModalBtn.addEventListener('click', (e) => { 
+        e.preventDefault();
+        resetModalState(modal);
+      });
+    }
+    if (modal) {
+      modal.addEventListener('click', (e) => { 
+        if (e.target === modal) {
+          resetModalState(modal);
+        }
+      });
+    }
+    // モーダルのポストフォーム送信
     const postFormModal = document.getElementById('scr-post-form-modal');
     if (postFormModal) {
-      postFormModal.addEventListener('submit', async (e) => {
+      postFormModal.onsubmit = async (e) => {
         e.preventDefault();
-        
-        // ユーザー情報を自動取得
         const { username, userid } = await ensureUserInfo();
-        console.log('[SCR] Using user info for post:', { username, userid });
-        
         const postname = document.getElementById('postname-modal').value;
         const postdata = document.getElementById('postdata-modal').value;
-        
         await submitPost({ username, userid, postname, postdata });
-        
-        // モーダルを閉じる
-        modal.style.setProperty('display', 'none', 'important');
-        modal.style.setProperty('visibility', 'hidden', 'important');
-        modal.style.setProperty('opacity', '0', 'important');
-        modal.classList.remove('show', 'visible');
-        
-        // フォームをクリア
+        resetModalState(modal);
         document.getElementById('postname-modal').value = '';
         document.getElementById('postdata-modal').value = '';
-      });
+      };
     }
   }
 
-  // 複数回試行してモーダルハンドラーを設定
+  // モーダルハンドラーは1回だけ呼ぶ
   setupModalHandlers();
-  
-  // 少し遅延してから再度試行
-  setTimeout(setupModalHandlers, 100);
-  setTimeout(setupModalHandlers, 500);
-  
+
   // 既存の投稿フォームは非表示に
   const oldPostForm = document.getElementById('post-form');
   if (oldPostForm) oldPostForm.style.display = 'none';
 
   // SCRロジック初期化
   initializeSCR();
+
   // --- 投稿・フィードAPIエンドポイント ---
   function getApiBase() {
     if (window.scr_url) return window.scr_url;
-    // CORS問題を回避するためのプロキシ使用
     return 'https://deep-school.onrender.com/posts';
   }
 
@@ -546,274 +471,30 @@ export function appInit(shell) {
   // --- Apple HIG風スタイルを追加 ---
   const style = document.createElement('style');
   style.innerHTML = `
-    .scr-feed-card {
-      background: #fff;
-      border-radius: 18px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      margin: 18px 0;
-      padding: 18px 20px 14px 20px;
-      transition: box-shadow 0.2s;
-      outline: none;
-    }
-    .scr-search-bar {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      max-width: 700px;
-      margin: 0 auto 20px auto;
-      padding: 16px 20px;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      border-radius: 16px;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-      z-index: 100;
-      position: sticky;
-      top: 0;
-      border: 1px solid rgba(0, 0, 0, 0.05);
-    }
-    
-    .scr-search-bar input {
-      flex: 1;
-      border: 1px solid #e0e4ea;
-      border-radius: 10px;
-      padding: 10px 14px;
-      font-size: 1em;
-      background: #fff;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    
-    .scr-search-bar input:focus {
-      outline: none;
-      border-color: #007aff;
-      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
-    }
-    
-    .scr-search-bar button {
-      background: #007aff;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      padding: 10px 20px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    
-    .scr-search-bar button:hover {
-      background: #005ecb;
-    }
-    .prominent-post-btn {
-      background: linear-gradient(90deg, #007aff 60%, #4fc3f7 100%);
-      color: #fff;
-      font-size: 1.12em;
-      font-weight: 700;
-      border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(0,122,255,0.13);
-      border: none;
-      padding: 12px 32px;
-      margin-top: 10px;
-      transition: background 0.2s, box-shadow 0.2s;
-      outline: none;
-    }
-    .prominent-post-btn:focus {
-      box-shadow: 0 0 0 3px #007aff55, 0 4px 16px rgba(0,122,255,0.13);
-    }
-    .prominent-post-btn:active {
-      background: #005ecb;
-    }
-    /* スクロール可能なフィード */
-    .scr-feed-scrollable {
-  min-height: 200px;
-  height: auto; /* 追加: 必ず高さを持たせる */
-  overflow-y: auto !important;
-  overflow-x: hidden;
-  margin-top: 8px;
-  margin-bottom: 8px;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-    }
-    .scr-feed-scrollable::-webkit-scrollbar {
-      width: 8px;
-      background: transparent;
-    }
-    .scr-feed-scrollable::-webkit-scrollbar-thumb {
-      background: #e0e4ea;
-      border-radius: 6px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-    .scr-feed-scrollable:focus {
-      outline: 2px solid #007aff;
-      outline-offset: -2px;
-    }
-    .scr-feed-card:focus {
-      box-shadow: 0 0 0 3px #007aff33, 0 2px 8px rgba(0,0,0,0.08);
-    }
-    .scr-feed-card-header {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      margin-bottom: 4px;
-    }
-    .scr-feed-username {
-      font-weight: 600;
-      color: #222;
-      font-size: 1.08em;
-    }
-    .scr-feed-userid {
-      color: #888;
-      font-size: 0.98em;
-    }
-    .scr-feed-title {
-      font-size: 1.12em;
-      font-weight: 500;
-      margin-bottom: 6px;
-      color: #007aff;
-    }
-    .scr-feed-content {
-      font-size: 1.04em;
-      color: #222;
+    .scr-feed-scrollable, #feed-content.scr-feed-scrollable {
+      min-height: 200px;
+      height: 60vh !important;
+      max-height: 60vh !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      margin-top: 8px;
       margin-bottom: 8px;
-      white-space: pre-wrap;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      width: 100%;
     }
-    .scr-feed-date {
-      color: #aaa;
-      font-size: 0.92em;
-      text-align: right;
-    }
-    .scr-feed-genre {
-      color: #007aff;
-      font-size: 0.88em;
-      font-weight: 500;
-      margin-top: 4px;
-      padding: 2px 8px;
-      background: rgba(0, 122, 255, 0.1);
-      border-radius: 8px;
-      display: inline-block;
-    }
-    .scr-feed-empty, .scr-feed-error {
-      color: #888;
-      text-align: center;
-      margin: 32px 0;
-      font-size: 1.1em;
-    }
-    .scr-post-icon-btn {
-      position: fixed !important;
-      top: 16px !important;
-      right: 16px !important;
-      background: #007bff;
-      border: none;
-      border-radius: 50%;
-      width: 52px;
-      height: 52px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: none;
-      cursor: pointer;
-      transition: none;
-      z-index: 10000 !important;
-    }
-    .scr-post-icon-btn:hover, .scr-post-icon-btn:focus, .scr-post-icon-btn:active {
-      background: #3290f4;
-      box-shadow: none;
-      outline: none;
-      transition: none;
-      transform: none;
-    }
-    @media (max-width: 600px) {
-      .scr-post-icon-btn {
-        top: 8px !important;
-        right: 8px !important;
-        width: 44px;
-        height: 44px;
-      }
-    }
-    .scr-post-modal {
-      background: rgba(0,0,0,0.4);
-      z-index: 999999;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      position: fixed;
-      left: 0; top: 0; right: 0; bottom: 0;
-      width: 100vw;
+    .page-container.full-screen.scr-bg {
+      min-height: 100vh;
       height: 100vh;
-      backdrop-filter: blur(8px);
-      pointer-events: auto;
-    }
-    .scr-post-modal[style*='display:flex'] {
-      display: flex !important;
-    }
-    .scr-post-modal.show {
-      display: flex !important;
-    }
-    .scr-post-modal.visible {
-      display: flex !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-    }
-    .scr-post-modal-content {
-      border-radius: 18px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-      background: #fff;
-      padding: 32px 24px 24px 24px;
-      max-width: 400px;
-      width: 90vw;
-      margin: 40px auto;
-      z-index: 1000000;
-      position: relative;
-      border: 1px solid rgba(0, 0, 0, 0.1);
-    }
-    .scr-post-form {
-      background: #f9f9fb;
-      border-radius: 16px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-      padding: 18px 16px 10px 16px;
-      margin-bottom: 18px;
       display: flex;
       flex-direction: column;
-      gap: 0.5em;
-    }
-    .scr-post-form-row {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 4px;
-    }
-    .scr-post-form-row input, .scr-post-form-row textarea {
-      border-radius: 10px;
-      border: 1px solid #ddd;
-      padding: 8px 12px;
-      font-size: 1em;
-      flex: 1;
-      box-sizing: border-box;
-    }
-    .scr-post-form textarea {
-      resize: vertical;
-      min-height: 36px;
-      max-height: 120px;
-    }
-    .scr-post-form .submit-button {
-      align-self: flex-end;
-      margin-top: 4px;
-      min-width: 120px;
-    }
-    html, body, .page-container.full-screen {
-      height: 100%;
-      min-height: 100vh;
-      margin: 0;
-      padding: 0;
-      width: 100vw;
-      box-sizing: border-box;
-      /* background: #f4f6fa; ← ここを削除してbody継承に */
     }
     .scr-feed.full-screen-feed {
-      width: 100%;
-      max-width: 700px;
-      margin: 0 auto;
-      min-height: 70vh;
-      padding: 20px 0 40px 0;
+      flex: 1 1 auto;
       display: flex;
       flex-direction: column;
+      justify-content: flex-start;
+      width: 100%;
     }
     .scr-feed-card {
       background: #fff;
@@ -842,11 +523,9 @@ export function appInit(shell) {
       width: 100vw;
       position: relative;
       z-index: 0;
-      /* background: none; ← ここを削除 */
     }
     .scr-bg::before {
       content: none !important;
-      /* background: none; ← ここを削除 */
       z-index: 1;
       pointer-events: none;
     }
@@ -867,18 +546,6 @@ export function appInit(shell) {
       min-height: 0 !important;
       padding: 0 !important;
       margin: 0 !important;
-    }
-    .page-container.full-screen.scr-bg {
-      min-height: 100vh;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    .scr-feed.full-screen-feed {
-      flex: 1 1 auto;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
     }
     .scr-user-info {
       text-align: center;
