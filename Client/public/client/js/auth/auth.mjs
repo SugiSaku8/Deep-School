@@ -153,6 +153,9 @@ export class SimpleAuthManager {
       // ユーザー情報を保存
       window.googleUserName = payload.name;
       window.googleUserId = payload.sub;
+      // SCR/menuアプリ用localStorageにも保存
+      localStorage.setItem('scr_username', payload.name);
+      localStorage.setItem('scr_userid', payload.sub);
       
       console.log("SimpleAuthManager: ユーザー情報", {
         name: window.googleUserName,
