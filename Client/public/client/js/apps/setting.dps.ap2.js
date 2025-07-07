@@ -131,15 +131,15 @@ export function appInit(shell) {
           <h2>アプリケーション情報</h2>
           <div class="setting-item">
             <label>バージョン:</label>
-            <span id="setting-version">0.3.0</span>
+            <span id="setting-version">0.3.7</span>
           </div>
           <div class="setting-item">
             <label>ビルド番号:</label>
-            <span id="setting-build">25C1016X1</span>
+            <span id="setting-build">25C1044X1</span>
           </div>
           <div class="setting-item">
             <label>最終更新:</label>
-            <span id="setting-updated">2025-07-04</span>
+            <span id="setting-updated">2025-07-07</span>
           </div>
           <div class="setting-item">
             <button class="auto-btn" id="check-update-btn">アップデートをチェック</button>
@@ -247,9 +247,9 @@ function updateUserInfo() {
   if (lastloginElement) lastloginElement.textContent = formattedDate;
   
   // バージョン情報を設定
-  if (versionElement) versionElement.textContent = '0.3.1';
-  if (buildElement) buildElement.textContent = '25C1000X1';
-  if (updatedElement) updatedElement.textContent = '2025-07-04';
+  if (versionElement) versionElement.textContent = '0.3.7';
+  if (buildElement) buildElement.textContent = '25C1044X1';
+  if (updatedElement) updatedElement.textContent = '2025-07-07';
 }
 
 function loadSettings() {
