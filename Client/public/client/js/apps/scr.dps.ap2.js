@@ -219,7 +219,7 @@ export function appInit(shell) {
   function getApiBase() {
     if (window.scr_url) return window.scr_url;
     // CORS問題を回避するためのプロキシ使用
-    return 'https://cors-anywhere.herokuapp.com/https://deep-school.onrender.com/posts';
+    return 'https://deep-school.onrender.com/posts';
   }
 
   // 再試行機能付きAPI呼び出し
@@ -483,7 +483,7 @@ export function appInit(shell) {
   // サーバー状態確認
   async function checkServerStatus() {
     try {
-      const res = await fetch('https://cors-anywhere.herokuapp.com/https://deep-school.onrender.com/', {
+      const res = await fetch('https://deep-school.onrender.com/', {
         method: 'GET',
         mode: 'cors',
         credentials: 'omit',
