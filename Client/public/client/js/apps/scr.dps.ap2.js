@@ -496,6 +496,29 @@ export function appInit(shell) {
       justify-content: flex-start;
       width: 100%;
     }
+    /* フィードの文字色を明示的に指定 */
+    .scr-feed-card {
+      color: #222 !important;
+      background: #fff !important;
+    }
+    .scr-feed-title {
+      color: #007aff !important;
+    }
+    .scr-feed-content {
+      color: #222 !important;
+    }
+    .scr-feed-username {
+      color: #222 !important;
+    }
+    .scr-feed-userid {
+      color: #888 !important;
+    }
+    .scr-feed-date {
+      color: #888 !important;
+    }
+    .scr-feed-genre {
+      color: #007aff !important;
+    }
     .scr-feed-card {
       background: #fff;
       border-radius: 18px;
