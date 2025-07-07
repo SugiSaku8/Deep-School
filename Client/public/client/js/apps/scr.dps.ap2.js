@@ -33,21 +33,7 @@ export function appInit(shell) {
       <div id="feed" class="scr-feed full-screen-feed">
         <h2>フィード</h2>
       </div>
-      
-      <!-- 投稿フォームをフィード外に移動 -->
-      <form id="scr-post-form" class="scr-post-form" style="display:flex;">
-        <div class="scr-post-form-row">
-          <input type="text" id="username" placeholder="ユーザー名" required autocomplete="username">
-          <input type="text" id="userid" placeholder="ユーザーID" required autocomplete="userid">
-        </div>
-        <div class="scr-post-form-row">
-          <input type="text" id="postname" placeholder="ポスト名" required>
-        </div>
-        <div class="scr-post-form-row">
-          <textarea id="postdata" placeholder="ポスト内容" required rows="2"></textarea>
-        </div>
-        <button type="submit" id="post-button" class="button-chalk submit-button prominent-post-btn">ポストする</button>
-      </form>
+
       
       <div id="feed-content" class="scr-feed-scrollable" tabindex="0" aria-label="投稿フィード"></div>
       <div id="scr-post-modal" class="scr-post-modal" style="display:none;">
@@ -1089,24 +1075,5 @@ export function appInit(shell) {
     return { username, userid };
   }
 
-  // --- 常設投稿フォームの送信処理 ---
-  const postForm = document.getElementById('scr-post-form');
-  if (postForm) {
-    postForm.onsubmit = async (e) => {
-      e.preventDefault();
-      
-      // ユーザー情報を自動取得
-      const { username, userid } = await ensureUserInfo();
-      console.log('[SCR] Using user info for post (inline form):', { username, userid });
-      
-      const postname = document.getElementById('postname').value;
-      const postdata = document.getElementById('postdata').value;
-      
-      await submitPost({ username, userid, postname, postdata });
-      
-      // 入力欄クリア
-      document.getElementById('postname').value = '';
-      document.getElementById('postdata').value = '';
-    };
-  }
+ 
 } 
