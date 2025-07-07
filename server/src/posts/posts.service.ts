@@ -28,7 +28,7 @@ export class PostsService {
 
     const createdPost = new this.postModel(postData);
     await createdPost.save();
-    return { message: 'The post was successful!' };
+    return { message: 'The post was successful!', post: createdPost };
   }
 
   async getAllPosts(): Promise<Post[]> {

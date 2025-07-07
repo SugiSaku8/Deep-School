@@ -284,6 +284,8 @@ export function appInit(shell) {
     const feed = document.getElementById('feed-content');
     if (!Array.isArray(posts) || posts.length === 0) {
       feed.innerHTML = '<div class="scr-feed-empty">投稿はまだありません</div>';
+      // 現在のフィードを保存
+      feed._currentFeed = [];
       return;
     }
     feed.innerHTML = posts.map(post => {
@@ -321,6 +323,8 @@ export function appInit(shell) {
       `;
     }).join('');
     
+    // 現在のフィードを保存
+    feed._currentFeed = posts;
     // 返信ボタンのイベントリスナーを設定
     setupReplyHandlers();
     
@@ -460,8 +464,23 @@ export function appInit(shell) {
       const result = await res.json();
       console.log('[SCR] Post submitted successfully:', result);
       
-      // フィード再取得（新規投稿のハイライトは後で実装）
-      await fetchFeed();
+      if (result.post) {
+        // 既存のフィードを取得
+        let feed = [];
+        const feedDiv = document.getElementById('feed-content');
+        if (feedDiv && feedDiv._currentFeed) {
+          feed = Array.isArray(feedDiv._currentFeed) ? feedDiv._currentFeed : [];
+        }
+        // 先頭に新しい投稿を追加
+        feed.unshift(result.post);
+        // フィードを再描画
+        renderFeed(feed);
+        // 現在のフィードを保存
+        if (feedDiv) feedDiv._currentFeed = feed;
+      } else {
+        // フォールバック：全件再取得
+        await fetchFeed();
+      }
     } catch (e) {
       console.error('[SCR] Post submission failed after retries:', e);
       alert(`投稿に失敗しました: ${e.message}`);
