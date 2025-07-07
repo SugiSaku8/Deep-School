@@ -1350,7 +1350,7 @@ body::-webkit-scrollbar {
 /* SCR フィード UI */
 #feed {
   margin: 32px auto 0 auto;
-  max-width: 600px;
+  max-width: 70%;
   padding: 0 8px;
 }
 .feed-item {

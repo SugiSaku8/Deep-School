@@ -637,13 +637,15 @@ export function appInit(shell) {
     }
     /* スクロール可能なフィード */
     .scr-feed-scrollable {
-      max-height: 20%;
-     overflow-y: scroll;
-      padding-right: 4px;
-      margin-top: 8px;
-      margin-bottom: 8px;
-      scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch;
+      max-height: 60vh;
+  min-height: 200px;
+  height: 60vh; /* 追加: 必ず高さを持たせる */
+  overflow-y: auto !important;
+  overflow-x: hidden;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
     }
     .scr-feed-scrollable::-webkit-scrollbar {
       width: 8px;
@@ -882,7 +884,16 @@ export function appInit(shell) {
       margin: 0 !important;
     }
     .page-container.full-screen.scr-bg {
-      position: relative;
+      min-height: 100vh;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .scr-feed.full-screen-feed {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
     }
     .scr-user-info {
       text-align: center;
