@@ -218,7 +218,8 @@ export function appInit(shell) {
   // --- 投稿・フィードAPIエンドポイント ---
   function getApiBase() {
     if (window.scr_url) return window.scr_url;
-    return 'https://deep-school.onrender.com/posts';
+    // CORS問題を回避するためのプロキシ使用
+    return 'https://cors-anywhere.herokuapp.com/https://deep-school.onrender.com/posts';
   }
 
   // 再試行機能付きAPI呼び出し
@@ -229,6 +230,8 @@ export function appInit(shell) {
       credentials: 'omit',
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
         ...options.headers
       }
     };
@@ -480,7 +483,15 @@ export function appInit(shell) {
   // サーバー状態確認
   async function checkServerStatus() {
     try {
-      const res = await fetch('http://localhost:8080/');
+      const res = await fetch('https://cors-anywhere.herokuapp.com/https://deep-school.onrender.com/', {
+        method: 'GET',
+        mode: 'cors',
+        credentials: 'omit',
+        headers: {
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      });
       if (res.ok) {
         console.log('[SCR] Server is running');
         return true;
@@ -492,6 +503,7 @@ export function appInit(shell) {
           <h3>サーバーに接続できません</h3>
           <p>サーバーが起動しているか確認してください。</p>
           <p>エラー: ${e.message}</p>
+          <p>詳細: CORS設定またはネットワーク接続の問題の可能性があります。</p>
         </div>
       `;
       return false;
