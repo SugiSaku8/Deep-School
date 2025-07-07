@@ -283,18 +283,44 @@ export function appInit(shell) {
       feed.innerHTML = '<div class="scr-feed-empty">投稿はまだありません</div>';
       return;
     }
-    feed.innerHTML = posts.map(post => `
-      <div class="scr-feed-card${highlightId && post.PostId === highlightId ? ' active' : ''}" tabindex="0" aria-label="投稿" data-postid="${post.PostId || ''}">
-        <div class="scr-feed-card-header">
-          <span class="scr-feed-username">${escapeHTML(post.UserName)}</span>
-          <span class="scr-feed-userid">@${escapeHTML(post.UserId)}</span>
+    feed.innerHTML = posts.map(post => {
+      const isReply = post.Genre === '@reply';
+      const replyToPostId = post.LinkerData && post.LinkerData.length > 0 && post.LinkerData[0].replyed;
+      
+      return `
+        <div class="scr-feed-card${highlightId && post.PostId === highlightId ? ' active' : ''}${isReply ? ' scr-reply-card' : ''}" tabindex="0" aria-label="投稿" data-postid="${post.PostId || ''}">
+          ${isReply && replyToPostId ? `<div class="scr-reply-indicator">↳ 返信: ${replyToPostId}</div>` : ''}
+          <div class="scr-feed-card-header">
+            <span class="scr-feed-username">${escapeHTML(post.UserName)}</span>
+            <span class="scr-feed-userid">@${escapeHTML(post.UserId)}</span>
+            ${isReply ? '<span class="scr-reply-badge">返信</span>' : ''}
+          </div>
+          <div class="scr-feed-title">${escapeHTML(post.PostName)}</div>
+          <div class="scr-feed-content">${escapeHTML(post.PostData)}</div>
+          <div class="scr-feed-date">${formatDate(post.PostTime)}</div>
+          <div class="scr-feed-genre">${escapeHTML(post.LikerData || '')}</div>
+          <div class="scr-feed-actions">
+            <button class="scr-reply-btn" data-postid="${post.PostId}" aria-label="返信">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9,17 15,17 15,11 21,11 21,5 15,5 15,11 9,11"></polyline>
+              </svg>
+              返信
+            </button>
+          </div>
+          <div class="scr-reply-form" id="reply-form-${post.PostId}" style="display:none;">
+            <textarea class="scr-reply-textarea" placeholder="返信を入力してください..." rows="3"></textarea>
+            <div class="scr-reply-actions">
+              <button class="scr-reply-submit-btn" data-postid="${post.PostId}">返信を送信</button>
+              <button class="scr-reply-cancel-btn" data-postid="${post.PostId}">キャンセル</button>
+            </div>
+          </div>
         </div>
-        <div class="scr-feed-title">${escapeHTML(post.PostName)}</div>
-        <div class="scr-feed-content">${escapeHTML(post.PostData)}</div>
-        <div class="scr-feed-date">${formatDate(post.PostTime)}</div>
-        <div class="scr-feed-genre">${escapeHTML(post.LikerData || '')}</div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
+    
+    // 返信ボタンのイベントリスナーを設定
+    setupReplyHandlers();
+    
     // アニメーション解除用
     if (highlightId) {
       const el = feed.querySelector('.scr-feed-card.active');
@@ -313,6 +339,97 @@ export function appInit(shell) {
     if (!dateStr) return '';
     const d = new Date(dateStr);
     return d.toLocaleString('ja-JP', { dateStyle: 'short', timeStyle: 'short' });
+  }
+
+  // 返信ハンドラー設定
+  function setupReplyHandlers() {
+    // 返信ボタンクリック
+    document.querySelectorAll('.scr-reply-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const postId = btn.getAttribute('data-postid');
+        const replyForm = document.getElementById(`reply-form-${postId}`);
+        if (replyForm) {
+          replyForm.style.display = 'block';
+          replyForm.querySelector('.scr-reply-textarea').focus();
+        }
+      });
+    });
+
+    // 返信送信ボタンクリック
+    document.querySelectorAll('.scr-reply-submit-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const postId = btn.getAttribute('data-postid');
+        const replyForm = document.getElementById(`reply-form-${postId}`);
+        const textarea = replyForm.querySelector('.scr-reply-textarea');
+        const replyText = textarea.value.trim();
+        
+        if (!replyText) {
+          alert('返信内容を入力してください');
+          return;
+        }
+        
+        await submitReply(postId, replyText);
+        
+        // フォームをクリアして非表示
+        textarea.value = '';
+        replyForm.style.display = 'none';
+      });
+    });
+
+    // 返信キャンセルボタンクリック
+    document.querySelectorAll('.scr-reply-cancel-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const postId = btn.getAttribute('data-postid');
+        const replyForm = document.getElementById(`reply-form-${postId}`);
+        const textarea = replyForm.querySelector('.scr-reply-textarea');
+        
+        // フォームをクリアして非表示
+        textarea.value = '';
+        replyForm.style.display = 'none';
+      });
+    });
+  }
+
+  // 返信送信関数
+  async function submitReply(parentPostId, replyText) {
+    try {
+      const { username, userid } = await ensureUserInfo();
+      const currentTime = new Date().toISOString();
+      
+      const replyData = {
+        UserName: username,
+        UserId: userid,
+        PostName: `返信: ${parentPostId}`,
+        PostTime: currentTime,
+        PostData: replyText,
+        Genre: '@reply',
+        LinkerData: [
+          {
+            replyed: parentPostId
+          }
+        ]
+      };
+      
+      console.log('[SCR] Submitting reply:', replyData);
+      
+      const res = await fetchWithRetry(`${getApiBase()}/create`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(replyData)
+      });
+      
+      const result = await res.json();
+      console.log('[SCR] Reply submitted successfully:', result);
+      
+      // フィード再取得
+      await fetchFeed();
+    } catch (e) {
+      console.error('[SCR] Reply submission failed after retries:', e);
+      alert(`返信に失敗しました: ${e.message}`);
+    }
   }
 
   // 投稿送信関数
@@ -746,6 +863,146 @@ export function appInit(shell) {
       font-size: 0.9em;
       color: #007aff;
       font-weight: 500;
+    }
+    
+    /* 返信機能のスタイル */
+    .scr-feed-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #f0f0f0;
+    }
+    
+    .scr-reply-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #f8f9fa;
+      border: 1px solid #e0e4ea;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 0.9em;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.2s;
+      outline: none;
+    }
+    
+    .scr-reply-btn:hover {
+      background: #e9ecef;
+      border-color: #007aff;
+      color: #007aff;
+    }
+    
+    .scr-reply-btn:focus {
+      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+    }
+    
+    .scr-reply-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+    
+    .scr-reply-form {
+      margin-top: 12px;
+      padding: 16px;
+      background: #f8f9fa;
+      border-radius: 12px;
+      border: 1px solid #e0e4ea;
+    }
+    
+    .scr-reply-textarea {
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 0.95em;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 60px;
+      box-sizing: border-box;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    
+    .scr-reply-textarea:focus {
+      border-color: #007aff;
+      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+    }
+    
+    .scr-reply-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      justify-content: flex-end;
+    }
+    
+    .scr-reply-submit-btn {
+      background: #007aff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 0.9em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      outline: none;
+    }
+    
+    .scr-reply-submit-btn:hover {
+      background: #005ecb;
+    }
+    
+    .scr-reply-submit-btn:focus {
+      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+    }
+    
+    .scr-reply-cancel-btn {
+      background: #f8f9fa;
+      color: #666;
+      border: 1px solid #e0e4ea;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 0.9em;
+      cursor: pointer;
+      transition: all 0.2s;
+      outline: none;
+    }
+    
+    .scr-reply-cancel-btn:hover {
+      background: #e9ecef;
+      border-color: #007aff;
+      color: #007aff;
+    }
+    
+    .scr-reply-cancel-btn:focus {
+      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+    }
+    
+    /* 返信投稿の視覚的区別 */
+    .scr-reply-card {
+      background: #f8f9fa;
+      border-left: 4px solid #007aff;
+      margin-left: 20px;
+    }
+    
+    .scr-reply-indicator {
+      font-size: 0.85em;
+      color: #007aff;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    
+    .scr-reply-badge {
+      background: #007aff;
+      color: #fff;
+      font-size: 0.75em;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-weight: 600;
+      margin-left: 8px;
     }
   `;
   document.head.insertBefore(style, document.head.lastChild);
