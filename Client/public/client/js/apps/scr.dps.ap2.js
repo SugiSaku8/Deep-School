@@ -846,9 +846,9 @@ export function appInit(shell) {
       "InTheMorning",
       "Wanted!",
       "Whoo",
-      "Love Me",
-      "Love You",
-      "Ao To Natsu",
+      "LoveMe",
+      "LoveYou",
+      "AoToNatsu",
       "Tenbyou",
       "Romanticism",
       "Soranji",
@@ -880,6 +880,7 @@ export function appInit(shell) {
       "FACTORY",
       "umbrella",
       "JOURNEY",
+      "Attitude"
     ];
     const nouns = [
       "User",
