@@ -277,8 +277,15 @@ export function appInit(shell) {
     
     .submit-button,
     .login-button {
-      padding: 10px 20px;
-      font-size: 1rem;
+      padding: 14px 0;
+      font-size: 1.15rem;
+      width: 90%;
+      min-width: 180px;
+      min-height: 48px;
+      max-width: 100%;
+      margin: 0 auto 0.5rem auto;
+      display: block;
+      border-radius: 14px;
     }
   }
   </style>
