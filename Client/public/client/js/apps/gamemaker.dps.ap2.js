@@ -589,7 +589,54 @@ export function appInit(shell) {
         </div>
       </div>
     `;
-    // ...既存のイベント・エディタ描画・アセット管理・AIサポート・プレビュー描画はそのまま...
+    // イベント: スクラッチ型
+    const scratchBtn = document.getElementById('gm-scratch-btn');
+    if (scratchBtn) scratchBtn.onclick = () => {
+      renderEditor('scratch', loadedProject);
+      updatePreview();
+    };
+    // イベント: コード型
+    const codeBtn = document.getElementById('gm-code-btn');
+    if (codeBtn) codeBtn.onclick = () => {
+      renderEditor('code', loadedProject);
+      updatePreview();
+    };
+    // アセット追加
+    const addAssetBtn = document.getElementById('gm-add-asset-btn');
+    if (addAssetBtn) addAssetBtn.onclick = () => {
+      const type = prompt('追加するアセットの種類を選択してください (image, sound)');
+      if (type && ['image', 'sound'].includes(type)) {
+        const name = prompt('アセットの名前を入力してください');
+        if (name) {
+          const newAsset = { id: Date.now(), type: type, name: name };
+          assets.push(newAsset);
+          updateAssetList();
+        }
+      }
+    };
+    // アセット削除
+    document.querySelectorAll('.gm-asset-list .pickramu-load-button.gm-remove-btn').forEach(btn => {
+      btn.onclick = () => {
+        const assetId = btn.getAttribute('data-id');
+        assets = assets.filter(a => a.id !== assetId);
+        updateAssetList();
+      };
+    });
+    // プロジェクト保存
+    const saveProjectBtn = document.getElementById('gm-save-project-btn');
+    if (saveProjectBtn) saveProjectBtn.onclick = () => {
+      const project = {
+        id: loadedProject?.id || Date.now(),
+        name: projectName || '新しいプロジェクト',
+        assets: assets,
+        scratchBlocks: scratchBlocks,
+        codeValue: codeValue,
+        createdAt: loadedProject?.createdAt || new Date().toISOString()
+      };
+      addProject(project);
+      alert('プロジェクトを保存しました！');
+      renderHome();
+    };
     // プレビュー描画を右カラムに反映
     function updatePreview() {
       const previewPanel = document.getElementById('gm-preview-panel');
