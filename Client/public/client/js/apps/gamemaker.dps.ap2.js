@@ -9,7 +9,6 @@
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', 'Helvetica Neue', Arial, sans-serif;
-      background: linear-gradient(120deg, #f8fafc 0%, #e9eff5 100%);
       color: #222;
       min-height: 100vh;
     }
@@ -960,9 +959,9 @@ export function appInit(shell) {
     if (!root) return;
     root.innerHTML = `
       <div class="page-container" id="gm-preview-mode">
-        <header class="card">
-          <h1 class="title">ゲームプレビュー</h1>
-          <button class="pickramu-load-button secondary gm-back" id="gm-back-edit" aria-label="編集に戻る">← 編集に戻る</button>
+        <header class="card" style="width:100%;max-width:480px;position:relative;">
+          <button class="pickramu-load-button secondary gm-back" id="gm-back-home" aria-label="ホームに戻る" style="position:absolute;left:1.2rem;top:1.2rem;z-index:2;">← ホーム</button>
+          <h1 class="title" style="margin-top:0.5rem;">ゲームプレビュー</h1>
         </header>
         <main class="card">
           <div class="preview-canvas-wrap">
@@ -1083,8 +1082,8 @@ export function appInit(shell) {
       draw();
     };
     // 戻るボタン
-    const backBtn = document.getElementById('gm-back-edit');
-    if (backBtn) backBtn.onclick = () => renderCreate({ assets, scratchBlocksTree, codeValue });
+    const backHomeBtn = document.getElementById('gm-back-home');
+    if (backHomeBtn) backHomeBtn.onclick = () => renderHome();
     // コード型ロジック反映
     try {
       if (codeValue && codeValue.trim() && codeValue.trim().startsWith('//') === false) {
