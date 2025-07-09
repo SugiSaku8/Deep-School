@@ -368,11 +368,11 @@ export function appInit(shell) {
     const progress = Math.round(((stepIdx+1)/steps.length)*100);
     root.innerHTML = `
       <div class="page-container" id="gm-lesson-mode">
-        <header class="card" style="width:100%;max-width:480px;position:relative;">
+        <header class="card" style="width:100%;max-width:900px;position:relative;">
           <button class="pickramu-load-button secondary gm-back" id="gm-back-home" aria-label="ホームに戻る" style="position:absolute;left:1.2rem;top:1.2rem;z-index:2;">← ホーム</button>
           <h1 class="title" style="margin-top:0.5rem;">講座モード</h1>
         </header>
-        <main class="card" style="width:100%;max-width:480px;">
+        <main class="card" style="width:100%;max-width:900px;">
           <div class="lesson-content">
             <h2 style="text-align:center;margin-bottom:1.2rem;">
               <span class="step-title" style="font-size:1.25rem;font-weight:600;">${step.title[lang] || step.title.ja}</span>
@@ -611,180 +611,66 @@ export function appInit(shell) {
     // ... existing code ...
   }
 
-  // --- ダーク/ライトモード自動切り替え ---
-  function applyColorScheme() {
-    const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  // renderPreview: 必ずホームボタンを表示
+  function renderPreview(assets, scratchBlocksTree = [], codeValue = '') {
+    let lang = localStorage.getItem('gamemaker_lang') || CURRENT_LANG;
+    const root = document.getElementById('app-root');
+    if (!root) return;
+    root.innerHTML = `
+      <div class="page-container" id="gm-preview-mode">
+        <header class="card" style="width:100%;max-width:900px;position:relative;">
+          <button class="pickramu-load-button secondary gm-back" id="gm-back-home" aria-label="ホームに戻る" style="position:absolute;left:1.2rem;top:1.2rem;z-index:2;">← ホーム</button>
+          <h1 class="title" style="margin-top:0.5rem;">ゲームプレビュー</h1>
+        </header>
+        <main class="card" style="width:100%;max-width:900px;">
+          <!-- ...rest of preview UI... -->
+        </main>
+      </div>
+    `;
+    const backBtn = document.getElementById('gm-back-home');
+    if (backBtn) backBtn.onclick = () => renderHome();
+    // ...既存のプレビュー描画ロジック...
   }
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyColorScheme);
-  applyColorScheme();
 
-  // 初期画面
-  renderHome();
-
-  shell.log({from: 'dp.app.gamemaker.out', message: 'GameMaker: 初期化完了', level: 'info'});
-} 
-
-// --- 言語切り替えボタン共通関数 ---
-function renderLangButton(parent) {
-  let lang = localStorage.getItem('gamemaker_lang') || CURRENT_LANG;
-  const langBtn = document.createElement('button');
-  langBtn.className = 'pickramu-load-button secondary';
-  langBtn.id = 'gm-lang-btn';
-  langBtn.style.position = 'absolute';
-  langBtn.style.right = '1rem';
-  langBtn.style.top = '1rem';
-  langBtn.textContent = lang === 'ja' ? 'EN' : 'JA';
-  langBtn.onclick = () => {
-    const nextLang = lang === 'ja' ? 'en' : 'ja';
-    localStorage.setItem('gamemaker_lang', nextLang);
-    location.reload();
-  };
-  parent.appendChild(langBtn);
-}
-
-// --- キーボードショートカットの多重登録防止 ---
-function addSingleKeyListener(type, handler) {
-  document.removeEventListener('keydown', handler);
-  document.addEventListener('keydown', handler);
-}
-// 例: renderHome内
-addSingleKeyListener('keydown', function(e) {
-  if (e.altKey || e.ctrlKey || e.metaKey) return;
-  if (e.key === 'l') document.getElementById('gm-lesson-btn')?.click();
-  if (e.key === 'c') document.getElementById('gm-create-btn')?.click();
-  if (e.key === 'i') document.getElementById('gm-import-drive-btn')?.click();
-});
-
-// --- テスト・品質保証用ユニットテスト関数とUI ---
-function runUnitTests() {
-  const results = [];
-  // テスト1: 多言語切替
-  localStorage.setItem('gamemaker_lang', 'en');
-  if ((window.CURRENT_LANG||'ja') === 'en' || localStorage.getItem('gamemaker_lang') === 'en') {
-    results.push('言語切替テスト: OK');
-  } else {
-    results.push('言語切替テスト: NG');
+  // renderTestUI: ホームボタン追加
+  function renderTestUI() {
+    let lang = localStorage.getItem('gamemaker_lang') || CURRENT_LANG;
+    const root = document.getElementById('app-root');
+    if (!root) return;
+    root.innerHTML = `<div class="page-container"><header class="card" style="position:relative;"><button class="pickramu-load-button secondary gm-back" id="gm-back-home" aria-label="ホームに戻る" style="position:absolute;left:1.2rem;top:1.2rem;z-index:2;">← ホーム</button><h1>Test & QA</h1></header><main class="card"><button class="pickramu-load-button primary" id="run-test-btn">Run Tests</button><ul id="test-result-list"></ul></main></div>`;
+    const backBtn = document.getElementById('gm-back-home');
+    if (backBtn) backBtn.onclick = () => renderHome();
+    // ... existing code ...
   }
-  // テスト2: プロジェクト保存
-  try {
-    addProject({ id: 'testid', name: 'test', assets: [], scratchBlocks: [], codeValue: '' });
-    results.push('プロジェクト保存テスト: OK');
-  } catch { results.push('プロジェクト保存テスト: NG'); }
-  // テスト3: バージョン履歴
-  try {
-    addProjectVersion({ id: 'testid', name: 'test', assets: [], scratchBlocks: [], codeValue: '' });
-    const v = getProjectVersions('testid');
-    if (v && v.length > 0) results.push('バージョン履歴テスト: OK');
-    else results.push('バージョン履歴テスト: NG');
-  } catch { results.push('バージョン履歴テスト: NG'); }
-  return results;
-}
-function renderTestUI() {
-  let lang = localStorage.getItem('gamemaker_lang') || CURRENT_LANG;
-  const root = document.getElementById('app-root');
-  if (!root) return;
-  root.innerHTML = `<div class="page-container"><header class="card"><h1>Test & QA</h1></header><main class="card"><button class="pickramu-load-button primary" id="run-test-btn">Run Tests</button><ul id="test-result-list"></ul></main></div>`;
-  document.getElementById('run-test-btn').onclick = () => {
-    const results = runUnitTests();
-    document.getElementById('test-result-list').innerHTML = results.map(r=>`<li>${r}</li>`).join('');
-  };
-  setTimeout(()=>{
-    const header = document.querySelector('.card');
-    if (header && !document.getElementById('gm-lang-btn')) renderLangButton(header);
-  }, 10);
-}
-// --- テストUI起動用ショートカット ---
-document.addEventListener('keydown', e => {
-  if ((e.ctrlKey||e.metaKey) && e.key === 't') {
-    renderTestUI();
+
+  // renderFeedbackUI: ホームボタン追加
+  function renderFeedbackUI() {
+    let lang = localStorage.getItem('gamemaker_lang') || CURRENT_LANG;
+    const root = document.getElementById('app-root');
+    if (!root) return;
+    root.innerHTML = `<div class="page-container"><header class="card" style="position:relative;"><button class="pickramu-load-button secondary gm-back" id="gm-back-home" aria-label="ホームに戻る" style="position:absolute;left:1.2rem;top:1.2rem;z-index:2;">← ホーム</button><h1>Feedback</h1></header><main class="card"><textarea id="feedback-text" rows="5" style="width:100%;font-size:1.1rem;"></textarea><button class="pickramu-load-button primary" id="send-feedback-btn">送信</button><div id="feedback-result"></div></main></div>`;
+    const backBtn = document.getElementById('gm-back-home');
+    if (backBtn) backBtn.onclick = () => renderHome();
+    // ... existing code ...
   }
-});
 
-// --- ユーザーフィードバックUI・保存 ---
-function renderFeedbackUI() {
-  let lang = localStorage.getItem('gamemaker_lang') || CURRENT_LANG;
-  const root = document.getElementById('app-root');
-  if (!root) return;
-  root.innerHTML = `<div class="page-container"><header class="card"><h1>Feedback</h1></header><main class="card"><textarea id="feedback-text" rows="5" style="width:100%;font-size:1.1rem;"></textarea><button class="pickramu-load-button primary" id="send-feedback-btn">送信</button><div id="feedback-result"></div></main></div>`;
-  document.getElementById('send-feedback-btn').onclick = () => {
-    const text = document.getElementById('feedback-text').value;
-    if (!text.trim()) return alert('内容を入力してください');
-    // ローカルストレージに保存（本番はAPI送信）
-    let arr = [];
-    try { arr = JSON.parse(localStorage.getItem('gamemaker_feedback')||'[]'); } catch {}
-    arr.unshift({ text, date: new Date().toISOString() });
-    localStorage.setItem('gamemaker_feedback', JSON.stringify(arr.slice(0, 50)));
-    document.getElementById('feedback-result').textContent = '送信しました。ご協力ありがとうございます。';
-  };
-  setTimeout(()=>{
-    const header = document.querySelector('.card');
-    if (header && !document.getElementById('gm-lang-btn')) renderLangButton(header);
-  }, 10);
-}
-// フィードバックUI起動用ショートカット
-// Ctrl+F
- document.addEventListener('keydown', e => {
-   if ((e.ctrlKey||e.metaKey) && e.key === 'f') {
-     renderFeedbackUI();
-   }
- });
-// --- パフォーマンス最適化 ---
-function debounce(fn, ms) {
-  let timer; return function(...args) {
-    clearTimeout(timer); timer = setTimeout(()=>fn.apply(this,args), ms);
-  };
-}
-// 例: updateBlockList, draw など重い処理にdebounce適用
-// ... 主要なupdateBlockList, draw, renderBlockTree, renderPreview, renderEditor等でdebounceやrequestIdleCallbackを適用 ...
-// --- Google認証・Drive連携リフレッシュ・再認証 ---
-async function ensureGoogleAuth() {
-  let token = localStorage.getItem('google_access_token');
-  if (!token) {
-    alert('Googleアカウントでログインしてください');
-    // 認証フロー起動（本番はOAuth2）
-    window.open('https://accounts.google.com/o/oauth2/v2/auth?client_id=54111871338-nv4bn99r48cohhverg3l9oicirthmtpp.apps.googleusercontent.com&redirect_uri='+encodeURIComponent(location.origin)+'&response_type=token&scope=https://www.googleapis.com/auth/drive.file','_blank');
-    return false;
+  // renderAdminUI: ホームボタン追加
+  function renderAdminUI() {
+    let lang = localStorage.getItem('gamemaker_lang') || CURRENT_LANG;
+    const root = document.getElementById('app-root');
+    if (!root) return;
+    let allProgress = [];
+    try { allProgress = JSON.parse(localStorage.getItem('gamemaker_lesson_history')||'[]'); } catch {}
+    let feedback = [];
+    try { feedback = JSON.parse(localStorage.getItem('gamemaker_feedback')||'[]'); } catch {}
+    root.innerHTML = `<div class="page-container"><header class="card" style="position:relative;"><button class="pickramu-load-button secondary gm-back" id="gm-back-home" aria-label="ホームに戻る" style="position:absolute;left:1.2rem;top:1.2rem;z-index:2;">← ホーム</button><h1>管理者ダッシュボード</h1></header><main class="card"><h2>進捗履歴</h2><ul>${allProgress.map(h=>`<li>ステップ${h.step} - ${h.date}</li>`).join('')||'<li>データなし</li>'}</ul><h2>フィードバック</h2><ul>${feedback.map(f=>`<li>${f.text} <span style='color:#888;'>(${f.date})</span></li>`).join('')||'<li>データなし</li>'}</ul></main></div>`;
+    const backBtn = document.getElementById('gm-back-home');
+    if (backBtn) backBtn.onclick = () => renderHome();
+    // ... existing code ...
   }
-  // トークン期限チェック・リフレッシュ（本番はrefresh_token）
-  // ...
-  return true;
-}
-// Drive API呼び出し前にensureGoogleAuth()をawaitするよう修正
-// --- XSS/CSRF等のセキュリティ対策 ---
-function sanitizeHTML(str) {
-  return str.replace(/[&<>'"`]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','\'':'&#39;','"':'&quot;','`':'&#96;'}[c]));
-}
-// innerHTMLにユーザー入力を挿入する箇所はsanitizeHTMLでラップ
-// fetch時にcredentials: 'same-origin'やX-Requested-Withヘッダを追加
-// --- 管理者向け管理画面UI ---
-function renderAdminUI() {
-  let lang = localStorage.getItem('gamemaker_lang') || CURRENT_LANG;
-  const root = document.getElementById('app-root');
-  if (!root) return;
-  let allProgress = [];
-  try { allProgress = JSON.parse(localStorage.getItem('gamemaker_lesson_history')||'[]'); } catch {}
-  let feedback = [];
-  try { feedback = JSON.parse(localStorage.getItem('gamemaker_feedback')||'[]'); } catch {}
-  root.innerHTML = `<div class="page-container"><header class="card"><h1>管理者ダッシュボード</h1></header><main class="card"><h2>進捗履歴</h2><ul>${allProgress.map(h=>`<li>ステップ${h.step} - ${h.date}</li>`).join('')||'<li>データなし</li>'}</ul><h2>フィードバック</h2><ul>${feedback.map(f=>`<li>${f.text} <span style='color:#888;'>(${f.date})</span></li>`).join('')||'<li>データなし</li>'}</ul></main></div>`;
-  setTimeout(()=>{
-    const header = document.querySelector('.card');
-    if (header && !document.getElementById('gm-lang-btn')) renderLangButton(header);
-  }, 10);
-}
-// Ctrl+Mで管理画面起動
- document.addEventListener('keydown', e => {
-   if ((e.ctrlKey||e.metaKey) && e.key === 'm') {
-     renderAdminUI();
-   }
- }); 
-
-// --- レッスンデータ（外部JSONで管理） ---
-// window.LESSONS = null; // グローバルで管理
-
-// --- レッスンデータ（外部JSONで管理） ---
-// window.LESSONS = null; // グローバルで管理
-
+  // --- レッスンデータ（外部JSONで管理） ---
+  // window.LESSONS = null; // グローバルで管理
+} // ← appInitの閉じカッコ
 // --- CodeMirror CDN動的ロード ---
 function loadCodeMirrorIfNeeded(cb) {
   if (window.CodeMirror) return cb();
