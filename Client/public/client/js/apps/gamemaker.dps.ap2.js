@@ -47,7 +47,6 @@ export function appInit(shell) {
   // 初期化時にCURRENT_LANGをlocalStorageから取得
   let lang = localStorage.getItem('gamemaker_lang') || CURRENT_LANG;
   if (lang !== CURRENT_LANG) {
-    // config.jsのCURRENT_LANGを書き換え（ESMのため再import不可、window変数で上書き）
     window.CURRENT_LANG = lang;
   }
 
@@ -57,79 +56,36 @@ export function appInit(shell) {
     if (!root) return;
     const projects = loadProjects();
     root.innerHTML = `
-      <div class="gm-container" id="gamemaker-app" role="main" aria-label="GameMakerホーム画面">
-        <header class="gm-header" role="banner">
-          <h1 class="gm-title" id="gm-title">${t('gamemaker_title', CURRENT_LANG) || 'GameMaker'}</h1>
-          <p class="gm-desc">${t('gamemaker_desc', CURRENT_LANG) || '2Dゲームを作ろう！モードを選んでスタート'}</p>
-          <button class="gm-btn gm-secondary" id="gm-lang-btn" style="position:absolute;right:1rem;top:1rem;">${CURRENT_LANG==='ja'?'EN':'JA'}</button>
+      <div class="page-container" id="gamemaker-app" role="main" aria-label="GameMakerホーム画面">
+        <header class="card">
+          <h1 class="title" id="gm-title">${t('gamemaker_title', lang) || 'GameMaker'}</h1>
+          <p class="desc">${t('gamemaker_desc', lang) || '2Dゲームを作ろう！モードを選んでスタート'}</p>
+          <button class="pickramu-load-button secondary" id="gm-lang-btn" style="position:absolute;right:1rem;top:1rem;">${lang==='ja'?'EN':'JA'}</button>
         </header>
-        <main class="gm-main" role="region" aria-label="メインコンテンツ">
-          <div class="gm-mode-select" role="group" aria-label="モード選択">
-            <button class="gm-btn gm-primary" id="gm-lesson-btn" aria-label="講座モード (L)" accesskey="l">${t('lesson_mode', CURRENT_LANG) || '講座モード'}</button>
-            <button class="gm-btn gm-secondary" id="gm-create-btn" aria-label="創造モード (C)" accesskey="c">${t('create_mode', CURRENT_LANG) || '創造モード'}</button>
-            <button class="gm-btn gm-primary" id="gm-import-drive-btn" aria-label="Google Driveからインポート (I)" accesskey="i">${t('import_from_drive', CURRENT_LANG) || 'Google Driveからインポート'}</button>
+        <main class="card">
+          <div class="mode-select" role="group" aria-label="モード選択">
+            <button class="pickramu-load-button primary" id="gm-lesson-btn" aria-label="講座モード (L)" accesskey="l">${t('lesson_mode', lang) || '講座モード'}</button>
+            <button class="pickramu-load-button secondary" id="gm-create-btn" aria-label="創造モード (C)" accesskey="c">${t('create_mode', lang) || '創造モード'}</button>
+            <button class="pickramu-load-button primary" id="gm-import-drive-btn" aria-label="Google Driveからインポート (I)" accesskey="i">${t('import_from_drive', lang) || 'Google Driveからインポート'}</button>
           </div>
-          <div class="gm-recent-projects" id="gm-recent-projects" role="region" aria-label="最近のプロジェクト">
-            <h2 class="gm-section-title">${t('recent_projects', CURRENT_LANG) || '最近のプロジェクト'}</h2>
-            <ul class="gm-project-list" id="gm-project-list" role="list">
+          <div class="recent-projects" id="gm-recent-projects" role="region" aria-label="最近のプロジェクト">
+            <h2 class="section-title">${t('recent_projects', lang) || '最近のプロジェクト'}</h2>
+            <ul class="project-list" id="gm-project-list" role="list">
               ${projects.length === 0
-                ? `<li class="gm-project-item gm-empty" role="listitem">${t('no_projects', CURRENT_LANG) || 'プロジェクトはまだありません'}</li>`
-                : projects.map(p => `<li class="gm-project-item" role="listitem"><span>${p.name}</span> <button class="gm-btn gm-secondary gm-load-btn" data-id="${p.id}" aria-label="${p.name}を開く">${t('open', CURRENT_LANG) || '開く'}</button></li>`).join('')}
+                ? `<li class="project-item empty" role="listitem">${t('no_projects', lang) || 'プロジェクトはまだありません'}</li>`
+                : projects.map(p => `<li class="project-item" role="listitem"><span>${p.name}</span> <button class="pickramu-load-button secondary gm-load-btn" data-id="${p.id}" aria-label="${p.name}を開く">${t('open', lang) || '開く'}</button></li>`).join('')}
             </ul>
           </div>
         </main>
-        <footer class="gm-footer" role="contentinfo">
-          <p class="gm-copyright">${t('copyright', CURRENT_LANG)}</p>
+        <footer class="card">
+          <p class="copyright">${t('copyright', lang)}</p>
         </footer>
       </div>
-      <style>
-        :root {
-          --gm-primary: #4f8cff;
-          --gm-secondary: #f5a623;
-          --gm-bg: #f7faff;
-          --gm-bg-dark: #23272e;
-          --gm-card: #fff;
-          --gm-card-dark: #2c313a;
-          --gm-radius: 16px;
-          --gm-shadow: 0 4px 16px rgba(0,0,0,0.08);
-          --gm-font: 'SF Pro JP', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
-        }
-        html[data-theme='dark'] .gm-container {
-            background: var(--gm-bg-dark);
-            color: #f7faff;
-          }
-        html[data-theme='dark'] .gm-header {
-            background: linear-gradient(90deg, #23272e 0%, #4f8cff 100%);
-            color: #fff;
-          }
-        html[data-theme='dark'] .gm-recent-projects {
-            background: var(--gm-card-dark);
-          }
-        html[data-theme='dark'] .gm-project-item {
-            background: #23272e;
-            color: #f7faff;
-          }
-        html[data-theme='dark'] .gm-empty {
-            background: #23272e;
-            color: #888;
-        }
-        @media (max-width: 600px) {
-          .gm-header { padding: 1.2rem 0.5rem 0.7rem 0.5rem; }
-          .gm-title { font-size: 2rem; }
-          .gm-main { padding: 1rem 0.5rem 0.5rem 0.5rem; }
-          .gm-recent-projects { padding: 1rem 0.5rem; }
-          .gm-btn { min-width: 120px; min-height: 44px; font-size: 1rem; }
-        }
-        @media (pointer: coarse) {
-          .gm-btn { font-size: 1.3rem; min-height: 48px; }
-          .gm-block, .gm-block-placed { font-size: 1.2rem; }
-        }
-      </style>
     `;
     // 言語切替ボタン
     const langBtn = document.getElementById('gm-lang-btn');
     if (langBtn) langBtn.onclick = () => {
-      const nextLang = CURRENT_LANG === 'ja' ? 'en' : 'ja';
+      const nextLang = lang === 'ja' ? 'en' : 'ja';
       localStorage.setItem('gamemaker_lang', nextLang);
       location.reload();
     };
@@ -174,15 +130,16 @@ export function appInit(shell) {
       }
     };
     // キーボードショートカット
-    document.addEventListener('keydown', e => {
+    addSingleKeyListener('keydown', function(e) {
       if (e.altKey || e.ctrlKey || e.metaKey) return;
       if (e.key === 'l') document.getElementById('gm-lesson-btn')?.click();
       if (e.key === 'c') document.getElementById('gm-create-btn')?.click();
       if (e.key === 'i') document.getElementById('gm-import-drive-btn')?.click();
-    }, { once: true });
+    });
   }
 
   function renderLesson(stepIdx = null) {
+    let lang = localStorage.getItem('gamemaker_lang') || CURRENT_LANG;
     const steps = [
       { title: 'ステップ1: ゲームの基本', desc: '2Dゲーム制作の基本を学ぼう。画面やキャラクターの概念を理解します。' },
       { title: 'ステップ2: キャラクターを動かそう', desc: 'キャラクター画像を配置し、矢印キーで動かす仕組みを作ります。' },
@@ -198,59 +155,44 @@ export function appInit(shell) {
     const root = document.getElementById('app-root');
     if (!root) return;
     root.innerHTML = `
-      <div class="gm-container" id="gm-lesson-mode">
-        <header class="gm-header">
-          <h1 class="gm-title">講座モード</h1>
-          <button class="gm-btn gm-secondary gm-back" id="gm-back-home" aria-label="ホームに戻る">← ホーム</button>
-          <button class="gm-btn gm-secondary" id="gm-reset-progress-btn" style="margin-left:1rem;">進捗リセット</button>
+      <div class="page-container" id="gm-lesson-mode">
+        <header class="card">
+          <h1 class="title">講座モード</h1>
+          <button class="pickramu-load-button secondary gm-back" id="gm-back-home" aria-label="ホームに戻る">← ホーム</button>
+          <button class="pickramu-load-button secondary" id="gm-reset-progress-btn" style="margin-left:1rem;">進捗リセット</button>
         </header>
-        <main class="gm-main">
-          <div class="gm-lesson-content">
+        <main class="card">
+          <div class="lesson-content">
             <h2>
-              <span class="gm-step-title">${step.title}</span>
-              <span class="gm-step-count">(${stepIdx+1}/${steps.length})</span>
+              <span class="step-title">${step.title}</span>
+              <span class="step-count">(${stepIdx+1}/${steps.length})</span>
             </h2>
-            <p class="gm-step-desc">${step.desc}</p>
-            <div class="gm-progress-bar" aria-label="進捗バー">
-              <div class="gm-progress" style="width: ${progress}%"></div>
-              <span class="gm-progress-percent">${progress}%</span>
+            <p class="step-desc">${step.desc}</p>
+            <div class="progress-bar" aria-label="進捗バー">
+              <div class="progress" style="width: ${progress}%"></div>
+              <span class="progress-percent">${progress}%</span>
             </div>
-            <div class="gm-lesson-nav">
-              <button class="gm-btn gm-secondary" id="gm-prev-step" ${stepIdx===0?'disabled':''}>前へ</button>
-              <button class="gm-btn gm-primary" id="gm-next-step" ${stepIdx===steps.length-1?'disabled':''}>次へ</button>
-              <button class="gm-btn gm-secondary" id="gm-progress-report-btn" style="margin-left:1rem;">進捗レポート</button>
+            <div class="lesson-nav">
+              <button class="pickramu-load-button secondary" id="gm-prev-step" ${stepIdx===0?'disabled':''}>前へ</button>
+              <button class="pickramu-load-button primary" id="gm-next-step" ${stepIdx===steps.length-1?'disabled':''}>次へ</button>
+              <button class="pickramu-load-button secondary" id="gm-progress-report-btn" style="margin-left:1rem;">進捗レポート</button>
             </div>
-            <div class="gm-ai-support-panel">
+            <div class="ai-support-panel">
               <strong>AIサポート</strong>
-              <div class="gm-ai-message" aria-live="polite" role="status">困ったらAIに質問しよう！（仮UI）</div>
-              <div class="gm-ai-btn-row">
-                <button class="gm-btn gm-primary" id="gm-ai-ask-btn" aria-label="AIに質問">AIに質問</button>
-                <button class="gm-btn gm-secondary" id="gm-ai-hint-btn" aria-label="ヒント例を表示">ヒント例</button>
-                <button class="gm-btn gm-secondary" id="gm-ai-faq-btn" aria-label="よくある質問を表示">よくある質問</button>
-                <button class="gm-btn gm-secondary" id="gm-ai-clear-btn" aria-label="AIサポートをクリア">AIサポートをクリア</button>
-                <button class="gm-btn gm-secondary" id="gm-ai-copy-btn" aria-label="AIサポートをコピー">AIサポートをコピー</button>
-                <button class="gm-btn gm-secondary" id="gm-ai-speak-btn" aria-label="AIサポートを音声で読み上げ">AIサポートを音声で読み上げ</button>
-                <button class="gm-btn gm-primary" id="gm-ai-guide-btn" aria-label="AIガイド自動生成">AIガイド自動生成</button>
+              <div class="ai-message" aria-live="polite" role="status">困ったらAIに質問しよう！（仮UI）</div>
+              <div class="ai-btn-row">
+                <button class="pickramu-load-button primary" id="gm-ai-ask-btn" aria-label="AIに質問">AIに質問</button>
+                <button class="pickramu-load-button secondary" id="gm-ai-hint-btn" aria-label="ヒント例を表示">ヒント例</button>
+                <button class="pickramu-load-button secondary" id="gm-ai-faq-btn" aria-label="よくある質問を表示">よくある質問</button>
+                <button class="pickramu-load-button secondary" id="gm-ai-clear-btn" aria-label="AIサポートをクリア">AIサポートをクリア</button>
+                <button class="pickramu-load-button secondary" id="gm-ai-copy-btn" aria-label="AIサポートをコピー">AIサポートをコピー</button>
+                <button class="pickramu-load-button secondary" id="gm-ai-speak-btn" aria-label="AIサポートを音声で読み上げ">AIサポートを音声で読み上げ</button>
+                <button class="pickramu-load-button primary" id="gm-ai-guide-btn" aria-label="AIガイド自動生成">AIガイド自動生成</button>
               </div>
             </div>
           </div>
         </main>
       </div>
-      <style>
-        .gm-back { float: right; margin-top: -2.5rem; }
-        .gm-lesson-content { background: var(--gm-card); border-radius: var(--gm-radius); box-shadow: var(--gm-shadow); padding: 2rem; max-width: 480px; margin: 2rem auto; }
-        .gm-step-title { font-weight: 700; font-size: 1.1rem; }
-        .gm-step-count { font-size: 0.95rem; color: #888; margin-left: 0.5em; }
-        .gm-step-desc { margin: 1rem 0 1.5rem 0; color: #333; }
-        .gm-progress-bar { width: 100%; height: 12px; background: #e0e7ff; border-radius: 6px; margin: 1.5rem 0; position: relative; }
-        .gm-progress { height: 100%; background: var(--gm-primary); border-radius: 6px; transition: width 0.3s; }
-        .gm-progress-percent { position: absolute; right: 12px; top: -22px; font-size: 0.95rem; color: #4f8cff; font-weight: 700; }
-        .gm-lesson-nav { display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem; }
-        .gm-ai-support-panel { margin-top: 2rem; background: #f0f4ff; border-radius: 10px; padding: 1rem; color: #333; box-shadow: 0 1px 4px rgba(79,140,255,0.04); }
-        .gm-ai-message { margin: 0.5rem 0 1rem 0; color: #4f8cff; }
-        .gm-ai-btn-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
-        .gm-ai-btn-row .gm-btn { flex: 1 1 auto; min-width: 140px; }
-      </style>
     `;
     const backBtn = document.getElementById('gm-back-home');
     if (backBtn) backBtn.onclick = () => renderHome();
@@ -260,27 +202,27 @@ export function appInit(shell) {
     if (nextBtn) nextBtn.onclick = () => { localStorage.setItem(PROGRESS_KEY, Math.min(steps.length-1, stepIdx+1)); renderLesson(Math.min(steps.length-1, stepIdx+1)); };
     const aiAskBtn = document.getElementById('gm-ai-ask-btn');
     if (aiAskBtn) aiAskBtn.onclick = () => {
-      const msg = document.querySelector('.gm-ai-message');
+      const msg = document.querySelector('.ai-message');
       if (msg) msg.textContent = 'AI: ここにAIからのヒントや回答が表示されます（今後実装）';
     };
     const aiHintBtn = document.getElementById('gm-ai-hint-btn');
     if (aiHintBtn) aiHintBtn.onclick = () => {
-      const msg = document.querySelector('.gm-ai-message');
+      const msg = document.querySelector('.ai-message');
       if (msg) msg.textContent = '例:「キャラクターが動かないときはどうすればいい？」「スコアを増やすには？」';
     };
     const aiFaqBtn = document.getElementById('gm-ai-faq-btn');
     if (aiFaqBtn) aiFaqBtn.onclick = () => {
-      const msg = document.querySelector('.gm-ai-message');
+      const msg = document.querySelector('.ai-message');
       if (msg) msg.textContent = 'FAQ例:「画像が表示されない」「ジャンプができない」「保存できない」など';
     };
     const aiClearBtn = document.getElementById('gm-ai-clear-btn');
     if (aiClearBtn) aiClearBtn.onclick = () => {
-      const msg = document.querySelector('.gm-ai-message');
+      const msg = document.querySelector('.ai-message');
       if (msg) msg.textContent = '困ったらAIに質問しよう！（仮UI）';
     };
     const aiCopyBtn = document.getElementById('gm-ai-copy-btn');
     if (aiCopyBtn) aiCopyBtn.onclick = () => {
-      const msg = document.querySelector('.gm-ai-message');
+      const msg = document.querySelector('.ai-message');
       if (msg) {
         navigator.clipboard.writeText(msg.textContent || '').then(()=>{
           aiCopyBtn.textContent = 'コピーしました';
@@ -290,7 +232,7 @@ export function appInit(shell) {
     };
     const aiSpeakBtn = document.getElementById('gm-ai-speak-btn');
     if (aiSpeakBtn) aiSpeakBtn.onclick = () => {
-      const msg = document.querySelector('.gm-ai-message');
+      const msg = document.querySelector('.ai-message');
       if (msg && window.speechSynthesis) {
         const utter = new window.SpeechSynthesisUtterance(msg.textContent || '');
         utter.lang = 'ja-JP';
@@ -300,7 +242,7 @@ export function appInit(shell) {
     };
     const aiGuideBtn = document.getElementById('gm-ai-guide-btn');
     if (aiGuideBtn) aiGuideBtn.onclick = () => {
-      const msg = document.querySelector('.gm-ai-message');
+      const msg = document.querySelector('.ai-message');
       let guide = '';
       if (stepIdx === 0) {
         guide = '【AIガイド】\nゲーム制作の基本: 画面は320x240ピクセル、キャラクターは32x32ピクセルで描画されます。まずはキャラクター画像をアセットに追加しましょう。';
@@ -327,7 +269,7 @@ export function appInit(shell) {
       alert(msg);
     };
     // キーボード操作サポート
-    const aiBtns = document.querySelectorAll('.gm-ai-btn-row .gm-btn');
+    const aiBtns = document.querySelectorAll('.ai-btn-row .pickramu-load-button');
     aiBtns.forEach((btn, idx) => {
       btn.tabIndex = 0;
       btn.onkeydown = e => {
@@ -345,6 +287,7 @@ export function appInit(shell) {
   }
 
   function renderCreate(loadedProject = null) {
+    let lang = localStorage.getItem('gamemaker_lang') || CURRENT_LANG;
     const root = document.getElementById('app-root');
     if (!root) return;
     // 仮アセットデータ（今後は状態管理/保存と連携）
@@ -360,20 +303,20 @@ export function appInit(shell) {
       const list = document.getElementById('gm-asset-list');
       if (!list) return;
       list.innerHTML = assets.length === 0
-        ? '<li class="gm-asset-item gm-empty">アセットはまだありません</li>'
+        ? '<li class="asset-item empty">アセットはまだありません</li>'
         : assets.map((asset, i) => {
             let preview = '';
             if (asset.type === 'image' && asset.data) {
               preview = `<img src="${asset.data}" alt="${asset.name}" style="height:32px;width:auto;margin-right:8px;border-radius:6px;vertical-align:middle;" />`;
             }
-            let details = `<span class='gm-asset-detail'>[${asset.type}${asset.data ? ', ' + Math.round((asset.data.length/1024)) + 'KB' : ''}]</span>`;
+            let details = `<span class='asset-detail'>[${asset.type}${asset.data ? ', ' + Math.round((asset.data.length/1024)) + 'KB' : ''}]</span>`;
             // 並び替えボタン
-            let upBtn = `<button class='gm-btn gm-move-btn' data-idx='${i}' data-dir='up' ${i===0?'disabled':''} style='padding:2px 8px;margin-right:2px;'>↑</button>`;
-            let downBtn = `<button class='gm-btn gm-move-btn' data-idx='${i}' data-dir='down' ${i===assets.length-1?'disabled':''} style='padding:2px 8px;'>↓</button>`;
-            return `<li class="gm-asset-item">${preview}<span class="gm-asset-name" data-id="${asset.id}" tabindex="0" style="cursor:pointer;">${asset.name}</span> ${details} ${upBtn}${downBtn}<button class="gm-btn gm-delete-btn" data-id="${asset.id}" aria-label="削除">×</button></li>`;
+            let upBtn = `<button class='pickramu-load-button move-btn' data-idx='${i}' data-dir='up' ${i===0?'disabled':''} style='padding:2px 8px;margin-right:2px;'>↑</button>`;
+            let downBtn = `<button class='pickramu-load-button move-btn' data-idx='${i}' data-dir='down' ${i===assets.length-1?'disabled':''} style='padding:2px 8px;'>↓</button>`;
+            return `<li class="asset-item">${preview}<span class="asset-name" data-id="${asset.id}" tabindex="0" style="cursor:pointer;">${asset.name}</span> ${details} ${upBtn}${downBtn}<button class="pickramu-load-button delete-btn" data-id="${asset.id}" aria-label="削除">×</button></li>`;
           }).join('');
       // 削除ボタンイベント
-      document.querySelectorAll('.gm-delete-btn').forEach(btn => {
+      document.querySelectorAll('.delete-btn').forEach(btn => {
         btn.onclick = e => {
           const id = Number(btn.getAttribute('data-id'));
           assets = assets.filter(a => a.id !== id);
@@ -381,7 +324,7 @@ export function appInit(shell) {
         };
       });
       // インライン編集イベント
-      document.querySelectorAll('.gm-asset-name').forEach(span => {
+      document.querySelectorAll('.asset-name').forEach(span => {
         span.onclick = () => {
           const id = Number(span.getAttribute('data-id'));
           const asset = assets.find(a => a.id === id);
@@ -400,7 +343,7 @@ export function appInit(shell) {
         };
       });
       // 並び替えイベント
-      document.querySelectorAll('.gm-move-btn').forEach(btn => {
+      document.querySelectorAll('.move-btn').forEach(btn => {
         btn.onclick = () => {
           const idx = Number(btn.getAttribute('data-idx'));
           const dir = btn.getAttribute('data-dir');
@@ -414,59 +357,44 @@ export function appInit(shell) {
       });
     }
     root.innerHTML = `
-      <div class="gm-container" id="gm-create-mode">
-        <header class="gm-header">
-          <h1 class="gm-title">創造モード</h1>
-          <button class="gm-btn gm-secondary gm-back" id="gm-back-home" aria-label="ホームに戻る">← ホーム</button>
+      <div class="page-container" id="gm-create-mode">
+        <header class="card">
+          <h1 class="title">創造モード</h1>
+          <button class="pickramu-load-button secondary gm-back" id="gm-back-home" aria-label="ホームに戻る">← ホーム</button>
         </header>
-        <main class="gm-main">
-          <div class="gm-create-content">
-            <div class="gm-editor-switch">
-              <button class="gm-btn gm-primary" id="gm-scratch-btn">スクラッチ型</button>
-              <button class="gm-btn gm-secondary" id="gm-code-btn">コード型</button>
+        <main class="card">
+          <div class="create-content">
+            <div class="editor-switch">
+              <button class="pickramu-load-button primary" id="gm-scratch-btn">スクラッチ型</button>
+              <button class="pickramu-load-button secondary" id="gm-code-btn">コード型</button>
             </div>
-            <div class="gm-editor-panel" id="gm-editor-panel">エディタ（仮）</div>
-            <div class="gm-asset-panel">
-              <div class="gm-asset-panel-header">
+            <div class="editor-panel" id="gm-editor-panel">エディタ（仮）</div>
+            <div class="asset-panel">
+              <div class="asset-panel-header">
                 <span>アセット管理</span>
-                <button class="gm-btn gm-primary gm-add-btn" id="gm-add-asset-btn">＋追加</button>
+                <button class="pickramu-load-button primary gm-add-btn" id="gm-add-asset-btn">＋追加</button>
               </div>
-              <ul class="gm-asset-list" id="gm-asset-list"></ul>
+              <ul class="asset-list" id="gm-asset-list"></ul>
             </div>
-            <div class="gm-project-actions">
-              <button class="gm-btn gm-primary" id="gm-save-project-btn">プロジェクトを保存</button>
+            <div class="project-actions">
+              <button class="pickramu-load-button primary" id="gm-save-project-btn">プロジェクトを保存</button>
             </div>
-            <div class="gm-support-btns">
-              <button class="gm-btn gm-primary" id="gm-ai-support-btn">AIサポート</button>
-              <button class="gm-btn gm-secondary">SCRサポート</button>
-              <button class="gm-btn gm-primary" id="gm-toaster-btn" style="background:#2cb4ad;color:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(44,180,173,0.12);font-weight:600;">ToasterMachineに質問</button>
+            <div class="support-btns">
+              <button class="pickramu-load-button primary" id="gm-ai-support-btn">AIサポート</button>
+              <button class="pickramu-load-button secondary">SCRサポート</button>
+              <button class="pickramu-load-button primary" id="gm-toaster-btn" style="background:#2cb4ad;color:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(44,180,173,0.12);font-weight:600;">ToasterMachineに質問</button>
               <span id="gm-toaster-status" style="margin-left:8px;color:#2cb4ad;font-weight:500;"></span>
             </div>
           </div>
         </main>
       </div>
-      <style>
-        .gm-back { float: right; margin-top: -2.5rem; }
-        .gm-create-content { background: var(--gm-card); border-radius: var(--gm-radius); box-shadow: var(--gm-shadow); padding: 2rem; max-width: 600px; margin: 2rem auto; }
-        .gm-editor-switch { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
-        .gm-editor-panel { background: #f0f4ff; border-radius: 10px; padding: 1.5rem; min-height: 120px; margin-bottom: 1.5rem; color: #333; }
-        .gm-asset-panel { background: #e0e7ff; border-radius: 10px; padding: 1rem; margin-bottom: 1.5rem; color: #333; }
-        .gm-asset-panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
-        .gm-asset-list { list-style: none; padding: 0; margin: 0; }
-        .gm-asset-item { background: #fff; color: #222; border-radius: 8px; padding: 0.5rem 1rem; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 4px rgba(79,140,255,0.04); }
-        .gm-asset-item:last-child { margin-bottom: 0; }
-        .gm-asset-item.gm-empty { background: #e0e7ff; color: #888; text-align: center; justify-content: center; }
-        .gm-add-btn { font-size: 1rem; padding: 0.3rem 1.2rem; min-width: 0; min-height: 0; }
-        .gm-delete-btn { background: #ff4d4f; color: #fff; border: none; border-radius: 8px; font-size: 1.1rem; padding: 0.2rem 0.7rem; margin-left: 1rem; cursor: pointer; transition: background 0.2s; }
-        .gm-delete-btn:hover { background: #d9363e; }
-        .gm-project-actions { display: flex; gap: 1rem; justify-content: flex-end; margin-bottom: 1.5rem; }
-        .gm-support-btns { display: flex; gap: 1rem; justify-content: flex-end; }
-      </style>
     `;
     const backBtn = document.getElementById('gm-back-home');
     if (backBtn) backBtn.onclick = () => renderHome();
     // スクラッチ/コード型切替（強化）
     let editorType = 'scratch';
+    const scratchBtn = document.getElementById('gm-scratch-btn');
+    const codeBtn = document.getElementById('gm-code-btn');
     if (scratchBtn) scratchBtn.onclick = () => { editorType = 'scratch'; renderEditor('scratch', codeValue); };
     if (codeBtn) codeBtn.onclick = () => { editorType = 'code'; renderEditor('code', codeValue); };
     // 初期表示
@@ -497,7 +425,7 @@ export function appInit(shell) {
     };
     // 履歴ボタン
     const historyBtn = document.createElement('button');
-    historyBtn.className = 'gm-btn gm-secondary';
+    historyBtn.className = 'pickramu-load-button secondary';
     historyBtn.textContent = '履歴';
     historyBtn.style.marginLeft = '1rem';
     historyBtn.onclick = () => {
@@ -509,7 +437,7 @@ export function appInit(shell) {
       renderCreate(versions[idx]);
       alert('選択したバージョンを復元しました');
     };
-    const actions = document.querySelector('.gm-project-actions');
+    const actions = document.querySelector('.project-actions');
     if (actions) {
       actions.appendChild(historyBtn);
     }
@@ -636,7 +564,7 @@ export function appInit(shell) {
     }
     // テンプレート読込ボタン
     const templateBtn = document.createElement('button');
-    templateBtn.className = 'gm-btn gm-secondary';
+    templateBtn.className = 'pickramu-load-button secondary';
     templateBtn.textContent = 'テンプレートから新規作成';
     templateBtn.style.marginLeft = '1rem';
     templateBtn.onclick = async () => {
@@ -659,7 +587,7 @@ export function appInit(shell) {
     }
     // 言語切り替えボタン
     setTimeout(()=>{
-      const header = document.querySelector('.gm-header');
+      const header = document.querySelector('.card');
       if (header && !document.getElementById('gm-lang-btn')) renderLangButton(header);
     }, 10);
     // AIサポートボタン拡張
@@ -729,12 +657,12 @@ export function appInit(shell) {
     if (type === 'scratch') {
       // 新しいブロックUI
       editorPanel.innerHTML = `
-        <div class="gm-scratch-blocks">
-          ${BLOCK_DEFS.map((b,i)=>`<div class="gm-block" draggable="true" data-type="${b.type}" data-idx="${i}">${b.label}</div>`).join('')}
+        <div class="scratch-blocks">
+          ${BLOCK_DEFS.map((b,i)=>`<div class="block" draggable="true" data-type="${b.type}" data-idx="${i}">${b.label}</div>`).join('')}
         </div>
-        <div class="gm-dropzone" id="gm-dropzone">ここにブロックをドラッグ＆ドロップ</div>
-        <div class="gm-block-list" id="gm-block-list"></div>
-        <button class="gm-btn gm-secondary" id="gm-block-clear-btn" style="margin-top:0.5rem;">すべて削除</button>
+        <div class="dropzone" id="gm-dropzone">ここにブロックをドラッグ＆ドロップ</div>
+        <div class="block-list" id="gm-block-list"></div>
+        <button class="pickramu-load-button secondary" id="gm-block-clear-btn" style="margin-top:0.5rem;">すべて削除</button>
       `;
       // 新 scratchBlocks: ツリー構造
       if (!window.scratchBlocksTree) window.scratchBlocksTree = [];
@@ -744,13 +672,13 @@ export function appInit(shell) {
           blocks.map((b, i) => {
             let controls = '';
             if (b.type === 'if' || b.type === 'repeat' || b.type === 'onKey') {
-              controls = `<button class='gm-btn gm-secondary gm-add-child-btn' data-parent='${parent}' data-idx='${i}' style='font-size:0.9rem;padding:2px 8px;margin-left:4px;'>子を追加</button>`;
+              controls = `<button class='pickramu-load-button secondary gm-add-child-btn' data-parent='${parent}' data-idx='${i}' style='font-size:0.9rem;padding:2px 8px;margin-left:4px;'>子を追加</button>`;
             }
             let children = (b.children && b.children.length)
               ? renderBlockTree(b.children, `${parent}.${i}`, depth+1)
               : '';
             return `<li style='margin-bottom:4px;'>
-              <span class='gm-block gm-block-placed' draggable='true' data-path='${parent}.${i}' title='クリックで削除/ドラッグで並び替え'>${b.label}</span>
+              <span class='block block-placed' draggable='true' data-path='${parent}.${i}' title='クリックで削除/ドラッグで並び替え'>${b.label}</span>
               ${controls}
               ${children}
             </li>`;
@@ -760,7 +688,7 @@ export function appInit(shell) {
         const blockList = document.getElementById('gm-block-list');
         blockList.innerHTML = '<b>並べたブロック:</b> ' + (scratchBlocksTree.length ? renderBlockTree(scratchBlocksTree, 'root') : 'なし');
         // 削除イベント
-        blockList.querySelectorAll('.gm-block-placed').forEach(span => {
+        blockList.querySelectorAll('.block-placed').forEach(span => {
           span.onclick = () => {
             const path = span.getAttribute('data-path').replace('root.','').split('.').map(Number);
             let arr = scratchBlocksTree;
@@ -783,7 +711,7 @@ export function appInit(shell) {
         });
       }
       // ドラッグ＆ドロップ
-      const blocks = editorPanel.querySelectorAll('.gm-block');
+      const blocks = editorPanel.querySelectorAll('.block');
       const dropzone = editorPanel.querySelector('#gm-dropzone');
       blocks.forEach(block => {
         block.ondragstart = e => {
@@ -807,10 +735,10 @@ export function appInit(shell) {
       if (clearBtn) clearBtn.onclick = () => { scratchBlocksTree.length = 0; updateBlockList(); };
     } else if (type === 'code') {
       editorPanel.innerHTML = `
-        <textarea id="gm-code-editor" class="gm-code-editor" rows="10" style="width:100%;font-size:1.1rem;">${codeVal || '// ここにゲームのロジックを書こう\n'}</textarea>
-        <button class="gm-btn gm-primary" id="gm-save-code-btn">コードを保存</button>
-        <button class="gm-btn gm-secondary" id="gm-reset-code-btn" style="margin-left:0.5rem;">リセット</button>
-        <button class="gm-btn gm-secondary" id="gm-sample-code-btn" style="margin-left:0.5rem;">サンプル挿入</button>
+        <textarea id="gm-code-editor" class="code-editor" rows="10" style="width:100%;font-size:1.1rem;">${codeVal || '// ここにゲームのロジックを書こう\n'}</textarea>
+        <button class="pickramu-load-button primary" id="gm-save-code-btn">コードを保存</button>
+        <button class="pickramu-load-button secondary" id="gm-reset-code-btn" style="margin-left:0.5rem;">リセット</button>
+        <button class="pickramu-load-button secondary" id="gm-sample-code-btn" style="margin-left:0.5rem;">サンプル挿入</button>
       `;
       const saveBtn = document.getElementById('gm-save-code-btn');
       if (saveBtn) saveBtn.onclick = () => {
@@ -869,39 +797,34 @@ export function appInit(shell) {
 
   // プレビュー画面の描画
   function renderPreview(assets, scratchBlocksTree = [], codeValue = '') {
+    let lang = localStorage.getItem('gamemaker_lang') || CURRENT_LANG;
     const root = document.getElementById('app-root');
     if (!root) return;
     root.innerHTML = `
-      <div class="gm-container" id="gm-preview-mode">
-        <header class="gm-header">
-          <h1 class="gm-title">ゲームプレビュー</h1>
-          <button class="gm-btn gm-secondary gm-back" id="gm-back-edit" aria-label="編集に戻る">← 編集に戻る</button>
+      <div class="page-container" id="gm-preview-mode">
+        <header class="card">
+          <h1 class="title">ゲームプレビュー</h1>
+          <button class="pickramu-load-button secondary gm-back" id="gm-back-edit" aria-label="編集に戻る">← 編集に戻る</button>
         </header>
-        <main class="gm-main">
-          <div class="gm-preview-canvas-wrap">
+        <main class="card">
+          <div class="preview-canvas-wrap">
             <canvas id="gm-preview-canvas" width="320" height="240" style="background:#222;border-radius:12px;"></canvas>
           </div>
-          <div class="gm-preview-assets">
+          <div class="preview-assets">
             <h3>アセット一覧</h3>
             <div>
               ${assets.filter(a=>a.type==='image').map(a=>`<img src="${a.data}" alt="${a.name}" style="height:48px;margin:4px;border-radius:8px;" />`).join('')}
             </div>
           </div>
-          <div class="gm-preview-blocks">
+          <div class="preview-blocks">
             <h4>実行ブロック</h4>
             <div>${scratchBlocksTree.length ? renderBlockTree(scratchBlocksTree, 'root') : 'なし'}</div>
           </div>
-          <div class="gm-preview-actions">
-            <button class="gm-btn gm-secondary" id="gm-reset-btn">リセット</button>
+          <div class="preview-actions">
+            <button class="pickramu-load-button secondary" id="gm-reset-btn">リセット</button>
           </div>
         </main>
       </div>
-      <style>
-        .gm-preview-canvas-wrap { display: flex; justify-content: center; margin: 2rem 0; }
-        .gm-preview-assets { text-align: center; margin-top: 1rem; }
-        .gm-preview-blocks { text-align: center; margin-top: 1.5rem; }
-        .gm-preview-actions { text-align: center; margin-top: 1.5rem; }
-      </style>
     `;
     // 新しいデータ構造
     let entities = [
@@ -1038,20 +961,34 @@ export function appInit(shell) {
 
 // --- 言語切り替えボタン共通関数 ---
 function renderLangButton(parent) {
+  let lang = localStorage.getItem('gamemaker_lang') || CURRENT_LANG;
   const langBtn = document.createElement('button');
-  langBtn.className = 'gm-btn gm-secondary';
+  langBtn.className = 'pickramu-load-button secondary';
   langBtn.id = 'gm-lang-btn';
   langBtn.style.position = 'absolute';
   langBtn.style.right = '1rem';
   langBtn.style.top = '1rem';
-  langBtn.textContent = (window.CURRENT_LANG||'ja') === 'ja' ? 'EN' : 'JA';
+  langBtn.textContent = lang === 'ja' ? 'EN' : 'JA';
   langBtn.onclick = () => {
-    const nextLang = (window.CURRENT_LANG||'ja') === 'ja' ? 'en' : 'ja';
+    const nextLang = lang === 'ja' ? 'en' : 'ja';
     localStorage.setItem('gamemaker_lang', nextLang);
     location.reload();
   };
   parent.appendChild(langBtn);
 }
+
+// --- キーボードショートカットの多重登録防止 ---
+function addSingleKeyListener(type, handler) {
+  document.removeEventListener('keydown', handler);
+  document.addEventListener('keydown', handler);
+}
+// 例: renderHome内
+addSingleKeyListener('keydown', function(e) {
+  if (e.altKey || e.ctrlKey || e.metaKey) return;
+  if (e.key === 'l') document.getElementById('gm-lesson-btn')?.click();
+  if (e.key === 'c') document.getElementById('gm-create-btn')?.click();
+  if (e.key === 'i') document.getElementById('gm-import-drive-btn')?.click();
+});
 
 // --- テスト・品質保証用ユニットテスト関数とUI ---
 function runUnitTests() {
@@ -1078,15 +1015,16 @@ function runUnitTests() {
   return results;
 }
 function renderTestUI() {
+  let lang = localStorage.getItem('gamemaker_lang') || CURRENT_LANG;
   const root = document.getElementById('app-root');
   if (!root) return;
-  root.innerHTML = `<div class="gm-container"><header class="gm-header"><h1>Test & QA</h1></header><main class="gm-main"><button class="gm-btn gm-primary" id="run-test-btn">Run Tests</button><ul id="test-result-list"></ul></main></div>`;
+  root.innerHTML = `<div class="page-container"><header class="card"><h1>Test & QA</h1></header><main class="card"><button class="pickramu-load-button primary" id="run-test-btn">Run Tests</button><ul id="test-result-list"></ul></main></div>`;
   document.getElementById('run-test-btn').onclick = () => {
     const results = runUnitTests();
     document.getElementById('test-result-list').innerHTML = results.map(r=>`<li>${r}</li>`).join('');
   };
   setTimeout(()=>{
-    const header = document.querySelector('.gm-header');
+    const header = document.querySelector('.card');
     if (header && !document.getElementById('gm-lang-btn')) renderLangButton(header);
   }, 10);
 }
@@ -1099,9 +1037,10 @@ document.addEventListener('keydown', e => {
 
 // --- ユーザーフィードバックUI・保存 ---
 function renderFeedbackUI() {
+  let lang = localStorage.getItem('gamemaker_lang') || CURRENT_LANG;
   const root = document.getElementById('app-root');
   if (!root) return;
-  root.innerHTML = `<div class="gm-container"><header class="gm-header"><h1>Feedback</h1></header><main class="gm-main"><textarea id="feedback-text" rows="5" style="width:100%;font-size:1.1rem;"></textarea><button class="gm-btn gm-primary" id="send-feedback-btn">送信</button><div id="feedback-result"></div></main></div>`;
+  root.innerHTML = `<div class="page-container"><header class="card"><h1>Feedback</h1></header><main class="card"><textarea id="feedback-text" rows="5" style="width:100%;font-size:1.1rem;"></textarea><button class="pickramu-load-button primary" id="send-feedback-btn">送信</button><div id="feedback-result"></div></main></div>`;
   document.getElementById('send-feedback-btn').onclick = () => {
     const text = document.getElementById('feedback-text').value;
     if (!text.trim()) return alert('内容を入力してください');
@@ -1113,7 +1052,7 @@ function renderFeedbackUI() {
     document.getElementById('feedback-result').textContent = '送信しました。ご協力ありがとうございます。';
   };
   setTimeout(()=>{
-    const header = document.querySelector('.gm-header');
+    const header = document.querySelector('.card');
     if (header && !document.getElementById('gm-lang-btn')) renderLangButton(header);
   }, 10);
 }
@@ -1154,15 +1093,16 @@ function sanitizeHTML(str) {
 // fetch時にcredentials: 'same-origin'やX-Requested-Withヘッダを追加
 // --- 管理者向け管理画面UI ---
 function renderAdminUI() {
+  let lang = localStorage.getItem('gamemaker_lang') || CURRENT_LANG;
   const root = document.getElementById('app-root');
   if (!root) return;
   let allProgress = [];
   try { allProgress = JSON.parse(localStorage.getItem('gamemaker_lesson_history')||'[]'); } catch {}
   let feedback = [];
   try { feedback = JSON.parse(localStorage.getItem('gamemaker_feedback')||'[]'); } catch {}
-  root.innerHTML = `<div class="gm-container"><header class="gm-header"><h1>管理者ダッシュボード</h1></header><main class="gm-main"><h2>進捗履歴</h2><ul>${allProgress.map(h=>`<li>ステップ${h.step} - ${h.date}</li>`).join('')||'<li>データなし</li>'}</ul><h2>フィードバック</h2><ul>${feedback.map(f=>`<li>${f.text} <span style='color:#888;'>(${f.date})</span></li>`).join('')||'<li>データなし</li>'}</ul></main></div>`;
+  root.innerHTML = `<div class="page-container"><header class="card"><h1>管理者ダッシュボード</h1></header><main class="card"><h2>進捗履歴</h2><ul>${allProgress.map(h=>`<li>ステップ${h.step} - ${h.date}</li>`).join('')||'<li>データなし</li>'}</ul><h2>フィードバック</h2><ul>${feedback.map(f=>`<li>${f.text} <span style='color:#888;'>(${f.date})</span></li>`).join('')||'<li>データなし</li>'}</ul></main></div>`;
   setTimeout(()=>{
-    const header = document.querySelector('.gm-header');
+    const header = document.querySelector('.card');
     if (header && !document.getElementById('gm-lang-btn')) renderLangButton(header);
   }, 10);
 }

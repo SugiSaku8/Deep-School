@@ -53,10 +53,6 @@ export function appInit(shell) {
           </div>
         </div>
         <div class="menu-item">
-          <img src="re/ico/Setting.png" alt="設定アイコン" class="menu-icon" />
-          <div class="menu-label chalk-text" id="menu-setting" style="cursor: pointer" data-lang-key="menu_setting">設定</div>
-        </div>
-        <div class="menu-item">
           <img src="re/ico/note.svg" alt="Pickramuアイコン" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-pickramu" style="cursor: pointer" data-lang-key="menu_pickramu">Pickramu</div>
         </div>
@@ -64,11 +60,15 @@ export function appInit(shell) {
           <img src="re/ico/game.svg" alt="GameMakerアイコン" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-gamemaker" style="cursor: pointer" data-lang-key="menu_gamemaker">GameMaker</div>
         </div>
+        <div class="menu-item">
+          <img src="re/ico/Setting.png" alt="設定アイコン" class="menu-icon" />
+          <div class="menu-label chalk-text" id="menu-setting" style="cursor: pointer" data-lang-key="menu_setting">設定</div>
+        </div>
       </div>
     </div>
     
     <div class="copyright-container horizontal-copyright">
-      <p class="copyright chalk-text left-align" data-lang-key="copyright">(c) 2022-2025 Carnation Studio v0.3.8 25C1052X1</p>
+      <p class="copyright chalk-text left-align" data-lang-key="copyright">(c) 2022-2025 Carnation Studio v0.3.8 25C1056X1</p>
     </div>
   
   <style>
