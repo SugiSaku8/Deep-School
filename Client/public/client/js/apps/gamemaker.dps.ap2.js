@@ -248,7 +248,7 @@ export function appInit(shell) {
 
   // レッスンデータを外部JSONから読み込む
   window.LESSONS = null;
-  fetch('apps/lessons.json')
+  fetch('lessons.json')
     .then(res => res.json())
     .then(data => {
       window.LESSONS = data;
@@ -357,15 +357,15 @@ export function appInit(shell) {
       return;
     }
     const steps = window.LESSONS;
-    // 進捗保存・読込
-    const PROGRESS_KEY = 'gamemaker_lesson_progress';
-    if (stepIdx === null) {
-      stepIdx = Number(localStorage.getItem(PROGRESS_KEY) || 0);
-    }
-    const step = steps[stepIdx] || steps[0];
-    const progress = Math.round(((stepIdx+1)/steps.length)*100);
     const root = document.getElementById('app-root');
-    if (!root) return;
+    if (!Array.isArray(steps) || steps.length === 0) {
+      if (root) root.innerHTML = '<div class="card">レッスンデータがありません</div>';
+      return;
+    }
+    if (stepIdx === null) stepIdx = Number(localStorage.getItem('gamemaker_lesson_progress') || 0);
+    if (stepIdx < 0 || stepIdx >= steps.length) stepIdx = 0;
+    const step = steps[stepIdx];
+    const progress = Math.round(((stepIdx+1)/steps.length)*100);
     root.innerHTML = `
       <div class="page-container" id="gm-lesson-mode">
         <header class="card" style="width:100%;max-width:480px;position:relative;">
@@ -450,9 +450,9 @@ export function appInit(shell) {
     const backBtn = document.getElementById('gm-back-home');
     if (backBtn) backBtn.onclick = () => renderHome();
     const prevBtn = document.getElementById('gm-prev-step');
-    if (prevBtn) prevBtn.onclick = () => { localStorage.setItem(PROGRESS_KEY, Math.max(0, stepIdx-1)); renderLesson(Math.max(0, stepIdx-1)); };
+    if (prevBtn) prevBtn.onclick = () => { localStorage.setItem('gamemaker_lesson_progress', Math.max(0, stepIdx-1)); renderLesson(Math.max(0, stepIdx-1)); };
     const nextBtn = document.getElementById('gm-next-step');
-    if (nextBtn) nextBtn.onclick = () => { localStorage.setItem(PROGRESS_KEY, Math.min(steps.length-1, stepIdx+1)); renderLesson(Math.min(steps.length-1, stepIdx+1)); };
+    if (nextBtn) nextBtn.onclick = () => { localStorage.setItem('gamemaker_lesson_progress', Math.min(steps.length-1, stepIdx+1)); renderLesson(Math.min(steps.length-1, stepIdx+1)); };
     const aiAskBtn = document.getElementById('gm-ai-ask-btn');
     if (aiAskBtn) aiAskBtn.onclick = async () => {
       const question = prompt('AIに質問したい内容を入力してください');
@@ -506,7 +506,7 @@ export function appInit(shell) {
       aiMsg.textContent = step.aiGuide[lang] || step.aiGuide.ja;
     };
     const resetProgressBtn = document.getElementById('gm-reset-progress-btn');
-    if (resetProgressBtn) resetProgressBtn.onclick = () => { localStorage.setItem(PROGRESS_KEY, 0); renderLesson(0); };
+    if (resetProgressBtn) resetProgressBtn.onclick = () => { localStorage.setItem('gamemaker_lesson_progress', 0); renderLesson(0); };
     const progressReportBtn = document.getElementById('gm-progress-report-btn');
     if (progressReportBtn) progressReportBtn.onclick = () => {
       const progress = Math.round(((stepIdx+1)/steps.length)*100);

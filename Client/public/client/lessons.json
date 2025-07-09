@@ -1,0 +1,41 @@
+[
+  {
+    "id": 1,
+    "title": { "ja": "ステップ1: ゲームの基本", "en": "Step 1: Game Basics" },
+    "desc": { "ja": "2Dゲーム制作の基本を学ぼう。画面やキャラクターの概念を理解します。", "en": "Learn the basics of 2D game creation. Understand screens and characters." },
+    "image": null,
+    "hints": [
+      { "ja": "画面サイズは320x240です。", "en": "Screen size is 320x240." }
+    ],
+    "faqs": [
+      { "ja": "キャラクターが表示されない場合は？", "en": "What if the character doesn't appear?" }
+    ],
+    "aiGuide": { "ja": "画面は320x240ピクセル、キャラクターは32x32ピクセルで描画されます。まずはキャラクター画像をアセットに追加しましょう。", "en": "The screen is 320x240 pixels, and characters are drawn at 32x32 pixels. First, add a character image to your assets." }
+  },
+  {
+    "id": 2,
+    "title": { "ja": "ステップ2: キャラクターを動かそう", "en": "Step 2: Move the Character" },
+    "desc": { "ja": "キャラクター画像を配置し、矢印キーで動かす仕組みを作ります。", "en": "Place a character image and make it move with arrow keys." },
+    "image": null,
+    "hints": [
+      { "ja": "キャラクターのx座標を変更してみましょう。", "en": "Try changing the character's x coordinate." }
+    ],
+    "faqs": [
+      { "ja": "動かない場合は？", "en": "What if it doesn't move?" }
+    ],
+    "aiGuide": { "ja": "キャラクターを動かすには「キャラクターを動かす」ブロックや、コード型ならx座標を変更するロジックを追加します。", "en": "To move the character, add a 'move character' block or change the x coordinate in code mode." }
+  },
+  {
+    "id": 3,
+    "title": { "ja": "ステップ3: ゴールを作ろう", "en": "Step 3: Create a Goal" },
+    "desc": { "ja": "ゴールを設置し、キャラクターが到達したらクリアになるようにします。", "en": "Set a goal and make it so the character clears the stage upon reaching it." },
+    "image": null,
+    "hints": [
+      { "ja": "ゴールの座標を決めてみましょう。", "en": "Set the coordinates for the goal." }
+    ],
+    "faqs": [
+      { "ja": "ゴール判定ができない場合は？", "en": "What if the goal detection doesn't work?" }
+    ],
+    "aiGuide": { "ja": "ゴールを設置し、キャラクターが到達したらスコアを加算し、クリアメッセージを表示しましょう。", "en": "Place a goal, and when the character reaches it, add score and show a clear message." }
+  }
+] 
