@@ -60,7 +60,8 @@ class VersionCLI {
       'server': 'deepSchoolServer',
       'pickramu': 'pickramu',
       'scr': 'scr',
-      'toaster': 'toasterMachine'
+      'toaster': 'toasterMachine',
+      'gamemaker': 'gamemaker'
     };
 
     const configKey = componentMap[component.toLowerCase()];
@@ -97,6 +98,7 @@ class VersionCLI {
             case 'menu': icon = '📋'; label = 'Menu'; break;
             case 'setting': icon = '⚙️'; label = 'Setting'; break;
             case 'toasterMachine': icon = '🍞'; label = 'Toaster-Machine'; break;
+            case 'gamemaker': icon = '🎮'; label = 'GameMaker'; break;
           }
           output += `${icon} ${label}: v${value.version} (${value.status})\n`;
           if (value.cycle !== undefined) output += `   Cycle: ${value.cycle}, Release: ${value.release}, Revision: ${value.revision}\n`;
@@ -248,7 +250,7 @@ Examples:
 
         case 'list':
           const components = ['family', 'client', 'server', 'pickramu', 'toaster'];
-          console.log('Available components:', components.join(', '));
+          console.log('Available components:', ['family', 'client', 'server', 'pickramu', 'scr', 'toaster', 'gamemaker'].join(', '));
           break;
 
         case 'check':

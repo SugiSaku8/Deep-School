@@ -39,7 +39,8 @@ class VersionManager {
       'pickramu': 'pickramu',
       'scr': 'scr',
       'workmaker': 'workMaker',
-      'toaster': 'toasterMachine'
+      'toaster': 'toasterMachine',
+      'gamemaker': 'gamemaker'
     };
 
     const configKey = componentMap[component.toLowerCase()];
@@ -79,6 +80,7 @@ class VersionManager {
           case 'menu': icon = '📋'; label = 'Menu'; break;
           case 'setting': icon = '⚙️'; label = 'Setting'; break;
           case 'toasterMachine': icon = '🍞'; label = 'Toaster-Machine'; break;
+          case 'gamemaker': icon = '🎮'; label = 'GameMaker'; break;
         }
         output += `${icon} ${label}: v${value.version} (${value.status})\n`;
         if (value.cycle !== undefined) output += `   Cycle: ${value.cycle}, Release: ${value.release}, Revision: ${value.revision}\n`;

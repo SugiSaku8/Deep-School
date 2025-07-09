@@ -1,12 +1,12 @@
 {
   "deepSchoolFamily": {
-    "version": "25C1044X1",
+    "version": "25C1052X1",
     "status": "beta",
     "lastUpdated": "2025-07-04",
     "description": "Deep-School Family Software - Initial release"
   },
   "deepSchoolClient": {
-    "version": "0.3.7",
+    "version": "0.3.8",
     "status": "stable",
     "cycle": 1,
     "release": 0,
@@ -24,7 +24,7 @@
     "description": "Deep-School Server - Initial stable release"
   },
   "pickramu": {
-    "version": "1.0.75",
+    "version": "1.0.76",
     "status": "beta",
     "cycle": 1,
     "release": 0,
@@ -42,7 +42,7 @@
     "description": "eGuide - Initial beta release"
   },
   "estore": {
-    "version": "0.0.3",
+    "version": "0.0.4",
     "status": "beta",
     "cycle": 0,
     "release": 0,
@@ -51,7 +51,7 @@
     "description": "eStore - Initial beta release"
   },
   "login": {
-    "version": "0.0.11",
+    "version": "0.0.12",
     "status": "beta",
     "cycle": 0,
     "release": 0,
@@ -60,7 +60,7 @@
     "description": "Login - Initial beta release"
   },
   "menu": {
-    "version": "0.0.18",
+    "version": "0.0.19",
     "status": "beta",
     "cycle": 0,
     "release": 0,
@@ -87,13 +87,22 @@
     "description": "ToasterMachine - Toaster Machine is AI tools for Deep-School - Initial beta release"
   },
   "scr": {
-    "version": "0.1.35",
+    "version": "0.1.37",
     "status": "beta",
     "cycle": 0,
     "release": 1,
     "revision": 0,
     "lastUpdated": "2025-07-04",
     "description": "SCR - Screen Capture and Recording tool - Initial beta release"
+  },
+  "gamemaker": {
+    "version": "0.1.0",
+    "status": "beta",
+    "cycle": 0,
+    "release": 1,
+    "revision": 0,
+    "lastUpdated": "2025-07-01",
+    "description": "GameMaker - 2Dゲーム制作アプリ - 初期ベータリリース"
   },
   "releaseSchedule": {
     "deepSchoolCycles": [
