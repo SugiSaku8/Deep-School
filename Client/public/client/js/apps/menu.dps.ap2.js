@@ -60,6 +60,10 @@ export function appInit(shell) {
           <img src="re/ico/note.svg" alt="Pickramuアイコン" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-pickramu" style="cursor: pointer" data-lang-key="menu_pickramu">Pickramu</div>
         </div>
+        <div class="menu-item">
+          <img src="re/ico/game.svg" alt="GameMakerアイコン" class="menu-icon" />
+          <div class="menu-label chalk-text" id="menu-gamemaker" style="cursor: pointer" data-lang-key="menu_gamemaker">GameMaker</div>
+        </div>
       </div>
     </div>
     
@@ -451,6 +455,10 @@ export function appInit(shell) {
     'menu-pickramu': () => {
       shell.log({from: 'dp.app.menu.out', message: 'MenuApp: Pickramuを開く', level: 'info'});
       shell.loadApp('pickramu');
+    },
+    'menu-gamemaker': () => {
+      shell.log({from: 'dp.app.menu.out', message: 'MenuApp: GameMakerを開く', level: 'info'});
+      shell.loadApp('gamemaker');
     }
   };
 
