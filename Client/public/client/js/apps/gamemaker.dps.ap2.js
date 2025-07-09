@@ -3,7 +3,6 @@
 // Apple HIG準拠・講座/創造モード・アクセシビリティ配慮
 
 import { t, LANG_DATA } from '../core/lang.js';
-import { t } from '../core/lang.js';
 import { CURRENT_LANG } from '../core/config.js';
 
 export const appMeta = {
