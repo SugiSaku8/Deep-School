@@ -206,8 +206,16 @@ export function appInit(shell) {
       const question = prompt('AIに質問したい内容を入力してください');
       if (!question) return;
       msg.textContent = 'AI: 回答生成中...';
+      let GeminiAPI = window.GeminiAPI;
+      if (!GeminiAPI && window.chatManager && window.chatManager.GeminiAPI) {
+        GeminiAPI = window.chatManager.GeminiAPI;
+      }
+      if (!GeminiAPI) {
+        msg.textContent = 'AI: GeminiAPIが利用できません。';
+        return;
+      }
       try {
-        const answer = await window.GeminiAPI.sendMessage(question, []);
+        const answer = await GeminiAPI.sendMessage(question, []);
         msg.textContent = 'AI: ' + answer;
       } catch (e) {
         msg.textContent = 'AI: エラーが発生しました: ' + (e.message || e);
