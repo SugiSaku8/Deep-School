@@ -9,7 +9,6 @@
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', 'Helvetica Neue', Arial, sans-serif;
-      background: linear-gradient(120deg, #f8fafc 0%, #e9eff5 100%);
       min-height: 100vh;
       width: 100vw;
       overflow-x: hidden;
