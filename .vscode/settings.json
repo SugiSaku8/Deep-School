@@ -22,7 +22,7 @@
     "cursor.composer.collapsePaneInputBoxPills": true,
     "cursor.composer.renderPillsInsteadOfBlocks": true,
     "editor.fontFamily": "Hack",
-    "workbench.colorTheme": "Arc+",
+    "workbench.colorTheme": "Visual Studio 2017 Dark - C++",
     "editor.accessibilitySupport": "off",
     "[css]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode"

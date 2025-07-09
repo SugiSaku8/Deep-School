@@ -1,0 +1,50 @@
+{
+  "fill" : {
+    "automatic-gradient" : "srgb:0.00000,0.39608,0.18431,1.00000"
+  },
+  "groups" : [
+    {
+      "layers" : [
+        {
+          "blend-mode" : "normal",
+          "fill" : "automatic",
+          "image-name" : "deep-rayer-1.png",
+          "name" : "deep-rayer-1",
+          "opacity" : 1,
+          "position" : {
+            "scale" : 4,
+            "translation-in-points" : [
+              -166.1918623309069,
+              -440.27422638899156
+            ]
+          }
+        },
+        {
+          "image-name" : "scr.txt.png",
+          "name" : "scr.txt",
+          "position" : {
+            "scale" : 1.9,
+            "translation-in-points" : [
+              11.457893238255735,
+              42.677905778589775
+            ]
+          }
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}

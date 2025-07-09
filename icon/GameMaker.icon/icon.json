@@ -1,0 +1,47 @@
+{
+  "fill" : {
+    "automatic-gradient" : "srgb:0.00000,0.55361,0.18431,1.00000"
+  },
+  "groups" : [
+    {
+      "layers" : [
+        {
+          "image-name" : "ゲームアイコン (2).svg",
+          "name" : "ゲームアイコン (2)",
+          "position" : {
+            "scale" : 1.5,
+            "translation-in-points" : [
+              -4.34082877049995,
+              -188.07953806479574
+            ]
+          }
+        },
+        {
+          "image-name" : "deep-rayer-1.png",
+          "name" : "deep-rayer-1",
+          "position" : {
+            "scale" : 2.5,
+            "translation-in-points" : [
+              -12.10421622840849,
+              -99.76031534341342
+            ]
+          }
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}
