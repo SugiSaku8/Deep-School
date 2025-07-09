@@ -9,7 +9,6 @@
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', 'Helvetica Neue', Arial, sans-serif;
-      color: #222;
       min-height: 100vh;
     }
     #app-root, .page-container {
@@ -297,6 +296,7 @@ export function appInit(shell) {
     if (!root) return;
     root.innerHTML = `
       <div class="page-container" id="gm-lesson-mode">
+        <header class="card" style="width:100%;max-width:480px;position:relative;">
         <header class="card">
           <h1 class="title">講座モード</h1>
           <button class="pickramu-load-button secondary gm-back" id="gm-back-home" aria-label="ホームに戻る">← ホーム</button>
