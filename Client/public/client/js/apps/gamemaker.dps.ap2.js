@@ -201,9 +201,17 @@ export function appInit(shell) {
     const nextBtn = document.getElementById('gm-next-step');
     if (nextBtn) nextBtn.onclick = () => { localStorage.setItem(PROGRESS_KEY, Math.min(steps.length-1, stepIdx+1)); renderLesson(Math.min(steps.length-1, stepIdx+1)); };
     const aiAskBtn = document.getElementById('gm-ai-ask-btn');
-    if (aiAskBtn) aiAskBtn.onclick = () => {
+    if (aiAskBtn) aiAskBtn.onclick = async () => {
       const msg = document.querySelector('.ai-message');
-      if (msg) msg.textContent = 'AI: ここにAIからのヒントや回答が表示されます（今後実装）';
+      const question = prompt('AIに質問したい内容を入力してください');
+      if (!question) return;
+      msg.textContent = 'AI: 回答生成中...';
+      try {
+        const answer = await window.GeminiAPI.sendMessage(question, []);
+        msg.textContent = 'AI: ' + answer;
+      } catch (e) {
+        msg.textContent = 'AI: エラーが発生しました: ' + (e.message || e);
+      }
     };
     const aiHintBtn = document.getElementById('gm-ai-hint-btn');
     if (aiHintBtn) aiHintBtn.onclick = () => {
