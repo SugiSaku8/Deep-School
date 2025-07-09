@@ -1,3 +1,145 @@
+// --- Apple HIG風グローバルCSSを動的に挿入 ---
+(function addAppleHIGStyle() {
+  if (document.getElementById('apple-hig-style')) return;
+  const style = document.createElement('style');
+  style.id = 'apple-hig-style';
+  style.textContent = `
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(120deg, #f8fafc 0%, #e9eff5 100%);
+      color: #222;
+      min-height: 100vh;
+    }
+    #app-root, .page-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100vw;
+      box-sizing: border-box;
+    }
+    .card {
+      background: rgba(255,255,255,0.95);
+      border-radius: 24px;
+      box-shadow: 0 8px 32px rgba(60,60,60,0.10), 0 1.5px 4px rgba(0,0,0,0.04);
+      padding: 2.5rem 2.5rem 2rem 2.5rem;
+      margin: 1.5rem 0;
+      max-width: 480px;
+      width: 100%;
+      position: relative;
+      transition: box-shadow 0.2s;
+    }
+    .card:focus-within, .card:hover {
+      box-shadow: 0 12px 40px rgba(60,60,60,0.16), 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+      color: #222;
+      text-align: center;
+    }
+    .desc {
+      font-size: 1.15rem;
+      color: #555;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .mode-select {
+      display: flex;
+      gap: 1.2rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .pickramu-load-button {
+      font-size: 1.08rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      padding: 0.7em 1.6em;
+      margin: 0.2em 0;
+      background: linear-gradient(90deg, #e0e7ef 0%, #f7fafc 100%);
+      color: #222;
+      box-shadow: 0 1.5px 4px rgba(0,0,0,0.04);
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    .pickramu-load-button.primary {
+      background: linear-gradient(90deg, #4f8cff 0%, #2cb4ad 100%);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(44,180,173,0.10);
+    }
+    .pickramu-load-button.secondary {
+      background: #f3f6fa;
+      color: #2cb4ad;
+      border: 1.5px solid #e0e7ef;
+    }
+    .pickramu-load-button:active {
+      filter: brightness(0.97);
+    }
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #2cb4ad;
+      margin-bottom: 0.5rem;
+      margin-top: 1.5rem;
+      text-align: left;
+    }
+    .recent-projects {
+      margin-top: 1.5rem;
+      width: 100%;
+    }
+    .project-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      width: 100%;
+    }
+    .project-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.7em 1em;
+      border-radius: 10px;
+      background: #f7fafc;
+      margin-bottom: 0.7em;
+      font-size: 1.05rem;
+      box-shadow: 0 1px 2px rgba(44,180,173,0.04);
+      transition: background 0.2s;
+    }
+    .project-item.empty {
+      background: none;
+      color: #aaa;
+      justify-content: center;
+    }
+    .copyright {
+      font-size: 0.95rem;
+      color: #aaa;
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+    @media (max-width: 600px) {
+      .card {
+        padding: 1.2rem 0.7rem 1.2rem 0.7rem;
+        max-width: 98vw;
+      }
+      .title {
+        font-size: 1.3rem;
+      }
+      .desc {
+        font-size: 1rem;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+})();
 // GameMakerアプリ（gamemaker.dps.ap2.js）
 // Deep-Schoolデフォルト搭載 2Dゲーム制作アプリ
 // Apple HIG準拠・講座/創造モード・アクセシビリティ配慮
@@ -56,28 +198,28 @@ export function appInit(shell) {
     if (!root) return;
     const projects = loadProjects();
     root.innerHTML = `
-      <div class="page-container" id="gamemaker-app" role="main" aria-label="GameMakerホーム画面">
-        <header class="card">
+      <div class="page-container" id="gamemaker-app" role="main" aria-label="GameMakerホーム画面" style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+        <header class="card" style="width:100%;max-width:480px;">
           <h1 class="title" id="gm-title">${LANG_DATA[lang] && LANG_DATA[lang].gamemaker_title ? t('gamemaker_title', lang) : 'GameMaker'}</h1>
           <p class="desc">${LANG_DATA[lang] && LANG_DATA[lang].gamemaker_desc ? t('gamemaker_desc', lang) : '2Dゲームを作ろう！モードを選んでスタート'}</p>
-          <button class="pickramu-load-button secondary" id="gm-lang-btn" style="position:absolute;right:1rem;top:1rem;">${lang==='ja'?'EN':'JA'}</button>
+          <button class="pickramu-load-button secondary" id="gm-lang-btn" style="position:absolute;right:1.5rem;top:1.5rem;z-index:2;">${lang==='ja'?'EN':'JA'}</button>
         </header>
-        <main class="card">
-          <div class="mode-select" role="group" aria-label="モード選択">
-            <button class="pickramu-load-button primary" id="gm-lesson-btn" aria-label="講座モード (L)" accesskey="l">${LANG_DATA[lang] && LANG_DATA[lang].lesson_mode ? t('lesson_mode', lang) : '講座モード'}</button>
-            <button class="pickramu-load-button secondary" id="gm-create-btn" aria-label="創造モード (C)" accesskey="c">${LANG_DATA[lang] && LANG_DATA[lang].create_mode ? t('create_mode', lang) : '創造モード'}</button>
-            <button class="pickramu-load-button primary" id="gm-import-drive-btn" aria-label="Google Driveからインポート (I)" accesskey="i">${LANG_DATA[lang] && LANG_DATA[lang].import_from_drive ? t('import_from_drive', lang) : 'Google Driveからインポート'}</button>
+        <main class="card" style="width:100%;max-width:480px;display:flex;flex-direction:column;align-items:center;">
+          <div class="mode-select" role="group" aria-label="モード選択" style="width:100%;justify-content:space-between;gap:1.5rem;margin-bottom:2.5rem;">
+            <button class="pickramu-load-button primary" id="gm-lesson-btn" aria-label="講座モード (L)" accesskey="l" style="flex:1;min-width:120px;">${LANG_DATA[lang] && LANG_DATA[lang].lesson_mode ? t('lesson_mode', lang) : '講座モード'}</button>
+            <button class="pickramu-load-button secondary" id="gm-create-btn" aria-label="創造モード (C)" accesskey="c" style="flex:1;min-width:120px;">${LANG_DATA[lang] && LANG_DATA[lang].create_mode ? t('create_mode', lang) : '創造モード'}</button>
           </div>
-          <div class="recent-projects" id="gm-recent-projects" role="region" aria-label="最近のプロジェクト">
-            <h2 class="section-title">${LANG_DATA[lang] && LANG_DATA[lang].recent_projects ? t('recent_projects', lang) : '最近のプロジェクト'}</h2>
+          <button class="pickramu-load-button primary" id="gm-import-drive-btn" aria-label="Google Driveからインポート (I)" accesskey="i" style="width:100%;margin-bottom:2rem;">${LANG_DATA[lang] && LANG_DATA[lang].import_from_drive ? t('import_from_drive', lang) : 'Google Driveからインポート'}</button>
+          <div class="recent-projects" id="gm-recent-projects" role="region" aria-label="最近のプロジェクト" style="width:100%;">
+            <h2 class="section-title" style="margin-bottom:0.7rem;">${LANG_DATA[lang] && LANG_DATA[lang].recent_projects ? t('recent_projects', lang) : '最近のプロジェクト'}</h2>
             <ul class="project-list" id="gm-project-list" role="list">
               ${projects.length === 0
                 ? `<li class="project-item empty" role="listitem">${LANG_DATA[lang] && LANG_DATA[lang].no_projects ? t('no_projects', lang) : 'プロジェクトはまだありません'}</li>`
-                : projects.map(p => `<li class="project-item" role="listitem"><span>${p.name}</span> <button class="pickramu-load-button secondary gm-load-btn" data-id="${p.id}" aria-label="${p.name}を開く">${LANG_DATA[lang] && LANG_DATA[lang].open ? t('open', lang) : '開く'}</button></li>`).join('')}
+                : projects.map(p => `<li class="project-item" role="listitem"><span style="font-weight:500;">${p.name}</span> <button class="pickramu-load-button secondary gm-load-btn" data-id="${p.id}" aria-label="${p.name}を開く" style="margin-left:1.2rem;">${LANG_DATA[lang] && LANG_DATA[lang].open ? t('open', lang) : '開く'}</button></li>`).join('')}
             </ul>
           </div>
         </main>
-        <footer class="card">
+        <footer class="card" style="width:100%;max-width:480px;background:transparent;box-shadow:none;margin-top:0.5rem;">
           <p class="copyright">${LANG_DATA[lang] && LANG_DATA[lang].copyright ? t('copyright', lang) : 'Copyright ©2024 Deep-School. All rights reserved.'}</p>
         </footer>
       </div>
