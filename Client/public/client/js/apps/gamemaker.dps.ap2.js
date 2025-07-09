@@ -190,6 +190,21 @@ export function appInit(shell) {
     window.CURRENT_LANG = lang;
   }
 
+  // レッスンデータを外部JSONから読み込む
+  window.LESSONS = null;
+  fetch('apps/lessons.json')
+    .then(res => res.json())
+    .then(data => {
+      window.LESSONS = data;
+      renderHome();
+      shell.log({from: 'dp.app.gamemaker.out', message: 'LESSONS loaded', level: 'info'});
+    })
+    .catch(e => {
+      shell.log({from: 'dp.app.gamemaker.out', message: 'LESSONS load failed: '+e, level: 'error'});
+      window.LESSONS = [];
+      renderHome();
+    });
+
   // 画面描画関数
   function renderHome() {
     const root = document.getElementById('app-root');
@@ -280,7 +295,12 @@ export function appInit(shell) {
 
   function renderLesson(stepIdx = null) {
     let lang = localStorage.getItem('gamemaker_lang') || CURRENT_LANG;
-    const steps = LESSONS;
+    if (!window.LESSONS) {
+      const root = document.getElementById('app-root');
+      if (root) root.innerHTML = '<div class="page-container"><div class="card" style="text-align:center;">Loading lessons...</div></div>';
+      return;
+    }
+    const steps = window.LESSONS;
     // 進捗保存・読込
     const PROGRESS_KEY = 'gamemaker_lesson_progress';
     if (stepIdx === null) {
@@ -814,15 +834,15 @@ export function appInit(shell) {
 
   // ブロック定義
   const BLOCK_DEFS = [
-    { type: 'move', label: 'キャラクターを動かす' },
-    { type: 'jump', label: 'ジャンプする' },
-    { type: 'goal', label: 'ゴールに到達したらクリア' },
-    { type: 'addScore', label: 'スコアを加算' },
-    { type: 'sound', label: '音を鳴らす' },
-    { type: 'if', label: 'もしスコアが100以上なら', children: [] },
-    { type: 'repeat', label: 'くりかえし10回', count: 10, children: [] },
-    { type: 'onKey', label: 'スペースキーが押されたとき', children: [] },
-    { type: 'wait', label: '1秒待つ' }
+    { type: 'move', label: 'キャラクターを動かす', icon: '🚶‍♂️', color: '#4f8cff' },
+    { type: 'jump', label: 'ジャンプする', icon: '🦘', color: '#ffb300' },
+    { type: 'goal', label: 'ゴールに到達したらクリア', icon: '🏁', color: '#2cb4ad' },
+    { type: 'addScore', label: 'スコアを加算', icon: '⭐', color: '#ff6f61' },
+    { type: 'sound', label: '音を鳴らす', icon: '🔊', color: '#a259ff' },
+    { type: 'if', label: 'もしスコアが100以上なら', icon: '❓', color: '#ffb300', children: [] },
+    { type: 'repeat', label: 'くりかえし10回', icon: '🔁', color: '#00b894', count: 10, children: [] },
+    { type: 'onKey', label: 'スペースキーが押されたとき', icon: '⌨️', color: '#00b894', children: [] },
+    { type: 'wait', label: '1秒待つ', icon: '⏱️', color: '#888' }
   ];
 
   function renderEditor(type = 'scratch', codeVal = '') {
@@ -831,10 +851,12 @@ export function appInit(shell) {
     if (type === 'scratch') {
       // 新しいブロックUI
       editorPanel.innerHTML = `
-        <div class="scratch-blocks">
-          ${BLOCK_DEFS.map((b,i)=>`<div class="block" draggable="true" data-type="${b.type}" data-idx="${i}">${b.label}</div>`).join('')}
+        <div class="scratch-blocks" style="display:flex;flex-wrap:wrap;gap:0.7em 1em;margin-bottom:1em;">
+          ${BLOCK_DEFS.map((b,i)=>`<div class="block block-palette" draggable="true" data-type="${b.type}" data-idx="${i}" style="display:flex;align-items:center;gap:0.5em;padding:0.7em 1.2em;border-radius:16px;background:${b.color};color:#fff;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,0.08);cursor:grab;user-select:none;transition:box-shadow 0.2s;min-width:120px;">
+            <span style='font-size:1.3em;'>${b.icon}</span> <span>${b.label}</span>
+          </div>`).join('')}
         </div>
-        <div class="dropzone" id="gm-dropzone">ここにブロックをドラッグ＆ドロップ</div>
+        <div class="dropzone" id="gm-dropzone" style="background:#e9eff5;border:2.5px dashed #b2bec3;border-radius:14px;min-height:48px;display:flex;align-items:center;justify-content:center;font-size:1.1em;color:#888;margin-bottom:1em;">ここにブロックをドラッグ＆ドロップ</div>
         <div class="block-list" id="gm-block-list"></div>
         <button class="pickramu-load-button secondary" id="gm-block-clear-btn" style="margin-top:0.5rem;">すべて削除</button>
       `;
@@ -842,21 +864,27 @@ export function appInit(shell) {
       if (!window.scratchBlocksTree) window.scratchBlocksTree = [];
       let scratchBlocksTree = window.scratchBlocksTree;
       function renderBlockTree(blocks, parent, depth=0) {
-        return `<ul style="margin-left:${depth*24}px;list-style:none;padding-left:0;">` +
-          blocks.map((b, i) => {
+        return `<ul style="margin-left:${depth*24}px;list-style:none;padding-left:0;">
+          ${blocks.map((b, i) => {
+            const def = BLOCK_DEFS.find(d=>d.type===b.type) || {icon:'❔',color:'#888'};
             let controls = '';
+            let children = '';
+            // ネスト可能なブロックには子ブロック用ドロップゾーン
             if (b.type === 'if' || b.type === 'repeat' || b.type === 'onKey') {
               controls = `<button class='pickramu-load-button secondary gm-add-child-btn' data-parent='${parent}' data-idx='${i}' style='font-size:0.9rem;padding:2px 8px;margin-left:4px;'>子を追加</button>`;
+              children = `<li style='margin:6px 0 6px 0;'>
+                <div class='child-dropzone' data-path='${parent}.${i}' style='background:#e9eff5;border:2px dashed #b2bec3;border-radius:10px;min-height:32px;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:0.98em;margin:4px 0;'>ここに子ブロックをドロップ</div>
+                ${(b.children && b.children.length) ? renderBlockTree(b.children, `${parent}.${i}`, depth+1) : ''}
+              </li>`;
             }
-            let children = (b.children && b.children.length)
-              ? renderBlockTree(b.children, `${parent}.${i}`, depth+1)
-              : '';
-            return `<li style='margin-bottom:4px;'>
-              <span class='block block-placed' draggable='true' data-path='${parent}.${i}' title='クリックで削除/ドラッグで並び替え'>${b.label}</span>
+            return `<li style='margin-bottom:8px;'>
+              <span class='block block-placed' draggable='true' data-path='${parent}.${i}' title='クリックで削除/ドラッグで並び替え' style='display:inline-flex;align-items:center;gap:0.5em;padding:0.6em 1.1em;border-radius:14px;background:${def.color};color:#fff;font-weight:600;box-shadow:0 1.5px 6px rgba(0,0,0,0.10);cursor:grab;user-select:none;min-width:110px;'>
+                <span style='font-size:1.2em;'>${def.icon}</span> <span>${def.label||b.type}</span>
+              </span>
               ${controls}
               ${children}
             </li>`;
-          }).join('') + '</ul>';
+          }).join('')}</ul>`;
       }
       function updateBlockList() {
         const blockList = document.getElementById('gm-block-list');
@@ -870,6 +898,59 @@ export function appInit(shell) {
             arr.splice(path[path.length-1],1);
             updateBlockList();
           };
+          // 並び替え用ドラッグイベント
+          span.ondragstart = e => {
+            e.dataTransfer.setData('block-path', span.getAttribute('data-path'));
+            e.dataTransfer.effectAllowed = 'move';
+          };
+        });
+        // 並び替え・ネスト用ドロップイベント
+        blockList.querySelectorAll('.block-placed').forEach(span => {
+          span.ondragover = e => { e.preventDefault(); span.style.boxShadow = '0 0 0 3px #4f8cff55'; };
+          span.ondragleave = e => { span.style.boxShadow = ''; };
+          span.ondrop = e => {
+            e.preventDefault();
+            span.style.boxShadow = '';
+            const fromPath = e.dataTransfer.getData('block-path');
+            const toPath = span.getAttribute('data-path');
+            if (!fromPath || fromPath === toPath) return;
+            // パスを配列に
+            const fromArr = fromPath.replace('root.','').split('.').map(Number);
+            const toArr = toPath.replace('root.','').split('.').map(Number);
+            // ブロックを取得・削除
+            let fromParent = scratchBlocksTree;
+            for(let i=0;i<fromArr.length-1;i++) fromParent = fromParent[fromArr[i]].children;
+            const [moved] = fromParent.splice(fromArr[fromArr.length-1],1);
+            // toParentに挿入
+            let toParent = scratchBlocksTree;
+            for(let i=0;i<toArr.length-1;i++) toParent = toParent[toArr[i]].children;
+            toParent.splice(toArr[toArr.length-1],0,moved);
+            updateBlockList();
+          };
+        });
+        // ネスト用ドロップゾーン
+        blockList.querySelectorAll('.child-dropzone').forEach(zone => {
+          zone.ondragover = e => { e.preventDefault(); zone.style.background = '#b2bec3'; };
+          zone.ondragleave = e => { zone.style.background = '#e9eff5'; };
+          zone.ondrop = e => {
+            e.preventDefault();
+            zone.style.background = '#e9eff5';
+            const fromPath = e.dataTransfer.getData('block-path');
+            const toPath = zone.getAttribute('data-path');
+            if (!fromPath || !toPath) return;
+            const fromArr = fromPath.replace('root.','').split('.').map(Number);
+            const toArr = toPath.replace('root.','').split('.').map(Number);
+            // ブロックを取得・削除
+            let fromParent = scratchBlocksTree;
+            for(let i=0;i<fromArr.length-1;i++) fromParent = fromParent[fromArr[i]].children;
+            const [moved] = fromParent.splice(fromArr[fromArr.length-1],1);
+            // toParentのchildrenにpush
+            let toBlock = scratchBlocksTree;
+            for(let i=0;i<toArr.length;i++) toBlock = toBlock[toArr[i]];
+            if (!toBlock.children) toBlock.children = [];
+            toBlock.children.push(moved);
+            updateBlockList();
+          };
         });
         // 子追加イベント
         blockList.querySelectorAll('.gm-add-child-btn').forEach(btn => {
@@ -880,56 +961,66 @@ export function appInit(shell) {
             for(let i=0;i<parentPath.length;i++) arr = arr[parentPath[i]].children;
             arr[idx].children = arr[idx].children || [];
             arr[idx].children.push({ type: 'move', label: 'キャラクターを動かす' });
-              updateBlockList();
+            updateBlockList();
           };
         });
       }
-      // ドラッグ＆ドロップ
-      const blocks = editorPanel.querySelectorAll('.block');
-      const dropzone = editorPanel.querySelector('#gm-dropzone');
-      blocks.forEach(block => {
-        block.ondragstart = e => {
-          e.dataTransfer.setData('block-idx', block.getAttribute('data-idx'));
-        };
-      });
-      if (dropzone) {
-        dropzone.ondragover = e => { e.preventDefault(); dropzone.style.background = '#d0e6ff'; };
-        dropzone.ondragleave = e => { dropzone.style.background = ''; };
-        dropzone.ondrop = e => {
-          e.preventDefault();
-          const idx = Number(e.dataTransfer.getData('block-idx'));
-          const blockDef = JSON.parse(JSON.stringify(BLOCK_DEFS[idx]));
-          scratchBlocksTree.push(blockDef);
-            updateBlockList();
-          dropzone.style.background = '';
-        };
-      }
-      updateBlockList();
-      const clearBtn = editorPanel.querySelector('#gm-block-clear-btn');
-      if (clearBtn) clearBtn.onclick = () => { scratchBlocksTree.length = 0; updateBlockList(); };
     } else if (type === 'code') {
+      // CodeMirrorエディタ用のラッパー
       editorPanel.innerHTML = `
-        <textarea id="gm-code-editor" class="code-editor" rows="10" style="width:100%;font-size:1.1rem;">${codeVal || '// ここにゲームのロジックを書こう\n'}</textarea>
-        <button class="pickramu-load-button primary" id="gm-save-code-btn">コードを保存</button>
-        <button class="pickramu-load-button secondary" id="gm-reset-code-btn" style="margin-left:0.5rem;">リセット</button>
-        <button class="pickramu-load-button secondary" id="gm-sample-code-btn" style="margin-left:0.5rem;">サンプル挿入</button>
+        <div style="margin-bottom:0.7em;">
+          <div id="gm-cm-editor" style="height:220px;"></div>
+        </div>
+        <div style="display:flex;gap:0.7em;align-items:center;">
+          <button class="pickramu-load-button primary" id="gm-run-code-btn">実行</button>
+          <button class="pickramu-load-button secondary" id="gm-reset-code-btn">リセット</button>
+          <button class="pickramu-load-button secondary" id="gm-sample-code-btn">サンプル</button>
+          <span id="gm-code-error" style="color:#d9363e;font-size:1em;margin-left:1em;"></span>
+        </div>
       `;
-      const saveBtn = document.getElementById('gm-save-code-btn');
-      if (saveBtn) saveBtn.onclick = () => {
-        const textarea = document.getElementById('gm-code-editor');
-        codeValue = textarea.value;
-        alert('コード内容を保存しました');
-      };
-      const resetBtn = document.getElementById('gm-reset-code-btn');
-      if (resetBtn) resetBtn.onclick = () => {
-        const textarea = document.getElementById('gm-code-editor');
-        textarea.value = '// ここにゲームのロジックを書こう\n';
-      };
-      const sampleBtn = document.getElementById('gm-sample-code-btn');
-      if (sampleBtn) sampleBtn.onclick = () => {
-        const textarea = document.getElementById('gm-code-editor');
-        textarea.value = `// キャラクターを自動で左右に動かす\nlet dir = 1;\nsetInterval(()=>{\n  x += dir * 2;\n  if(x < 0 || x > 288) dir *= -1;\n  draw();\n}, 30);`;
-      };
+      loadCodeMirrorIfNeeded(() => {
+        // CodeMirror初期化
+        if (window.gmCodeMirror) window.gmCodeMirror.toTextArea && window.gmCodeMirror.toTextArea();
+        const textarea = document.createElement('textarea');
+        textarea.value = codeVal || '// ここにゲームのロジックを書こう\n';
+        textarea.id = 'gm-cm-textarea';
+        document.getElementById('gm-cm-editor').appendChild(textarea);
+        window.gmCodeMirror = window.CodeMirror.fromTextArea(textarea, {
+          mode: 'javascript',
+          lineNumbers: true,
+          autoCloseBrackets: true,
+          theme: (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'default' : 'default',
+          placeholder: '// ここにゲームのロジックを書こう\n',
+        });
+        window.gmCodeMirror.setSize('100%', '220px');
+      });
+      // 実行ボタン
+      setTimeout(() => {
+        const runBtn = document.getElementById('gm-run-code-btn');
+        const errorSpan = document.getElementById('gm-code-error');
+        if (runBtn) runBtn.onclick = () => {
+          errorSpan.textContent = '';
+          let code = '';
+          if (window.gmCodeMirror) code = window.gmCodeMirror.getValue();
+          else code = document.getElementById('gm-cm-textarea').value;
+          try {
+            // プレビュー画面に反映
+            renderPreview(assets, scratchBlocks, code);
+          } catch (e) {
+            errorSpan.textContent = e.message || e;
+          }
+        };
+        // リセットボタン
+        const resetBtn = document.getElementById('gm-reset-code-btn');
+        if (resetBtn) resetBtn.onclick = () => {
+          if (window.gmCodeMirror) window.gmCodeMirror.setValue('// ここにゲームのロジックを書こう\n');
+        };
+        // サンプルボタン
+        const sampleBtn = document.getElementById('gm-sample-code-btn');
+        if (sampleBtn) sampleBtn.onclick = () => {
+          if (window.gmCodeMirror) window.gmCodeMirror.setValue(`// キャラクターを自動で左右に動かす\nlet dir = 1;\nsetInterval(()=>{\n  x += dir * 2;\n  if(x < 0 || x > 288) dir *= -1;\n  draw();\n}, 30);`);
+        };
+      }, 300);
     }
   }
 
@@ -1287,45 +1378,36 @@ function renderAdminUI() {
    }
  }); 
 
-// --- レッスンデータ（JSON管理） ---
-const LESSONS = [
-  {
-    id: 1,
-    title: { ja: "ステップ1: ゲームの基本", en: "Step 1: Game Basics" },
-    desc: { ja: "2Dゲーム制作の基本を学ぼう。画面やキャラクターの概念を理解します。", en: "Learn the basics of 2D game creation. Understand screens and characters." },
-    image: null,
-    hints: [
-      { ja: "画面サイズは320x240です。", en: "Screen size is 320x240." }
-    ],
-    faqs: [
-      { ja: "キャラクターが表示されない場合は？", en: "What if the character doesn't appear?" }
-    ],
-    aiGuide: { ja: "画面は320x240ピクセル、キャラクターは32x32ピクセルで描画されます。まずはキャラクター画像をアセットに追加しましょう。", en: "The screen is 320x240 pixels, and characters are drawn at 32x32 pixels. First, add a character image to your assets." }
-  },
-  {
-    id: 2,
-    title: { ja: "ステップ2: キャラクターを動かそう", en: "Step 2: Move the Character" },
-    desc: { ja: "キャラクター画像を配置し、矢印キーで動かす仕組みを作ります。", en: "Place a character image and make it move with arrow keys." },
-    image: null,
-    hints: [
-      { ja: "キャラクターのx座標を変更してみましょう。", en: "Try changing the character's x coordinate." }
-    ],
-    faqs: [
-      { ja: "動かない場合は？", en: "What if it doesn't move?" }
-    ],
-    aiGuide: { ja: "キャラクターを動かすには「キャラクターを動かす」ブロックや、コード型ならx座標を変更するロジックを追加します。", en: "To move the character, add a 'move character' block or change the x coordinate in code mode." }
-  },
-  {
-    id: 3,
-    title: { ja: "ステップ3: ゴールを作ろう", en: "Step 3: Create a Goal" },
-    desc: { ja: "ゴールを設置し、キャラクターが到達したらクリアになるようにします。", en: "Set a goal and make it so the character clears the stage upon reaching it." },
-    image: null,
-    hints: [
-      { ja: "ゴールの座標を決めてみましょう。", en: "Set the coordinates for the goal." }
-    ],
-    faqs: [
-      { ja: "ゴール判定ができない場合は？", en: "What if the goal detection doesn't work?" }
-    ],
-    aiGuide: { ja: "ゴールを設置し、キャラクターが到達したらスコアを加算し、クリアメッセージを表示しましょう。", en: "Place a goal, and when the character reaches it, add score and show a clear message." }
+// --- レッスンデータ（外部JSONで管理） ---
+// window.LESSONS = null; // グローバルで管理
+
+// --- レッスンデータ（外部JSONで管理） ---
+// window.LESSONS = null; // グローバルで管理
+
+// --- CodeMirror CDN動的ロード ---
+function loadCodeMirrorIfNeeded(cb) {
+  if (window.CodeMirror) return cb();
+  // CSS
+  if (!document.getElementById('cm-css')) {
+    const link = document.createElement('link');
+    link.id = 'cm-css';
+    link.rel = 'stylesheet';
+    link.href = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css';
+    document.head.appendChild(link);
   }
-];
+  // JS
+  const jsUrls = [
+    'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/display/placeholder.min.js'
+  ];
+  let loaded = 0;
+  jsUrls.forEach(url => {
+    if ([...document.scripts].some(s=>s.src===url)) { loaded++; if (loaded===jsUrls.length) cb(); return; }
+    const script = document.createElement('script');
+    script.src = url;
+    script.onload = () => { loaded++; if (loaded===jsUrls.length) cb(); };
+    document.body.appendChild(script);
+  });
+}
