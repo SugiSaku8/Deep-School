@@ -21,6 +21,11 @@ export function appInit(shell) {
     <div class="page-container full-screen scr-bg">
       <button class="go-back-button" id="scr-back-btn" data-lang-key="back">←</button>
       <h1 class="page-title" data-lang-key="scr_note">SCR</h1>
+      <div style="display:flex;gap:12px;align-items:center;margin-bottom:8px;">
+        <button id="scr-toaster-btn" class="button-chalk" style="background:#2cb4ad;color:#fff;border-radius:8px;padding:8px 16px;box-shadow:0 2px 8px rgba(44,180,173,0.12);font-weight:600;">ToasterMachineで答えを生成</button>
+        <button id="scr-toaster-to-chat" class="button-chalk" style="background:#ffd700;color:#222;border-radius:8px;padding:8px 16px;box-shadow:0 2px 8px rgba(255,215,0,0.12);font-weight:600;display:none;">生成内容をChatに送る</button>
+        <span id="scr-toaster-status" style="margin-left:8px;color:#2cb4ad;font-weight:500;"></span>
+      </div>
       <div id="scr-user-info" class="scr-user-info" style="display:none;">
         <span id="scr-current-user"></span>
       </div>
@@ -933,5 +938,43 @@ export function appInit(shell) {
       return generated;
     }
     return { username, userid };
+  }
+
+  // ToasterMachine連携ボタンのイベント
+  const toasterBtn = document.getElementById('scr-toaster-btn');
+  const toasterToChatBtn = document.getElementById('scr-toaster-to-chat');
+  const toasterStatus = document.getElementById('scr-toaster-status');
+  let lastToasterResult = '';
+  if (toasterBtn) {
+    toasterBtn.onclick = async () => {
+      const postdata = document.getElementById('postdata-modal')?.value || '';
+      if (!postdata) {
+        toasterStatus.textContent = '投稿内容を入力してください';
+        return;
+      }
+      toasterStatus.textContent = 'AI生成中...';
+      toasterBtn.disabled = true;
+      try {
+        // ToasterMachine API呼び出し
+        const resp = await window.chatManager?.geminiProcessor?.callGemini_U?.(postdata) || 'ToasterMachine連携API未接続';
+        lastToasterResult = resp;
+        toasterStatus.textContent = '生成完了';
+        toasterToChatBtn.style.display = '';
+      } catch (e) {
+        toasterStatus.textContent = 'エラー: ' + (e.message || e);
+      } finally {
+        toasterBtn.disabled = false;
+      }
+    };
+  }
+  if (toasterToChatBtn) {
+    toasterToChatBtn.onclick = () => {
+      if (lastToasterResult) {
+        // chatアプリに転送
+        localStorage.setItem('toastermachine_transfer', lastToasterResult);
+        window.location.hash = '#chat';
+        location.reload();
+      }
+    };
   }
 }

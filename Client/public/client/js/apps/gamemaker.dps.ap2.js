@@ -439,6 +439,8 @@ export function appInit(shell) {
             <div class="gm-support-btns">
               <button class="gm-btn gm-primary" id="gm-ai-support-btn">AIサポート</button>
               <button class="gm-btn gm-secondary">SCRサポート</button>
+              <button class="gm-btn gm-primary" id="gm-toaster-btn" style="background:#2cb4ad;color:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(44,180,173,0.12);font-weight:600;">ToasterMachineに質問</button>
+              <span id="gm-toaster-status" style="margin-left:8px;color:#2cb4ad;font-weight:500;"></span>
             </div>
           </div>
         </main>
@@ -685,6 +687,27 @@ export function appInit(shell) {
       if (advice.length === 0) advice.push('特に問題は見つかりませんでした。');
       alert('AIアドバイス:\n' + advice.join('\n'));
     };
+    // ToasterMachine連携ボタンのイベント
+    setTimeout(() => {
+      const toasterBtn = document.getElementById('gm-toaster-btn');
+      const toasterStatus = document.getElementById('gm-toaster-status');
+      if (toasterBtn) {
+        toasterBtn.onclick = async () => {
+          let question = prompt('ToasterMachineに質問したい内容を入力してください');
+          if (!question) return;
+          toasterStatus.textContent = 'AI生成中...';
+          toasterBtn.disabled = true;
+          try {
+            const resp = await window.chatManager?.geminiProcessor?.callGemini_U?.(question) || 'ToasterMachine連携API未接続';
+            toasterStatus.textContent = '回答: ' + resp.slice(0, 60) + (resp.length > 60 ? '...' : '');
+          } catch (e) {
+            toasterStatus.textContent = 'エラー: ' + (e.message || e);
+          } finally {
+            toasterBtn.disabled = false;
+          }
+        };
+      }
+    }, 0);
   }
 
   // ブロック定義

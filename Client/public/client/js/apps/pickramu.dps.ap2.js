@@ -476,10 +476,10 @@ export function appInit(shell) {
             </div>
           </div>
         </div>
-        <iframe id="pickramu_iframe" class="pickramu-iframe"></iframe>
+        <iframe id="pickramu_iframe" class="pickramu-iframe" style="border:none;border-radius:16px;box-shadow:0 2px 8px rgba(44,180,173,0.08);background:transparent;transition:box-shadow 0.2s;"></iframe>
       </div>
       <div id="pickramu-eguide-area" class="pickramu-eguide-area" style="display:none;">
-        <iframe src="eguide.html" class="pickramu-iframe"></iframe>
+        <iframe src="eguide.html" class="pickramu-iframe" style="border:none;border-radius:16px;box-shadow:0 2px 8px rgba(44,180,173,0.08);background:transparent;transition:box-shadow 0.2s;"></iframe>
       </div>
     </div>
   `;
@@ -602,4 +602,22 @@ export function appInit(shell) {
   const eguideArea = document.getElementById('pickramu-eguide-area');
   if (eguideTab) eguideTab.style.display = 'none';
   if (eguideArea) eguideArea.style.display = 'none';
+
+  // Ctrl+選択でToasterMachineに送信
+  const iframe = document.getElementById('pickramu_iframe');
+  if (iframe) {
+    iframe.onload = () => {
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      doc.addEventListener('mouseup', (e) => {
+        if (e.ctrlKey) {
+          const sel = doc.getSelection();
+          const text = sel ? sel.toString().trim() : '';
+          if (text) {
+            localStorage.setItem('toastermachine_transfer', text);
+            window.open('#chat', '_blank');
+          }
+        }
+      });
+    };
+  }
 } 
