@@ -451,8 +451,8 @@ export function appInit(shell) {
         <button class="auto-btn" id="tab-pickramu" data-lang-key="pickramu_tab">教材ワーク</button>
         <button class="auto-btn" id="tab-eguide" data-lang-key="eguide_tab">eGuide</button>
       </div>
-      <div id="pickramu-work-area" class="pickramu-work-area">
-        <div class="pickramu-select-container">
+      <div id="pickramu-work-area" class="pickramu-work-area" style="display:flex;gap:24px;align-items:flex-start;">
+        <div class="pickramu-select-container" style="flex:0 0 320px;max-width:340px;min-width:260px;">
           <div class="pickramu-select-card">
             <h3 class="pickramu-select-title">教材選択</h3>
             <div class="pickramu-select-group">
@@ -476,7 +476,7 @@ export function appInit(shell) {
             </div>
           </div>
         </div>
-        <iframe id="pickramu_iframe" class="pickramu-iframe" style="border:none;border-radius:16px;box-shadow:0 2px 8px rgba(44,180,173,0.08);background:transparent;transition:box-shadow 0.2s;"></iframe>
+        <iframe id="pickramu_iframe" class="pickramu-iframe" style="flex:1 1 0%;min-width:0;height:70vh;border:none;border-radius:16px;box-shadow:0 2px 8px rgba(44,180,173,0.08);background:transparent;transition:box-shadow 0.2s;"></iframe>
       </div>
       <div id="pickramu-eguide-area" class="pickramu-eguide-area" style="display:none;">
         <iframe src="eguide.html" class="pickramu-iframe" style="border:none;border-radius:16px;box-shadow:0 2px 8px rgba(44,180,173,0.08);background:transparent;transition:box-shadow 0.2s;"></iframe>
