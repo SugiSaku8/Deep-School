@@ -280,11 +280,7 @@ export function appInit(shell) {
 
   function renderLesson(stepIdx = null) {
     let lang = localStorage.getItem('gamemaker_lang') || CURRENT_LANG;
-    const steps = [
-      { title: 'ステップ1: ゲームの基本', desc: '2Dゲーム制作の基本を学ぼう。画面やキャラクターの概念を理解します。' },
-      { title: 'ステップ2: キャラクターを動かそう', desc: 'キャラクター画像を配置し、矢印キーで動かす仕組みを作ります。' },
-      { title: 'ステップ3: ゴールを作ろう', desc: 'ゴールを設置し、キャラクターが到達したらクリアになるようにします。' }
-    ];
+    const steps = LESSONS;
     // 進捗保存・読込
     const PROGRESS_KEY = 'gamemaker_lesson_progress';
     if (stepIdx === null) {
@@ -297,38 +293,78 @@ export function appInit(shell) {
     root.innerHTML = `
       <div class="page-container" id="gm-lesson-mode">
         <header class="card" style="width:100%;max-width:480px;position:relative;">
-        <header class="card">
-          <h1 class="title">講座モード</h1>
-          <button class="pickramu-load-button secondary gm-back" id="gm-back-home" aria-label="ホームに戻る">← ホーム</button>
-          <button class="pickramu-load-button secondary" id="gm-reset-progress-btn" style="margin-left:1rem;">進捗リセット</button>
+          <button class="pickramu-load-button secondary gm-back" id="gm-back-home" aria-label="ホームに戻る" style="position:absolute;left:1.2rem;top:1.2rem;z-index:2;">← ホーム</button>
+          <h1 class="title" style="margin-top:0.5rem;">講座モード</h1>
         </header>
-        <main class="card">
+        <main class="card" style="width:100%;max-width:480px;">
           <div class="lesson-content">
-            <h2>
-              <span class="step-title">${LANG_DATA[lang] && LANG_DATA[lang].step_title ? t('step_title', lang) : step.title}</span>
-              <span class="step-count">(${stepIdx+1}/${steps.length})</span>
+            <h2 style="text-align:center;margin-bottom:1.2rem;">
+              <span class="step-title" style="font-size:1.25rem;font-weight:600;">${step.title[lang] || step.title.ja}</span>
+              <span class="step-count" style="font-size:1rem;color:#2cb4ad;margin-left:0.7em;">(${stepIdx+1}/${steps.length})</span>
             </h2>
-            <p class="step-desc">${LANG_DATA[lang] && LANG_DATA[lang].step_desc ? t('step_desc', lang) : step.desc}</p>
-            <div class="progress-bar" aria-label="進捗バー">
-              <div class="progress" style="width: ${progress}%"></div>
-              <span class="progress-percent">${progress}%</span>
+            <p class="step-desc" style="text-align:center;color:#555;margin-bottom:1.5rem;">${step.desc[lang] || step.desc.ja}</p>
+            <div class="progress-bar" aria-label="進捗バー" style="background:#e0e7ef;border-radius:8px;height:18px;position:relative;margin-bottom:1.5rem;">
+              <div class="progress" style="width: ${progress}%;background:linear-gradient(90deg,#4f8cff,#2cb4ad);height:100%;border-radius:8px;"></div>
+              <span class="progress-percent" style="position:absolute;right:12px;top:0;color:#222;font-size:0.98rem;line-height:18px;">${progress}%</span>
             </div>
-            <div class="lesson-nav">
-              <button class="pickramu-load-button secondary" id="gm-prev-step" ${stepIdx===0?'disabled':''}>前へ</button>
-              <button class="pickramu-load-button primary" id="gm-next-step" ${stepIdx===steps.length-1?'disabled':''}>次へ</button>
-              <button class="pickramu-load-button secondary" id="gm-progress-report-btn" style="margin-left:1rem;">進捗レポート</button>
+            <div class="lesson-nav" style="display:flex;gap:1.2rem;justify-content:center;margin-bottom:2rem;">
+              <button class="pickramu-load-button secondary" id="gm-prev-step" ${stepIdx===0?'disabled':''} style="display:flex;align-items:center;gap:0.5em;">
+                <span style="font-size:1.2em;">⬅️</span> 前へ
+              </button>
+              <button class="pickramu-load-button primary" id="gm-next-step" ${stepIdx===steps.length-1?'disabled':''} style="display:flex;align-items:center;gap:0.5em;">
+                次へ <span style="font-size:1.2em;">➡️</span>
+              </button>
+              <button class="pickramu-load-button secondary" id="gm-progress-report-btn" style="display:flex;align-items:center;gap:0.5em;">
+                <span style="font-size:1.2em;">📈</span> 進捗レポート
+              </button>
             </div>
-            <div class="ai-support-panel">
-              <strong>AIサポート</strong>
-              <div class="ai-message" aria-live="polite" role="status">困ったらAIに質問しよう！（仮UI）</div>
-              <div class="ai-btn-row">
-                <button class="pickramu-load-button primary" id="gm-ai-ask-btn" aria-label="AIに質問">AIに質問</button>
-                <button class="pickramu-load-button secondary" id="gm-ai-hint-btn" aria-label="ヒント例を表示">ヒント例</button>
-                <button class="pickramu-load-button secondary" id="gm-ai-faq-btn" aria-label="よくある質問を表示">よくある質問</button>
-                <button class="pickramu-load-button secondary" id="gm-ai-clear-btn" aria-label="AIサポートをクリア">AIサポートをクリア</button>
-                <button class="pickramu-load-button secondary" id="gm-ai-copy-btn" aria-label="AIサポートをコピー">AIサポートをコピー</button>
-                <button class="pickramu-load-button secondary" id="gm-ai-speak-btn" aria-label="AIサポートを音声で読み上げ">AIサポートを音声で読み上げ</button>
-                <button class="pickramu-load-button primary" id="gm-ai-guide-btn" aria-label="AIガイド自動生成">AIガイド自動生成</button>
+            <div class="ai-support-panel" style="background:#f7fafc;border-radius:18px;box-shadow:0 2px 8px rgba(44,180,173,0.07);padding:1.2rem 1rem 1.5rem 1rem;margin-bottom:0.5rem;">
+              <div style="display:flex;align-items:center;gap:0.7em;margin-bottom:1em;">
+                <span style="font-size:1.5em;">🤖</span>
+                <strong style="font-size:1.1em;">AIサポート</strong>
+              </div>
+              <div class="ai-message" aria-live="polite" role="status" style="background:#fff;border-radius:12px;padding:1em 1.2em;margin-bottom:1.2em;box-shadow:0 1px 4px rgba(44,180,173,0.06);display:flex;align-items:center;gap:0.7em;min-height:2.5em;">
+                <span style="font-size:1.3em;">💡</span>
+                <span id="ai-message-text">困ったらAIに質問しよう！</span>
+              </div>
+              <div class="ai-btn-row" style="display:flex;flex-wrap:wrap;gap:0.7em;justify-content:center;">
+                <button class="pickramu-load-button primary" id="gm-ai-ask-btn" aria-label="AIに質問" style="display:flex;align-items:center;gap:0.5em;min-width:110px;">
+                  <span style="font-size:1.2em;">💬</span> 質問
+                </button>
+                <button class="pickramu-load-button secondary" id="gm-ai-hint-btn" aria-label="ヒント例を表示" style="display:flex;align-items:center;gap:0.5em;min-width:110px;">
+                  <span style="font-size:1.2em;">💡</span> ヒント
+                </button>
+                <button class="pickramu-load-button secondary" id="gm-ai-faq-btn" aria-label="よくある質問を表示" style="display:flex;align-items:center;gap:0.5em;min-width:110px;">
+                  <span style="font-size:1.2em;">❓</span> FAQ
+                </button>
+                <button class="pickramu-load-button secondary" id="gm-ai-clear-btn" aria-label="AIサポートをクリア" style="display:flex;align-items:center;gap:0.5em;min-width:110px;">
+                  <span style="font-size:1.2em;">🧹</span> クリア
+                </button>
+                <button class="pickramu-load-button secondary" id="gm-ai-copy-btn" aria-label="AIサポートをコピー" style="display:flex;align-items:center;gap:0.5em;min-width:110px;">
+                  <span style="font-size:1.2em;">📋</span> コピー
+                </button>
+                <button class="pickramu-load-button secondary" id="gm-ai-speak-btn" aria-label="AIサポートを音声で読み上げ" style="display:flex;align-items:center;gap:0.5em;min-width:110px;">
+                  <span style="font-size:1.2em;">🔊</span> 音声
+                </button>
+                <button class="pickramu-load-button primary" id="gm-ai-guide-btn" aria-label="AIガイド自動生成" style="display:flex;align-items:center;gap:0.5em;min-width:110px;">
+                  <span style="font-size:1.2em;">📝</span> ガイド
+                </button>
+              </div>
+            </div>
+            <div class="lesson-hints-faqs" style="margin-top:1.2em;">
+              <div style="display:flex;gap:1.5em;justify-content:center;flex-wrap:wrap;">
+                <div style="min-width:120px;">
+                  <div style="font-weight:600;color:#2cb4ad;margin-bottom:0.3em;">ヒント</div>
+                  <ul style="padding-left:1.2em;margin:0;">
+                    ${(step.hints||[]).map(h=>`<li style='font-size:0.98em;color:#555;'>${h[lang]||h.ja}</li>`).join('')}
+                  </ul>
+                </div>
+                <div style="min-width:120px;">
+                  <div style="font-weight:600;color:#2cb4ad;margin-bottom:0.3em;">FAQ</div>
+                  <ul style="padding-left:1.2em;margin:0;">
+                    ${(step.faqs||[]).map(f=>`<li style='font-size:0.98em;color:#555;'>${f[lang]||f.ja}</li>`).join('')}
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -343,74 +379,55 @@ export function appInit(shell) {
     if (nextBtn) nextBtn.onclick = () => { localStorage.setItem(PROGRESS_KEY, Math.min(steps.length-1, stepIdx+1)); renderLesson(Math.min(steps.length-1, stepIdx+1)); };
     const aiAskBtn = document.getElementById('gm-ai-ask-btn');
     if (aiAskBtn) aiAskBtn.onclick = async () => {
-      const msg = document.querySelector('.ai-message');
       const question = prompt('AIに質問したい内容を入力してください');
       if (!question) return;
-      msg.textContent = 'AI: 回答生成中...';
+      aiMsg.textContent = 'AI: 回答生成中...';
       let GeminiAPI = window.GeminiAPI;
       if (!GeminiAPI && window.chatManager && window.chatManager.GeminiAPI) {
         GeminiAPI = window.chatManager.GeminiAPI;
       }
       if (!GeminiAPI) {
-        msg.textContent = 'AI: GeminiAPIが利用できません。';
+        aiMsg.textContent = 'AI: GeminiAPIが利用できません。';
         return;
       }
       try {
         const answer = await GeminiAPI.sendMessage(question, []);
-        msg.textContent = 'AI: ' + answer;
+        aiMsg.textContent = 'AI: ' + answer;
       } catch (e) {
-        msg.textContent = 'AI: エラーが発生しました: ' + (e.message || e);
+        aiMsg.textContent = 'AI: エラーが発生しました: ' + (e.message || e);
       }
     };
     const aiHintBtn = document.getElementById('gm-ai-hint-btn');
     if (aiHintBtn) aiHintBtn.onclick = () => {
-      const msg = document.querySelector('.ai-message');
-      if (msg) msg.textContent = '例:「キャラクターが動かないときはどうすればいい？」「スコアを増やすには？」';
+      aiMsg.textContent = (step.hints && step.hints.length) ? step.hints.map(h=>h[lang]||h.ja).join(' / ') : 'ヒントはありません';
     };
     const aiFaqBtn = document.getElementById('gm-ai-faq-btn');
     if (aiFaqBtn) aiFaqBtn.onclick = () => {
-      const msg = document.querySelector('.ai-message');
-      if (msg) msg.textContent = 'FAQ例:「画像が表示されない」「ジャンプができない」「保存できない」など';
+      aiMsg.textContent = (step.faqs && step.faqs.length) ? step.faqs.map(f=>f[lang]||f.ja).join(' / ') : 'FAQはありません';
     };
     const aiClearBtn = document.getElementById('gm-ai-clear-btn');
     if (aiClearBtn) aiClearBtn.onclick = () => {
-      const msg = document.querySelector('.ai-message');
-      if (msg) msg.textContent = '困ったらAIに質問しよう！（仮UI）';
+      aiMsg.textContent = '困ったらAIに質問しよう！';
     };
     const aiCopyBtn = document.getElementById('gm-ai-copy-btn');
     if (aiCopyBtn) aiCopyBtn.onclick = () => {
-      const msg = document.querySelector('.ai-message');
-      if (msg) {
-        navigator.clipboard.writeText(msg.textContent || '').then(()=>{
-          aiCopyBtn.textContent = 'コピーしました';
-          setTimeout(()=>{aiCopyBtn.textContent = 'AIサポートをコピー';}, 1200);
-        });
-      }
+      navigator.clipboard.writeText(aiMsg.textContent || '').then(()=>{
+        aiCopyBtn.textContent = 'コピーしました';
+        setTimeout(()=>{aiCopyBtn.textContent = '📋 コピー';}, 1200);
+      });
     };
     const aiSpeakBtn = document.getElementById('gm-ai-speak-btn');
     if (aiSpeakBtn) aiSpeakBtn.onclick = () => {
-      const msg = document.querySelector('.ai-message');
-      if (msg && window.speechSynthesis) {
-        const utter = new window.SpeechSynthesisUtterance(msg.textContent || '');
-        utter.lang = 'ja-JP';
+      if (window.speechSynthesis) {
+        const utter = new window.SpeechSynthesisUtterance(aiMsg.textContent || '');
+        utter.lang = lang === 'en' ? 'en-US' : 'ja-JP';
         window.speechSynthesis.cancel();
         window.speechSynthesis.speak(utter);
       }
     };
     const aiGuideBtn = document.getElementById('gm-ai-guide-btn');
     if (aiGuideBtn) aiGuideBtn.onclick = () => {
-      const msg = document.querySelector('.ai-message');
-      let guide = '';
-      if (stepIdx === 0) {
-        guide = '【AIガイド】\nゲーム制作の基本: 画面は320x240ピクセル、キャラクターは32x32ピクセルで描画されます。まずはキャラクター画像をアセットに追加しましょう。';
-      } else if (stepIdx === 1) {
-        guide = '【AIガイド】\nキャラクターを動かすには「キャラクターを動かす」ブロックや、コード型ならx座標を変更するロジックを追加します。';
-      } else if (stepIdx === 2) {
-        guide = '【AIガイド】\nゴールを設置し、キャラクターが到達したらスコアを加算し、クリアメッセージを表示しましょう。';
-      } else {
-        guide = '【AIガイド】\nゲーム制作の流れに沿って、アセット・ブロック・コードを組み合わせてみましょう。';
-      }
-      if (msg) msg.textContent = guide;
+      aiMsg.textContent = step.aiGuide[lang] || step.aiGuide.ja;
     };
     const resetProgressBtn = document.getElementById('gm-reset-progress-btn');
     if (resetProgressBtn) resetProgressBtn.onclick = () => { localStorage.setItem(PROGRESS_KEY, 0); renderLesson(0); };
@@ -1269,3 +1286,46 @@ function renderAdminUI() {
      renderAdminUI();
    }
  }); 
+
+// --- レッスンデータ（JSON管理） ---
+const LESSONS = [
+  {
+    id: 1,
+    title: { ja: "ステップ1: ゲームの基本", en: "Step 1: Game Basics" },
+    desc: { ja: "2Dゲーム制作の基本を学ぼう。画面やキャラクターの概念を理解します。", en: "Learn the basics of 2D game creation. Understand screens and characters." },
+    image: null,
+    hints: [
+      { ja: "画面サイズは320x240です。", en: "Screen size is 320x240." }
+    ],
+    faqs: [
+      { ja: "キャラクターが表示されない場合は？", en: "What if the character doesn't appear?" }
+    ],
+    aiGuide: { ja: "画面は320x240ピクセル、キャラクターは32x32ピクセルで描画されます。まずはキャラクター画像をアセットに追加しましょう。", en: "The screen is 320x240 pixels, and characters are drawn at 32x32 pixels. First, add a character image to your assets." }
+  },
+  {
+    id: 2,
+    title: { ja: "ステップ2: キャラクターを動かそう", en: "Step 2: Move the Character" },
+    desc: { ja: "キャラクター画像を配置し、矢印キーで動かす仕組みを作ります。", en: "Place a character image and make it move with arrow keys." },
+    image: null,
+    hints: [
+      { ja: "キャラクターのx座標を変更してみましょう。", en: "Try changing the character's x coordinate." }
+    ],
+    faqs: [
+      { ja: "動かない場合は？", en: "What if it doesn't move?" }
+    ],
+    aiGuide: { ja: "キャラクターを動かすには「キャラクターを動かす」ブロックや、コード型ならx座標を変更するロジックを追加します。", en: "To move the character, add a 'move character' block or change the x coordinate in code mode." }
+  },
+  {
+    id: 3,
+    title: { ja: "ステップ3: ゴールを作ろう", en: "Step 3: Create a Goal" },
+    desc: { ja: "ゴールを設置し、キャラクターが到達したらクリアになるようにします。", en: "Set a goal and make it so the character clears the stage upon reaching it." },
+    image: null,
+    hints: [
+      { ja: "ゴールの座標を決めてみましょう。", en: "Set the coordinates for the goal." }
+    ],
+    faqs: [
+      { ja: "ゴール判定ができない場合は？", en: "What if the goal detection doesn't work?" }
+    ],
+    aiGuide: { ja: "ゴールを設置し、キャラクターが到達したらスコアを加算し、クリアメッセージを表示しましょう。", en: "Place a goal, and when the character reaches it, add score and show a clear message." }
+  }
+];
