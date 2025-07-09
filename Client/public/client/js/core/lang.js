@@ -55,7 +55,17 @@ export const LANG_DATA = {
     question_fail: "申し訳ありません。回答の生成に失敗しました。もう一度お試しください。",
     security_warning_insecure: "セキュリティの弱い接続（http）です。安全なネットワークで再度ログインしてください。",
     security_warning_public_wifi: "公衆Wi-Fiなどセキュリティの弱いネットワークが検出されました。安全な環境で再度ログインしてください。",
-    security_warning_default: "セキュリティ上の理由でログアウトしました。安全な環境で再度ログインしてください。"
+    security_warning_default: "セキュリティ上の理由でログアウトしました。安全な環境で再度ログインしてください。",
+    gamemaker_title: "GameMaker",
+    gamemaker_desc: "2Dゲームを作ろう！モードを選んでスタート",
+    lesson_mode: "講座モード",
+    create_mode: "創造モード",
+    import_from_drive: "Google Driveからインポート",
+    recent_projects: "最近のプロジェクト",
+    no_projects: "プロジェクトはまだありません",
+    open: "開く",
+    step_title: "ステップ",
+    step_desc: "説明"
   },
   en: {
     greeting: "Hello",
@@ -112,7 +122,17 @@ export const LANG_DATA = {
     question_fail: "Sorry, failed to generate answer. Please try again.",
     security_warning_insecure: "You are on an insecure connection (http). Please log in again on a secure network.",
     security_warning_public_wifi: "A public Wi-Fi or insecure network was detected. Please log in again in a secure environment.",
-    security_warning_default: "You have been logged out for security reasons. Please log in again in a secure environment."
+    security_warning_default: "You have been logged out for security reasons. Please log in again in a secure environment.",
+    gamemaker_title: "GameMaker",
+    gamemaker_desc: "Let's make a 2D game! Select a mode to start.",
+    lesson_mode: "Lesson Mode",
+    create_mode: "Create Mode",
+    import_from_drive: "Import from Google Drive",
+    recent_projects: "Recent Projects",
+    no_projects: "No projects yet",
+    open: "Open",
+    step_title: "Step",
+    step_desc: "Description"
   },
   ko: {
     greeting: "안녕하세요",
@@ -169,7 +189,17 @@ export const LANG_DATA = {
     question_fail: "죄송합니다. 답변 생성에 실패했습니다. 다시 시도해 주세요.",
     security_warning_insecure: "보안이 약한 연결(http)입니다. 안전한 네트워크에서 다시 로그인해 주세요.",
     security_warning_public_wifi: "공용 Wi-Fi 등 보안이 약한 네트워크가 감지되었습니다. 안전한 환경에서 다시 로그인해 주세요.",
-    security_warning_default: "보안상의 이유로 로그아웃되었습니다. 안전한 환경에서 다시 로그인해 주세요."
+    security_warning_default: "보안상의 이유로 로그아웃되었습니다. 안전한 환경에서 다시 로그인해 주세요.",
+    gamemaker_title: "GameMaker",
+    gamemaker_desc: "2D와 게임을 만들어보세요! 모드를 선택하여 시작하세요",
+    lesson_mode: "강의 모드",
+    create_mode: "창의 모드",
+    import_from_drive: "Google Drive에서 가져오기",
+    recent_projects: "최근 프로젝트",
+    no_projects: "아직 프로젝트가 없습니다",
+    open: "열기",
+    step_title: "단계",
+    step_desc: "설명"
   },
   zh: {
     greeting: "你好",
@@ -226,7 +256,17 @@ export const LANG_DATA = {
     question_fail: "很抱歉，生成回答失败。请重试。",
     security_warning_insecure: "您正在使用不安全的连接（http）。请在安全的网络环境下重新登录。",
     security_warning_public_wifi: "检测到公共Wi-Fi等不安全网络。请在安全环境下重新登录。",
-    security_warning_default: "出于安全原因，您已被登出。请在安全环境下重新登录。"
+    security_warning_default: "出于安全原因，您已被登出。请在安全环境下重新登录。",
+    gamemaker_title: "GameMaker",
+    gamemaker_desc: "2D游戏制作吧！选择模式开始",
+    lesson_mode: "讲座模式",
+    create_mode: "创造模式",
+    import_from_drive: "从Google Drive导入",
+    recent_projects: "最近的项目",
+    no_projects: "还没有项目",
+    open: "打开",
+    step_title: "步骤",
+    step_desc: "说明"
   }
 };
 

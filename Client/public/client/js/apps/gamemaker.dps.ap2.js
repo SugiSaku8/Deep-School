@@ -58,27 +58,27 @@ export function appInit(shell) {
     root.innerHTML = `
       <div class="page-container" id="gamemaker-app" role="main" aria-label="GameMakerホーム画面">
         <header class="card">
-          <h1 class="title" id="gm-title">${t('gamemaker_title', lang) || 'GameMaker'}</h1>
-          <p class="desc">${t('gamemaker_desc', lang) || '2Dゲームを作ろう！モードを選んでスタート'}</p>
+          <h1 class="title" id="gm-title">${LANG_DATA[lang] && LANG_DATA[lang].gamemaker_title ? t('gamemaker_title', lang) : 'GameMaker'}</h1>
+          <p class="desc">${LANG_DATA[lang] && LANG_DATA[lang].gamemaker_desc ? t('gamemaker_desc', lang) : '2Dゲームを作ろう！モードを選んでスタート'}</p>
           <button class="pickramu-load-button secondary" id="gm-lang-btn" style="position:absolute;right:1rem;top:1rem;">${lang==='ja'?'EN':'JA'}</button>
         </header>
         <main class="card">
           <div class="mode-select" role="group" aria-label="モード選択">
-            <button class="pickramu-load-button primary" id="gm-lesson-btn" aria-label="講座モード (L)" accesskey="l">${t('lesson_mode', lang) || '講座モード'}</button>
-            <button class="pickramu-load-button secondary" id="gm-create-btn" aria-label="創造モード (C)" accesskey="c">${t('create_mode', lang) || '創造モード'}</button>
-            <button class="pickramu-load-button primary" id="gm-import-drive-btn" aria-label="Google Driveからインポート (I)" accesskey="i">${t('import_from_drive', lang) || 'Google Driveからインポート'}</button>
+            <button class="pickramu-load-button primary" id="gm-lesson-btn" aria-label="講座モード (L)" accesskey="l">${LANG_DATA[lang] && LANG_DATA[lang].lesson_mode ? t('lesson_mode', lang) : '講座モード'}</button>
+            <button class="pickramu-load-button secondary" id="gm-create-btn" aria-label="創造モード (C)" accesskey="c">${LANG_DATA[lang] && LANG_DATA[lang].create_mode ? t('create_mode', lang) : '創造モード'}</button>
+            <button class="pickramu-load-button primary" id="gm-import-drive-btn" aria-label="Google Driveからインポート (I)" accesskey="i">${LANG_DATA[lang] && LANG_DATA[lang].import_from_drive ? t('import_from_drive', lang) : 'Google Driveからインポート'}</button>
           </div>
           <div class="recent-projects" id="gm-recent-projects" role="region" aria-label="最近のプロジェクト">
-            <h2 class="section-title">${t('recent_projects', lang) || '最近のプロジェクト'}</h2>
+            <h2 class="section-title">${LANG_DATA[lang] && LANG_DATA[lang].recent_projects ? t('recent_projects', lang) : '最近のプロジェクト'}</h2>
             <ul class="project-list" id="gm-project-list" role="list">
               ${projects.length === 0
-                ? `<li class="project-item empty" role="listitem">${t('no_projects', lang) || 'プロジェクトはまだありません'}</li>`
-                : projects.map(p => `<li class="project-item" role="listitem"><span>${p.name}</span> <button class="pickramu-load-button secondary gm-load-btn" data-id="${p.id}" aria-label="${p.name}を開く">${t('open', lang) || '開く'}</button></li>`).join('')}
+                ? `<li class="project-item empty" role="listitem">${LANG_DATA[lang] && LANG_DATA[lang].no_projects ? t('no_projects', lang) : 'プロジェクトはまだありません'}</li>`
+                : projects.map(p => `<li class="project-item" role="listitem"><span>${p.name}</span> <button class="pickramu-load-button secondary gm-load-btn" data-id="${p.id}" aria-label="${p.name}を開く">${LANG_DATA[lang] && LANG_DATA[lang].open ? t('open', lang) : '開く'}</button></li>`).join('')}
             </ul>
           </div>
         </main>
         <footer class="card">
-          <p class="copyright">${t('copyright', lang)}</p>
+          <p class="copyright">${LANG_DATA[lang] && LANG_DATA[lang].copyright ? t('copyright', lang) : 'Copyright ©2024 Deep-School. All rights reserved.'}</p>
         </footer>
       </div>
     `;
@@ -164,10 +164,10 @@ export function appInit(shell) {
         <main class="card">
           <div class="lesson-content">
             <h2>
-              <span class="step-title">${step.title}</span>
+              <span class="step-title">${LANG_DATA[lang] && LANG_DATA[lang].step_title ? t('step_title', lang) : step.title}</span>
               <span class="step-count">(${stepIdx+1}/${steps.length})</span>
             </h2>
-            <p class="step-desc">${step.desc}</p>
+            <p class="step-desc">${LANG_DATA[lang] && LANG_DATA[lang].step_desc ? t('step_desc', lang) : step.desc}</p>
             <div class="progress-bar" aria-label="進捗バー">
               <div class="progress" style="width: ${progress}%"></div>
               <span class="progress-percent">${progress}%</span>
