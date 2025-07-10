@@ -658,33 +658,71 @@ export function appInit(shell) {
       const panel = document.getElementById('gm-editor-panel');
       if (!panel) return;
       if (type === 'scratch') {
-        // ブロック配列がなければ初期化
+        // パレット用の基本ブロック一覧
+        const blockPalette = [
+          { id: 'move', text: 'キャラクターを右に動かす' },
+          { id: 'jump', text: 'ジャンプする' },
+          { id: 'score', text: 'スコアを1増やす' },
+          { id: 'wait', text: '1秒待つ' },
+          { id: 'say', text: 'メッセージを表示' }
+        ];
         if (!Array.isArray(scratchBlocks)) scratchBlocks = [];
-        // サンプルブロック（空なら仮で追加）
-        if (scratchBlocks.length === 0) {
-          scratchBlocks = [
-            { id: 1, text: 'キャラクターを右に動かす' },
-            { id: 2, text: 'ジャンプする' },
-            { id: 3, text: 'スコアを1増やす' }
-          ];
-        }
-        // ブロックリストHTML
+        // UI: パレット＋キャンバス
         panel.innerHTML = `
-          <div style="padding:0.5em 0;">
-            <div id="gm-block-list" style="display:flex;flex-direction:column;gap:1em;">
-              ${scratchBlocks.map((b,i)=>`
-                <div class="gm-block" draggable="true" data-idx="${i}" style="background:#fff;color:#222;border-radius:12px;box-shadow:0 2px 8px rgba(44,180,173,0.10);padding:1em 1.2em;font-size:1.1em;font-weight:600;cursor:grab;user-select:none;transition:box-shadow 0.2s;">
-                  ${b.text}
-                </div>
-              `).join('')}
+          <div style="display:flex;gap:2em;align-items:flex-start;">
+            <div style="min-width:160px;">
+              <div style="font-weight:700;margin-bottom:0.7em;">ブロック一覧</div>
+              <div id="gm-block-palette" style="display:flex;flex-direction:column;gap:0.7em;">
+                ${blockPalette.map(b=>`
+                  <div class="gm-block-palette-item" draggable="true" data-id="${b.id}" style="background:#f7fafc;color:#222;border-radius:10px;box-shadow:0 1px 4px rgba(44,180,173,0.08);padding:0.7em 1em;font-size:1em;font-weight:600;cursor:grab;user-select:none;">${b.text}</div>
+                `).join('')}
+              </div>
             </div>
-            <button class="pickramu-load-button primary" id="gm-add-block-btn" style="margin-top:1em;">＋ブロック追加</button>
+            <div style="flex:1;min-width:200px;">
+              <div style="font-weight:700;margin-bottom:0.7em;">キャンバス</div>
+              <div id="gm-block-canvas" style="min-height:120px;min-width:180px;background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(44,180,173,0.07);padding:1em;display:flex;flex-direction:column;gap:1em;">
+                ${scratchBlocks.map((b,i)=>`
+                  <div class="gm-block" draggable="true" data-idx="${i}" style="background:#fff;color:#222;border-radius:12px;box-shadow:0 2px 8px rgba(44,180,173,0.10);padding:1em 1.2em;font-size:1.1em;font-weight:600;cursor:grab;user-select:none;display:flex;align-items:center;justify-content:space-between;">
+                    <span>${b.text}</span>
+                    <button class="pickramu-load-button secondary gm-remove-block-btn" data-idx="${i}" style="margin-left:1em;font-size:0.9em;padding:0.2em 0.7em;">削除</button>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
           </div>
         `;
-        // ドラッグ＆ドロップ実装
-        const blockList = panel.querySelector('#gm-block-list');
+        // パレット→キャンバスへのドラッグ＆ドロップ
+        const paletteItems = panel.querySelectorAll('.gm-block-palette-item');
+        const canvas = panel.querySelector('#gm-block-canvas');
+        paletteItems.forEach(item => {
+          item.addEventListener('dragstart', e => {
+            e.dataTransfer.setData('block-id', item.getAttribute('data-id'));
+            item.style.opacity = '0.5';
+          });
+          item.addEventListener('dragend', e => {
+            item.style.opacity = '';
+          });
+        });
+        canvas.addEventListener('dragover', e => {
+          e.preventDefault();
+          canvas.style.boxShadow = '0 0 0 3px #4f8cff';
+        });
+        canvas.addEventListener('dragleave', e => {
+          canvas.style.boxShadow = '';
+        });
+        canvas.addEventListener('drop', e => {
+          e.preventDefault();
+          canvas.style.boxShadow = '';
+          const blockId = e.dataTransfer.getData('block-id');
+          const block = blockPalette.find(b => b.id === blockId);
+          if (block) {
+            scratchBlocks.push({ id: Date.now(), text: block.text });
+            renderEditor('scratch', loadedProject);
+          }
+        });
+        // キャンバス上のブロック並び替え
         let dragIdx = null;
-        blockList.querySelectorAll('.gm-block').forEach(block => {
+        canvas.querySelectorAll('.gm-block').forEach(block => {
           block.addEventListener('dragstart', e => {
             dragIdx = Number(block.getAttribute('data-idx'));
             block.style.opacity = '0.5';
@@ -711,15 +749,14 @@ export function appInit(shell) {
             dragIdx = null;
           });
         });
-        // ブロック追加
-        const addBlockBtn = panel.querySelector('#gm-add-block-btn');
-        if (addBlockBtn) addBlockBtn.onclick = () => {
-          const text = prompt('ブロックの内容を入力してください');
-          if (text) {
-            scratchBlocks.push({ id: Date.now(), text });
+        // ブロック削除
+        panel.querySelectorAll('.gm-remove-block-btn').forEach(btn => {
+          btn.onclick = () => {
+            const idx = Number(btn.getAttribute('data-idx'));
+            scratchBlocks.splice(idx, 1);
             renderEditor('scratch', loadedProject);
-          }
-        };
+          };
+        });
       } else if (type === 'code') {
         // コード型エディタ（仮）
         panel.innerHTML = `<textarea id="gm-code-editor" style="width:100%;height:180px;font-size:1.1em;border-radius:8px;padding:0.7em;">${codeValue||''}</textarea>`;
