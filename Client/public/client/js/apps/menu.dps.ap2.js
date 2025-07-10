@@ -64,6 +64,10 @@ export function appInit(shell) {
           <img src="re/ico/Setting.png" alt="設定アイコン" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-setting" style="cursor: pointer" data-lang-key="menu_setting">設定</div>
         </div>
+        <div class="menu-item">
+          <img src="re/ico/feedback.svg" alt="フィードバックアイコン" class="menu-icon" />
+          <div class="menu-label chalk-text" id="menu-feedback" style="cursor: pointer" data-lang-key="menu_feedback">フィードバック</div>
+        </div>
       </div>
     </div>
     
@@ -459,6 +463,10 @@ export function appInit(shell) {
     'menu-gamemaker': () => {
       shell.log({from: 'dp.app.menu.out', message: 'MenuApp: GameMakerを開く', level: 'info'});
       shell.loadApp('gamemaker');
+    },
+    'menu-feedback': () => {
+      shell.log({from: 'dp.app.menu.out', message: 'MenuApp: フィードバックを開く', level: 'info'});
+      shell.loadApp('feedback');
     }
   };
 
