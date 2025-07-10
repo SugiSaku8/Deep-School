@@ -653,9 +653,84 @@ export function appInit(shell) {
         // ...既存のプレビュー描画ロジックをここで呼ぶ...
       }
     }
-    // ...既存のrenderEditor, updateAssetList, AIサポート, ToasterMachine連携なども同様に...
-    // ... existing code ...
-  }
+    // --- スクラッチ/コード型エディタ切替 ---
+    function renderEditor(type, loadedProject) {
+      const panel = document.getElementById('gm-editor-panel');
+      if (!panel) return;
+      if (type === 'scratch') {
+        // ブロック配列がなければ初期化
+        if (!Array.isArray(scratchBlocks)) scratchBlocks = [];
+        // サンプルブロック（空なら仮で追加）
+        if (scratchBlocks.length === 0) {
+          scratchBlocks = [
+            { id: 1, text: 'キャラクターを右に動かす' },
+            { id: 2, text: 'ジャンプする' },
+            { id: 3, text: 'スコアを1増やす' }
+          ];
+        }
+        // ブロックリストHTML
+        panel.innerHTML = `
+          <div style="padding:0.5em 0;">
+            <div id="gm-block-list" style="display:flex;flex-direction:column;gap:1em;">
+              ${scratchBlocks.map((b,i)=>`
+                <div class="gm-block" draggable="true" data-idx="${i}" style="background:#fff;color:#222;border-radius:12px;box-shadow:0 2px 8px rgba(44,180,173,0.10);padding:1em 1.2em;font-size:1.1em;font-weight:600;cursor:grab;user-select:none;transition:box-shadow 0.2s;">
+                  ${b.text}
+                </div>
+              `).join('')}
+            </div>
+            <button class="pickramu-load-button primary" id="gm-add-block-btn" style="margin-top:1em;">＋ブロック追加</button>
+          </div>
+        `;
+        // ドラッグ＆ドロップ実装
+        const blockList = panel.querySelector('#gm-block-list');
+        let dragIdx = null;
+        blockList.querySelectorAll('.gm-block').forEach(block => {
+          block.addEventListener('dragstart', e => {
+            dragIdx = Number(block.getAttribute('data-idx'));
+            block.style.opacity = '0.5';
+          });
+          block.addEventListener('dragend', e => {
+            block.style.opacity = '';
+          });
+          block.addEventListener('dragover', e => {
+            e.preventDefault();
+            block.style.boxShadow = '0 0 0 3px #4f8cff';
+          });
+          block.addEventListener('dragleave', e => {
+            block.style.boxShadow = '';
+          });
+          block.addEventListener('drop', e => {
+            e.preventDefault();
+            block.style.boxShadow = '';
+            const dropIdx = Number(block.getAttribute('data-idx'));
+            if (dragIdx !== null && dragIdx !== dropIdx) {
+              const moved = scratchBlocks.splice(dragIdx, 1)[0];
+              scratchBlocks.splice(dropIdx, 0, moved);
+              renderEditor('scratch', loadedProject);
+            }
+            dragIdx = null;
+          });
+        });
+        // ブロック追加
+        const addBlockBtn = panel.querySelector('#gm-add-block-btn');
+        if (addBlockBtn) addBlockBtn.onclick = () => {
+          const text = prompt('ブロックの内容を入力してください');
+          if (text) {
+            scratchBlocks.push({ id: Date.now(), text });
+            renderEditor('scratch', loadedProject);
+          }
+        };
+      } else if (type === 'code') {
+        // コード型エディタ（仮）
+        panel.innerHTML = `<textarea id="gm-code-editor" style="width:100%;height:180px;font-size:1.1em;border-radius:8px;padding:0.7em;">${codeValue||''}</textarea>`;
+        const codeEditor = document.getElementById('gm-code-editor');
+        if (codeEditor) codeEditor.oninput = e => {
+          codeValue = codeEditor.value;
+        };
+      }
+    }
+    // ...既存のupdateAssetList, AIサポート, ToasterMachine連携なども同様に...
+    }
 
   // renderPreview: 必ずホームボタンを表示
   function renderPreview(assets, scratchBlocksTree = [], codeValue = '') {
