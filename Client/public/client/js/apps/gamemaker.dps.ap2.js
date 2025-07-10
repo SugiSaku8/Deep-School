@@ -340,7 +340,7 @@ export function appInit(shell) {
       }
     };
     // キーボードショートカット
-    addSingleKeyListener('keydown', function(e) {
+    document.addEventListener('keydown', function(e) {
       if (e.altKey || e.ctrlKey || e.metaKey) return;
       if (e.key === 'l') document.getElementById('gm-lesson-btn')?.click();
       if (e.key === 'c') document.getElementById('gm-create-btn')?.click();
