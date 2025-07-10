@@ -580,11 +580,11 @@ export function appInit(shell) {
             </div>
             <div id="gm-preview-panel" style="width:100%;max-width:420px;"></div>
             <div class="support-btns" style="margin-top:1.5rem;display:flex;flex-wrap:wrap;gap:0.7em;">
-              <button class="pickramu-load-button primary" id="gm-ai-support-btn">AIサポート</button>
-              <button class="pickramu-load-button secondary">SCRサポート</button>
+              <button class="pickramu-load-button secondary" id="gm-scr-btn">SCRサポート</button>
               <button class="pickramu-load-button primary" id="gm-toaster-btn" style="background:#2cb4ad;color:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(44,180,173,0.12);font-weight:600;">ToasterMachineに質問</button>
               <span id="gm-toaster-status" style="margin-left:8px;color:#2cb4ad;font-weight:500;"></span>
             </div>
+            <div id="gm-support-result" style="margin-top:1.2em;min-height:2.5em;background:#f7fafc;border-radius:10px;padding:1em 1.2em;color:#222;box-shadow:0 1px 4px rgba(44,180,173,0.06);"></div>
           </div>
         </div>
       </div>
@@ -766,8 +766,63 @@ export function appInit(shell) {
         };
       }
     }
-    // ...既存のupdateAssetList, AIサポート, ToasterMachine連携なども同様に...
-    }
+    // SCRサポート機能
+    const scrBtn = document.getElementById('gm-scr-btn');
+    const supportResult = document.getElementById('gm-support-result');
+    if (scrBtn && supportResult) scrBtn.onclick = () => {
+      if (!scratchBlocks.length) {
+        supportResult.textContent = 'キャンバスにブロックがありません。左の一覧から追加してください。';
+        return;
+      }
+      // ブロック内容に応じた説明（仮）
+      const descs = {
+        'キャラクターを右に動かす': 'キャラクターを右方向に1マス動かします。',
+        'ジャンプする': 'キャラクターがジャンプします。',
+        'スコアを1増やす': 'スコアを1点増やします。',
+        '1秒待つ': '1秒間待機します。',
+        'メッセージを表示': '画面にメッセージを表示します。'
+      };
+      const lines = scratchBlocks.map(b => `・${b.text}：${descs[b.text]||'このブロックの説明はありません。'}`);
+      supportResult.innerHTML = `<b>SCRサポート:</b><br>${lines.join('<br>')}`;
+    };
+    // ToasterMachineサポート機能
+    const toasterBtn = document.getElementById('gm-toaster-btn');
+    if (toasterBtn && supportResult) toasterBtn.onclick = async () => {
+      const question = prompt('ToasterMachineに質問したい内容を入力してください');
+      if (!question) return;
+      supportResult.textContent = 'ToasterMachine: 回答生成中...';
+      let ToasterMachineAPI = window.ToasterMachineAPI;
+      if (!ToasterMachineAPI && window.chatManager && window.chatManager.ToasterMachineAPI) {
+        ToasterMachineAPI = window.chatManager.ToasterMachineAPI;
+      }
+      if (!ToasterMachineAPI || !ToasterMachineAPI.sendMessage) {
+        supportResult.textContent = 'ToasterMachine APIが利用できません。';
+        return;
+      }
+      try {
+        const answer = await ToasterMachineAPI.sendMessage(question);
+        supportResult.textContent = 'ToasterMachine: ' + answer;
+      } catch (e) {
+        supportResult.textContent = 'ToasterMachine: エラーが発生しました: ' + (e.message || e);
+      }
+    };
+    // キーボード操作サポート
+    const aiBtns = document.querySelectorAll('.ai-btn-row .pickramu-load-button');
+    aiBtns.forEach((btn, idx) => {
+      btn.tabIndex = 0;
+      btn.onkeydown = e => {
+        if (e.key === 'Enter' || e.key === ' ') btn.click();
+        if (e.key === 'ArrowRight' || (e.key === 'Tab' && !e.shiftKey)) {
+          e.preventDefault();
+          aiBtns[(idx+1)%aiBtns.length].focus();
+        }
+        if (e.key === 'ArrowLeft' || (e.key === 'Tab' && e.shiftKey)) {
+          e.preventDefault();
+          aiBtns[(idx-1+aiBtns.length)%aiBtns.length].focus();
+        }
+      };
+    });
+  }
 
   // renderPreview: 必ずホームボタンを表示
   function renderPreview(assets, scratchBlocksTree = [], codeValue = '') {
