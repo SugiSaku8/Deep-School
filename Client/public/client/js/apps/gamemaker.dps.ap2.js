@@ -237,6 +237,8 @@ function getProjectVersions(projectId) {
 }
 
 export function appInit(shell) {
+  // ホーム画面をグローバル化
+  window.renderHome = renderHome;
   shell.log({from: 'dp.app.gamemaker.out', message: 'GameMaker: 初期化開始', level: 'info'});
 
   // 初期化時にCURRENT_LANGをlocalStorageから取得
