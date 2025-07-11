@@ -737,6 +737,9 @@ export function appInit(shell) {
                   </div>`;
                 }).join('')}
               </div>
+              <div style="margin-top:1.2em;text-align:right;">
+                <button class="pickramu-load-button primary" id="gm-run-btn" style="font-size:1.1em;padding:0.7em 2em;">実行 ▶</button>
+              </div>
             </div>
           </div>
         `;
@@ -856,6 +859,59 @@ export function appInit(shell) {
         supportResult.textContent = 'ToasterMachine: ' + answer;
       } catch (e) {
         supportResult.textContent = 'ToasterMachine: エラーが発生しました: ' + (e.message || e);
+      }
+    };
+    // プレビューエリアの初期化
+    const previewPanel = document.getElementById('gm-preview-panel');
+    if (previewPanel) {
+      previewPanel.innerHTML = `
+        <div id="gm-preview-area" style="position:relative;width:320px;height:180px;background:#222;border-radius:12px;overflow:hidden;margin:0 auto;">
+          <img id="gm-char" src="https://cdn.jsdelivr.net/gh/googlefonts/noto-emoji@main/png/128/emoji_u1f47e.png" alt="キャラクター" style="position:absolute;left:20px;bottom:20px;width:48px;height:48px;transition:all 0.4s cubic-bezier(.4,2,.6,1);">
+          <div id="gm-score" style="position:absolute;top:10px;right:16px;color:#fff;font-size:1.1em;font-weight:700;">スコア: 0</div>
+          <div id="gm-msg" style="position:absolute;left:50px;bottom:70px;color:#fff;font-size:1.1em;background:rgba(44,180,173,0.95);border-radius:12px;padding:0.4em 1em;display:none;white-space:nowrap;">メッセージ</div>
+        </div>
+      `;
+    }
+    // 実行ボタンのロジック
+    const runBtn = document.getElementById('gm-run-btn');
+    if (runBtn && previewPanel) runBtn.onclick = async () => {
+      // 初期状態
+      const char = document.getElementById('gm-char');
+      const scoreEl = document.getElementById('gm-score');
+      const msgEl = document.getElementById('gm-msg');
+      let charX = 20;
+      let charY = 20;
+      let score = 0;
+      char.style.left = charX + 'px';
+      char.style.bottom = charY + 'px';
+      scoreEl.textContent = 'スコア: ' + score;
+      msgEl.style.display = 'none';
+      // ブロックを順に実行
+      for (let i = 0; i < scratchBlocks.length; ++i) {
+        const b = scratchBlocks[i];
+        if (b.text === 'キャラクターを右に動かす') {
+          charX += 40;
+          char.style.left = charX + 'px';
+          await new Promise(r=>setTimeout(r, 400));
+        } else if (b.text === 'ジャンプする') {
+          char.style.transition = 'all 0.2s cubic-bezier(.4,2,.6,1)';
+          char.style.bottom = (charY+40) + 'px';
+          await new Promise(r=>setTimeout(r, 200));
+          char.style.bottom = charY + 'px';
+          await new Promise(r=>setTimeout(r, 200));
+          char.style.transition = '';
+        } else if (b.text === 'スコアを1増やす') {
+          score++;
+          scoreEl.textContent = 'スコア: ' + score;
+          await new Promise(r=>setTimeout(r, 300));
+        } else if (b.text === '1秒待つ') {
+          await new Promise(r=>setTimeout(r, 1000));
+        } else if (b.text === 'メッセージを表示') {
+          msgEl.textContent = 'こんにちは！';
+          msgEl.style.display = 'block';
+          await new Promise(r=>setTimeout(r, 1200));
+          msgEl.style.display = 'none';
+        }
       }
     };
     // キーボード操作サポート
