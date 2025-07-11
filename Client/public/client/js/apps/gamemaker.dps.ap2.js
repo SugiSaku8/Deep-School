@@ -660,33 +660,82 @@ export function appInit(shell) {
       if (type === 'scratch') {
         // パレット用の基本ブロック一覧
         const blockPalette = [
-          { id: 'move', text: 'キャラクターを右に動かす' },
-          { id: 'jump', text: 'ジャンプする' },
-          { id: 'score', text: 'スコアを1増やす' },
-          { id: 'wait', text: '1秒待つ' },
-          { id: 'say', text: 'メッセージを表示' }
+          { id: 'move', text: 'キャラクターを右に動かす', color: '#4f8cff' },
+          { id: 'jump', text: 'ジャンプする', color: '#4f8cff' },
+          { id: 'score', text: 'スコアを1増やす', color: '#ffb347' },
+          { id: 'wait', text: '1秒待つ', color: '#a259e6' },
+          { id: 'say', text: 'メッセージを表示', color: '#2cb4ad' }
         ];
         if (!Array.isArray(scratchBlocks)) scratchBlocks = [];
         // UI: パレット＋キャンバス
         panel.innerHTML = `
+          <style>
+            .gm-block-scratch {
+              border-radius: 18px;
+              box-shadow: 0 4px 16px rgba(60,60,60,0.13), 0 1.5px 4px rgba(0,0,0,0.04);
+              color: #fff;
+              font-weight: 700;
+              font-size: 1.08em;
+              margin-top: -10px;
+              margin-bottom: 12px;
+              padding: 1.1em 1.5em 1.1em 2.2em;
+              position: relative;
+              cursor: grab;
+              user-select: none;
+              transition: box-shadow 0.2s, filter 0.2s;
+              border-left: 16px solid rgba(0,0,0,0.08);
+            }
+            .gm-block-scratch.dragover {
+              filter: brightness(1.08) drop-shadow(0 0 0.5em #4f8cff88);
+            }
+            .gm-block-scratch .gm-remove-block-btn {
+              background: rgba(255,255,255,0.18);
+              color: #fff;
+              border: none;
+              border-radius: 8px;
+              margin-left: 1em;
+              font-size: 0.95em;
+              padding: 0.2em 0.7em;
+              cursor: pointer;
+            }
+            .gm-block-scratch .gm-remove-block-btn:hover {
+              background: #fff;
+              color: #222;
+            }
+            .gm-block-palette-item {
+              border-radius: 14px;
+              box-shadow: 0 2px 8px rgba(44,180,173,0.08);
+              color: #fff;
+              font-weight: 700;
+              font-size: 1em;
+              padding: 0.8em 1.2em 0.8em 1.7em;
+              margin-bottom: 0.7em;
+              cursor: grab;
+              user-select: none;
+              border-left: 12px solid rgba(0,0,0,0.08);
+            }
+          </style>
           <div style="display:flex;gap:2em;align-items:flex-start;">
             <div style="min-width:160px;">
               <div style="font-weight:700;margin-bottom:0.7em;">ブロック一覧</div>
               <div id="gm-block-palette" style="display:flex;flex-direction:column;gap:0.7em;">
                 ${blockPalette.map(b=>`
-                  <div class="gm-block-palette-item" draggable="true" data-id="${b.id}" style="background:#f7fafc;color:#222;border-radius:10px;box-shadow:0 1px 4px rgba(44,180,173,0.08);padding:0.7em 1em;font-size:1em;font-weight:600;cursor:grab;user-select:none;">${b.text}</div>
+                  <div class="gm-block-palette-item" draggable="true" data-id="${b.id}" style="background:${b.color};">${b.text}</div>
                 `).join('')}
               </div>
             </div>
             <div style="flex:1;min-width:200px;">
               <div style="font-weight:700;margin-bottom:0.7em;">キャンバス</div>
-              <div id="gm-block-canvas" style="min-height:120px;min-width:180px;background:#fff;border-radius:12px;box-shadow:0 2px 8px rgba(44,180,173,0.07);padding:1em;display:flex;flex-direction:column;gap:1em;">
-                ${scratchBlocks.map((b,i)=>`
-                  <div class="gm-block" draggable="true" data-idx="${i}" style="background:#fff;color:#222;border-radius:12px;box-shadow:0 2px 8px rgba(44,180,173,0.10);padding:1em 1.2em;font-size:1.1em;font-weight:600;cursor:grab;user-select:none;display:flex;align-items:center;justify-content:space-between;">
+              <div id="gm-block-canvas" style="min-height:120px;min-width:180px;background:#f6faff;border-radius:16px;box-shadow:0 2px 8px rgba(44,180,173,0.07);padding:1.2em 1em 1.2em 1em;display:flex;flex-direction:column;gap:0.2em;">
+                ${scratchBlocks.map((b,i)=>{
+                  // 色分け
+                  const palette = blockPalette.find(p=>p.text===b.text);
+                  const color = palette ? palette.color : '#888';
+                  return `<div class="gm-block-scratch" draggable="true" data-idx="${i}" style="background:${color};">
                     <span>${b.text}</span>
-                    <button class="pickramu-load-button secondary gm-remove-block-btn" data-idx="${i}" style="margin-left:1em;font-size:0.9em;padding:0.2em 0.7em;">削除</button>
-                  </div>
-                `).join('')}
+                    <button class="gm-remove-block-btn" data-idx="${i}">削除</button>
+                  </div>`;
+                }).join('')}
               </div>
             </div>
           </div>
@@ -705,13 +754,16 @@ export function appInit(shell) {
         });
         canvas.addEventListener('dragover', e => {
           e.preventDefault();
-          canvas.style.boxShadow = '0 0 0 3px #4f8cff';
+          canvas.classList.add('dragover');
+          canvas.style.boxShadow = '0 0 0 4px #4f8cff';
         });
         canvas.addEventListener('dragleave', e => {
+          canvas.classList.remove('dragover');
           canvas.style.boxShadow = '';
         });
         canvas.addEventListener('drop', e => {
           e.preventDefault();
+          canvas.classList.remove('dragover');
           canvas.style.boxShadow = '';
           const blockId = e.dataTransfer.getData('block-id');
           const block = blockPalette.find(b => b.id === blockId);
@@ -722,7 +774,7 @@ export function appInit(shell) {
         });
         // キャンバス上のブロック並び替え
         let dragIdx = null;
-        canvas.querySelectorAll('.gm-block').forEach(block => {
+        canvas.querySelectorAll('.gm-block-scratch').forEach(block => {
           block.addEventListener('dragstart', e => {
             dragIdx = Number(block.getAttribute('data-idx'));
             block.style.opacity = '0.5';
@@ -732,14 +784,14 @@ export function appInit(shell) {
           });
           block.addEventListener('dragover', e => {
             e.preventDefault();
-            block.style.boxShadow = '0 0 0 3px #4f8cff';
+            block.classList.add('dragover');
           });
           block.addEventListener('dragleave', e => {
-            block.style.boxShadow = '';
+            block.classList.remove('dragover');
           });
           block.addEventListener('drop', e => {
             e.preventDefault();
-            block.style.boxShadow = '';
+            block.classList.remove('dragover');
             const dropIdx = Number(block.getAttribute('data-idx'));
             if (dragIdx !== null && dragIdx !== dropIdx) {
               const moved = scratchBlocks.splice(dragIdx, 1)[0];
