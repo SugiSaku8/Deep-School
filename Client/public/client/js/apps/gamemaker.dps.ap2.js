@@ -202,7 +202,7 @@ import { CURRENT_LANG } from '../core/config.js';
 
 export const appMeta = {
   name: "gamemaker",
-  title: "GameMaker",
+  title: "GameMaker【一時停止中】",
   icon: "re/icon/game.svg" // 仮アイコン
 };
 
@@ -237,6 +237,8 @@ function getProjectVersions(projectId) {
 }
 
 export function appInit(shell) {
+  alert('GameMakerは現在一時的に無効化されています。しばらくお待ちください。');
+  return;
   // ホーム画面をグローバル化
   window.renderHome = renderHome;
   shell.log({from: 'dp.app.gamemaker.out', message: 'GameMaker: 初期化開始', level: 'info'});
