@@ -62,7 +62,7 @@ export function appInit(shell) {
           <div class="menu-label chalk-text" id="menu-setting" style="cursor: pointer" data-lang-key="menu_setting">設定</div>
         </div>
         <div class="menu-item">
-          <img src="re/ico/feedback.svg" alt="フィードバックアイコン" class="menu-icon" />
+          <img src="re/ico/feed.svg" alt="フィードバックアイコン" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-feedback" style="cursor: pointer" data-lang-key="menu_feedback">フィードバック</div>
         </div>
       </div>
