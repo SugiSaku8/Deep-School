@@ -492,7 +492,7 @@ function renderMaterialSelector(materials, onSelect) {
   // 検索バー＋教科ごとにリスト表示
   return `
     <div class="pickramu-material-search">
-      <input type="text" id="material-search-bar" placeholder="教材名・教科・Unitで検索" style="width:100%;margin-bottom:8px;padding:6px 12px;">
+      <input type="text" id="material-search-bar" placeholder="教材名・教科・Unitで検索" class="search-bar">
     </div>
     <div class="pickramu-material-list">
       ${['数学','国語','社会'].map(subject => {
@@ -502,7 +502,7 @@ function renderMaterialSelector(materials, onSelect) {
         const fields = [...new Set(subjectMaterials.map(m => m.field))];
         return `
           <div class="pickramu-material-subject">
-            <h4>${subject}</h4>
+            <h4 class="section-title">${subject}</h4>
             ${fields.map(field => {
               const fieldMaterials = subjectMaterials.filter(m => m.field === field);
               // Unitごと
@@ -518,7 +518,7 @@ function renderMaterialSelector(materials, onSelect) {
                           <span class="pickramu-material-unit-title">${unit}</span>
                           <ul class="pickramu-material-file-list">
                             ${unitMaterials.map(mat => `
-                              <li><button class="pickramu-material-btn" data-file="${mat.file}">${mat.title}</button></li>
+                              <li><button class="auto-btn pickramu-material-btn" data-file="${mat.file}">${mat.title}</button></li>
                             `).join('')}
                           </ul>
                         </li>
@@ -558,9 +558,9 @@ export function appInit(shell) {
           <button class="auto-btn" id="tab-pickramu" data-lang-key="pickramu_tab">教材ワーク</button>
           <button class="auto-btn" id="tab-eguide" data-lang-key="eguide_tab">eGuide</button>
         </div>
-        <div id="pickramu-work-area" class="pickramu-work-area" style="display:flex;gap:24px;align-items:flex-start;">
-          <div class="pickramu-select-container" style="flex:0 0 320px;max-width:340px;min-width:260px;">
-            <div class="pickramu-select-card">
+        <div id="pickramu-work-area" class="pickramu-work-area">
+          <div class="pickramu-select-container">
+            <div class="card pickramu-select-card">
               <h3 class="pickramu-select-title">教材選択</h3>
               <div class="pickramu-select-group" id="pickramu-material-selector-area">
                 <!-- 教材リスト＋検索バーがここに入る -->
@@ -568,12 +568,250 @@ export function appInit(shell) {
               </div>
             </div>
           </div>
-          <iframe id="pickramu_iframe" class="pickramu-iframe" style="flex:1 1 0%;min-width:0;height:70vh;border:none;border-radius:16px;box-shadow:0 2px 8px rgba(44,180,173,0.08);background:transparent;transition:box-shadow 0.2s;"></iframe>
+          <iframe id="pickramu_iframe" class="pickramu-iframe"></iframe>
         </div>
         <div id="pickramu-eguide-area" class="pickramu-eguide-area" style="display:none;">
-          <iframe src="eguide.html" class="pickramu-iframe" style="border:none;border-radius:16px;box-shadow:0 2px 8px rgba(44,180,173,0.08);background:transparent;transition:box-shadow 0.2s;"></iframe>
+          <iframe src="eguide.html" class="pickramu-iframe"></iframe>
         </div>
       </div>
+      
+      <style>
+        /* Pickramu専用スタイル - 他のアプリと統一 */
+        .pickramu-page {
+          padding: 20px;
+          max-width: 1200px;
+          margin: 0 auto;
+          min-height: 100vh;
+          box-sizing: border-box;
+        }
+        
+        .pickramu-tabs {
+          display: flex;
+          gap: 12px;
+          justify-content: center;
+          margin-bottom: 20px;
+        }
+        
+        .pickramu-tabs .auto-btn {
+          background: white;
+          color: #222;
+          border: none;
+          border-radius: 15px;
+          padding: 15px 40px;
+          font-size: 1.2em;
+          margin: 0;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+        
+        .pickramu-tabs .auto-btn:hover,
+        .pickramu-tabs .auto-btn.active {
+          background: #007bff;
+          color: #fff;
+        }
+        
+        .pickramu-work-area {
+          display: flex;
+          gap: 24px;
+          align-items: flex-start;
+          margin-top: 20px;
+        }
+        
+        .pickramu-select-container {
+          flex: 0 0 320px;
+          max-width: 340px;
+          min-width: 260px;
+        }
+        
+        .pickramu-select-card {
+          background: #ffffff;
+          border-radius: 12px;
+          border: 1px solid #e5e5e7;
+          padding: 2rem;
+          width: 100%;
+          color: #1d1d1f;
+          text-align: center;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .pickramu-select-title {
+          font-size: 1.5rem;
+          font-weight: 600;
+          margin-bottom: 1.5rem;
+          color: #1d1d1f;
+        }
+        
+        .pickramu-material-search {
+          margin-bottom: 1rem;
+        }
+        
+        .pickramu-material-search .search-bar {
+          width: 100%;
+          padding: 12px 16px;
+          border: 1px solid #ccc;
+          border-radius: 10px;
+          font-size: 1.1em;
+          background: #fff;
+          box-sizing: border-box;
+        }
+        
+        .pickramu-material-search .search-bar:focus {
+          outline: none;
+          border-color: #87c1ff;
+          box-shadow: 0 0 0 3px rgba(135, 193, 255, 0.3);
+        }
+        
+        .pickramu-material-list {
+          max-height: 60vh;
+          overflow-y: auto;
+          text-align: left;
+        }
+        
+        .pickramu-material-subject {
+          margin-bottom: 1.5rem;
+        }
+        
+        .pickramu-material-subject .section-title {
+          font-size: 1.2rem;
+          font-weight: 600;
+          color: #007bff;
+          margin-bottom: 0.8rem;
+          padding-bottom: 0.3rem;
+          border-bottom: 2px solid #e5e5e7;
+        }
+        
+        .pickramu-material-field {
+          margin-bottom: 1rem;
+        }
+        
+        .pickramu-material-field-title {
+          font-size: 1rem;
+          font-weight: 500;
+          color: #333;
+          margin-bottom: 0.5rem;
+          padding-left: 0.5rem;
+        }
+        
+        .pickramu-material-unit-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
+        
+        .pickramu-material-unit {
+          margin-bottom: 0.8rem;
+          padding-left: 1rem;
+        }
+        
+        .pickramu-material-unit-title {
+          font-size: 0.9rem;
+          color: #666;
+          font-weight: 500;
+          display: block;
+          margin-bottom: 0.3rem;
+        }
+        
+        .pickramu-material-file-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
+        
+        .pickramu-material-file-list li {
+          margin-bottom: 0.3rem;
+        }
+        
+        .pickramu-material-btn {
+          background: white;
+          color: #222;
+          border: none;
+          border-radius: 15px;
+          padding: 8px 16px;
+          font-size: 0.9em;
+          width: 100%;
+          text-align: left;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+          cursor: pointer;
+          transition: background 0.2s;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        
+        .pickramu-material-btn:hover {
+          background: #007bff;
+          color: #fff;
+        }
+        
+        .pickramu-iframe {
+          flex: 1 1 0%;
+          min-width: 0;
+          height: 70vh;
+          border: none;
+          border-radius: 16px;
+          box-shadow: 0 2px 8px rgba(44,180,173,0.08);
+          background: transparent;
+          transition: box-shadow 0.2s;
+        }
+        
+        .pickramu-eguide-area {
+          width: 100%;
+          height: 70vh;
+        }
+        
+        .pickramu-eguide-area .pickramu-iframe {
+          width: 100%;
+          height: 100%;
+        }
+        
+        /* スクロールバーのスタイル */
+        .pickramu-material-list::-webkit-scrollbar {
+          width: 6px;
+        }
+        
+        .pickramu-material-list::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          border-radius: 3px;
+        }
+        
+        .pickramu-material-list::-webkit-scrollbar-thumb {
+          background: #c1c1c1;
+          border-radius: 3px;
+        }
+        
+        .pickramu-material-list::-webkit-scrollbar-thumb:hover {
+          background: #a8a8a8;
+        }
+        
+        /* レスポンシブデザイン */
+        @media (max-width: 768px) {
+          .pickramu-work-area {
+            flex-direction: column;
+            gap: 16px;
+          }
+          
+          .pickramu-select-container {
+            flex: none;
+            max-width: 100%;
+            min-width: 0;
+          }
+          
+          .pickramu-iframe {
+            height: 50vh;
+          }
+          
+          .pickramu-tabs {
+            flex-wrap: wrap;
+            gap: 8px;
+          }
+          
+          .pickramu-tabs .auto-btn {
+            padding: 12px 24px;
+            font-size: 1em;
+          }
+        }
+      </style>
     `;
 
     // 戻るボタン
@@ -581,48 +819,16 @@ export function appInit(shell) {
 
     // タブ切り替え
     document.getElementById('tab-pickramu').onclick = () => {
-      document.getElementById('pickramu-work-area').style.display = 'block';
+      document.getElementById('pickramu-work-area').style.display = 'flex';
       document.getElementById('pickramu-eguide-area').style.display = 'none';
       document.getElementById('tab-pickramu').classList.add('active');
       document.getElementById('tab-eguide').classList.remove('active');
-      // eguideエリアの高さ等をリセット
-      const eguideArea = document.getElementById('pickramu-eguide-area');
-      eguideArea.style.height = '';
-      eguideArea.style.flex = '';
-      eguideArea.style.minWidth = '';
-      // workエリアの高さ等もリセット
-      const workArea = document.getElementById('pickramu-work-area');
-      workArea.style.height = '';
-      workArea.style.flex = '';
-      workArea.style.minWidth = '';
-      // もしiframeの高さが変になっていたらリセット
-      const workIframe = document.getElementById('pickramu_iframe');
-      if (workIframe) {
-        workIframe.style.height = '';
-        workIframe.style.minHeight = '';
-        workIframe.style.flex = '';
-      }
     };
     document.getElementById('tab-eguide').onclick = () => {
       document.getElementById('pickramu-work-area').style.display = 'none';
       document.getElementById('pickramu-eguide-area').style.display = 'block';
-      document.getElementById('pickramu-eguide-area').style.height = '70vh';
-      document.getElementById('pickramu-eguide-area').style.flex = '1 1 0%';
-      document.getElementById('pickramu-eguide-area').style.minWidth = '0';
       document.getElementById('tab-pickramu').classList.remove('active');
       document.getElementById('tab-eguide').classList.add('active');
-      // workエリアの高さ等もリセット
-      const workArea = document.getElementById('pickramu-work-area');
-      workArea.style.height = '';
-      workArea.style.flex = '';
-      workArea.style.minWidth = '';
-      // もしiframeの高さが変になっていたらリセット
-      const workIframe = document.getElementById('pickramu_iframe');
-      if (workIframe) {
-        workIframe.style.height = '';
-        workIframe.style.minHeight = '';
-        workIframe.style.flex = '';
-      }
     };
 
     // 教材ボタン押下でiframeに教材をロード
@@ -678,6 +884,51 @@ export function appInit(shell) {
           }
         });
       };
+    }
+
+    // Initialize parallax effects for pickramu elements
+    if (window.parallaxManager) {
+      const backBtn = document.getElementById('pickramu-back-btn');
+      const tabButtons = document.querySelectorAll('#tab-pickramu, #tab-eguide');
+      const materialBtns = document.querySelectorAll('.pickramu-material-btn');
+      const selectCard = document.querySelector('.pickramu-select-card');
+      
+      if (backBtn) {
+        window.parallaxManager.addParallaxEffects(backBtn, {
+          hover: true,
+          mouse: false,
+          touch: true,
+          ripple: true
+        });
+      }
+      
+      tabButtons.forEach(btn => {
+        window.parallaxManager.addParallaxEffects(btn, {
+          hover: true,
+          mouse: false,
+          touch: true,
+          ripple: true
+        });
+      });
+      
+      materialBtns.forEach(btn => {
+        window.parallaxManager.addParallaxEffects(btn, {
+          hover: true,
+          mouse: false,
+          touch: true,
+          ripple: true
+        });
+      });
+      
+      if (selectCard) {
+        window.parallaxManager.addParallaxEffects(selectCard, {
+          hover: true,
+          mouse: true,
+          touch: false
+        });
+      }
+      
+      shell.log({from: 'dp.app.pickramu.out', message: 'PickramuApp: Parallax effects initialized', level: 'info'});
     }
   });
 } 
