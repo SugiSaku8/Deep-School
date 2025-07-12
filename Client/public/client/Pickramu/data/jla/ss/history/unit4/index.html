@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/cancel.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg-color: transparent;
+      --text-color: #222;
+      --card-bg: #fff;
+      --border-radius: 12px;
+      --shadow-color: rgba(0,0,0,0.08);
+      --spacing-unit: 20px;
+      --animation-duration: 0.3s;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--text-color);
+      background: var(--bg-color);
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+      transition: background var(--animation-duration);
+    }
+    #content {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 8px var(--shadow-color);
+      max-width: 720px;
+      width: 100%;
+      padding: 2rem;
+      box-sizing: border-box;
+      word-break: break-word;
+    }
+    .input-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1em;
+      margin-top: 2em;
+      padding: 1.5em;
+      background: #f5f5f7;
+      border: 1px solid #e5e5e7;
+      border-radius: var(--border-radius);
+      box-shadow: 0 1px 4px var(--shadow-color);
+    }
+    .input-box {
+      background: #fff;
+      border-radius: 8px;
+      padding: 0.8em 1em;
+      font-size: 1.1em;
+      border: 1px solid #d2d2d7;
+      width: 260px;
+      text-align: center;
+    }
+    .button-next {
+      background: #007aff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.8em 1.5em;
+      font-size: 1em;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 1px 4px var(--shadow-color);
+    }
+    .highlight {
+      background: #fff3cd;
+      padding: 0.5em;
+      border-radius: 6px;
+      border-left: 4px solid #ffc107;
+      margin: 1em 0;
+    }
+    .tip {
+      background: #d1ecf1;
+      padding: 0.5em;
+      border-radius: 6px;
+      border-left: 4px solid #17a2b8;
+      margin: 1em 0;
+    }
+    .question {
+      background: #f8f9fa;
+      padding: 1em;
+      border-radius: 6px;
+      border: 1px solid #dee2e6;
+      margin: 1em 0;
+    }
+    body.dark-mode, .dark-mode #content {
+      --bg-color: #1a1a1a;
+      --text-color: #fff;
+      --card-bg: #222;
+      --shadow-color: rgba(0,0,0,0.3);
+    }
+    #content #n2, #content #n3, #content #n4, #content #n5, #content #n6, #content #n7, #content #n8, #content #n9, #content #n10, #content #n11, #content #n12, #content #n13, #content #n14, #content #n15, #content #n16, #content #n17, #content #n18, #content #n19, #content #n20, #content #n21, #content #n22, #content #n23, #content #n24, #content #n25, #content #n26, #content #n27, #content #n28, #content #n29, #content #n30, #content #n31, #content #n32, #content #n33, #content #n34, #content #n35, #content #n36, #content #n37, #content #n38, #content #n39, #content #n40, #content #n41, #content #n42, #content #n43, #content #n44, #content #n45, #content #n46, #content #n47, #content #n48, #content #n49, #content #n50, #content #n51, #content #n52, #content #n53, #content #n54, #content #n55, #content #n56, #content #n57, #content #n58, #content #n59, #content #n60, #content #n61, #content #n62, #content #n63, #content #n64, #content #n65, #content #n66, #content #n67, #content #n68, #content #n69, #content #n70, #content #n71, #content #n72, #content #n73, #content #n74, #content #n75, #content #n76, #content #n77, #content #n78, #content #n79, #content #n80, #content #n81, #content #n82, #content #n83, #content #n84, #content #n85, #content #n86, #content #n87, #content #n88, #content #n89, #content #n90, #content #n91, #content #n92, #content #n93, #content #n94, #content #n95, #content #n96, #content #n97, #content #n98, #content #n99, #content #n100 {
+      display: none;
+    }
+  </style>
+  <script>
+    const dom = {
+      Tag: function(ID) {
+        const el = document.getElementById(ID);
+        return {
+          style: {
+            display: function(state, auto) {
+              if (!el) return;
+              if (state === 'block' || state === 'none') {
+                el.style.display = state;
+              }
+              if (auto === 'auto' && state === 'block') {
+                el.style.display = '';
+              }
+            }
+          }
+        };
+      }
+    };
+  </script>
+</head>
+<body>
+  <div id="content">
+    <div id="unit-title" class="">
+      <h1>Unit 4: 近代の日本と世界</h1>
+      <h2>第1章: 開国と明治維新</h2>
+    </div>
+
+    <div id="n1" class="">
+      <div id="question" class="">
+        <h3>📚 学習の目標</h3>
+        このUnitでは、近代日本の成立と発展について学びます。<br>
+        開国から明治維新、そして近代国家への道筋を理解しましょう！
+      </div>
+      <button id="next1" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n1").style.display('none','auto');
+        dom.Tag("n2").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n2" class="">
+      <div id="question" class="">
+        <h3>📖 資料の提示</h3>
+        <div class="highlight">
+          <strong>開国の背景</strong><br>
+          • 1853年：ペリー来航<br>
+          • 1854年：日米和親条約<br>
+          • 1858年：日米修好通商条約<br>
+          • 不平等条約の締結
+        </div>
+        <div class="highlight">
+          <strong>明治維新の流れ</strong><br>
+          • 1867年：大政奉還<br>
+          • 1868年：明治維新<br>
+          • 廃藩置県・地租改正<br>
+          • 富国強兵・殖産興業
+        </div>
+      </div>
+      <button id="next2" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n2").style.display('none','auto');
+        dom.Tag("n3").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n3" class="">
+      <div id="question" class="">
+        <h3>🎯 要点</h3>
+        <strong>開国の影響：</strong><br>
+        • 鎖国体制の崩壊<br>
+        • 不平等条約の締結<br>
+        • 攘夷運動の高まり<br>
+        • 幕府の権威低下<br><br>
+        <strong>明治維新の改革：</strong><br>
+        • 中央集権国家の建設<br>
+        • 身分制度の廃止<br>
+        • 近代産業の育成<br>
+        • 軍備の強化
+      </div>
+      <button id="next3" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n3").style.display('none','auto');
+        dom.Tag("n4").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n4" class="">
+      <div id="question" class="">
+        <h3>📝 要点のまとめ</h3>
+        <div class="tip">
+          <strong>開国から明治維新へ</strong><br>
+          ペリー来航 → 不平等条約 → 攘夷運動 → 大政奉還 → 明治維新<br><br>
+          <strong>明治政府の政策</strong><br>
+          廃藩置県・地租改正・富国強兵・殖産興業
+        </div>
+        <p>開国は日本の近代化への第一歩であり、明治維新により近代国家が建設されました。</p>
+      </div>
+      <button id="next4" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n4").style.display('none','auto');
+        dom.Tag("n5").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n5" class="">
+      <div id="question" class="">
+        <h3>💡 豆知識</h3>
+        <div class="tip">
+          <strong>黒船来航</strong><br>
+          1853年、ペリーが4隻の軍艦で浦賀に来航。<br>
+          蒸気船の黒い船体から「黒船」と呼ばれた。<br>
+          日本に開国を迫る圧力となった。
+        </div>
+        <div class="tip">
+          <strong>五箇条の御誓文</strong><br>
+          1868年、明治天皇が示した新政府の基本方針。<br>
+          「広く会議を興し、万機公論に決すべし」<br>
+          民主主義の萌芽を示す文書。
+        </div>
+      </div>
+      <button id="next5" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n5").style.display('none','auto');
+        dom.Tag("n6").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n6" class="">
+      <div id="question" class="">
+        <h3>❓ 発展問題</h3>
+        <div class="question">
+          <strong>問題1:</strong> 不平等条約が日本に与えた影響を、経済と主権の観点から説明しなさい。<br><br>
+          <strong>問題2:</strong> 明治維新が日本の近代化に果たした役割を、政治・経済・社会の変化から説明しなさい。
+        </div>
+      </div>
+      <button id="next6" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n6").style.display('none','auto');
+        dom.Tag("n7").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n7" class="">
+      <div id="question" class="">
+        <h3>🔑 発展のコツ</h3>
+        <div class="tip">
+          <strong>開国と明治維新を理解するコツ</strong><br>
+          1. 国際環境の変化を理解する<br>
+          2. 国内の政治状況を把握する<br>
+          3. 改革の目的と効果を考える<br>
+          4. 近代化の意義を評価する
+        </div>
+        <p>開国と明治維新は、日本が近代国家として発展するための重要な転換点でした。</p>
+      </div>
+      <button id="next7" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n7").style.display('none','auto');
+        dom.Tag("n8").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n8" class="">
+      <div id="question" class="">
+        <h3>📖 資料の提示（日清・日露戦争）</h3>
+        <div class="highlight">
+          <strong>日清戦争（1894-1895年）</strong><br>
+          • 朝鮮半島の支配権をめぐる戦争<br>
+          • 日本が勝利<br>
+          • 下関条約の締結<br>
+          • 台湾・澎湖諸島の割譲
+        </div>
+        <div class="highlight">
+          <strong>日露戦争（1904-1905年）</strong><br>
+          • 満州・朝鮮の支配権をめぐる戦争<br>
+          • 日本が勝利<br>
+          • ポーツマス条約の締結<br>
+          • 南樺太の割譲
+        </div>
+      </div>
+      <button id="next8" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n8").style.display('none','auto');
+        dom.Tag("n9").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n9" class="">
+      <div id="question" class="">
+        <h3>🎯 要点（日清・日露戦争）</h3>
+        <strong>戦争の背景：</strong><br>
+        • 帝国主義の時代<br>
+        • 列強のアジア進出<br>
+        • 日本の軍国主義化<br>
+        • 朝鮮半島の重要性<br><br>
+        <strong>戦争の影響：</strong><br>
+        • 日本の国際的地位向上<br>
+        • 軍備拡張の加速<br>
+        • 国民の戦争熱<br>
+        • アジアへの影響
+      </div>
+      <button id="next9" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n9").style.display('none','auto');
+        dom.Tag("n10").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n10" class="">
+      <div id="question" class="">
+        <h3>📝 要点のまとめ（日清・日露戦争）</h3>
+        <div class="tip">
+          <strong>戦争の流れ</strong><br>
+          帝国主義時代 → 朝鮮半島争奪 → 日清戦争 → 日露戦争 → 国際的地位向上
+        </div>
+        <p>日清・日露戦争は、日本が帝国主義国家として台頭する契機となりました。</p>
+      </div>
+      <button id="next10" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n10").style.display('none','auto');
+        dom.Tag("n11").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n11" class="">
+      <div id="question" class="">
+        <h3>💡 豆知識（日清・日露戦争）</h3>
+        <div class="tip">
+          <strong>黄海海戦</strong><br>
+          日清戦争中の海戦。日本海軍が清国北洋艦隊に勝利。<br>
+          日本の海軍力が世界に認められる契機。<br>
+          近代海軍の重要性を示した。
+        </div>
+        <div class="tip">
+          <strong>旅順攻囲戦</strong><br>
+          日露戦争中の陸戦。日本軍が旅順要塞を攻略。<br>
+          約6ヶ月の長期戦。<br>
+          近代戦の過酷さを示した。
+        </div>
+      </div>
+      <button id="next11" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n11").style.display('none','auto');
+        dom.Tag("n12").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n12" class="">
+      <div id="question" class="">
+        <h3>❓ 発展問題（日清・日露戦争）</h3>
+        <div class="question">
+          <strong>問題3:</strong> 日清・日露戦争が日本の軍国主義化を促進した理由を、国民意識の変化から説明しなさい。<br><br>
+          <strong>問題4:</strong> これらの戦争がアジア諸国に与えた影響を、植民地化と民族運動の観点から説明しなさい。
+        </div>
+      </div>
+      <button id="next12" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n12").style.display('none','auto');
+        dom.Tag("n13").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n13" class="">
+      <div id="question" class="">
+        <h3>🔑 発展のコツ（日清・日露戦争）</h3>
+        <div class="tip">
+          <strong>戦争を理解するコツ</strong><br>
+          1. 国際環境の変化を理解する<br>
+          2. 戦争の目的と結果を考える<br>
+          3. 国内への影響を評価する<br>
+          4. アジアへの影響を考える
+        </div>
+        <p>日清・日露戦争は、日本が帝国主義国家として発展する過程での重要な戦争でした。</p>
+      </div>
+      <button id="next13" class="button-next">おしまい</button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+          ],
+          throwOnError: false
+        });
+      }
+    });
+  </script>
+</body>
+</html> 

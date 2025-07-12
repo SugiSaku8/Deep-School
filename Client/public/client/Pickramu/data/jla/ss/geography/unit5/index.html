@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/cancel.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg-color: transparent;
+      --text-color: #222;
+      --card-bg: #fff;
+      --border-radius: 12px;
+      --shadow-color: rgba(0,0,0,0.08);
+      --spacing-unit: 20px;
+      --animation-duration: 0.3s;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--text-color);
+      background: var(--bg-color);
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+      transition: background var(--animation-duration);
+    }
+    #content {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 8px var(--shadow-color);
+      max-width: 720px;
+      width: 100%;
+      padding: 2rem;
+      box-sizing: border-box;
+      word-break: break-word;
+    }
+    .input-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1em;
+      margin-top: 2em;
+      padding: 1.5em;
+      background: #f5f5f7;
+      border: 1px solid #e5e5e7;
+      border-radius: var(--border-radius);
+      box-shadow: 0 1px 4px var(--shadow-color);
+    }
+    .input-box {
+      background: #fff;
+      border-radius: 8px;
+      padding: 0.8em 1em;
+      font-size: 1.1em;
+      border: 1px solid #d2d2d7;
+      width: 260px;
+      text-align: center;
+    }
+    .button-next {
+      background: #007aff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.8em 1.5em;
+      font-size: 1em;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 1px 4px var(--shadow-color);
+    }
+    .highlight {
+      background: #fff3cd;
+      padding: 0.5em;
+      border-radius: 6px;
+      border-left: 4px solid #ffc107;
+      margin: 1em 0;
+    }
+    .tip {
+      background: #d1ecf1;
+      padding: 0.5em;
+      border-radius: 6px;
+      border-left: 4px solid #17a2b8;
+      margin: 1em 0;
+    }
+    .question {
+      background: #f8f9fa;
+      padding: 1em;
+      border-radius: 6px;
+      border: 1px solid #dee2e6;
+      margin: 1em 0;
+    }
+    body.dark-mode, .dark-mode #content {
+      --bg-color: #1a1a1a;
+      --text-color: #fff;
+      --card-bg: #222;
+      --shadow-color: rgba(0,0,0,0.3);
+    }
+    #content #n2, #content #n3, #content #n4, #content #n5, #content #n6, #content #n7, #content #n8, #content #n9, #content #n10, #content #n11, #content #n12, #content #n13, #content #n14, #content #n15, #content #n16, #content #n17, #content #n18, #content #n19, #content #n20, #content #n21, #content #n22, #content #n23, #content #n24, #content #n25, #content #n26, #content #n27, #content #n28, #content #n29, #content #n30, #content #n31, #content #n32, #content #n33, #content #n34, #content #n35, #content #n36, #content #n37, #content #n38, #content #n39, #content #n40, #content #n41, #content #n42, #content #n43, #content #n44, #content #n45, #content #n46, #content #n47, #content #n48, #content #n49, #content #n50, #content #n51, #content #n52, #content #n53, #content #n54, #content #n55, #content #n56, #content #n57, #content #n58, #content #n59, #content #n60, #content #n61, #content #n62, #content #n63, #content #n64, #content #n65, #content #n66, #content #n67, #content #n68, #content #n69, #content #n70, #content #n71, #content #n72, #content #n73, #content #n74, #content #n75, #content #n76, #content #n77, #content #n78, #content #n79, #content #n80, #content #n81, #content #n82, #content #n83, #content #n84, #content #n85, #content #n86, #content #n87, #content #n88, #content #n89, #content #n90, #content #n91, #content #n92, #content #n93, #content #n94, #content #n95, #content #n96, #content #n97, #content #n98, #content #n99, #content #n100 {
+      display: none;
+    }
+  </style>
+  <script>
+    const dom = {
+      Tag: function(ID) {
+        const el = document.getElementById(ID);
+        return {
+          style: {
+            display: function(state, auto) {
+              if (!el) return;
+              if (state === 'block' || state === 'none') {
+                el.style.display = state;
+              }
+              if (auto === 'auto' && state === 'block') {
+                el.style.display = '';
+              }
+            }
+          }
+        };
+      }
+    };
+  </script>
+</head>
+<body>
+  <div id="content">
+    <div id="unit-title" class="">
+      <h1>Unit 5: アフリカ州</h1>
+      <h2>第1章: アフリカの自然と人々</h2>
+    </div>
+
+    <div id="n1" class="">
+      <div id="question" class="">
+        <h3>🌍 学習の目標</h3>
+        このUnitでは、アフリカ州の特色について学びます。<br>
+        アフリカの自然環境・民族・文化・開発課題を理解しましょう！
+      </div>
+      <button id="next1" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n1").style.display('none','auto');
+        dom.Tag("n2").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n2" class="">
+      <div id="question" class="">
+        <h3>📖 資料の提示</h3>
+        <div class="highlight">
+          <strong>アフリカの自然環境</strong><br>
+          • サハラ砂漠（世界最大の砂漠）<br>
+          • サバンナ（熱帯草原）<br>
+          • コンゴ盆地（熱帯雨林）<br>
+          • ナイル川（世界最長の川）
+        </div>
+        <div class="highlight">
+          <strong>アフリカの民族・文化</strong><br>
+          • 多様な民族（約3000の民族）<br>
+          • 伝統的な生活様式<br>
+          • 豊かな文化遺産<br>
+          • 言語の多様性
+        </div>
+      </div>
+      <button id="next2" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n2").style.display('none','auto');
+        dom.Tag("n3").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n3" class="">
+      <div id="question" class="">
+        <h3>❓ 発展問題</h3>
+        <div class="question">
+          <strong>問題1:</strong> アフリカに多様な自然環境が存在する理由を、緯度と地形の特徴から説明しなさい。<br><br>
+          <strong>問題2:</strong> アフリカに多くの民族が存在する理由を、歴史的背景と地理的条件から説明しなさい。
+        </div>
+      </div>
+      <button id="next3" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n3").style.display('none','auto');
+        dom.Tag("n4").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n4" class="">
+      <div id="question" class="">
+        <h3>📝 要点のまとめ</h3>
+        <div class="tip">
+          <strong>アフリカの特徴</strong><br>
+          <strong>自然:</strong> サハラ砂漠・サバンナ・コンゴ盆地・ナイル川<br>
+          <strong>民族:</strong> 3000民族・伝統文化・言語多様・文化遺産<br>
+          <strong>課題:</strong> 開発格差・貧困・紛争・環境問題
+        </div>
+        <p>アフリカは、豊かな自然と多様な文化を持つ大陸ですが、多くの開発課題も抱えています。</p>
+      </div>
+      <button id="next4" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n4").style.display('none','auto');
+        dom.Tag("n5").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n5" class="">
+      <div id="question" class="">
+        <h3>💡 豆知識</h3>
+        <div class="tip">
+          <strong>サハラ砂漠</strong><br>
+          面積約900万km²の世界最大の砂漠。<br>
+          かつては緑豊かな地域だった。<br>
+          気候変動により砂漠化が進んだ。
+        </div>
+        <div class="tip">
+          <strong>ナイル川</strong><br>
+          全長6650kmの世界最長の川。<br>
+          エジプト文明の発祥地。<br>
+          現在も農業・生活用水として重要。
+        </div>
+      </div>
+      <button id="next5" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n5").style.display('none','auto');
+        dom.Tag("n6").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n6" class="">
+      <div id="question" class="">
+        <h3>❓ 発展問題</h3>
+        <div class="question">
+          <strong>問題3:</strong> サハラ砂漠の拡大がアフリカの開発に与える影響を、農業と生活の観点から説明しなさい。<br><br>
+          <strong>問題4:</strong> アフリカの伝統文化を守りながら開発を進める方法を、持続可能な開発の観点から説明しなさい。
+        </div>
+      </div>
+      <button id="next6" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n6").style.display('none','auto');
+        dom.Tag("n7").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n7" class="">
+      <div id="question" class="">
+        <h3>🔑 発展のコツ</h3>
+        <div class="tip">
+          <strong>アフリカ州を理解するコツ</strong><br>
+          1. 自然環境の多様性を把握する<br>
+          2. 民族・文化の特徴を理解する<br>
+          3. 開発課題の背景を考える<br>
+          4. 国際協力の重要性を認識する
+        </div>
+        <p>アフリカ州は、自然・文化・開発の面で世界の注目を集める地域です。</p>
+      </div>
+      <button id="next7" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n7").style.display('none','auto');
+        dom.Tag("n8").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n8" class="">
+      <div id="question" class="">
+        <h3>📖 資料の提示（アフリカの開発課題）</h3>
+        <div class="highlight">
+          <strong>経済的課題</strong><br>
+          • 貧困の深刻化<br>
+          • 経済格差の拡大<br>
+          • 一次産品への依存<br>
+          • 債務問題
+        </div>
+        <div class="highlight">
+          <strong>社会的課題</strong><br>
+          • 教育の遅れ<br>
+          • 医療の不足<br>
+          • 人口増加<br>
+          • 都市化の進行
+        </div>
+      </div>
+      <button id="next8" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n8").style.display('none','auto');
+        dom.Tag("n9").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n9" class="">
+      <div id="question" class="">
+        <h3>❓ 発展問題（開発課題）</h3>
+        <div class="question">
+          <strong>問題5:</strong> アフリカの貧困が深刻化する理由を、植民地支配の歴史から説明しなさい。<br><br>
+          <strong>問題6:</strong> アフリカの人口増加が開発に与える影響を、食料問題と教育の観点から説明しなさい。
+        </div>
+      </div>
+      <button id="next9" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n9").style.display('none','auto');
+        dom.Tag("n10").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n10" class="">
+      <div id="question" class="">
+        <h3>📝 要点のまとめ（開発課題）</h3>
+        <div class="tip">
+          <strong>アフリカの開発課題</strong><br>
+          <strong>経済:</strong> 貧困・格差・一次産品依存・債務問題<br>
+          <strong>社会:</strong> 教育遅れ・医療不足・人口増加・都市化<br>
+          <strong>環境:</strong> 砂漠化・森林減少・気候変動
+        </div>
+        <p>アフリカの開発課題は、歴史的背景と現代の国際環境が複雑に絡み合っています。</p>
+      </div>
+      <button id="next10" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n10").style.display('none','auto');
+        dom.Tag("n11").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n11" class="">
+      <div id="question" class="">
+        <h3>💡 豆知識（開発課題）</h3>
+        <div class="tip">
+          <strong>MDGs・SDGs</strong><br>
+          国連が定めた開発目標。MDGs（2000-2015）からSDGs（2015-2030）へ。<br>
+          貧困削減・教育・保健・環境など幅広い目標。<br>
+          アフリカの開発支援の指針となっている。
+        </div>
+        <div class="tip">
+          <strong>アフリカ連合（AU）</strong><br>
+          アフリカ諸国の地域統合組織。<br>
+          平和・安全・開発の促進を目指す。<br>
+          55か国が加盟している。
+        </div>
+      </div>
+      <button id="next11" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n11").style.display('none','auto');
+        dom.Tag("n12").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n12" class="">
+      <div id="question" class="">
+        <h3>❓ 発展問題（開発課題）</h3>
+        <div class="question">
+          <strong>問題7:</strong> 国際社会がアフリカの開発支援を行う理由を、人道主義と国際協力の観点から説明しなさい。<br><br>
+          <strong>問題8:</strong> アフリカの持続可能な開発を実現するために、私たちができる取り組みを説明しなさい。
+        </div>
+      </div>
+      <button id="next12" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n12").style.display('none','auto');
+        dom.Tag("n13").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n13" class="">
+      <div id="question" class="">
+        <h3>🔑 発展のコツ（開発課題）</h3>
+        <div class="tip">
+          <strong>開発課題を理解するコツ</strong><br>
+          1. 歴史的背景を理解する<br>
+          2. 国際環境の影響を考える<br>
+          3. 地域の多様性を認識する<br>
+          4. 国際協力の重要性を理解する
+        </div>
+        <p>アフリカの開発課題は、グローバルな視点から考える必要があります。</p>
+      </div>
+      <button id="next13" class="button-next">おしまい</button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+          ],
+          throwOnError: false
+        });
+      }
+    });
+  </script>
+</body>
+</html> 

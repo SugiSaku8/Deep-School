@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/cancel.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg-color: transparent;
+      --text-color: #222;
+      --card-bg: #fff;
+      --border-radius: 12px;
+      --shadow-color: rgba(0,0,0,0.08);
+      --spacing-unit: 20px;
+      --animation-duration: 0.3s;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--text-color);
+      background: var(--bg-color);
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+      transition: background var(--animation-duration);
+    }
+    #content {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 8px var(--shadow-color);
+      max-width: 720px;
+      width: 100%;
+      padding: 2rem;
+      box-sizing: border-box;
+      word-break: break-word;
+    }
+    .input-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1em;
+      margin-top: 2em;
+      padding: 1.5em;
+      background: #f5f5f7;
+      border: 1px solid #e5e5e7;
+      border-radius: var(--border-radius);
+      box-shadow: 0 1px 4px var(--shadow-color);
+    }
+    .input-box {
+      background: #fff;
+      border-radius: 8px;
+      padding: 0.8em 1em;
+      font-size: 1.1em;
+      border: 1px solid #d2d2d7;
+      width: 260px;
+      text-align: center;
+    }
+    .button-next {
+      background: #007aff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.8em 1.5em;
+      font-size: 1em;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 1px 4px var(--shadow-color);
+    }
+    .highlight {
+      background: #fff3cd;
+      padding: 0.5em;
+      border-radius: 6px;
+      border-left: 4px solid #ffc107;
+      margin: 1em 0;
+    }
+    .tip {
+      background: #d1ecf1;
+      padding: 0.5em;
+      border-radius: 6px;
+      border-left: 4px solid #17a2b8;
+      margin: 1em 0;
+    }
+    .question {
+      background: #f8f9fa;
+      padding: 1em;
+      border-radius: 6px;
+      border: 1px solid #dee2e6;
+      margin: 1em 0;
+    }
+    body.dark-mode, .dark-mode #content {
+      --bg-color: #1a1a1a;
+      --text-color: #fff;
+      --card-bg: #222;
+      --shadow-color: rgba(0,0,0,0.3);
+    }
+    #content #n2, #content #n3, #content #n4, #content #n5, #content #n6, #content #n7, #content #n8, #content #n9, #content #n10, #content #n11, #content #n12, #content #n13, #content #n14, #content #n15, #content #n16, #content #n17, #content #n18, #content #n19, #content #n20, #content #n21, #content #n22, #content #n23, #content #n24, #content #n25, #content #n26, #content #n27, #content #n28, #content #n29, #content #n30, #content #n31, #content #n32, #content #n33, #content #n34, #content #n35, #content #n36, #content #n37, #content #n38, #content #n39, #content #n40, #content #n41, #content #n42, #content #n43, #content #n44, #content #n45, #content #n46, #content #n47, #content #n48, #content #n49, #content #n50, #content #n51, #content #n52, #content #n53, #content #n54, #content #n55, #content #n56, #content #n57, #content #n58, #content #n59, #content #n60, #content #n61, #content #n62, #content #n63, #content #n64, #content #n65, #content #n66, #content #n67, #content #n68, #content #n69, #content #n70, #content #n71, #content #n72, #content #n73, #content #n74, #content #n75, #content #n76, #content #n77, #content #n78, #content #n79, #content #n80, #content #n81, #content #n82, #content #n83, #content #n84, #content #n85, #content #n86, #content #n87, #content #n88, #content #n89, #content #n90, #content #n91, #content #n92, #content #n93, #content #n94, #content #n95, #content #n96, #content #n97, #content #n98, #content #n99, #content #n100 {
+      display: none;
+    }
+  </style>
+  <script>
+    const dom = {
+      Tag: function(ID) {
+        const el = document.getElementById(ID);
+        return {
+          style: {
+            display: function(state, auto) {
+              if (!el) return;
+              if (state === 'block' || state === 'none') {
+                el.style.display = state;
+              }
+              if (auto === 'auto' && state === 'block') {
+                el.style.display = '';
+              }
+            }
+          }
+        };
+      }
+    };
+  </script>
+</head>
+<body>
+  <div id="content">
+    <div id="unit-title" class="">
+      <h1>Unit 2: 民主政治と日本国憲法</h1>
+      <h2>第1章: 民主政治の基本原理</h2>
+    </div>
+
+    <div id="n1" class="">
+      <div id="question" class="">
+        <h3>🏛️ 学習の目標</h3>
+        このUnitでは、民主政治の仕組みと日本国憲法について学びます。<br>
+        民主主義の原理・三権分立・基本的人権の保障を理解しましょう！
+      </div>
+      <button id="next1" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n1").style.display('none','auto');
+        dom.Tag("n2").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n2" class="">
+      <div id="question" class="">
+        <h3>📖 資料の提示</h3>
+        <div class="highlight">
+          <strong>民主主義の基本原理</strong><br>
+          • 国民主権（主権在民）<br>
+          • 基本的人権の尊重<br>
+          • 法の支配<br>
+          • 権力分立
+        </div>
+        <div class="highlight">
+          <strong>日本国憲法の三大原則</strong><br>
+          • 国民主権<br>
+          • 基本的人権の尊重<br>
+          • 平和主義<br>
+          • 1947年5月3日施行
+        </div>
+      </div>
+      <button id="next2" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n2").style.display('none','auto');
+        dom.Tag("n3").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n3" class="">
+      <div id="question" class="">
+        <h3>🎯 要点</h3>
+        <strong>国民主権の意味：</strong><br>
+        • 国の政治の最終的な決定権は国民にある<br>
+        • 選挙を通じて国民の意思を政治に反映<br>
+        • 国民が主権者として政治に参加<br>
+        • 国民の権利と義務の両立<br><br>
+        <strong>基本的人権の内容：</strong><br>
+        • 自由権（思想・信教・表現の自由など）<br>
+        • 平等権（法の下の平等）<br>
+        • 社会権（生存権・教育を受ける権利など）<br>
+        • 参政権（選挙権・被選挙権）
+      </div>
+      <button id="next3" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n3").style.display('none','auto');
+        dom.Tag("n4").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n4" class="">
+      <div id="question" class="">
+        <h3>📝 要点のまとめ</h3>
+        <div class="tip">
+          <strong>民主主義の基本原理</strong><br>
+          国民主権 → 国民が主権者・選挙で意思反映・政治参加・権利義務両立<br><br>
+          <strong>基本的人権</strong><br>
+          自由権・平等権・社会権・参政権の4つの権利
+        </div>
+        <p>民主主義は、国民が主権者として政治に参加し、基本的人権が保障される政治制度です。</p>
+      </div>
+      <button id="next4" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n4").style.display('none','auto');
+        dom.Tag("n5").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n5" class="">
+      <div id="question" class="">
+        <h3>💡 豆知識</h3>
+        <div class="tip">
+          <strong>日本国憲法の前文</strong><br>
+          「日本国民は、正当に選挙された国会における代表者を通じて行動し、われらとわれらの子孫のために、諸国民との協和による成果と、わが国全土にわたって自由のもたらす恵沢を確保し、政府の行為によって再び戦争の惨禍が起ることのないやうにすることを決意し、ここに主権が国民に存することを宣言し、この憲法を確定する。」
+        </div>
+        <div class="tip">
+          <strong>憲法記念日</strong><br>
+          5月3日は憲法記念日として国民の祝日。<br>
+          日本国憲法の施行を記念して制定された。<br>
+          民主主義と平和主義の重要性を再確認する日。
+        </div>
+      </div>
+      <button id="next5" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n5").style.display('none','auto');
+        dom.Tag("n6").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n6" class="">
+      <div id="question" class="">
+        <h3>❓ 発展問題</h3>
+        <div class="question">
+          <strong>問題1:</strong> 国民主権が実現されるために、私たち国民はどのような行動を取るべきかを、選挙と政治参加の観点から説明しなさい。<br><br>
+          <strong>問題2:</strong> 基本的人権が制限される場合がある理由を、公共の福祉との関係から説明しなさい。
+        </div>
+      </div>
+      <button id="next6" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n6").style.display('none','auto');
+        dom.Tag("n7").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n7" class="">
+      <div id="question" class="">
+        <h3>🔑 発展のコツ</h3>
+        <div class="tip">
+          <strong>民主主義を理解するコツ</strong><br>
+          1. 国民の権利と義務の両方を理解する<br>
+          2. 政治参加の重要性を認識する<br>
+          3. 基本的人権の制限について考える<br>
+          4. 憲法の意義を理解する
+        </div>
+        <p>民主主義は、国民一人一人の政治参加によって支えられています。</p>
+      </div>
+      <button id="next7" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n7").style.display('none','auto');
+        dom.Tag("n8").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n8" class="">
+      <div id="question" class="">
+        <h3>📖 資料の提示（三権分立）</h3>
+        <div class="highlight">
+          <strong>三権分立の仕組み</strong><br>
+          • 立法権：国会（法律の制定）<br>
+          • 行政権：内閣（法律の執行）<br>
+          • 司法権：裁判所（法律の解釈・適用）
+        </div>
+        <div class="highlight">
+          <strong>権力分立の目的</strong><br>
+          • 権力の集中を防ぐ<br>
+          • 国民の権利・自由を守る<br>
+          • 民主政治を実現する<br>
+          • 権力の濫用を防ぐ
+        </div>
+      </div>
+      <button id="next8" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n8").style.display('none','auto');
+        dom.Tag("n9").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n9" class="">
+      <div id="question" class="">
+        <h3>🎯 要点（三権分立）</h3>
+        <strong>国会の役割：</strong><br>
+        • 法律の制定<br>
+        • 予算の議決<br>
+        • 内閣総理大臣の指名<br>
+        • 国政調査権<br><br>
+        <strong>内閣の役割：</strong><br>
+        • 法律の執行<br>
+        • 外交関係の処理<br>
+        • 条約の締結<br>
+        • 予算の作成
+      </div>
+      <button id="next9" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n9").style.display('none','auto');
+        dom.Tag("n10").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n10" class="">
+      <div id="question" class="">
+        <h3>📝 要点のまとめ（三権分立）</h3>
+        <div class="tip">
+          <strong>三権分立の仕組み</strong><br>
+          立法権（国会）・行政権（内閣）・司法権（裁判所）<br><br>
+          <strong>目的</strong><br>
+          権力集中防止・国民の権利保護・民主政治実現・権力濫用防止
+        </div>
+        <p>三権分立は、民主政治を実現するための重要な制度です。</p>
+      </div>
+      <button id="next10" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n10").style.display('none','auto');
+        dom.Tag("n11").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n11" class="">
+      <div id="question" class="">
+        <h3>💡 豆知識（三権分立）</h3>
+        <div class="tip">
+          <strong>国会の二院制</strong><br>
+          衆議院と参議院の二つの議院で構成。<br>
+          衆議院の優越（予算先議権・内閣不信任決議権）。<br>
+          参議院は良識の府としての役割。
+        </div>
+        <div class="tip">
+          <strong>内閣不信任決議</strong><br>
+          衆議院が内閣に対して不信任を決議する制度。<br>
+          内閣は総辞職するか、衆議院を解散する。<br>
+          国会による内閣の統制機能。
+        </div>
+      </div>
+      <button id="next11" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n11").style.display('none','auto');
+        dom.Tag("n12").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n12" class="">
+      <div id="question" class="">
+        <h3>❓ 発展問題（三権分立）</h3>
+        <div class="question">
+          <strong>問題3:</strong> 三権分立が国民の権利・自由を守る理由を、権力の集中防止から説明しなさい。<br><br>
+          <strong>問題4:</strong> 国会と内閣の関係を、法律の制定と執行の観点から説明しなさい。
+        </div>
+      </div>
+      <button id="next12" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n12").style.display('none','auto');
+        dom.Tag("n13").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n13" class="">
+      <div id="question" class="">
+        <h3>🔑 発展のコツ（三権分立）</h3>
+        <div class="tip">
+          <strong>三権分立を理解するコツ</strong><br>
+          1. 各機関の役割を明確に理解する<br>
+          2. 権力分立の目的を押さえる<br>
+          3. 機関間の関係を理解する<br>
+          4. 国民の権利保護との関係を考える
+        </div>
+        <p>三権分立は、民主政治を支える重要な制度であり、国民の権利・自由を守るために必要です。</p>
+      </div>
+      <button id="next13" class="button-next">おしまい</button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+          ],
+          throwOnError: false
+        });
+      }
+    });
+  </script>
+</body>
+</html> 

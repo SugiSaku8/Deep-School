@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/cancel.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --bg-color: transparent;
+      --text-color: #222;
+      --card-bg: #fff;
+      --border-radius: 12px;
+      --shadow-color: rgba(0,0,0,0.08);
+      --spacing-unit: 20px;
+      --animation-duration: 0.3s;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--text-color);
+      background: var(--bg-color);
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+      transition: background var(--animation-duration);
+    }
+    #content {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 8px var(--shadow-color);
+      max-width: 720px;
+      width: 100%;
+      padding: 2rem;
+      box-sizing: border-box;
+      word-break: break-word;
+    }
+    .input-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1em;
+      margin-top: 2em;
+      padding: 1.5em;
+      background: #f5f5f7;
+      border: 1px solid #e5e5e7;
+      border-radius: var(--border-radius);
+      box-shadow: 0 1px 4px var(--shadow-color);
+    }
+    .input-box {
+      background: #fff;
+      border-radius: 8px;
+      padding: 0.8em 1em;
+      font-size: 1.1em;
+      border: 1px solid #d2d2d7;
+      width: 260px;
+      text-align: center;
+    }
+    .button-next {
+      background: #007aff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.8em 1.5em;
+      font-size: 1em;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 1px 4px var(--shadow-color);
+    }
+    .highlight {
+      background: #fff3cd;
+      padding: 0.5em;
+      border-radius: 6px;
+      border-left: 4px solid #ffc107;
+      margin: 1em 0;
+    }
+    .tip {
+      background: #d1ecf1;
+      padding: 0.5em;
+      border-radius: 6px;
+      border-left: 4px solid #17a2b8;
+      margin: 1em 0;
+    }
+    .question {
+      background: #f8f9fa;
+      padding: 1em;
+      border-radius: 6px;
+      border: 1px solid #dee2e6;
+      margin: 1em 0;
+    }
+    body.dark-mode, .dark-mode #content {
+      --bg-color: #1a1a1a;
+      --text-color: #fff;
+      --card-bg: #222;
+      --shadow-color: rgba(0,0,0,0.3);
+    }
+    #content #n2, #content #n3, #content #n4, #content #n5, #content #n6, #content #n7, #content #n8, #content #n9, #content #n10, #content #n11, #content #n12, #content #n13, #content #n14, #content #n15, #content #n16, #content #n17, #content #n18, #content #n19, #content #n20, #content #n21, #content #n22, #content #n23, #content #n24, #content #n25, #content #n26, #content #n27, #content #n28, #content #n29, #content #n30, #content #n31, #content #n32, #content #n33, #content #n34, #content #n35, #content #n36, #content #n37, #content #n38, #content #n39, #content #n40, #content #n41, #content #n42, #content #n43, #content #n44, #content #n45, #content #n46, #content #n47, #content #n48, #content #n49, #content #n50, #content #n51, #content #n52, #content #n53, #content #n54, #content #n55, #content #n56, #content #n57, #content #n58, #content #n59, #content #n60, #content #n61, #content #n62, #content #n63, #content #n64, #content #n65, #content #n66, #content #n67, #content #n68, #content #n69, #content #n70, #content #n71, #content #n72, #content #n73, #content #n74, #content #n75, #content #n76, #content #n77, #content #n78, #content #n79, #content #n80, #content #n81, #content #n82, #content #n83, #content #n84, #content #n85, #content #n86, #content #n87, #content #n88, #content #n89, #content #n90, #content #n91, #content #n92, #content #n93, #content #n94, #content #n95, #content #n96, #content #n97, #content #n98, #content #n99, #content #n100 {
+      display: none;
+    }
+  </style>
+  <script>
+    const dom = {
+      Tag: function(ID) {
+        const el = document.getElementById(ID);
+        return {
+          style: {
+            display: function(state, auto) {
+              if (!el) return;
+              if (state === 'block' || state === 'none') {
+                el.style.display = state;
+              }
+              if (auto === 'auto' && state === 'block') {
+                el.style.display = '';
+              }
+            }
+          }
+        };
+      }
+    };
+  </script>
+</head>
+<body>
+  <div id="content">
+    <div id="unit-title" class="">
+      <h1>Unit 1: 世界の地域構成</h1>
+      <h2>第1章: 世界の国々と地域</h2>
+    </div>
+
+    <div id="n1" class="">
+      <div id="question" class="">
+        <h3>🌍 学習の目標</h3>
+        このUnitでは、世界の地域構成について学びます。<br>
+        大陸・海洋の分布、世界の国々の特徴を理解しましょう！
+      </div>
+      <button id="next1" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n1").style.display('none','auto');
+        dom.Tag("n2").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n2" class="">
+      <div id="question" class="">
+        <h3>📖 資料の提示</h3>
+        <div class="highlight">
+          <strong>世界の大陸（6大陸）</strong><br>
+          • アジア大陸（最大）<br>
+          • アフリカ大陸<br>
+          • 北アメリカ大陸<br>
+          • 南アメリカ大陸<br>
+          • ヨーロッパ大陸<br>
+          • オーストラリア大陸（最小）
+        </div>
+        <div class="highlight">
+          <strong>世界の海洋（3大洋）</strong><br>
+          • 太平洋（最大）<br>
+          • 大西洋<br>
+          • インド洋
+        </div>
+      </div>
+      <button id="next2" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n2").style.display('none','auto');
+        dom.Tag("n3").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n3" class="">
+      <div id="question" class="">
+        <h3>❓ 発展問題</h3>
+        <div class="question">
+          <strong>問題1:</strong> 世界地図を見て、アジア大陸が世界最大の大陸である理由を、面積と人口の観点から説明しなさい。<br><br>
+          <strong>問題2:</strong> 太平洋が世界最大の海洋である理由を、他の海洋との比較から説明しなさい。
+        </div>
+      </div>
+      <button id="next3" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n3").style.display('none','auto');
+        dom.Tag("n4").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n4" class="">
+      <div id="question" class="">
+        <h3>📝 要点のまとめ</h3>
+        <div class="tip">
+          <strong>世界の地域構成</strong><br>
+          <strong>大陸:</strong> アジア・アフリカ・北アメリカ・南アメリカ・ヨーロッパ・オーストラリア<br>
+          <strong>海洋:</strong> 太平洋・大西洋・インド洋<br>
+          <strong>特徴:</strong> アジア大陸が最大、太平洋が最大の海洋
+        </div>
+        <p>世界は6つの大陸と3つの大洋で構成されており、それぞれが独自の特徴を持っています。</p>
+      </div>
+      <button id="next4" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n4").style.display('none','auto');
+        dom.Tag("n5").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n5" class="">
+      <div id="question" class="">
+        <h3>💡 豆知識</h3>
+        <div class="tip">
+          <strong>大陸の境界</strong><br>
+          ヨーロッパとアジアの境界はウラル山脈・カスピ海・コーカサス山脈。<br>
+          アフリカとアジアの境界はスエズ運河。<br>
+          北アメリカと南アメリカの境界はパナマ地峡。
+        </div>
+        <div class="tip">
+          <strong>海洋の特徴</strong><br>
+          太平洋は「火の輪」と呼ばれる火山帯に囲まれている。<br>
+          大西洋は南北に細長く、中央海嶺が特徴的。<br>
+          インド洋はモンスーンの影響を受ける海域。
+        </div>
+      </div>
+      <button id="next5" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n5").style.display('none','auto');
+        dom.Tag("n6").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n6" class="">
+      <div id="question" class="">
+        <h3>❓ 発展問題</h3>
+        <div class="question">
+          <strong>問題3:</strong> 大陸の境界が自然の地形で決められている理由を説明しなさい。<br><br>
+          <strong>問題4:</strong> 太平洋が「火の輪」と呼ばれる理由を、プレートテクトニクスの観点から説明しなさい。
+        </div>
+      </div>
+      <button id="next6" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n6").style.display('none','auto');
+        dom.Tag("n7").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n7" class="">
+      <div id="question" class="">
+        <h3>🔑 発展のコツ</h3>
+        <div class="tip">
+          <strong>世界の地域構成を理解するコツ</strong><br>
+          1. 大陸と海洋の位置関係を把握する<br>
+          2. 面積や人口の比較から特徴を理解する<br>
+          3. 自然の境界線の意味を考える<br>
+          4. 各地域の特徴的な自然現象を覚える
+        </div>
+        <p>世界の地域構成は、自然地理と人文地理の両方の観点から理解することが重要です。</p>
+      </div>
+      <button id="next7" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n7").style.display('none','auto');
+        dom.Tag("n8").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n8" class="">
+      <div id="question" class="">
+        <h3>📖 資料の提示（世界の国々）</h3>
+        <div class="highlight">
+          <strong>世界の国数</strong><br>
+          • 約200の国と地域<br>
+          • 国連加盟国：193か国<br>
+          • 面積最大：ロシア（約1700万km²）<br>
+          • 人口最多：中国（約14億人）
+        </div>
+        <div class="highlight">
+          <strong>地域別の特徴</strong><br>
+          • アジア：人口密度が高い<br>
+          • アフリカ：発展途上国が多い<br>
+          • ヨーロッパ：先進国が多い<br>
+          • アメリカ：経済規模が大きい
+        </div>
+      </div>
+      <button id="next8" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n8").style.display('none','auto');
+        dom.Tag("n9").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n9" class="">
+      <div id="question" class="">
+        <h3>❓ 発展問題（世界の国々）</h3>
+        <div class="question">
+          <strong>問題5:</strong> アジアの人口密度が高い理由を、自然環境と歴史的背景から説明しなさい。<br><br>
+          <strong>問題6:</strong> アフリカに発展途上国が多い理由を、植民地支配の歴史から説明しなさい。
+        </div>
+      </div>
+      <button id="next9" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n9").style.display('none','auto');
+        dom.Tag("n10").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n10" class="">
+      <div id="question" class="">
+        <h3>📝 要点のまとめ（世界の国々）</h3>
+        <div class="tip">
+          <strong>世界の国々の特徴</strong><br>
+          <strong>規模:</strong> 約200の国と地域、国連加盟国193か国<br>
+          <strong>最大国:</strong> ロシア（面積）、中国（人口）<br>
+          <strong>地域差:</strong> アジア（人口密度高）、アフリカ（発展途上国多）、ヨーロッパ（先進国多）
+        </div>
+        <p>世界の国々は、歴史・文化・経済発展の度合いによって多様な特徴を持っています。</p>
+      </div>
+      <button id="next10" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n10").style.display('none','auto');
+        dom.Tag("n11").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n11" class="">
+      <div id="question" class="">
+        <h3>💡 豆知識（世界の国々）</h3>
+        <div class="tip">
+          <strong>バチカン市国</strong><br>
+          世界最小の独立国（面積0.44km²）。<br>
+          ローマ教皇を元首とするカトリック教会の総本山。<br>
+          国連オブザーバー国として参加している。
+        </div>
+        <div class="tip">
+          <strong>BRICs</strong><br>
+          ブラジル・ロシア・インド・中国の4か国。<br>
+          経済発展が著しい新興国として注目されている。<br>
+          世界経済における重要性が増している。
+        </div>
+      </div>
+      <button id="next11" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n11").style.display('none','auto');
+        dom.Tag("n12").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n12" class="">
+      <div id="question" class="">
+        <h3>❓ 発展問題（世界の国々）</h3>
+        <div class="question">
+          <strong>問題7:</strong> BRICs諸国が世界経済で注目されている理由を、人口と経済成長率から説明しなさい。<br><br>
+          <strong>問題8:</strong> バチカン市国が独立国として存在する理由を、宗教と政治の関係から説明しなさい。
+        </div>
+      </div>
+      <button id="next12" class="button-next">次へ</button>
+      <script>
+        dom.Tag("n12").style.display('none','auto');
+        dom.Tag("n13").style.display('block','auto');
+      </script>
+    </div>
+
+    <div id="n13" class="">
+      <div id="question" class="">
+        <h3>🔑 発展のコツ（世界の国々）</h3>
+        <div class="tip">
+          <strong>世界の国々を理解するコツ</strong><br>
+          1. 面積・人口・経済規模を比較する<br>
+          2. 歴史的背景を考慮する<br>
+          3. 地域的な特徴を把握する<br>
+          4. 国際関係の変化に注目する
+        </div>
+        <p>世界の国々の多様性を理解することで、グローバルな視点を身につけることができます。</p>
+      </div>
+      <button id="next13" class="button-next">おしまい</button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof renderMathInElement === "function") {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+          ],
+          throwOnError: false
+        });
+      }
+    });
+  </script>
+</body>
+</html> 
