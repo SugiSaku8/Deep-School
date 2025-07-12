@@ -1,12 +1,12 @@
 {
   "deepSchoolFamily": {
-    "version": "25C1056X1",
+    "version": "25C1086X1",
     "status": "beta",
-    "lastUpdated": "2025-07-09",
+    "lastUpdated": "2025-07-12",
     "description": "Deep-School Family Software - Initial release"
   },
   "deepSchoolClient": {
-    "version": "0.3.8",
+    "version": "0.3.9",
     "status": "stable",
     "cycle": 1,
     "release": 0,
@@ -24,12 +24,12 @@
     "description": "Deep-School Server - Initial stable release"
   },
   "pickramu": {
-    "version": "1.0.76",
+    "version": "1.0.80",
     "status": "beta",
     "cycle": 1,
     "release": 0,
     "revision": 1,
-    "lastUpdated": "2025-07-09",
+    "lastUpdated": "2025-07-12",
     "description": "Pickramu - Initial stable release"
   },
   "eguide": {

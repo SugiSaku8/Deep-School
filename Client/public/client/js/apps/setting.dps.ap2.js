@@ -131,15 +131,15 @@ export function appInit(shell) {
           <h2>アプリケーション情報</h2>
           <div class="setting-item">
             <label>バージョン:</label>
-            <span id="setting-version">0.3.8</span>
+            <span id="setting-version">0.3.9</span>
           </div>
           <div class="setting-item">
             <label>ビルド番号:</label>
-            <span id="setting-build">25C1056X1</span>
+            <span id="setting-build">25C1086X1</span>
           </div>
           <div class="setting-item">
             <label>最終更新:</label>
-            <span id="setting-updated">2025-07-09</span>
+            <span id="setting-updated">2025-07-12</span>
           </div>
           <div class="setting-item">
             <button class="auto-btn" id="check-update-btn">アップデートをチェック</button>
