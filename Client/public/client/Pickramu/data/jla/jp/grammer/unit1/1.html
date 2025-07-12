@@ -192,9 +192,6 @@
           if (state === 'block' || state === 'none') {
             el.style.display = state;
           }
-          // 'auto' オプションが指定された場合の追加処理
-          if (auto === 'auto' && state === 'block') {
-          }
         }
       }
     };
@@ -348,25 +345,9 @@ document.getElementById('next6').addEventListener('click', function() {
 dom.Tag("n6").style.display('none','auto');
 dom.Tag("n7").style.display('block','auto');
 });
-document.getElementById('next7').addEventListener('click', function() {
-dom.back();
-});
+
 </script>
 
   </div>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      if (typeof renderMathInElement === "function") {
-        renderMathInElement(document.body, {
-          delimiters: [
-            {left: "$$", right: "$$", display: true},
-            {left: "$", right: "$", display: false}
-          ],
-          throwOnError: false
-        });
-      }
-    });
-  </script>
 </body>
 </html>
