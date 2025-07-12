@@ -183,20 +183,20 @@
   </style>
   <script>
     const dom = {
-  Tag: function(ID) {
-    const el = document.getElementById(ID);
-    return {
-      style: {
-        display: function(state, auto) {
-          if (!el) return;
-          if (state === 'block' || state === 'none') {
-            el.style.display = state;
+      Tag: function(ID) {
+        const el = document.getElementById(ID);
+        return {
+          style: {
+            display: function(state, auto) {
+              if (!el) return;
+              if (state === 'block' || state === 'none') {
+                el.style.display = state;
+              }
+            }
           }
-        }
+        };
       }
     };
-  }
-};
   </script>
 </head>
 <body>
