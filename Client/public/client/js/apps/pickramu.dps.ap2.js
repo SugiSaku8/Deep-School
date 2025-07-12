@@ -495,42 +495,45 @@ function renderMaterialSelector(materials, onSelect) {
       <input type="text" id="material-search-bar" placeholder="教材名・教科・Unitで検索" class="search-bar">
     </div>
     <div class="pickramu-material-list">
-      ${['数学','国語','社会'].map(subject => {
-        const subjectMaterials = materials.filter(m => m.subject === subject);
-        if (!subjectMaterials.length) return '';
-        // フィールドごと
-        const fields = [...new Set(subjectMaterials.map(m => m.field))];
-        return `
-          <div class="pickramu-material-subject">
-            <h4 class="section-title">${subject}</h4>
-            ${fields.map(field => {
-              const fieldMaterials = subjectMaterials.filter(m => m.field === field);
-              // Unitごと
-              const units = [...new Set(fieldMaterials.map(m => m.unit))];
-              return `
-                <div class="pickramu-material-field">
-                  <div class="pickramu-material-field-title">${field}</div>
-                  <ul class="pickramu-material-unit-list">
-                    ${units.map(unit => {
-                      const unitMaterials = fieldMaterials.filter(m => m.unit === unit);
-                      return `
-                        <li class="pickramu-material-unit">
-                          <span class="pickramu-material-unit-title">${unit}</span>
-                          <ul class="pickramu-material-file-list">
-                            ${unitMaterials.map(mat => `
-                              <li><button class="auto-btn pickramu-material-btn" data-file="${mat.file}">${mat.title}</button></li>
-                            `).join('')}
-                          </ul>
-                        </li>
-                      `;
-                    }).join('')}
-                  </ul>
-                </div>
-              `;
-            }).join('')}
-          </div>
-        `;
-      }).join('')}
+      ${materials.length === 0 ? 
+        '<div class="pickramu-no-results">検索結果が見つかりませんでした。<br>別のキーワードで検索してください。</div>' :
+        ['数学','国語','社会'].map(subject => {
+          const subjectMaterials = materials.filter(m => m.subject === subject);
+          if (!subjectMaterials.length) return '';
+          // フィールドごと
+          const fields = [...new Set(subjectMaterials.map(m => m.field))];
+          return `
+            <div class="pickramu-material-subject">
+              <h4 class="section-title">${subject}</h4>
+              ${fields.map(field => {
+                const fieldMaterials = subjectMaterials.filter(m => m.field === field);
+                // Unitごと
+                const units = [...new Set(fieldMaterials.map(m => m.unit))];
+                return `
+                  <div class="pickramu-material-field">
+                    <div class="pickramu-material-field-title">${field}</div>
+                    <ul class="pickramu-material-unit-list">
+                      ${units.map(unit => {
+                        const unitMaterials = fieldMaterials.filter(m => m.unit === unit);
+                        return `
+                          <li class="pickramu-material-unit">
+                            <span class="pickramu-material-unit-title">${unit}</span>
+                            <ul class="pickramu-material-file-list">
+                              ${unitMaterials.map(mat => `
+                                <li><button class="auto-btn pickramu-material-btn" data-file="${mat.file}">${mat.title}</button></li>
+                              `).join('')}
+                            </ul>
+                          </li>
+                        `;
+                      }).join('')}
+                    </ul>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          `;
+        }).join('')
+      }
     </div>
   `;
 }
@@ -784,6 +787,15 @@ export function appInit(shell) {
           background: #a8a8a8;
         }
         
+        /* 検索結果なしのスタイル */
+        .pickramu-no-results {
+          text-align: center;
+          padding: 2rem;
+          color: #666;
+          font-size: 1.1em;
+          line-height: 1.6;
+        }
+        
         /* レスポンシブデザイン */
         @media (max-width: 768px) {
           .pickramu-work-area {
@@ -840,25 +852,67 @@ export function appInit(shell) {
       };
     });
 
-    // 検索バー機能
+    // 検索バー機能（デバウンス付き）
     const searchBar = document.getElementById('material-search-bar');
     if (searchBar) {
+      let searchTimeout;
       searchBar.addEventListener('input', (e) => {
-        const keyword = searchBar.value.trim().toLowerCase();
-        const filtered = materials.filter(m =>
-          m.title.toLowerCase().includes(keyword) ||
-          m.subject.toLowerCase().includes(keyword) ||
-          m.field.toLowerCase().includes(keyword) ||
-          m.unit.toLowerCase().includes(keyword)
-        );
-        document.getElementById('pickramu-material-selector-area').innerHTML = renderMaterialSelector(filtered);
-        // 再度教材ボタンにイベントを付与
-        document.querySelectorAll('.pickramu-material-btn').forEach(btn => {
-          btn.onclick = (e) => {
-            const file = btn.getAttribute('data-file');
-            document.getElementById('pickramu_iframe').src = baseHtmlPath + file;
-          };
-        });
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+          const keyword = searchBar.value.trim().toLowerCase();
+          const filtered = materials.filter(m =>
+            m.title.toLowerCase().includes(keyword) ||
+            m.subject.toLowerCase().includes(keyword) ||
+            m.field.toLowerCase().includes(keyword) ||
+            m.unit.toLowerCase().includes(keyword)
+          );
+          
+          // 検索結果を表示
+          const selectorArea = document.getElementById('pickramu-material-selector-area');
+          if (keyword === '') {
+            // 検索が空の場合は全教材を表示
+            selectorArea.innerHTML = renderMaterialSelector(materials);
+          } else {
+            // 検索結果を表示
+            selectorArea.innerHTML = renderMaterialSelector(filtered);
+          }
+          
+          // 再度教材ボタンにイベントを付与
+          document.querySelectorAll('.pickramu-material-btn').forEach(btn => {
+            btn.onclick = (e) => {
+              const file = btn.getAttribute('data-file');
+              document.getElementById('pickramu_iframe').src = baseHtmlPath + file;
+            };
+          });
+        }, 300); // 300msのデバウンス
+      });
+      
+      // Enterキーで即座に検索
+      searchBar.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          clearTimeout(searchTimeout);
+          const keyword = searchBar.value.trim().toLowerCase();
+          const filtered = materials.filter(m =>
+            m.title.toLowerCase().includes(keyword) ||
+            m.subject.toLowerCase().includes(keyword) ||
+            m.field.toLowerCase().includes(keyword) ||
+            m.unit.toLowerCase().includes(keyword)
+          );
+          
+          const selectorArea = document.getElementById('pickramu-material-selector-area');
+          if (keyword === '') {
+            selectorArea.innerHTML = renderMaterialSelector(materials);
+          } else {
+            selectorArea.innerHTML = renderMaterialSelector(filtered);
+          }
+          
+          document.querySelectorAll('.pickramu-material-btn').forEach(btn => {
+            btn.onclick = (e) => {
+              const file = btn.getAttribute('data-file');
+              document.getElementById('pickramu_iframe').src = baseHtmlPath + file;
+            };
+          });
+        }
       });
     }
 
