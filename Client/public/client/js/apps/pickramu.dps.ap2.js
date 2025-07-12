@@ -492,7 +492,7 @@ function renderMaterialSelector(materials, onSelect) {
   // 検索バー＋教科ごとにリスト表示
   return `
     <div class="pickramu-material-search">
-      <input type="text" id="material-search-bar" placeholder="教材名・教科・Unitで検索" class="search-bar">
+      <input type="text" id="material-search-bar" placeholder="例: 数学、公民、unit1、式の計算..." class="search-bar">
     </div>
     <div class="pickramu-material-list">
       ${materials.length === 0 ? 
@@ -852,69 +852,73 @@ export function appInit(shell) {
       };
     });
 
-    // 検索バー機能（デバウンス付き）
-    const searchBar = document.getElementById('material-search-bar');
-    if (searchBar) {
+    // 検索機能を実行する関数
+    function performSearch(keyword) {
+      const filtered = materials.filter(m =>
+        m.title.toLowerCase().includes(keyword) ||
+        m.subject.toLowerCase().includes(keyword) ||
+        m.field.toLowerCase().includes(keyword) ||
+        m.unit.toLowerCase().includes(keyword)
+      );
+      
+      // 検索結果を表示
+      const selectorArea = document.getElementById('pickramu-material-selector-area');
+      if (keyword === '') {
+        // 検索が空の場合は全教材を表示
+        selectorArea.innerHTML = renderMaterialSelector(materials);
+      } else {
+        // 検索結果を表示
+        selectorArea.innerHTML = renderMaterialSelector(filtered);
+      }
+      
+      // 再度教材ボタンにイベントを付与
+      document.querySelectorAll('.pickramu-material-btn').forEach(btn => {
+        btn.onclick = (e) => {
+          const file = btn.getAttribute('data-file');
+          document.getElementById('pickramu_iframe').src = baseHtmlPath + file;
+        };
+      });
+      
+      // 検索バーのイベントリスナーを再設定
+      setupSearchBar();
+    }
+    
+    // 検索バーのイベントリスナーを設定する関数
+    function setupSearchBar() {
+      const searchBar = document.getElementById('material-search-bar');
+      if (!searchBar) return;
+      
+      // 既存のイベントリスナーを削除
+      searchBar.removeEventListener('input', searchBar._inputHandler);
+      searchBar.removeEventListener('keypress', searchBar._keypressHandler);
+      
       let searchTimeout;
-      searchBar.addEventListener('input', (e) => {
+      
+      // inputイベントハンドラー
+      searchBar._inputHandler = (e) => {
         clearTimeout(searchTimeout);
         searchTimeout = setTimeout(() => {
           const keyword = searchBar.value.trim().toLowerCase();
-          const filtered = materials.filter(m =>
-            m.title.toLowerCase().includes(keyword) ||
-            m.subject.toLowerCase().includes(keyword) ||
-            m.field.toLowerCase().includes(keyword) ||
-            m.unit.toLowerCase().includes(keyword)
-          );
-          
-          // 検索結果を表示
-          const selectorArea = document.getElementById('pickramu-material-selector-area');
-          if (keyword === '') {
-            // 検索が空の場合は全教材を表示
-            selectorArea.innerHTML = renderMaterialSelector(materials);
-          } else {
-            // 検索結果を表示
-            selectorArea.innerHTML = renderMaterialSelector(filtered);
-          }
-          
-          // 再度教材ボタンにイベントを付与
-          document.querySelectorAll('.pickramu-material-btn').forEach(btn => {
-            btn.onclick = (e) => {
-              const file = btn.getAttribute('data-file');
-              document.getElementById('pickramu_iframe').src = baseHtmlPath + file;
-            };
-          });
+          performSearch(keyword);
         }, 300); // 300msのデバウンス
-      });
+      };
       
-      // Enterキーで即座に検索
-      searchBar.addEventListener('keypress', (e) => {
+      // keypressイベントハンドラー
+      searchBar._keypressHandler = (e) => {
         if (e.key === 'Enter') {
           clearTimeout(searchTimeout);
           const keyword = searchBar.value.trim().toLowerCase();
-          const filtered = materials.filter(m =>
-            m.title.toLowerCase().includes(keyword) ||
-            m.subject.toLowerCase().includes(keyword) ||
-            m.field.toLowerCase().includes(keyword) ||
-            m.unit.toLowerCase().includes(keyword)
-          );
-          
-          const selectorArea = document.getElementById('pickramu-material-selector-area');
-          if (keyword === '') {
-            selectorArea.innerHTML = renderMaterialSelector(materials);
-          } else {
-            selectorArea.innerHTML = renderMaterialSelector(filtered);
-          }
-          
-          document.querySelectorAll('.pickramu-material-btn').forEach(btn => {
-            btn.onclick = (e) => {
-              const file = btn.getAttribute('data-file');
-              document.getElementById('pickramu_iframe').src = baseHtmlPath + file;
-            };
-          });
+          performSearch(keyword);
         }
-      });
+      };
+      
+      // 新しいイベントリスナーを追加
+      searchBar.addEventListener('input', searchBar._inputHandler);
+      searchBar.addEventListener('keypress', searchBar._keypressHandler);
     }
+    
+    // 初期検索バー設定
+    setupSearchBar();
 
     // eGuideタブとエリアを常に非表示にする
     const eguideTab = document.getElementById('tab-eguide');

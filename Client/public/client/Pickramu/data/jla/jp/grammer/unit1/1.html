@@ -210,7 +210,7 @@
 <div id="chapter-title" class="">
 </div>
 
-<div id="n1" class="n1" class="">
+<div id="n1" class="n1">
 
 <div id="question" class="">
 こんにちは！<br>
@@ -218,15 +218,11 @@
 まあ文法と言ってもそこまでむずくはないよ！<br>
 次へボタンで次進んでー
 </div>
-<script>
-  dom.Tag("n1").style.display('none','auto');
-dom.Tag("n2").style.display('block','auto');
-</script>
 <button id="next1" class="button-next">次へ</button>
 
 </div>
 
-<div id="n2" class="n2" class="">
+<div id="n2" class="n2">
 
 <div id="question" class="">
 このユニットで勉強するのは、基本的な文の構造についてのこと。<br>
@@ -236,14 +232,10 @@ dom.Tag("n2").style.display('block','auto');
 
 <button id="next2" class="button-next">次へ</button>
 
-<script>
-    dom.Tag("n2").style.display('none','auto');
-    dom.Tag("n3").style.display('block','auto');
-</script>
 </div>
 
 
-<div id="n3" class="n3" class="">
+<div id="n3" class="n3">
 
 <div id="question" class="">
 まず、下のやつを読んでみよう！<br><br>
@@ -262,13 +254,9 @@ dom.Tag("n2").style.display('block','auto');
 
 <button id="next3" class="button-next">次へ</button>
 
-<script>
-  dom.Tag("n3").style.display('none','auto');
-  dom.Tag("n4").style.display('block','auto');
-</script>
 </div>
 
-<div id="n4" class="n4" class="">
+<div id="n4" class="n4">
 
 <div id="question" class="">
 次！さっきの文で、頭に一文字空いてるやつ行があったよね？<br>
@@ -288,10 +276,9 @@ dom.Tag("n2").style.display('block','auto');
 
 <button id="next4" class="button-next">次へ</button>
 
-
 </div>
 
-<div id="n5" class="n5" class="">
+<div id="n5" class="n5">
 
 <div id="question" class="">
 もうちょっとで終わるよ！<br>
@@ -300,13 +287,9 @@ dom.Tag("n2").style.display('block','auto');
 
 <button id="next5" class="button-next">次へ</button>
 
-<script>
-  dom.Tag("n5").style.display('none','auto');
-  dom.Tag("n6").style.display('block','auto');
-</script>
 </div>
 
-<div id="n6" class="n6" class="">
+<div id="n6" class="n6">
 
 <div id="question" class="">
 そう、「文」。<br>
@@ -321,13 +304,9 @@ dom.Tag("n2").style.display('block','auto');
 
 <button id="next6" class="button-next">次へ</button>
 
-<script>
-  dom.Tag("n6").style.display('none','auto');
-  dom.Tag("n7").style.display('block','auto');
-</script>
 </div>
 
-<div id="n7" class="n7" class="">
+<div id="n7" class="n7">
 
 <div id="question" class="">
 まとめ！<br>
@@ -345,6 +324,35 @@ dom.Tag("n2").style.display('block','auto');
 <button id="next7" class="button-next">おしまい。</button>
 </div>
 
+<script>
+document.getElementById('next1').addEventListener('click', function() {
+dom.Tag("n1").style.display('none','auto');
+dom.Tag("n2").style.display('block','auto');
+});
+document.getElementById('next2').addEventListener('click', function() {
+dom.Tag("n2").style.display('none','auto');
+dom.Tag("n3").style.display('block','auto');
+});
+document.getElementById('next3').addEventListener('click', function() {
+dom.Tag("n3").style.display('none','auto');
+dom.Tag("n4").style.display('block','auto');
+});
+document.getElementById('next4').addEventListener('click', function() {
+dom.Tag("n4").style.display('none','auto');
+dom.Tag("n5").style.display('block','auto');
+});
+document.getElementById('next5').addEventListener('click', function() {
+dom.Tag("n5").style.display('none','auto');
+dom.Tag("n6").style.display('block','auto');
+});
+document.getElementById('next6').addEventListener('click', function() {
+dom.Tag("n6").style.display('none','auto');
+dom.Tag("n7").style.display('block','auto');
+});
+document.getElementById('next7').addEventListener('click', function() {
+dom.back();
+});
+</script>
 
   </div>
 
