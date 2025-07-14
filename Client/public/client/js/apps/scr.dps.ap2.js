@@ -1,12 +1,31 @@
 import { initializeSCR } from "../data/scr.client.mjs";
 import { SCR_URL, setSCRUrl } from "../core/config.js";
 
+/**
+ * SCRアプリのメインエントリーポイント
+ * 
+ * - 投稿の作成・返信・検索・フィード表示・ユーザー情報管理・ToasterMachine連携などを提供
+ * - フィードは #feed-content の _currentFeed プロパティに配列として保持される
+ * - 投稿API: https://deep-school.onrender.com/posts
+ * 
+ * @module scr.dps.ap2
+ * @author Deep-School
+ */
+
+/**
+ * アプリのメタ情報
+ * @type {{name: string, title: string, icon: string}}
+ */
 export const appMeta = {
   name: "scr",
   title: "SCR",
   icon: "re/ico/icon_top.png",
 };
 
+/**
+ * SCRアプリの初期化関数
+ * @param {object} shell - アプリケーションシェルオブジェクト
+ */
 export function appInit(shell) {
   const root = document.getElementById("app-root");
   if (!root) {
@@ -77,6 +96,21 @@ export function appInit(shell) {
     }
   }
 
+    // --- 任意のポストデータ取得ユーティリティ ---
+  /**
+   * 現在表示されているフィードから指定したPostIdのポストデータを取得
+   * @param {string|number} postId - 投稿ID
+   * @returns {object|null} ポストデータ or null
+   */
+  function getCurrentPostById(postId) {
+    const feedDiv = document.getElementById("feed-content");
+    if (!feedDiv || !feedDiv._currentFeed) return null;
+    return feedDiv._currentFeed.find(post => String(post.PostId) === String(postId)) || null;
+  }
+  
+  /**
+   * モーダルのイベントハンドラをセットアップ
+   */
   function setupModalHandlers() {
     const openModalBtn = document.getElementById("scr-open-post-modal");
     const modal = document.getElementById("scr-post-modal");
@@ -138,12 +172,23 @@ export function appInit(shell) {
   initializeSCR();
 
   // --- 投稿・フィードAPIエンドポイント ---
+  /**
+   * 投稿・フィードAPIのベースURLを取得
+   * @returns {string} APIベースURL
+   */
   function getApiBase() {
     if (window.scr_url) return window.scr_url;
     return "https://deep-school.onrender.com/posts";
   }
 
-  // 再試行機能付きAPI呼び出し
+  /**
+   * 再試行機能付きAPI呼び出し
+   * @param {string} url - リクエストURL
+   * @param {object} [options={}] - fetchオプション
+   * @param {number} [maxRetries=3] - 最大リトライ回数
+   * @param {number} [delay=1000] - リトライ間隔(ms)
+   * @returns {Promise<Response>} fetchレスポンス
+   */
   async function fetchWithRetry(
     url,
     options = {},
@@ -195,7 +240,10 @@ export function appInit(shell) {
     }
   }
 
-  // フィード取得関数
+  /**
+   * フィードをAPIから取得し描画
+   * @param {string|number} [highlightId] - ハイライト表示する投稿ID
+   */
   async function fetchFeed(highlightId) {
     try {
       const res = await fetchWithRetry(`${getApiBase()}/all`);
@@ -209,7 +257,11 @@ export function appInit(shell) {
     }
   }
 
-  // フィード描画関数
+  /**
+   * フィードを描画
+   * @param {Array<object>} posts - 投稿配列
+   * @param {string|number} [highlightId] - ハイライト表示する投稿ID
+   */
   function renderFeed(posts, highlightId) {
     const feed = document.getElementById("feed-content");
     if (!Array.isArray(posts) || posts.length === 0) {
@@ -288,7 +340,11 @@ export function appInit(shell) {
     }
   }
 
-  // HTMLエスケープ
+  /**
+   * HTML文字列をエスケープ
+   * @param {string} str
+   * @returns {string}
+   */
   function escapeHTML(str) {
     return String(str).replace(
       /[&<>'"]/g,
@@ -302,7 +358,11 @@ export function appInit(shell) {
         }[tag])
     );
   }
-  // 日付フォーマット
+  /**
+   * 日付文字列を日本語ローカル形式に変換
+   * @param {string} dateStr
+   * @returns {string}
+   */
   function formatDate(dateStr) {
     if (!dateStr) return "";
     const d = new Date(dateStr);
@@ -312,7 +372,9 @@ export function appInit(shell) {
     });
   }
 
-  // 返信ハンドラー設定
+  /**
+   * 返信ボタン・フォームのイベントハンドラをセットアップ
+   */
   function setupReplyHandlers() {
     // 返信ボタンクリック
     document.querySelectorAll(".scr-reply-btn").forEach((btn) => {
@@ -364,7 +426,11 @@ export function appInit(shell) {
     });
   }
 
-  // 返信送信関数
+  /**
+   * 返信を送信
+   * @param {string|number} parentPostId - 親投稿ID
+   * @param {string} replyText - 返信内容
+   */
   async function submitReply(parentPostId, replyText) {
     try {
       const { username, userid } = await ensureUserInfo();
@@ -403,7 +469,14 @@ export function appInit(shell) {
     }
   }
 
-  // 投稿送信関数
+  /**
+   * 新規投稿を送信
+   * @param {object} param0
+   * @param {string} param0.username - ユーザー名
+   * @param {string} param0.userid - ユーザーID
+   * @param {string} param0.postname - ポスト名
+   * @param {string} param0.postdata - ポスト内容
+   */
   async function submitPost({ username, userid, postname, postdata }) {
     try {
       const currentTime = new Date().toISOString();
@@ -453,7 +526,9 @@ export function appInit(shell) {
     }
   }
 
-  // ユーザー情報を表示
+  /**
+   * ユーザー情報を表示
+   */
   async function displayUserInfo() {
     const { username, userid } = await ensureUserInfo();
     const userInfoDiv = document.getElementById("scr-user-info");
@@ -465,7 +540,10 @@ export function appInit(shell) {
     }
   }
 
-  // サーバー状態確認
+  /**
+   * サーバー状態を確認
+   * @returns {Promise<boolean>} サーバーが稼働中ならtrue
+   */
   async function checkServerStatus() {
     try {
       const res = await fetch("https://deep-school.onrender.com/", {
@@ -495,7 +573,9 @@ export function appInit(shell) {
     }
   }
 
-  // 初回ロード時の処理
+  /**
+   * 初回ロード時の初期化処理
+   */
   async function initializeApp() {
     const serverOk = await checkServerStatus();
     if (serverOk) {
@@ -834,8 +914,11 @@ export function appInit(shell) {
   );
 
   // --- ユーザー情報の自動設定 ---
+  /**
+   * ランダムなユーザー情報を生成
+   * @returns {{username: string, userid: string}}
+   */
   function generateUserInfo() {
-    // ランダムなユーザー名とIDを生成
     const adjectives = [
       "Happy",
       "Smart",
@@ -917,17 +1000,30 @@ export function appInit(shell) {
     return { username, userid };
   }
 
+  /**
+   * ローカルストレージからユーザー情報を取得
+   * @returns {{username: string|null, userid: string|null}}
+   */
   function getUserInfo() {
     let username = localStorage.getItem("scr_username");
     let userid = localStorage.getItem("scr_userid");
     return { username, userid };
   }
 
+  /**
+   * ローカルストレージにユーザー情報を保存
+   * @param {string} username
+   * @param {string} userid
+   */
   function setUserInfo(username, userid) {
     localStorage.setItem("scr_username", username);
     localStorage.setItem("scr_userid", userid);
   }
 
+  /**
+   * ユーザー情報がなければ自動生成し返す
+   * @returns {Promise<{username: string, userid: string}>}
+   */
   async function ensureUserInfo() {
     let { username, userid } = getUserInfo();
     if (!username || !userid) {

@@ -6,17 +6,6 @@ Development:Carnaion Studio
 License:MPL-2.0
 */
 
-/**
- * Pickramu記法テキストをHTMLに変換するメイン関数
- * @param {string} inputText - Pickramu記法のテキスト
- * @param {object} shell - ログ出力などのためのシェルオブジェクト
- * @returns {string} 変換後のHTML
- */
-/**
- * @param {string} line
- * @returns {boolean}
- * @description @tag [open] 判定
- */
 function isTagOpen(line) {
   return /@tag\s+([\w,-]+)?(?:\s+class=([\w,-]+))?\s+\[open\]/.test(line);
 }
