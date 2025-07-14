@@ -1,6 +1,7 @@
 /*
 This is ToasterMachine functions system base,
 acturually it is not a full app,
+so you should show user by menu.ap2.js
 */
 export const appMeta = {
   name: "tmbase",
@@ -59,4 +60,5 @@ export function ssession(gemini){
 function appInit(shell){
       shell.log({from: 'dp.bapp.tm.out', message: 'tmbase: init process started', level: 'info'});
       shell.log({from: 'dp.bapp.tm.out', message: 'tmbase: waiting use tm', level: 'info'});
-    }
+
+ }

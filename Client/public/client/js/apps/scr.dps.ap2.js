@@ -1,13 +1,14 @@
 import { initializeSCR } from "../data/scr.client.mjs";
 import { SCR_URL, setSCRUrl } from "../core/config.js";
-
+import { GeminiIninter, ssession } from "./toastermachine.dps.bap.js";
+import shell from "../core/shell.js";
 /**
  * SCRアプリのメインエントリーポイント
- * 
+ *
  * - 投稿の作成・返信・検索・フィード表示・ユーザー情報管理・ToasterMachine連携などを提供
  * - フィードは #feed-content の _currentFeed プロパティに配列として保持される
  * - 投稿API: https://deep-school.onrender.com/posts
- * 
+ *
  * @module scr.dps.ap2
  * @author Deep-School
  */
@@ -40,11 +41,6 @@ export function appInit(shell) {
     <div class="page-container full-screen scr-bg">
       <button class="go-back-button" id="scr-back-btn" data-lang-key="back">←</button>
       <h1 class="page-title" data-lang-key="scr_note">SCR</h1>
-      <div style="display:flex;gap:12px;align-items:center;margin-bottom:8px;">
-        <button id="scr-toaster-btn" class="button-chalk" style="background:#2cb4ad;color:#fff;border-radius:8px;padding:8px 16px;box-shadow:0 2px 8px rgba(44,180,173,0.12);font-weight:600;">ToasterMachineで答えを生成</button>
-        <button id="scr-toaster-to-chat" class="button-chalk" style="background:#ffd700;color:#222;border-radius:8px;padding:8px 16px;box-shadow:0 2px 8px rgba(255,215,0,0.12);font-weight:600;display:none;">生成内容をChatに送る</button>
-        <span id="scr-toaster-status" style="margin-left:8px;color:#2cb4ad;font-weight:500;"></span>
-      </div>
       <div id="scr-user-info" class="scr-user-info" style="display:none;">
         <span id="scr-current-user"></span>
       </div>
@@ -96,7 +92,7 @@ export function appInit(shell) {
     }
   }
 
-    // --- 任意のポストデータ取得ユーティリティ ---
+  // --- 任意のポストデータ取得ユーティリティ ---
   /**
    * 現在表示されているフィードから指定したPostIdのポストデータを取得
    * @param {string|number} postId - 投稿ID
@@ -105,9 +101,13 @@ export function appInit(shell) {
   function getCurrentPostById(postId) {
     const feedDiv = document.getElementById("feed-content");
     if (!feedDiv || !feedDiv._currentFeed) return null;
-    return feedDiv._currentFeed.find(post => String(post.PostId) === String(postId)) || null;
+    return (
+      feedDiv._currentFeed.find(
+        (post) => String(post.PostId) === String(postId)
+      ) || null
+    );
   }
-  
+
   /**
    * モーダルのイベントハンドラをセットアップ
    */
@@ -299,6 +299,9 @@ export function appInit(shell) {
           <div class="scr-feed-date">${formatDate(post.PostTime)}</div>
           <div class="scr-feed-genre">${escapeHTML(post.LikerData || "")}</div>
           <div class="scr-feed-actions">
+          <button class=scr-reply-btn" id="when${
+            post.PostId
+          }">ToasterMachineでこのポストの内容を作成</button>
             <button class="scr-reply-btn" data-postid="${
               post.PostId
             }" aria-label="返信">
@@ -308,6 +311,38 @@ export function appInit(shell) {
               返信
             </button>
           </div>
+          <script>
+            document.getElementById("when${
+              post.PostId
+            }").onclick = async function() {
+              const gemini = GeminiIninter();
+              const session = ssession(gemini);
+              const firstReply = await session.start("このポストの内容の回答を簡単に制作して。: " + "${escapeHTML(
+                post.PostData
+              )}");
+              shell.log({from: 'dp.app.tm.out', message: 'tmbase: used tm-explain by dp.app.scr', level: 'info'});
+               const dialog = new Dialog({
+                title: 'ToasterMachineの回答',
+                message: firstReply,
+                buttons: [
+                  {
+                    text: 'もっと質問する',
+                    onClick: () => {
+                      console.log('OK button clicked!');
+                    }
+                  },
+                  {
+                    text: 'おわり',
+                    onClick: () => {
+                      console.log('Cancel button clicked!');
+                    }
+                  }
+                  }
+                ]
+              });
+          dialog.show();
+            }
+          </script>
           <div class="scr-reply-form" id="reply-form-${
             post.PostId
           }" style="display:none;">
@@ -896,6 +931,66 @@ export function appInit(shell) {
       height: 32px !important;
       filter: none !important;
     }
+      /* Dialog container */
+.dialog-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Dialog content */
+.dialog-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  width: 300px;
+}
+
+/* Dialog title */
+.dialog-content h2 {
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+/* Dialog message */
+.dialog-content p {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Actions */
+.actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Button */
+.button {
+  background-color: #007aff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #0069d9;
+}
+
+.button:active {
+  background-color: #005cbf;
+}
   `;
   document.head.insertBefore(style, document.head.lastChild);
 
@@ -968,7 +1063,7 @@ export function appInit(shell) {
       "FACTORY",
       "umbrella",
       "JOURNEY",
-      "Attitude"
+      "Attitude",
     ];
     const nouns = [
       "User",
@@ -992,9 +1087,9 @@ export function appInit(shell) {
     }
 
     const numbers = secureRandomInt(1000, 10998); // 9999 + 1000 = 10999, but upper bound is exclusive
-    const username = `${
-      adjectives[secureRandomInt(0, adjectives.length - 1)]
-    }${nouns[secureRandomInt(0, nouns.length - 1)]}`;
+    const username = `${adjectives[secureRandomInt(0, adjectives.length - 1)]}${
+      nouns[secureRandomInt(0, nouns.length - 1)]
+    }`;
     const userid = `user_${numbers}`;
 
     return { username, userid };
@@ -1037,27 +1132,30 @@ export function appInit(shell) {
   }
 
   // ToasterMachine連携ボタンのイベント
-  const toasterBtn = document.getElementById('scr-toaster-btn');
-  const toasterToChatBtn = document.getElementById('scr-toaster-to-chat');
-  const toasterStatus = document.getElementById('scr-toaster-status');
-  let lastToasterResult = '';
+  const toasterBtn = document.getElementById("scr-toaster-btn");
+  const toasterToChatBtn = document.getElementById("scr-toaster-to-chat");
+  const toasterStatus = document.getElementById("scr-toaster-status");
+  let lastToasterResult = "";
   if (toasterBtn) {
     toasterBtn.onclick = async () => {
-      const postdata = document.getElementById('postdata-modal')?.value || '';
+      const postdata = document.getElementById("postdata-modal")?.value || "";
       if (!postdata) {
-        toasterStatus.textContent = '投稿内容を入力してください';
+        toasterStatus.textContent = "投稿内容を入力してください";
         return;
       }
-      toasterStatus.textContent = 'AI生成中...';
+      toasterStatus.textContent = "AI生成中...";
       toasterBtn.disabled = true;
       try {
         // ToasterMachine API呼び出し
-        const resp = await window.chatManager?.geminiProcessor?.callGemini_U?.(postdata) || 'ToasterMachine連携API未接続';
+        const resp =
+          (await window.chatManager?.geminiProcessor?.callGemini_U?.(
+            postdata
+          )) || "ToasterMachine連携API未接続";
         lastToasterResult = resp;
-        toasterStatus.textContent = '生成完了';
-        toasterToChatBtn.style.display = '';
+        toasterStatus.textContent = "生成完了";
+        toasterToChatBtn.style.display = "";
       } catch (e) {
-        toasterStatus.textContent = 'エラー: ' + (e.message || e);
+        toasterStatus.textContent = "エラー: " + (e.message || e);
       } finally {
         toasterBtn.disabled = false;
       }
@@ -1067,8 +1165,8 @@ export function appInit(shell) {
     toasterToChatBtn.onclick = () => {
       if (lastToasterResult) {
         // chatアプリに転送
-        localStorage.setItem('toastermachine_transfer', lastToasterResult);
-        window.location.hash = '#chat';
+        localStorage.setItem("toastermachine_transfer", lastToasterResult);
+        window.location.hash = "#chat";
         location.reload();
       }
     };
