@@ -13,7 +13,7 @@ import { GeminiProcessor, CoachingSession, ChatHistoryManager } from "../chat/tm
  * Create a new GeminiProcessor instance.
  * @returns {GeminiProcessor} The GeminiProcessor instance.
  */
-export default function GeminiIninter(){
+export function GeminiIninter(){
     const gemini_inited = new GeminiProcessor();
     return gemini_inited;
 }
