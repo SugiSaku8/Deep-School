@@ -1,18 +1,26 @@
-import { SimpleAuthManager } from '../auth/auth.mjs';
+import { SimpleAuthManager } from "../auth/auth.mjs";
 
 export const appMeta = {
   name: "setting",
   title: "設定",
-  icon: "re/ico/Setting.png"
+  icon: "re/ico/Setting.png",
 };
 
 export function appInit(shell) {
-  shell.log({from: 'dp.app.setting.out', message: 'SettingApp: 初期化開始', level: 'info'});
+  shell.log({
+    from: "dp.app.setting.out",
+    message: "SettingApp: 初期化開始",
+    level: "info",
+  });
 
   // HTMLを#app-rootに描画
-  const root = document.getElementById('app-root');
+  const root = document.getElementById("app-root");
   if (!root) {
-    shell.log({from: 'dp.app.setting.err', message: 'SettingApp: #app-rootが見つかりません', level: 'error'});
+    shell.log({
+      from: "dp.app.setting.err",
+      message: "SettingApp: #app-rootが見つかりません",
+      level: "error",
+    });
     return;
   }
   root.innerHTML = `
@@ -154,7 +162,10 @@ export function appInit(shell) {
         </div>
         <div class="form-group">
           <label for="scr_url_setting">SCRサーバーURL</label>
-          <input type="text" id="scr_url_setting" value="${localStorage.getItem('scr_url') || 'https://deep-school.onrender.com'}" placeholder="https://deep-school.onrender.com" />
+          <input type="text" id="scr_url_setting" value="${
+            localStorage.getItem("scr_url") ||
+            "https://deep-school.onrender.com"
+          }" placeholder="https://deep-school.onrender.com" />
         </div>
       </div>
     </div>
@@ -168,147 +179,188 @@ export function appInit(shell) {
   setupEventListeners(shell);
 
   // 閉じるボタンでmenuに戻る
-  const closeBtn = document.getElementById('setting-close-btn');
-  if (closeBtn) closeBtn.onclick = () => shell.loadApp('menu');
+  const closeBtn = document.getElementById("setting-close-btn");
+  if (closeBtn) closeBtn.onclick = () => shell.loadApp("menu");
 
   // Initialize parallax effects for setting elements
   if (window.parallaxManager) {
-    const settingItems = document.querySelectorAll('.setting-item');
-    const buttons = document.querySelectorAll('.auto-btn');
-    const closeBtn = document.getElementById('setting-close-btn');
-    const inputs = document.querySelectorAll('input[type="checkbox"], input[type="text"], select');
-    
-    settingItems.forEach(item => {
+    const settingItems = document.querySelectorAll(".setting-item");
+    const buttons = document.querySelectorAll(".auto-btn");
+    const closeBtn = document.getElementById("setting-close-btn");
+    const inputs = document.querySelectorAll(
+      'input[type="checkbox"], input[type="text"], select'
+    );
+
+    settingItems.forEach((item) => {
       window.parallaxManager.addParallaxEffects(item, {
         hover: true,
         mouse: false,
-        touch: false
+        touch: false,
       });
     });
-    
-    buttons.forEach(btn => {
+
+    buttons.forEach((btn) => {
       window.parallaxManager.addParallaxEffects(btn, {
         hover: true,
         mouse: false,
         touch: true,
-        ripple: true
+        ripple: true,
       });
     });
-    
+
     if (closeBtn) {
       window.parallaxManager.addParallaxEffects(closeBtn, {
         hover: true,
         mouse: false,
         touch: true,
-        ripple: true
+        ripple: true,
       });
     }
-    
-    inputs.forEach(input => {
+
+    inputs.forEach((input) => {
       window.parallaxManager.addParallaxEffects(input, {
         hover: true,
         mouse: false,
-        touch: false
+        touch: false,
       });
     });
-    
-    shell.log({from: 'dp.app.setting.out', message: 'SettingApp: Parallax effects initialized', level: 'info'});
+
+    shell.log({
+      from: "dp.app.setting.out",
+      message: "SettingApp: Parallax effects initialized",
+      level: "info",
+    });
   }
 
   // SCRサーバーURL入力欄を設定画面に追加
   renderSCRUrlSetting();
 
-  shell.log({from: 'dp.app.setting.out', message: 'SettingApp: 初期化完了', level: 'info'});
+  shell.log({
+    from: "dp.app.setting.out",
+    message: "SettingApp: 初期化完了",
+    level: "info",
+  });
 }
 
 function updateUserInfo() {
-  const usernameElement = document.getElementById('setting-username');
-  const useridElement = document.getElementById('setting-userid');
-  const createdElement = document.getElementById('setting-created');
-  const lastloginElement = document.getElementById('setting-lastlogin');
-  const versionElement = document.getElementById('setting-version');
-  const buildElement = document.getElementById('setting-build');
-  const updatedElement = document.getElementById('setting-updated');
-  
-  if (usernameElement) usernameElement.textContent = window.googleUserName || '未設定';
-  if (useridElement) useridElement.textContent = window.googleUserId || '未設定';
-  
+  const usernameElement = document.getElementById("setting-username");
+  const useridElement = document.getElementById("setting-userid");
+  const createdElement = document.getElementById("setting-created");
+  const lastloginElement = document.getElementById("setting-lastlogin");
+  const versionElement = document.getElementById("setting-version");
+  const buildElement = document.getElementById("setting-build");
+  const updatedElement = document.getElementById("setting-updated");
+
+  if (usernameElement)
+    usernameElement.textContent = window.googleUserName || "未設定";
+  if (useridElement)
+    useridElement.textContent = window.googleUserId || "未設定";
+
   // アカウント作成日と最終ログイン日を設定
   const now = new Date();
-  const formattedDate = now.toLocaleDateString('ja-JP', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit'
+  const formattedDate = now.toLocaleDateString("ja-JP", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
   });
-  
+
   if (createdElement) createdElement.textContent = formattedDate;
   if (lastloginElement) lastloginElement.textContent = formattedDate;
-  
+
   // バージョン情報を設定
-  if (versionElement) versionElement.textContent = '0.3.7';
-  if (buildElement) buildElement.textContent = '25C1044X1';
-  if (updatedElement) updatedElement.textContent = '2025-07-07';
+  if (versionElement) versionElement.textContent = "0.3.7";
+  if (buildElement) buildElement.textContent = "25C1044X1";
+  if (updatedElement) updatedElement.textContent = "2025-07-07";
 }
 
 function loadSettings() {
   try {
-    const settings = JSON.parse(localStorage.getItem('deep-school-settings') || '{}');
-    
+    const settings = JSON.parse(
+      localStorage.getItem("deep-school-settings") || "{}"
+    );
+
     // 既存の設定項目
-    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    const darkModeToggle = document.getElementById("dark-mode-toggle");
     if (darkModeToggle) darkModeToggle.checked = settings.darkMode !== false;
-    
-    const fontSizeSelect = document.getElementById('font-size-select');
-    if (fontSizeSelect) fontSizeSelect.value = settings.fontSize || 'medium';
-    
-    const notificationToggle = document.getElementById('notification-toggle');
-    if (notificationToggle) notificationToggle.checked = settings.notifications !== false;
-    
-    const soundToggle = document.getElementById('sound-toggle');
+
+    const fontSizeSelect = document.getElementById("font-size-select");
+    if (fontSizeSelect) fontSizeSelect.value = settings.fontSize || "medium";
+
+    const notificationToggle = document.getElementById("notification-toggle");
+    if (notificationToggle)
+      notificationToggle.checked = settings.notifications !== false;
+
+    const soundToggle = document.getElementById("sound-toggle");
     if (soundToggle) soundToggle.checked = settings.sound !== false;
-    
+
     // 新しく追加した設定項目
-    const animationToggle = document.getElementById('animation-toggle');
+    const animationToggle = document.getElementById("animation-toggle");
     if (animationToggle) animationToggle.checked = settings.animation !== false;
-    
-    const compactModeToggle = document.getElementById('compact-mode-toggle');
-    if (compactModeToggle) compactModeToggle.checked = settings.compactMode === true;
-    
-    const emailNotificationToggle = document.getElementById('email-notification-toggle');
-    if (emailNotificationToggle) emailNotificationToggle.checked = settings.emailNotifications === true;
-    
-    const pushNotificationToggle = document.getElementById('push-notification-toggle');
-    if (pushNotificationToggle) pushNotificationToggle.checked = settings.pushNotifications !== false;
-    
-    const analyticsToggle = document.getElementById('analytics-toggle');
+
+    const compactModeToggle = document.getElementById("compact-mode-toggle");
+    if (compactModeToggle)
+      compactModeToggle.checked = settings.compactMode === true;
+
+    const emailNotificationToggle = document.getElementById(
+      "email-notification-toggle"
+    );
+    if (emailNotificationToggle)
+      emailNotificationToggle.checked = settings.emailNotifications === true;
+
+    const pushNotificationToggle = document.getElementById(
+      "push-notification-toggle"
+    );
+    if (pushNotificationToggle)
+      pushNotificationToggle.checked = settings.pushNotifications !== false;
+
+    const analyticsToggle = document.getElementById("analytics-toggle");
     if (analyticsToggle) analyticsToggle.checked = settings.analytics !== false;
-    
-    const crashReportToggle = document.getElementById('crash-report-toggle');
-    if (crashReportToggle) crashReportToggle.checked = settings.crashReports !== false;
-    
-    const locationToggle = document.getElementById('location-toggle');
+
+    const crashReportToggle = document.getElementById("crash-report-toggle");
+    if (crashReportToggle)
+      crashReportToggle.checked = settings.crashReports !== false;
+
+    const locationToggle = document.getElementById("location-toggle");
     if (locationToggle) locationToggle.checked = settings.location === true;
-    
-    const cacheToggle = document.getElementById('cache-toggle');
+
+    const cacheToggle = document.getElementById("cache-toggle");
     if (cacheToggle) cacheToggle.checked = settings.cache !== false;
-    
-    const autoSaveToggle = document.getElementById('auto-save-toggle');
+
+    const autoSaveToggle = document.getElementById("auto-save-toggle");
     if (autoSaveToggle) autoSaveToggle.checked = settings.autoSave !== false;
-    
-    const backgroundSyncToggle = document.getElementById('background-sync-toggle');
-    if (backgroundSyncToggle) backgroundSyncToggle.checked = settings.backgroundSync !== false;
-    
-    const pickramuEguideToggle = document.getElementById('pickramu-eguide-toggle');
-    if (pickramuEguideToggle) pickramuEguideToggle.checked = settings.pickramuEguideEnabled === true;
-    
+
+    const backgroundSyncToggle = document.getElementById(
+      "background-sync-toggle"
+    );
+    if (backgroundSyncToggle)
+      backgroundSyncToggle.checked = settings.backgroundSync !== false;
+
+    const pickramuEguideToggle = document.getElementById(
+      "pickramu-eguide-toggle"
+    );
+    if (pickramuEguideToggle)
+      pickramuEguideToggle.checked = settings.pickramuEguideEnabled === true;
+    const googleUserName = localStorage.getItem("googleUserName") || "未設定";
+    const googleUserId = localStorage.getItem("googleUserId") || "未設定";
+
+    if (usernameElement) usernameElement.textContent = googleUserName;
+    if (useridElement) useridElement.textContent = googleUserId;
     // 設定を実際に適用
     applySettings(settings);
-    
-    shell.log({from: 'dp.app.setting.out', message: 'SettingApp: 設定を読み込みました', level: 'info'});
+
+    shell.log({
+      from: "dp.app.setting.out",
+      message: "SettingApp: 設定を読み込みました",
+      level: "info",
+    });
   } catch (error) {
-    shell.log({from: 'dp.app.setting.err', message: 'SettingApp: 設定の読み込みエラー ' + error, level: 'error'});
+    shell.log({
+      from: "dp.app.setting.err",
+      message: "SettingApp: 設定の読み込みエラー " + error,
+      level: "error",
+    });
   }
 }
 
@@ -316,89 +368,119 @@ function saveSettings() {
   try {
     const settings = {
       // 既存の設定項目
-      darkMode: document.getElementById('dark-mode-toggle')?.checked ?? true,
-      fontSize: document.getElementById('font-size-select')?.value ?? 'medium',
-      notifications: document.getElementById('notification-toggle')?.checked ?? true,
-      sound: document.getElementById('sound-toggle')?.checked ?? true,
-      
+      darkMode: document.getElementById("dark-mode-toggle")?.checked ?? true,
+      fontSize: document.getElementById("font-size-select")?.value ?? "medium",
+      notifications:
+        document.getElementById("notification-toggle")?.checked ?? true,
+      sound: document.getElementById("sound-toggle")?.checked ?? true,
+
       // 新しく追加した設定項目
-      animation: document.getElementById('animation-toggle')?.checked ?? true,
-      compactMode: document.getElementById('compact-mode-toggle')?.checked ?? false,
-      emailNotifications: document.getElementById('email-notification-toggle')?.checked ?? false,
-      pushNotifications: document.getElementById('push-notification-toggle')?.checked ?? true,
-      analytics: document.getElementById('analytics-toggle')?.checked ?? true,
-      crashReports: document.getElementById('crash-report-toggle')?.checked ?? true,
-      location: document.getElementById('location-toggle')?.checked ?? false,
-      cache: document.getElementById('cache-toggle')?.checked ?? true,
-      autoSave: document.getElementById('auto-save-toggle')?.checked ?? true,
-      backgroundSync: document.getElementById('background-sync-toggle')?.checked ?? true,
-      pickramuEguideEnabled: document.getElementById('pickramu-eguide-toggle')?.checked ?? false
+      animation: document.getElementById("animation-toggle")?.checked ?? true,
+      compactMode:
+        document.getElementById("compact-mode-toggle")?.checked ?? false,
+      emailNotifications:
+        document.getElementById("email-notification-toggle")?.checked ?? false,
+      pushNotifications:
+        document.getElementById("push-notification-toggle")?.checked ?? true,
+      analytics: document.getElementById("analytics-toggle")?.checked ?? true,
+      crashReports:
+        document.getElementById("crash-report-toggle")?.checked ?? true,
+      location: document.getElementById("location-toggle")?.checked ?? false,
+      cache: document.getElementById("cache-toggle")?.checked ?? true,
+      autoSave: document.getElementById("auto-save-toggle")?.checked ?? true,
+      backgroundSync:
+        document.getElementById("background-sync-toggle")?.checked ?? true,
+      pickramuEguideEnabled:
+        document.getElementById("pickramu-eguide-toggle")?.checked ?? false,
     };
-    
-    localStorage.setItem('deep-school-settings', JSON.stringify(settings));
-    
+
+    localStorage.setItem("deep-school-settings", JSON.stringify(settings));
+
     // 設定を実際に適用
     applySettings(settings);
-    
+
     // SCRサーバーURL保存
-    const scrInput = document.getElementById('scr_url_setting');
+    const scrInput = document.getElementById("scr_url_setting");
     if (scrInput) {
       const scrUrl = scrInput.value.trim();
       if (scrUrl) {
-        localStorage.setItem('scr_url', scrUrl);
+        localStorage.setItem("scr_url", scrUrl);
         window.scr_url = scrUrl;
       }
     }
-    
-    shell.log({from: 'dp.app.setting.out', message: 'SettingApp: 設定を保存しました', level: 'info'});
+
+    shell.log({
+      from: "dp.app.setting.out",
+      message: "SettingApp: 設定を保存しました",
+      level: "info",
+    });
   } catch (error) {
-    shell.log({from: 'dp.app.setting.err', message: 'SettingApp: 設定の保存エラー ' + error, level: 'error'});
+    shell.log({
+      from: "dp.app.setting.err",
+      message: "SettingApp: 設定の保存エラー " + error,
+      level: "error",
+    });
   }
 }
 
 function setupEventListeners(shell) {
   // 既存の設定項目
-  ['dark-mode-toggle','font-size-select','notification-toggle','sound-toggle'].forEach(id => {
+  [
+    "dark-mode-toggle",
+    "font-size-select",
+    "notification-toggle",
+    "sound-toggle",
+  ].forEach((id) => {
     const element = document.getElementById(id);
-    if (element) element.addEventListener('change', saveSettings);
+    if (element) element.addEventListener("change", saveSettings);
   });
-  
+
   // 新しく追加した設定項目
-  ['animation-toggle','compact-mode-toggle','email-notification-toggle','push-notification-toggle',
-   'analytics-toggle','crash-report-toggle','location-toggle','cache-toggle','auto-save-toggle','background-sync-toggle'].forEach(id => {
+  [
+    "animation-toggle",
+    "compact-mode-toggle",
+    "email-notification-toggle",
+    "push-notification-toggle",
+    "analytics-toggle",
+    "crash-report-toggle",
+    "location-toggle",
+    "cache-toggle",
+    "auto-save-toggle",
+    "background-sync-toggle",
+  ].forEach((id) => {
     const element = document.getElementById(id);
-    if (element) element.addEventListener('change', saveSettings);
+    if (element) element.addEventListener("change", saveSettings);
   });
-  
-  const logoutBtn = document.getElementById('logout-btn');
+
+  const logoutBtn = document.getElementById("logout-btn");
   if (logoutBtn) {
-    logoutBtn.addEventListener('click', () => {
-      if (confirm('ログアウトしますか？')) {
+    logoutBtn.addEventListener("click", () => {
+      if (confirm("ログアウトしますか？")) {
         logout(shell);
-        shell.loadApp('login');
+        shell.loadApp("login");
       }
     });
   }
-  
-  const exportBtn = document.getElementById('export-btn');
-  if (exportBtn) exportBtn.addEventListener('click', exportData);
-  
-  const importBtn = document.getElementById('import-btn');
-  if (importBtn) importBtn.addEventListener('click', importData);
-  
-  const backupBtn = document.getElementById('backup-btn');
-  if (backupBtn) backupBtn.addEventListener('click', createBackup);
-  
-  const restoreBtn = document.getElementById('restore-btn');
-  if (restoreBtn) restoreBtn.addEventListener('click', restoreBackup);
-  
-  const checkUpdateBtn = document.getElementById('check-update-btn');
-  if (checkUpdateBtn) checkUpdateBtn.addEventListener('click', checkForUpdates);
-  
-  const clearBtn = document.getElementById('clear-btn');
+
+  const exportBtn = document.getElementById("export-btn");
+  if (exportBtn) exportBtn.addEventListener("click", exportData);
+
+  const importBtn = document.getElementById("import-btn");
+  if (importBtn) importBtn.addEventListener("click", importData);
+
+  const backupBtn = document.getElementById("backup-btn");
+  if (backupBtn) backupBtn.addEventListener("click", createBackup);
+
+  const restoreBtn = document.getElementById("restore-btn");
+  if (restoreBtn) restoreBtn.addEventListener("click", restoreBackup);
+
+  const checkUpdateBtn = document.getElementById("check-update-btn");
+  if (checkUpdateBtn) checkUpdateBtn.addEventListener("click", checkForUpdates);
+
+  const clearBtn = document.getElementById("clear-btn");
   if (clearBtn) {
-    clearBtn.addEventListener('click', () => {
-      if (confirm('すべてのデータを削除しますか？この操作は取り消せません。')) {
+    clearBtn.addEventListener("click", () => {
+      if (confirm("すべてのデータを削除しますか？この操作は取り消せません。")) {
         clearData(shell);
       }
     });
@@ -410,44 +492,68 @@ function logout(shell) {
     if (window.google && window.google.accounts) {
       window.google.accounts.id.disableAutoSelect();
     }
-    localStorage.removeItem('google_access_token');
-    localStorage.removeItem('google_token_timestamp');
+    localStorage.removeItem("google_access_token");
+    localStorage.removeItem("google_token_timestamp");
     window.googleUserName = null;
     window.googleUserId = null;
-    shell.log({from: 'dp.app.setting.out', message: 'SettingApp: ログアウト完了', level: 'info'});
+    shell.log({
+      from: "dp.app.setting.out",
+      message: "SettingApp: ログアウト完了",
+      level: "info",
+    });
   } catch (error) {
-    shell.log({from: 'dp.app.setting.err', message: 'SettingApp: ログアウトエラー ' + error, level: 'error'});
+    shell.log({
+      from: "dp.app.setting.err",
+      message: "SettingApp: ログアウトエラー " + error,
+      level: "error",
+    });
   }
 }
 
 function exportData() {
   try {
     const data = {
-      settings: JSON.parse(localStorage.getItem('deep-school-settings') || '{}'),
-      userData: JSON.parse(localStorage.getItem('deep-school-user-data') || '{}'),
-      timestamp: new Date().toISOString()
+      settings: JSON.parse(
+        localStorage.getItem("deep-school-settings") || "{}"
+      ),
+      userData: JSON.parse(
+        localStorage.getItem("deep-school-user-data") || "{}"
+      ),
+      timestamp: new Date().toISOString(),
     };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: "application/json",
+    });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `deep-school-backup-${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `deep-school-backup-${
+      new Date().toISOString().split("T")[0]
+    }.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    shell.log({from: 'dp.app.setting.out', message: 'SettingApp: データをエクスポートしました', level: 'info'});
+    shell.log({
+      from: "dp.app.setting.out",
+      message: "SettingApp: データをエクスポートしました",
+      level: "info",
+    });
   } catch (error) {
-    shell.log({from: 'dp.app.setting.err', message: 'SettingApp: データエクスポートエラー ' + error, level: 'error'});
-    alert('データのエクスポートに失敗しました');
+    shell.log({
+      from: "dp.app.setting.err",
+      message: "SettingApp: データエクスポートエラー " + error,
+      level: "error",
+    });
+    alert("データのエクスポートに失敗しました");
   }
 }
 
 function importData() {
   try {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json';
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json";
     input.onchange = (event) => {
       const file = event.target.files[0];
       if (file) {
@@ -455,14 +561,30 @@ function importData() {
         reader.onload = (e) => {
           try {
             const data = JSON.parse(e.target.result);
-            if (data.settings) localStorage.setItem('deep-school-settings', JSON.stringify(data.settings));
-            if (data.userData) localStorage.setItem('deep-school-user-data', JSON.stringify(data.userData));
+            if (data.settings)
+              localStorage.setItem(
+                "deep-school-settings",
+                JSON.stringify(data.settings)
+              );
+            if (data.userData)
+              localStorage.setItem(
+                "deep-school-user-data",
+                JSON.stringify(data.userData)
+              );
             loadSettings();
-            shell.log({from: 'dp.app.setting.out', message: 'SettingApp: データをインポートしました', level: 'info'});
-            alert('データのインポートが完了しました');
+            shell.log({
+              from: "dp.app.setting.out",
+              message: "SettingApp: データをインポートしました",
+              level: "info",
+            });
+            alert("データのインポートが完了しました");
           } catch (error) {
-            shell.log({from: 'dp.app.setting.err', message: 'SettingApp: データインポートエラー ' + error, level: 'error'});
-            alert('データのインポートに失敗しました');
+            shell.log({
+              from: "dp.app.setting.err",
+              message: "SettingApp: データインポートエラー " + error,
+              level: "error",
+            });
+            alert("データのインポートに失敗しました");
           }
         };
         reader.readAsText(file);
@@ -470,25 +592,37 @@ function importData() {
     };
     input.click();
   } catch (error) {
-    shell.log({from: 'dp.app.setting.err', message: 'SettingApp: データインポートエラー ' + error, level: 'error'});
-    alert('データのインポートに失敗しました');
+    shell.log({
+      from: "dp.app.setting.err",
+      message: "SettingApp: データインポートエラー " + error,
+      level: "error",
+    });
+    alert("データのインポートに失敗しました");
   }
 }
 
 function clearData(shell) {
   try {
-    const keysToKeep = ['deep-school-settings'];
+    const keysToKeep = ["deep-school-settings"];
     const keysToRemove = [];
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key && !keysToKeep.includes(key)) keysToRemove.push(key);
     }
-    keysToRemove.forEach(key => localStorage.removeItem(key));
-    shell.log({from: 'dp.app.setting.out', message: 'SettingApp: データをクリアしました', level: 'info'});
-    alert('データのクリアが完了しました');
+    keysToRemove.forEach((key) => localStorage.removeItem(key));
+    shell.log({
+      from: "dp.app.setting.out",
+      message: "SettingApp: データをクリアしました",
+      level: "info",
+    });
+    alert("データのクリアが完了しました");
   } catch (error) {
-    shell.log({from: 'dp.app.setting.err', message: 'SettingApp: データクリアエラー ' + error, level: 'error'});
-    alert('データのクリアに失敗しました');
+    shell.log({
+      from: "dp.app.setting.err",
+      message: "SettingApp: データクリアエラー " + error,
+      level: "error",
+    });
+    alert("データのクリアに失敗しました");
   }
 }
 
@@ -498,70 +632,78 @@ function applySettings(settings) {
     if (settings.darkMode !== undefined) {
       applyDarkMode(settings.darkMode);
     }
-    
+
     // フォントサイズの適用
     if (settings.fontSize) {
       applyFontSize(settings.fontSize);
     }
-    
+
     // アニメーションの適用
     if (settings.animation !== undefined) {
       applyAnimation(settings.animation);
     }
-    
+
     // コンパクトモードの適用
     if (settings.compactMode !== undefined) {
       applyCompactMode(settings.compactMode);
     }
-    
+
     // 通知設定の適用
     if (settings.notifications !== undefined) {
       applyNotifications(settings.notifications);
     }
-    
+
     // サウンド設定の適用
     if (settings.sound !== undefined) {
       applySound(settings.sound);
     }
-    
+
     // キャッシュ設定の適用
     if (settings.cache !== undefined) {
       applyCache(settings.cache);
     }
-    
+
     // 自動保存設定の適用
     if (settings.autoSave !== undefined) {
       applyAutoSave(settings.autoSave);
     }
-    
+
     // バックグラウンド同期設定の適用
     if (settings.backgroundSync !== undefined) {
       applyBackgroundSync(settings.backgroundSync);
     }
-    
+
     // 分析データ設定の適用
     if (settings.analytics !== undefined) {
       applyAnalytics(settings.analytics);
     }
-    
+
     // クラッシュレポート設定の適用
     if (settings.crashReports !== undefined) {
       applyCrashReports(settings.crashReports);
     }
-    
+
     // 位置情報設定の適用
     if (settings.location !== undefined) {
       applyLocation(settings.location);
     }
-    
+
     // Pickramu設定の適用
     if (settings.pickramuEguideEnabled !== undefined) {
       applyPickramuEguide(settings.pickramuEguideEnabled);
     }
-    
-    shell.log({from: 'dp.app.setting.out', message: 'SettingApp: 設定を適用しました', level: 'info'});
+
+    shell.log({
+      from: "dp.app.setting.out",
+      message: "SettingApp: 設定を適用しました",
+      level: "info",
+    });
   } catch (error) {
-    shell.log({from: 'dp.app.setting.err', message: 'SettingApp: 設定の適用エラー ' + error, level: 'error'});
+    shell.log({
+      from: "dp.app.setting.err",
+      message: "SettingApp: 設定の適用エラー " + error,
+      level: "error",
+    });
   }
 }
 
@@ -569,15 +711,15 @@ function applySettings(settings) {
 function applyDarkMode(enabled) {
   const body = document.body;
   if (enabled) {
-    body.classList.add('dark-mode');
-    body.style.setProperty('--bg-color', '#1a1a1a');
-    body.style.setProperty('--text-color', '#ffffff');
-    body.style.setProperty('--card-bg', '#2d2d2d');
+    body.classList.add("dark-mode");
+    body.style.setProperty("--bg-color", "#1a1a1a");
+    body.style.setProperty("--text-color", "#ffffff");
+    body.style.setProperty("--card-bg", "#2d2d2d");
   } else {
-    body.classList.remove('dark-mode');
-    body.style.setProperty('--bg-color', '#f5f5f5');
-    body.style.setProperty('--text-color', '#333333');
-    body.style.setProperty('--card-bg', '#ffffff');
+    body.classList.remove("dark-mode");
+    body.style.setProperty("--bg-color", "#f5f5f5");
+    body.style.setProperty("--text-color", "#333333");
+    body.style.setProperty("--card-bg", "#ffffff");
   }
 }
 
@@ -585,9 +727,9 @@ function applyDarkMode(enabled) {
 function applyFontSize(size) {
   const root = document.documentElement;
   const sizes = {
-    small: '14px',
-    medium: '16px',
-    large: '18px'
+    small: "14px",
+    medium: "16px",
+    large: "18px",
   };
   root.style.fontSize = sizes[size] || sizes.medium;
 }
@@ -596,11 +738,11 @@ function applyFontSize(size) {
 function applyAnimation(enabled) {
   const body = document.body;
   if (enabled) {
-    body.style.setProperty('--animation-duration', '0.3s');
-    body.classList.remove('no-animation');
+    body.style.setProperty("--animation-duration", "0.3s");
+    body.classList.remove("no-animation");
   } else {
-    body.style.setProperty('--animation-duration', '0s');
-    body.classList.add('no-animation');
+    body.style.setProperty("--animation-duration", "0s");
+    body.classList.add("no-animation");
   }
 }
 
@@ -608,20 +750,20 @@ function applyAnimation(enabled) {
 function applyCompactMode(enabled) {
   const body = document.body;
   if (enabled) {
-    body.classList.add('compact-mode');
-    body.style.setProperty('--spacing-unit', '8px');
-    body.style.setProperty('--border-radius', '4px');
+    body.classList.add("compact-mode");
+    body.style.setProperty("--spacing-unit", "8px");
+    body.style.setProperty("--border-radius", "4px");
   } else {
-    body.classList.remove('compact-mode');
-    body.style.setProperty('--spacing-unit', '16px');
-    body.style.setProperty('--border-radius', '8px');
+    body.classList.remove("compact-mode");
+    body.style.setProperty("--spacing-unit", "16px");
+    body.style.setProperty("--border-radius", "8px");
   }
 }
 
 // 通知設定の適用
 function applyNotifications(enabled) {
-  if (enabled && 'Notification' in window) {
-    if (Notification.permission === 'default') {
+  if (enabled && "Notification" in window) {
+    if (Notification.permission === "default") {
       Notification.requestPermission();
     }
   }
@@ -633,7 +775,7 @@ function applySound(enabled) {
   window.soundEnabled = enabled;
   if (enabled) {
     // サウンド機能の初期化
-    console.log('サウンド機能が有効になりました');
+    console.log("サウンド機能が有効になりました");
   }
 }
 
@@ -642,9 +784,9 @@ function applyCache(enabled) {
   window.cacheEnabled = enabled;
   if (!enabled) {
     // キャッシュをクリア
-    if ('caches' in window) {
-      caches.keys().then(names => {
-        names.forEach(name => caches.delete(name));
+    if ("caches" in window) {
+      caches.keys().then((names) => {
+        names.forEach((name) => caches.delete(name));
       });
     }
   }
@@ -665,9 +807,9 @@ function applyAutoSave(enabled) {
 // バックグラウンド同期設定の適用
 function applyBackgroundSync(enabled) {
   window.backgroundSyncEnabled = enabled;
-  if (enabled && 'serviceWorker' in navigator) {
+  if (enabled && "serviceWorker" in navigator) {
     // バックグラウンド同期の設定
-    console.log('バックグラウンド同期が有効になりました');
+    console.log("バックグラウンド同期が有効になりました");
   }
 }
 
@@ -676,10 +818,10 @@ function applyAnalytics(enabled) {
   window.analyticsEnabled = enabled;
   if (enabled) {
     // 分析機能の開始
-    console.log('分析データの送信が有効になりました');
+    console.log("分析データの送信が有効になりました");
   } else {
     // 分析機能の停止
-    console.log('分析データの送信が無効になりました');
+    console.log("分析データの送信が無効になりました");
   }
 }
 
@@ -688,25 +830,25 @@ function applyCrashReports(enabled) {
   window.crashReportsEnabled = enabled;
   if (enabled) {
     // エラーハンドリングの設定
-    window.addEventListener('error', handleError);
-    window.addEventListener('unhandledrejection', handleUnhandledRejection);
+    window.addEventListener("error", handleError);
+    window.addEventListener("unhandledrejection", handleUnhandledRejection);
   } else {
     // エラーハンドリングの削除
-    window.removeEventListener('error', handleError);
-    window.removeEventListener('unhandledrejection', handleUnhandledRejection);
+    window.removeEventListener("error", handleError);
+    window.removeEventListener("unhandledrejection", handleUnhandledRejection);
   }
 }
 
 // 位置情報設定の適用
 function applyLocation(enabled) {
   window.locationEnabled = enabled;
-  if (enabled && 'geolocation' in navigator) {
+  if (enabled && "geolocation" in navigator) {
     navigator.geolocation.getCurrentPosition(
-      position => {
-        console.log('位置情報が取得されました:', position.coords);
+      (position) => {
+        console.log("位置情報が取得されました:", position.coords);
       },
-      error => {
-        console.log('位置情報の取得に失敗しました:', error);
+      (error) => {
+        console.log("位置情報の取得に失敗しました:", error);
       }
     );
   }
@@ -721,9 +863,9 @@ function handleError(event) {
       lineno: event.lineno,
       colno: event.colno,
       error: event.error?.stack,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
-    console.log('クラッシュレポート:', errorData);
+    console.log("クラッシュレポート:", errorData);
     // 実際のアプリケーションでは、ここでサーバーにエラーデータを送信
   }
 }
@@ -732,9 +874,9 @@ function handleUnhandledRejection(event) {
   if (window.crashReportsEnabled) {
     const errorData = {
       reason: event.reason,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
-    console.log('未処理のPromise拒否:', errorData);
+    console.log("未処理のPromise拒否:", errorData);
   }
 }
 
@@ -743,17 +885,19 @@ let autoSaveInterval = null;
 
 function startAutoSave() {
   if (autoSaveInterval) return;
-  
+
   autoSaveInterval = setInterval(() => {
     if (window.autoSaveEnabled) {
       // 現在のアプリケーション状態を保存
       const appState = {
-        currentApp: window.currentApp || 'menu',
-        userData: JSON.parse(localStorage.getItem('deep-school-user-data') || '{}'),
-        timestamp: new Date().toISOString()
+        currentApp: window.currentApp || "menu",
+        userData: JSON.parse(
+          localStorage.getItem("deep-school-user-data") || "{}"
+        ),
+        timestamp: new Date().toISOString(),
       };
-      localStorage.setItem('deep-school-auto-save', JSON.stringify(appState));
-      console.log('自動保存が実行されました');
+      localStorage.setItem("deep-school-auto-save", JSON.stringify(appState));
+      console.log("自動保存が実行されました");
     }
   }, 30000); // 30秒ごと
 }
@@ -769,37 +913,53 @@ function stopAutoSave() {
 function createBackup() {
   try {
     const backupData = {
-      settings: JSON.parse(localStorage.getItem('deep-school-settings') || '{}'),
-      userData: JSON.parse(localStorage.getItem('deep-school-user-data') || '{}'),
-      autoSave: localStorage.getItem('deep-school-auto-save'),
+      settings: JSON.parse(
+        localStorage.getItem("deep-school-settings") || "{}"
+      ),
+      userData: JSON.parse(
+        localStorage.getItem("deep-school-user-data") || "{}"
+      ),
+      autoSave: localStorage.getItem("deep-school-auto-save"),
       timestamp: new Date().toISOString(),
-      version: '0.4.0'
+      version: "0.4.0",
     };
-    
-    const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+
+    const blob = new Blob([JSON.stringify(backupData, null, 2)], {
+      type: "application/json",
+    });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `deep-school-backup-${new Date().toISOString().split('T')[0]}-${Date.now()}.json`;
+    a.download = `deep-school-backup-${
+      new Date().toISOString().split("T")[0]
+    }-${Date.now()}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    
-    shell.log({from: 'dp.app.setting.out', message: 'SettingApp: バックアップを作成しました', level: 'info'});
-    alert('バックアップが正常に作成されました');
+
+    shell.log({
+      from: "dp.app.setting.out",
+      message: "SettingApp: バックアップを作成しました",
+      level: "info",
+    });
+    alert("バックアップが正常に作成されました");
   } catch (error) {
-    shell.log({from: 'dp.app.setting.err', message: 'SettingApp: バックアップ作成エラー ' + error, level: 'error'});
-    alert('バックアップの作成に失敗しました');
+    shell.log({
+      from: "dp.app.setting.err",
+      message: "SettingApp: バックアップ作成エラー " + error,
+      level: "error",
+    });
+    alert("バックアップの作成に失敗しました");
   }
 }
 
 // 復元機能
 function restoreBackup() {
   try {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json';
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json";
     input.onchange = (event) => {
       const file = event.target.files[0];
       if (file) {
@@ -807,36 +967,55 @@ function restoreBackup() {
         reader.onload = (e) => {
           try {
             const backupData = JSON.parse(e.target.result);
-            
+
             // バックアップデータの検証
             if (!backupData.timestamp || !backupData.version) {
-              throw new Error('無効なバックアップファイルです');
+              throw new Error("無効なバックアップファイルです");
             }
-            
+
             // データの復元
             if (backupData.settings) {
-              localStorage.setItem('deep-school-settings', JSON.stringify(backupData.settings));
+              localStorage.setItem(
+                "deep-school-settings",
+                JSON.stringify(backupData.settings)
+              );
             }
             if (backupData.userData) {
-              localStorage.setItem('deep-school-user-data', JSON.stringify(backupData.userData));
+              localStorage.setItem(
+                "deep-school-user-data",
+                JSON.stringify(backupData.userData)
+              );
             }
             if (backupData.autoSave) {
-              localStorage.setItem('deep-school-auto-save', backupData.autoSave);
+              localStorage.setItem(
+                "deep-school-auto-save",
+                backupData.autoSave
+              );
             }
-            
+
             // 設定を再読み込みして適用
             loadSettings();
-            
-            shell.log({from: 'dp.app.setting.out', message: 'SettingApp: バックアップを復元しました', level: 'info'});
-            alert('バックアップの復元が完了しました。ページを再読み込みしてください。');
-            
+
+            shell.log({
+              from: "dp.app.setting.out",
+              message: "SettingApp: バックアップを復元しました",
+              level: "info",
+            });
+            alert(
+              "バックアップの復元が完了しました。ページを再読み込みしてください。"
+            );
+
             // ページを再読み込み
             setTimeout(() => {
               window.location.reload();
             }, 1000);
           } catch (error) {
-            shell.log({from: 'dp.app.setting.err', message: 'SettingApp: バックアップ復元エラー ' + error, level: 'error'});
-            alert('バックアップの復元に失敗しました: ' + error.message);
+            shell.log({
+              from: "dp.app.setting.err",
+              message: "SettingApp: バックアップ復元エラー " + error,
+              level: "error",
+            });
+            alert("バックアップの復元に失敗しました: " + error.message);
           }
         };
         reader.readAsText(file);
@@ -844,8 +1023,12 @@ function restoreBackup() {
     };
     input.click();
   } catch (error) {
-    shell.log({from: 'dp.app.setting.err', message: 'SettingApp: バックアップ復元エラー ' + error, level: 'error'});
-    alert('バックアップの復元に失敗しました');
+    shell.log({
+      from: "dp.app.setting.err",
+      message: "SettingApp: バックアップ復元エラー " + error,
+      level: "error",
+    });
+    alert("バックアップの復元に失敗しました");
   }
 }
 
@@ -853,26 +1036,42 @@ function restoreBackup() {
 function checkForUpdates() {
   try {
     // 現在のバージョン情報を取得
-    const currentVersion = '0.4.0';
-    const currentBuild = '25C1110X1';
-    const latestVersion = '0.4.0';
-    const latestBuild = '25C1110X1';
-    
+    const currentVersion = "0.4.0";
+    const currentBuild = "25C1110X1";
+    const latestVersion = "0.4.0";
+    const latestBuild = "25C1110X1";
+
     if (latestVersion > currentVersion) {
       const updateMessage = `新しいバージョンが利用可能です。\n\n現在のバージョン: ${currentVersion} (${currentBuild})\n最新バージョン: ${latestVersion} (${latestBuild})\n\nアップデートをダウンロードしますか？`;
-      
+
       if (confirm(updateMessage)) {
         // 実際のアプリケーションでは、ここでアップデートをダウンロード
-        alert('アップデートのダウンロードを開始しました。\nダウンロードが完了したら、アプリケーションを再起動してください。');
+        alert(
+          "アップデートのダウンロードを開始しました。\nダウンロードが完了したら、アプリケーションを再起動してください。"
+        );
       }
     } else {
-      alert('お使いのアプリケーションは最新バージョンです。\n\n現在のバージョン: ' + currentVersion + ' (' + currentBuild + ')');
+      alert(
+        "お使いのアプリケーションは最新バージョンです。\n\n現在のバージョン: " +
+          currentVersion +
+          " (" +
+          currentBuild +
+          ")"
+      );
     }
-    
-    shell.log({from: 'dp.app.setting.out', message: 'SettingApp: アップデートチェックを実行しました', level: 'info'});
+
+    shell.log({
+      from: "dp.app.setting.out",
+      message: "SettingApp: アップデートチェックを実行しました",
+      level: "info",
+    });
   } catch (error) {
-    shell.log({from: 'dp.app.setting.err', message: 'SettingApp: アップデートチェックエラー ' + error, level: 'error'});
-    alert('アップデートチェックに失敗しました');
+    shell.log({
+      from: "dp.app.setting.err",
+      message: "SettingApp: アップデートチェックエラー " + error,
+      level: "error",
+    });
+    alert("アップデートチェックに失敗しました");
   }
 }
 
@@ -888,26 +1087,30 @@ window.loadSettings = loadSettings;
 window.saveSettings = saveSettings;
 
 // 設定の取得関数
-window.getSetting = function(key) {
+window.getSetting = function (key) {
   try {
-    const settings = JSON.parse(localStorage.getItem('deep-school-settings') || '{}');
+    const settings = JSON.parse(
+      localStorage.getItem("deep-school-settings") || "{}"
+    );
     return settings[key];
   } catch (error) {
-    console.error('設定の取得エラー:', error);
+    console.error("設定の取得エラー:", error);
     return null;
   }
 };
 
 // 設定の設定関数
-window.setSetting = function(key, value) {
+window.setSetting = function (key, value) {
   try {
-    const settings = JSON.parse(localStorage.getItem('deep-school-settings') || '{}');
+    const settings = JSON.parse(
+      localStorage.getItem("deep-school-settings") || "{}"
+    );
     settings[key] = value;
-    localStorage.setItem('deep-school-settings', JSON.stringify(settings));
+    localStorage.setItem("deep-school-settings", JSON.stringify(settings));
     applySettings(settings);
     return true;
   } catch (error) {
-    console.error('設定の保存エラー:', error);
+    console.error("設定の保存エラー:", error);
     return false;
   }
 };
@@ -916,27 +1119,29 @@ window.setSetting = function(key, value) {
 function applyPickramuEguide(enabled) {
   window.pickramuEguideEnabled = enabled;
   if (enabled) {
-    console.log('eGuideがPickramuで有効になりました');
+    console.log("eGuideがPickramuで有効になりました");
   } else {
-    console.log('eGuideがPickramuで無効になりました');
+    console.log("eGuideがPickramuで無効になりました");
   }
 }
 
 // SCRサーバーURL入力欄を設定画面に追加
 function escapeHTML(str) {
-  return String(str).replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 function renderSCRUrlSetting() {
-  const settingRoot = document.getElementById('setting-root') || document.body;
-  if (!document.getElementById('scr_url_setting')) {
-    const scrUrl = localStorage.getItem('scr_url') || 'https://deep-school.onrender.com';
+  const settingRoot = document.getElementById("setting-root") || document.body;
+  if (!document.getElementById("scr_url_setting")) {
+    const scrUrl =
+      localStorage.getItem("scr_url") || "https://deep-school.onrender.com";
     const safeScrUrl = escapeHTML(scrUrl);
     const html = `<div class="form-group"><label for="scr_url_setting">SCRサーバーURL</label><input type="text" id="scr_url_setting" value="${safeScrUrl}" placeholder="https://deep-school.onrender.com" /></div>`;
-    settingRoot.insertAdjacentHTML('beforeend', html);
+    settingRoot.insertAdjacentHTML("beforeend", html);
   }
-} 
+}

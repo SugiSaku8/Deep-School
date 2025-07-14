@@ -29,16 +29,27 @@ export function appInit(shell) {
       resultDiv.textContent = 'フィードバック内容を入力してください。';
       return;
     }
-    // ローカルストレージに保存（後でAPI送信に拡張可）
-    const feedbacks = JSON.parse(localStorage.getItem('deep-school-feedbacks') || '[]');
-    feedbacks.unshift({
-      text,
-      date: new Date().toISOString(),
-      user: window.googleUserName || '匿名',
-      userId: window.googleUserId || 'anonymous'
+
+    // Googleフォームの送信URLとフィールドIDを設定
+    const googleFormUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSd9_GO7Mdexh_lqZOcORCyACUR-Ng63DJ0Y42aOyUOvDDRs9A/viewform'; // YOUR_FORM_IDをGoogleフォームのIDに置き換えてください
+    const formData = new FormData();
+    formData.append('entry.2068037734', text); // YOUR_FIELD_IDをGoogleフォームのフィールドIDに置き換えてください
+
+    // フォーム送信
+    fetch(googleFormUrl, {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => {
+      if (response.ok) {
+        resultDiv.textContent = 'フィードバックを送信しました。ご協力ありがとうございます！';
+        document.getElementById('feedback-text').value = '';
+      } else {
+        resultDiv.textContent = 'フィードバックの送信に失敗しました。後でもう一度お試しください。';
+      }
+    })
+    .catch(() => {
+      resultDiv.textContent = 'フィードバックの送信に失敗しました。後でもう一度お試しください。';
     });
-    localStorage.setItem('deep-school-feedbacks', JSON.stringify(feedbacks));
-    resultDiv.textContent = 'フィードバックを送信しました。ご協力ありがとうございます！';
-    document.getElementById('feedback-text').value = '';
   };
-} 
+}
