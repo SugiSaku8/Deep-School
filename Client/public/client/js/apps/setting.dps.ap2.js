@@ -131,15 +131,15 @@ export function appInit(shell) {
           <h2>アプリケーション情報</h2>
           <div class="setting-item">
             <label>バージョン:</label>
-            <span id="setting-version">0.3.9</span>
+            <span id="setting-version">0.4.0</span>
           </div>
           <div class="setting-item">
             <label>ビルド番号:</label>
-            <span id="setting-build">25C1086X1</span>
+            <span id="setting-build">25C1110X1</span>
           </div>
           <div class="setting-item">
             <label>最終更新:</label>
-            <span id="setting-updated">2025-07-12</span>
+            <span id="setting-updated">2025-07-14</span>
           </div>
           <div class="setting-item">
             <button class="auto-btn" id="check-update-btn">アップデートをチェック</button>
@@ -773,7 +773,7 @@ function createBackup() {
       userData: JSON.parse(localStorage.getItem('deep-school-user-data') || '{}'),
       autoSave: localStorage.getItem('deep-school-auto-save'),
       timestamp: new Date().toISOString(),
-      version: '0.3.0'
+      version: '0.4.0'
     };
     
     const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
@@ -853,10 +853,10 @@ function restoreBackup() {
 function checkForUpdates() {
   try {
     // 現在のバージョン情報を取得
-    const currentVersion = '0.3.0';
-    const currentBuild = '25C962X1';
-    const latestVersion = '0.3.0';
-    const latestBuild = '25C9621';
+    const currentVersion = '0.4.0';
+    const currentBuild = '25C1110X1';
+    const latestVersion = '0.4.0';
+    const latestBuild = '25C1110X1';
     
     if (latestVersion > currentVersion) {
       const updateMessage = `新しいバージョンが利用可能です。\n\n現在のバージョン: ${currentVersion} (${currentBuild})\n最新バージョン: ${latestVersion} (${latestBuild})\n\nアップデートをダウンロードしますか？`;
