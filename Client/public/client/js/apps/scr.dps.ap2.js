@@ -300,7 +300,7 @@ export function appInit(shell) {
           <div class="scr-feed-actions">
           <button class="scr-reply-btn" id="when${
             post.PostId
-          }">ToasterMachineでこのポストの内容を作成</button>
+          }">ToasterMachineで<br>このポストを作成</button>
             <button class="scr-reply-btn" data-postid="${
               post.PostId
             }" aria-label="返信">
