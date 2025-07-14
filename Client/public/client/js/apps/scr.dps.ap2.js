@@ -298,7 +298,7 @@ export function appInit(shell) {
           <div class="scr-feed-date">${formatDate(post.PostTime)}</div>
           <div class="scr-feed-genre">${escapeHTML(post.LikerData || "")}</div>
           <div class="scr-feed-actions">
-          <button class=scr-reply-btn" id="when${
+          <button class="scr-reply-btn" id="when${
             post.PostId
           }">ToasterMachineでこのポストの内容を作成</button>
             <button class="scr-reply-btn" data-postid="${
