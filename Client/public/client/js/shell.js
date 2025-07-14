@@ -241,11 +241,13 @@ Examples:
       document.body.appendChild(appRoot);
       this.log({from: 'dp.sys.shell', message: '#app-root がなかったので自動生成しました', level: 'warn'});
     }
+    // app-rootがhiddenやdisplay:noneになっていたら強制的に表示
+    appRoot.style.display = '';
+    appRoot.hidden = false;
     this.showApp(appName);
     const appModule = appModules[appName];
     if (appModule && typeof appModule.appInit === 'function') {
       appModule.appInit(this);
-      
       // Initialize parallax effects after app initialization
       setTimeout(() => {
         if (parallaxManager && parallaxManager.isInitialized) {

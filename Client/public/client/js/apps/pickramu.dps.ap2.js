@@ -545,11 +545,16 @@ export const appMeta = {
 };
 
 export function appInit(shell) {
-  const root = document.getElementById('app-root');
+  let root = document.getElementById('app-root');
   if (!root) {
-    ds.log({from: 'dp.app.pickramu.err', message: 'PickramuApp: #app-rootが見つかりません', level: 'error'});
-    return;
+    root = document.createElement('div');
+    root.id = 'app-root';
+    document.body.appendChild(root);
+    if (window.ds && window.ds.log) window.ds.log({from: 'dp.app.pickramu.err', message: 'PickramuApp: #app-rootがなかったので自動生成', level: 'warn'});
   }
+  // app-rootがhiddenやdisplay:noneになっていたら強制的に表示
+  root.style.display = '';
+  root.hidden = false;
 
   // 教材リストを取得してUI生成
   fetchAllMaterials('', (materials) => {
