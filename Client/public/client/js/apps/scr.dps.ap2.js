@@ -1,7 +1,6 @@
 import { initializeSCR } from "../data/scr.client.mjs";
 import { SCR_URL, setSCRUrl } from "../core/config.js";
 import { GeminiIninter, ssession } from "./toastermachine.dps.bap.js";
-import { shell } from "../shell.js";
 /**
  * SCRアプリのメインエントリーポイント
  *
