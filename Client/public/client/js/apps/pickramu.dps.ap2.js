@@ -828,6 +828,32 @@ export function appInit(shell) {
             font-size: 1em;
           }
         }
+        .go-back-button {
+          position: fixed;
+          top: 20px;
+          left: 20px;
+          z-index: 1000;
+          background: rgba(255, 255, 255, 0.1);
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          backdrop-filter: blur(10px);
+          border-radius: 50%;
+          width: 50px;
+          height: 50px;
+          display: flex !important;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.5rem;
+          color: #fff;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          opacity: 1 !important;
+          visibility: visible !important;
+        }
+        .go-back-button:hover {
+          background: rgba(255, 255, 255, 0.2);
+          border-color: rgba(255, 255, 255, 0.5);
+          transform: translateY(-2px) scale(1.1);
+        }
       </style>
     `;
 
