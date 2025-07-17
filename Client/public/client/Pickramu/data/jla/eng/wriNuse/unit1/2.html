@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>English Write and Use :Unit1 The Tale of Peter Rabbit</title>
+    <style>
+      :root {
+        --bg-color: transparent;
+        --text-color: #222;
+        --card-bg: #fff;
+        --border-radius: 12px;
+        --shadow-color: rgba(0, 0, 0, 0.08);
+        --spacing-unit: 20px;
+        --animation-duration: 0.3s;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        color: var(--text-color);
+        background: var(--bg-color);
+        margin: 0;
+        padding: 2rem;
+        display: flex;
+        justify-content: center;
+        transition: background var(--animation-duration);
+      }
+      #content {
+        background: var(--card-bg);
+        border-radius: var(--border-radius);
+        box-shadow: 0 2px 8px var(--shadow-color);
+        max-width: 720px;
+        width: 100%;
+        padding: 2rem;
+        box-sizing: border-box;
+        word-break: break-word;
+      }
+      .section {
+        margin-bottom: 2rem;
+      }
+      .section button {
+        background: #007aff;
+        border: none;
+        border-radius: 8px;
+        padding: 0.8em 1.5em;
+        font-size: 1em;
+        color: #fff;
+        cursor: pointer;
+        box-shadow: 0 1px 4px var(--shadow-color);
+        transition: background 0.2s, box-shadow 0.2s;
+        outline: none;
+        margin-top: 1rem;
+      }
+      .section button:focus {
+        box-shadow: 0 0 0 3px #aad8ff;
+      }
+      .english {
+        font-family: "Hiragino Mincho Pro", "Times New Roman", serif;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="content">
+      <div class="section" id="s1">
+        <h1>English Write and Use :Unit1 The Tale of Peter Rabbit</h1>
+        <p>
+          こんにちは。EnglishのWrite and Use CourceのUnit1です。<br />
+          前回と引き続き、BEATRIX POTTERの「ピーターラビットのおはなし」(The
+          Tale of Peter Rabbit)を読んでいきましょう。 前回は、
+        </p>
+        <p class="english" style="white-space: pre-line">
+          ONCE upon a time there were four little Rabbits, and their names were
+          Flopsy, Mopsy, Cotton-tail,and Peter.
+          <br />THEY lived with their Mother in a sand-bank, underneath the root
+          of a very big fir-tree.
+        </p>
+        <p>
+          のところでしたね。 どんな感じの意味だったっけ？今思い出せますか？<br />
+        </p>
+        <button onclick="showNext('s1', 's2')">次へ</button>
+      </div>
+
+      <div class="section" id="s2" style="display: none">
+        <p>
+          むかしむかし、4匹の小さなうさぎが住んでいました。
+          名前をそれぞれ、Flopsy, Mopsy, Cotton-tail そして Peterといいました。  
+          彼らは、母と、大きなもみの木の根元の盛り上がった土に中に住んでいました。</br>
+          こんな感じでしたね。
+        </p>
+        <button onclick="showNext('s2', 's3')">次へ</button>
+      </div>
+
+      <div class="section" id="s3" style="display: none">
+        <p>では、次の文にいきましょう。</p>
+        <p class="english">
+          NOW, my dears,' said old Mrs. Rabbit one morning, </br>
+          'you may go into the fields or down the lane, </br>
+          but don't go into Mr. McGregor's garden.'
+        </p>
+        <p>読み終わったら、次へ！</p>
+        <button onclick="showNext('s3', 's4')">次へ</button>
+      </div>
+
+      <div class="section" id="s4" style="display: none">
+        <p>
+          いやーちょっと難しいかも。<br/>
+          でも、落ち着いて見てみましょう。<br>
+          まずは、このフレーズ。<br>
+          「'NOW, my dears,' said old Mrs. Rabbit one morning,」</br>
+          Now,my dearsは、「さて、みなさん」という感じの意味です。<br />
+          Now→さて　my dears→親愛なる　という意味がそれぞれあるので、こんな感じの意味になります。<br>
+        </p>
+        <button onclick="showNext('s4', 's5')">次へ</button>
+      </div>
+
+      <div class="section" id="s5" style="display: none">
+        <p>
+          では、次のフレーズにいきましょう。<br />
+          「'you may go into the fields or down the lane, 」<br />
+          mayという知らないやつがありますね。<br />
+          mayには、いろいろな意味があります。<br/>
+          ここでは、「〜してもいいよ」という意味で使われています。<br>
+          気になった人は、詳しいことは、Grammerコースで勉強するか先生に聞くといいでしょう。
+          「'you may go / into /the fields / or / down the lane, 」<br />
+          ここの'は、「」と同じ意味です。気にしなくていいよ。<br />
+          さて、you may goはどのような意味になるでしょうか？<br>
+          大体見当がついたら、次に進みましょう！
+        </p>
+        <button onclick="showNext('s5', 's6')">次へ</button>
+      </div>
+
+      <div class="section" id="s6" style="display: none">
+        <p>
+          you →あなた<br />
+          may →〜してもいいよ<br />
+          go →行く<br />
+          なので、you may goは、「(あなたは)行ってもいいよ」<br />
+          という意味になります。<br />
+          じゃあ、次の言葉intoの意味はわかりますか？<br />
+          これは、大雑把にいうとinと同じような意味ですが、<br>
+          inは「中に」という意味の一方、intoは、「中に入る」という意味です。<br>
+        </p>
+        <button onclick="showNext('s6', 's7')">次へ</button>
+      </div>
+
+      <div class="section" id="s7" style="display: none">
+        <p>
+          次の言葉 fieldsは、カタカナにするとわかりやすいかもしれません。<br>
+          これは、フィールド、すなわち野原などの広い土地という意味です。<br>
+          そして、laneは、道のことです。<br>
+          レーンって言いますよね。車とかで。<br>
+          これでだいたいわかるようになったかな？<br>
+          では、「'you may go into the fields or down the lane, 」を訳してみましょう。
+        </p>
+        <button onclick="showNext('s7', 's8')">次へ</button>
+      </div>
+
+      <div class="section" id="s8" style="display: none">
+        <p>
+          できたかな？<br>
+          こんな感じの意味になればいいと思う。<br>
+          「野原に行ってもいいし、小道の方に行ってもいい。」<br>
+          なんで「野原」(the fields)はinto=に向かうなのに「小道」(the lane)は、down=下に行くなんだろ、って思いませんか？<br>
+          これは、goとかintoとかdownとかの意味が、それぞれ違うからです。<br>
+          downは、「〜に沿って進む」という意味があるので、<br>
+          「小道に行く」ってことを言いたいときは、downの方がいいのです。<br>
+          into the laneだと、「小道を横断した」みたいな感じになるから、ちょっと変。<br>
+          まあ、細かいことは気にしなくていいと思う。<br>
+          じき、なれるから。
+        </p>
+        <button onclick="showNext('s8', 's9')">次へ</button>
+      </div>
+
+      <div class="section" id="s9" style="display: none">
+        <p>
+          じゃあ、次の文に行ってみよう。<br />
+          「but don't go into Mr. McGregor's garden」<br />
+          butの意味はわかるかな？<br />
+          これは、「でも」という意味。<br>
+          このbutは、2つの分をつなげることができる。<br />
+          さっきの文「'you may go into the fields or down the lane,」と関わりがあるってことだね。<br />
+          don't goはわかるかな?<br>
+          ~に行かないで、という意味だね<br>
+          go intoで、中に行く、みたいな感じのいみ。<br>
+          じゃあ、この文はどんな意味になるかな？<br>
+        </p>
+        <button onclick="showNext('s9', 's10')">次へ</button>
+      </div>
+    <div class="section" id="s10" style="display: none">
+           <p>
+          「でも、Mr.Mcgregorの庭には行かないでね」という意味になります。<br />
+        </p>
+        では、全体の文をまとめてみましょう。
+        <button onclick="showNext('s9', 's10')">次へ</button>
+      </div>
+      <div class="section" id="s11" style="display: none">
+        <p class="english">
+          NOW, my dears,' said old Mrs. Rabbit one morning, </br>
+          'you may go into the fields or down the lane, </br>
+          but don't go into Mr. McGregor's garden.'
+        </p>
+        <p>
+          「さて、みなさん」と年老いたMrs. Rabbitはある朝に言いました。<br />
+          「野原に行ってもいいし、小道の方に行ってもいいけど、
+          Mr. McGregorの庭には行かないでね。」</br>
+          <br>
+          こんな感じの意味になるでしょう。
+        </p>
+        <button onclick="showNext('s11', 's12')">次へ</button>
+      </div>
+
+      <div class="section" id="s12" style="display: none">
+        <p>
+          なぜDon't go into Mr.McGregor's gardenというのでしょうか。<br />
+          今回は少し難しかったかもしれません。<br />
+          でも、意外と読めたと思います。
+          さあ、Part3に進んで、物語をもっと進めましょう。
+        </p>
+      </div>
+    </div>
+
+    <script>
+      function showNext(current, next) {
+        document.getElementById(current).style.display = "none";
+        document.getElementById(next).style.display = "block";
+      }
+    </script>
+  </body>
+</html>
