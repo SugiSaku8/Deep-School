@@ -104,14 +104,14 @@ function fetchAllMaterials(basePath, callback) {
     {
       subject: "English",
       field: "Write and Use",
-      unit: "unit1:The tale of PeterRabbit",
+      unit: "Unit1:The tale of Peter Rabbit",
       file: "jla/eng/wriNuse/unit1/1.html",
       title: "English:wriNuse Unit1 The Tale of Peter Rabbit-Part1",
     },
     {
       subject: "English",
       field: "Write and Use",
-      unit: "unit1:The tale of PeterRabbit",
+      unit: "Unit1:The tale of Peter Rabbit",
       file: "jla/eng/wriNuse/unit1/2.html",
       title: "English:wriNuse Unit1 The Tale of Peter Rabbit-Part2",
     },
@@ -430,7 +430,7 @@ export function appInit(shell) {
     font-weight: 700;
     text-align: center;
     margin: 48px 0;
-    color: #1d1d1f;
+    color: #dedef7ff;
     letter-spacing: -0.003em;
   }
 
