@@ -28,6 +28,9 @@ function fetchAllMaterials(basePath, callback) {
     { subject: '数学', field: '式の計算', unit: '5.式の値', file: 'jla/math/式の計算/1節/5.式の値/2.html', title: '数学: 式の計算・1節・式の値 (2)' },
     // 国語
     { subject: '国語', field: '文法', unit: 'unit1', file: 'jla/jp/grammer/unit1/1.html', title: '国語: 文法・unit1 (1)' },
+    //英語
+    { subject: 'English', field: 'Write and Use', unit: 'unit1:The tale of PeterRabbit', file: 'jla/eng/wriNuse/unit1/1.html', title: 'English:wriNuse Unit1 The Tale of Peter Rabbit-Part1' },
+    { subject: 'English', field: 'Write and Use', unit: 'unit1:The tale of PeterRabbit', file: 'jla/eng/wriNuse/unit1/2.html', title: 'English:wriNuse Unit1 The Tale of Peter Rabbit-Part2' },
     // 社会（公民）
     { subject: '社会', field: '公民', unit: 'unit1', file: 'jla/ss/civics/unit1/index.html', title: '社会: 公民・unit1' },
     { subject: '社会', field: '公民', unit: 'unit2', file: 'jla/ss/civics/unit2/index.html', title: '社会: 公民・unit2' },

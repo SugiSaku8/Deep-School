@@ -143,11 +143,11 @@ export function appInit(shell) {
           </div>
           <div class="setting-item">
             <label>ビルド番号:</label>
-            <span id="setting-build">25C1110X1</span>
+            <span id="setting-build">25C1167X1</span>
           </div>
           <div class="setting-item">
             <label>最終更新:</label>
-            <span id="setting-updated">2025-07-14</span>
+            <span id="setting-updated">2025-07-17</span>
           </div>
           <div class="setting-item">
             <button class="auto-btn" id="check-update-btn">アップデートをチェック</button>
@@ -270,9 +270,9 @@ function updateUserInfo() {
   if (lastloginElement) lastloginElement.textContent = formattedDate;
 
   // バージョン情報を設定
-  if (versionElement) versionElement.textContent = "0.3.7";
-  if (buildElement) buildElement.textContent = "25C1044X1";
-  if (updatedElement) updatedElement.textContent = "2025-07-07";
+  if (versionElement) versionElement.textContent = "0.4.0";
+  if (buildElement) buildElement.textContent = "25C1167X1";
+  if (updatedElement) updatedElement.textContent = "2025-07-17";
 }
 
 function loadSettings() {
@@ -1037,9 +1037,9 @@ function checkForUpdates() {
   try {
     // 現在のバージョン情報を取得
     const currentVersion = "0.4.0";
-    const currentBuild = "25C1110X1";
+    const currentBuild = "25C1167X1";
     const latestVersion = "0.4.0";
-    const latestBuild = "25C1110X1";
+    const latestBuild = "25C1167X1";
 
     if (latestVersion > currentVersion) {
       const updateMessage = `新しいバージョンが利用可能です。\n\n現在のバージョン: ${currentVersion} (${currentBuild})\n最新バージョン: ${latestVersion} (${latestBuild})\n\nアップデートをダウンロードしますか？`;
