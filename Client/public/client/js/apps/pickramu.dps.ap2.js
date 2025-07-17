@@ -420,7 +420,6 @@ export function appInit(shell) {
     margin: 0 auto;
     min-height: 100vh;
     box-sizing: border-box;
-    background: #f5f5f7;
     color: #1d1d1f;
     letter-spacing: -0.022em;
   }
