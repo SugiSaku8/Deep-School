@@ -1,183 +1,226 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <title>English Write and Use :Unit1 The Tale of Peter Rabbit</title>
-  <style>
-    :root {
-      --bg-color: transparent;
-      --text-color: #222;
-      --card-bg: #fff;
-      --border-radius: 12px;
-      --shadow-color: rgba(0,0,0,0.08);
-      --spacing-unit: 20px;
-      --animation-duration: 0.3s;
-    }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      color: var(--text-color);
-      background: var(--bg-color);
-      margin: 0;
-      padding: 2rem;
-      display: flex;
-      justify-content: center;
-      transition: background var(--animation-duration);
-    }
-    #content {
-      background: var(--card-bg);
-      border-radius: var(--border-radius);
-      box-shadow: 0 2px 8px var(--shadow-color);
-      max-width: 720px;
-      width: 100%;
-      padding: 2rem;
-      box-sizing: border-box;
-      word-break: break-word;
-    }
-    .section {
-      margin-bottom: 2rem;
-    }
-    .section button {
-      background: #007aff;
-      border: none;
-      border-radius: 8px;
-      padding: 0.8em 1.5em;
-      font-size: 1em;
-      color: #fff;
-      cursor: pointer;
-      box-shadow: 0 1px 4px var(--shadow-color);
-      transition: background 0.2s, box-shadow 0.2s;
-      outline: none;
-      margin-top: 1rem;
-    }
-    .section button:focus {
-      box-shadow: 0 0 0 3px #aad8ff;
-    }
-    .english {
-      font-family: "Hiragino Mincho Pro", "Times New Roman", serif;
-    }
-  </style>
-</head>
-<body>
-  <div id="content">
-    <!-- Section 1: Intro -->
-    <div class="section" id="s1">
-      <h1>English Write and Use :Unit1 The Tale of Peter Rabbit</h1>
-      <p>
-        こんにちは。EnglishのWrite and Use CourceのUnit1です。<br>
-        ところで、みんなはピーターラビットのおはなし　という本を知っていますか？<br>
-        1902年に出版された、イギリスのビクトリアス・ポター(BEATRIX POTTER)という人のおはなしです。<br>
-        この物語は、英語の物語を読む上で、比較的簡単な問題です。<br>
-        文法も一緒に楽しく学べるので、肩の力を抜いてやってみましょう。
-      </p>
-      <button onclick="showNext('s1', 's2')">次へ</button>
+  <head>
+    <meta charset="UTF-8" />
+    <title>English Write and Use :Unit1 The Tale of Peter Rabbit</title>
+    <style>
+      :root {
+        --bg-color: transparent;
+        --text-color: #222;
+        --card-bg: #fff;
+        --border-radius: 12px;
+        --shadow-color: rgba(0, 0, 0, 0.08);
+        --spacing-unit: 20px;
+        --animation-duration: 0.3s;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        color: var(--text-color);
+        background: var(--bg-color);
+        margin: 0;
+        padding: 2rem;
+        display: flex;
+        justify-content: center;
+        transition: background var(--animation-duration);
+      }
+      #content {
+        background: var(--card-bg);
+        border-radius: var(--border-radius);
+        box-shadow: 0 2px 8px var(--shadow-color);
+        max-width: 720px;
+        width: 100%;
+        padding: 2rem;
+        box-sizing: border-box;
+        word-break: break-word;
+      }
+      .section {
+        margin-bottom: 2rem;
+      }
+      .section button {
+        background: #007aff;
+        border: none;
+        border-radius: 8px;
+        padding: 0.8em 1.5em;
+        font-size: 1em;
+        color: #fff;
+        cursor: pointer;
+        box-shadow: 0 1px 4px var(--shadow-color);
+        transition: background 0.2s, box-shadow 0.2s;
+        outline: none;
+        margin-top: 1rem;
+      }
+      .section button:focus {
+        box-shadow: 0 0 0 3px #aad8ff;
+      }
+      .english {
+        font-family: "Hiragino Mincho Pro", "Times New Roman", serif;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="content">
+      <div class="section" id="s1">
+        <h1>English Write and Use :Unit1 The Tale of Peter Rabbit</h1>
+        <p>
+          こんにちは。EnglishのWrite and Use CourceのUnit1です。<br />
+          ところで、みんなはピーターラビットのおはなし　という本を知っていますか？<br />
+          1902年に出版された、イギリスのビクトリアス・ポター(BEATRIX
+          POTTER)という人のおはなしです。<br />
+          この物語は、英語の物語を読む上で、比較的簡単な問題です。<br />
+          文法も一緒に楽しく学べるので、肩の力を抜いてやってみましょう。
+        </p>
+        <button onclick="showNext('s1', 's2')">次へ</button>
+      </div>
+
+      <div class="section" id="s2" style="display: none">
+        <p>
+          では、物語の冒頭を読んでみましょう。<br />
+          このコースでは、次のように読むのをお勧めします:<br />
+          ① とりあえず目を通してみる。<br />
+          ② 声に出して読んでみる。<br />
+          ③ お話の意味を考えながら、また読んでみる。
+        </p>
+        <button onclick="showNext('s2', 's3')">次へ</button>
+      </div>
+
+      <div class="section" id="s3" style="display: none">
+        <p>さあ、早速始めましょう。</p>
+        <p class="english">
+          The Tale of PETER RABBIT.<br /><br />
+          BY BEATRIX POTTER.<br /><br />
+          ONCE upon a time there were four little Rabbits, and their names were
+          Flopsy, Mopsy, Cotton-tail, and Peter.<br />
+          THEY lived with their Mother in a sand-bank, underneath the root of a
+          very big fir-tree.
+        </p>
+        <p>読み終わったら、次へ！</p>
+        <button onclick="showNext('s3', 's4')">次へ</button>
+      </div>
+
+      <div class="section" id="s4" style="display: none">
+        <p>
+          じゃあ、読み解いてみましょう。<br />
+          開始早々、見慣れないものがありますね。<br />
+          "ONCE upon a time"
+          （最初の単語が大文字になっているのは、文学の慣例のひとつです）<br />
+          これの意味は簡単で、日本でいう「むかしむかし」です。<br />
+          英語の物語では、しょっちゅう出てきます。覚えておくといいでしょう。
+        </p>
+        <button onclick="showNext('s4', 's5')">次へ</button>
+      </div>
+
+      <div class="section" id="s5" style="display: none">
+        <p>
+          では、次のフレーズにいきましょう。<br />
+          「ONCE upon a time there were four little Rabbits,」<br />
+          こうなっていますよね？<br />
+          文的には、次のように分けれることがわかりますか？<br />
+          「ONCE upon a time / there were four little Rabbits,」<br />
+          こうなると簡単ですよね？<br />
+          もしあなたが中一なら、wereがわかんないかも。<br />
+          wereは、areの過去形と言われるもの。〜でしたって意味。<br />
+          there wereは、there areの過去形だから、<br />
+          それらは〜でしたって意味になりますね。(うさぎは人ではないので、それらでしょう。たぶん。)<br />
+          意味的には、「there were four little
+          Rabbits」は、4匹の小さなうさぎがいましたって感じでしょう。
+        </p>
+        <button onclick="showNext('s5', 's6')">次へ</button>
+      </div>
+
+      <div class="section" id="s6" style="display: none">
+        <p>
+          さっきのフレーズの最後に、「,」がありましたよね？<br />
+          「ONCE upon a time there were four little Rabbits,」<br />
+          これは、「,」という便利なものを使って文をつなげているのです。<br />
+          日本語で言う「。」とかみたいなものでしょう。<br />
+          じゃあその続きの文を読み解いていきましょう。<br />
+          「and their names were Flopsy, Mopsy, Cotton-tail,and Peter.」<br />
+          さっき「,」でも言いましたが、「and」があることで、さっきの文「there
+          were four little Rabbits」と関係があることがわかります。<br />
+          中一は、少し難しくなるかも。<br />
+          でも大丈夫。簡単だから。<br />
+          まず、「their」は、「they」が変化したもの。<br />
+          英語は、主語が、後の内容によって変わることがある。(詳しいことは、Grammerコースで勉強するか先生に聞こう)。<br />
+          「their」は、「彼らの」という意味。
+        </p>
+        <button onclick="showNext('s6', 's7')">次へ</button>
+      </div>
+
+      <div class="section" id="s7" style="display: none">
+        <p>
+          次は、「names」について。<br />
+          「name」の意味は知ってるよね？<br />
+          名前、という意味。<br />
+          でも、「name」だけじゃないよね。<br />
+          なんか「s」がついてるよね。<br />
+          この「s」は、「their」が、「彼ら」が複数だから、付く「s」。<br />
+          まあ、主語の数がたくさんいたら、「s」が付くんだなー程度でOK。
+        </p>
+        <button onclick="showNext('s7', 's8')">次へ</button>
+      </div>
+
+      <div class="section" id="s8" style="display: none">
+        <p>
+          「were」はいいよね？<br />
+          じゃあ、どんな意味になるか考えてみよう。<br />
+          「and their names were Flopsy, Mopsy, Cotton-tail,and Peter.」<br />
+          まあ、彼らの名前はそれぞれ、Flopsy, Mopsy, Cotton-tail そして
+          Peterでした。ってところでしょう。<br />
+          (Flopsy, Mopsy,
+          Cotton-tail,Peterは固有名詞。わざわざ辞書で調べなくていいよ。人によってなんて訳す(日本語に表す)かが変わるからこのコースでは、固有名詞は英語にしてるよ)
+        </p>
+        <button onclick="showNext('s8', 's9')">次へ</button>
+      </div>
+
+      <div class="section" id="s9" style="display: none">
+        <p>
+          じゃあ、次の文に行ってみよう。<br />
+          「THEY lived with their Mother in a sand-bank, underneath the root of
+          a very big fir-tree.」<br />
+          わけわかんない単語がたくさんあるかも。<br />
+          まあ、落ち着いて一つ一つ見てみましょう。<br />
+          「lived」は、さっきの「were」と同じ「過去形」ってやつ。<br />
+          「live」= 住むの過去形、住んでいた、みたいな感じ。<br />
+          この話は、あくまでも「Once upon a
+          time」のことだから、大体の動詞が過去形だね。<br />
+          「with」はわかるかな？<br />
+          〜と、って意味。<br />
+          「sand-bank」というのは、砂が堆積しているところという意味。<br />
+          「sand」→砂の「bank」→堤防　ってかんじかな？<br />
+          「underneath」は、「under」と同じような意味。(若干使い方が違うけど、気にしなくていいよ)。<br />
+          で、「fir-tree」は、もみの木、という意味。クリスマスツリーのアレです。<br />
+          「root」は、根っこという意味。
+        </p>
+        <button onclick="showNext('s9', 's10')">次へ</button>
+      </div>
+
+      <div class="section" id="s10" style="display: none">
+        <p>
+          これで大体わかったかな？<br />
+          「THEY lived with their Mother in a sand-bank, underneath the root of
+          a very big fir-tree.」<br />
+          大体、「彼らは、(彼らの)母と、大きなもみの木の根元の盛り上がった土に中に住んでいました」みたいな感じの情景が浮かべばOK。
+        </p>
+        <button onclick="showNext('s10', 's11')">次へ</button>
+      </div>
+
+      <div class="section" id="s11" style="display: none">
+        <p>
+          どうですか？<br />
+          慣れないまでは、少し大変かもしれません。<br />
+          しかし、一回慣れて仕舞えば、読めるお話が爆発的に増えることでしょう。<br />
+          中学の英語を頑張れば、あなたの好きな本が、現地の言葉で読めるかもしれません。<br />
+          さあ、Part2に進んで、もっと物語にのめり込んでいきましょう!
+        </p>
+      </div>
     </div>
 
-    <!-- Section 2: 読む前の説明 -->
-    <div class="section" id="s2" style="display: none;">
-      <p>
-        では、物語の冒頭を読んでみましょう。<br>
-        このコースでは、次のように読むのをお勧めします:<br>
-        ① とりあえず目を通してみる。<br>
-        ② 声に出して読んでみる。<br>
-        ③ お話の意味を考えながら、また読んでみる.
-      </p>
-      <button onclick="showNext('s2', 's3')">次へ</button>
-    </div>
-
-    <!-- Section 3: 物語の本文 (英語部分は明朝体) -->
-    <div class="section" id="s3" style="display: none;">
-      <p>
-        さあ、早速始めましょう。
-      </p>
-      <p class="english" style="white-space: pre-line;">
-The Tale of    
-PETER RABBIT.  
-
-BY   
-BEATRIX POTTER.  
-
-ONCE upon a time there were four little Rabbits, and their names were Flopsy, Mopsy, Cotton-tail, and Peter.   
-THEY lived with their Mother in a sand-bank, underneath the root of a very big fir-tree.
-      </p>
-      <p>
-        読み終わったら、次へ！
-      </p>
-      <button onclick="showNext('s3', 's4')">次へ</button>
-    </div>
-
-    <!-- Section 4: 解説 -->
-    <div class="section" id="s4" style="display: none;">
-      <p>
-        じゃあ、読み解いてみましょう。<br>
-        開始早々、見慣れないものがありますね。<br>
-        "ONCE upon a time" （最初の単語が大文字になっているのは、文学の慣例のひとつです）<br>
-        これの意味は簡単で、日本でいう「むかしむかし」です。<br>
-        英語の物語では、しょっちゅう出てきます。覚えておくといいでしょう。
-      </p>
-      <p>
-        では、次のフレーズにいきましょう。<br>
-        <code>ONCE upon a time there were four little Rabbits,</code><br>
-        こうなっていますよね？ 文的には、次のように分けられることがわかりますか？<br>
-        <code>ONCE upon a time / there were four little Rabbits,</code><br>
-        こうなると簡単ですよね？ もしあなたが中一なら、<code>were</code>がわからないかも。<br>
-        <code>were</code>は <code>are</code> の過去形、〜でしたという意味です。<br>
-        <code>there were</code>は <code>there are</code> の過去形なので、「それらは〜でした」となります。
-      </p>
-      <p>
-        意味的には、<code>there were four little Rabbits</code> は、4匹の小さなうさぎがいましたという感じです。<br>
-        さっきのフレーズの最後に、<code>,</code> がありましたよね？<br>
-        これは、<code>,</code> という便利な記号を使って文をつなげているのです。<br>
-        日本語で言う「。」のようなものです。<br>
-        じゃあ、その続きの文を読み解いていきましょう。<br>
-        <code>and their names were Flopsy, Mopsy, Cotton-tail, and Peter.</code><br>
-        先ほど <code>,</code> についても言いましたが、<code>and</code> によって先の文と関係付けられていることがわかります。<br>
-        中一には少し難しいかもしれませんが、簡単です。<br>
-        まず、<code>their</code> は <code>they</code> の変化形で、「彼らの」という意味です。
-      </p>
-      <p>
-        次は、<code>names</code> について。<br>
-        <code>name</code> は「名前」という意味ですが、<br>
-        複数なので <code>s</code> が付いています。<br>
-        主語が複数の場合、<code>s</code> が付くという仕組みです。
-      </p>
-      <p>
-        そして、<code>were</code> はどういう意味か考えてみましょう。<br>
-        先ほどの文のように、彼らの名前はそれぞれ Flopsy, Mopsy, Cotton-tail, そして Peter でした。<br>
-        （固有名詞なので、辞書で調べる必要はありません）
-      </p>
-      <p>
-        次に、<code>THEY lived with their Mother in a sand-bank, underneath the root of a very big fir-tree.</code><br>
-        なかなか難しい単語もありますが、<br>
-        <code>lived</code> は <code>live</code> の過去形、つまり「住んでいた」という意味です。<br>
-        この物語は「Once upon a time」が前提なので、ほとんどの動詞が過去形になっています。
-      </p>
-      <p>
-        最後に、全体の流れをまとめると、<br>
-        上記の英文は以下のように訳せます:
-      </p>
-      <pre style="background: #f5f5f7; padding: 1em; border-radius: 8px;">
-ピーターラビットのおはなし
-
-ビクトリアスポター著
-
-むかしむかし、4匹の小さなうさぎが住んでいました。
-名前をそれぞれ、Flopsy, Mopsy, Cotton-tail そして Peter といいました。
-彼らは、母と大きなもみの木の根元の盛り上がった土の中に住んでいました。
-      </pre>
-      <p>
-        どうですか？ 慣れるまでは少し大変かもしれません。<br>
-        しかし、一度慣れてしまえば、英語で読めるお話はどんどん広がっていくことでしょう。<br>
-        中学英語を頑張れば、あなたの好きな本が現地の言葉で読めるかもしれません。<br>
-        さあ、Part2に進んで、もっと物語にのめり込みましょう！
-      </p>
-    </div>
-  </div>
-
-  <script>
-    function showNext(current, next) {
-      document.getElementById(current).style.display = 'none';
-      document.getElementById(next).style.display = 'block';
-    }
-  </script>
-</body>
+    <script>
+      function showNext(current, next) {
+        document.getElementById(current).style.display = "none";
+        document.getElementById(next).style.display = "block";
+      }
+    </script>
+  </body>
 </html>
