@@ -1,5 +1,9 @@
 use wasm_bindgen::prelude::*;
 use webrtc_p2p::{Peer, Message};
+use std::collections::HashMap;
+use rand::Rng;
+use tokio::net::TcpListener;
+use tokio::net::TcpStream;
 
 #[wasm_bindgen]
 extern "C" {
@@ -10,13 +14,22 @@ extern "C" {
 #[wasm_bindgen]
 pub struct P2PNetwork {
     peers: Vec<Peer>,
+    peer_id: String,
 }
 
 #[wasm_bindgen]
 impl P2PNetwork {
     #[wasm_bindgen(constructor)]
     pub fn new() -> Self {
-        P2PNetwork { peers: vec![] }
+        P2PNetwork {
+            peers: vec![],
+            peer_id: String::new(),
+        }
+    }
+
+    #[wasm_bindgen]
+    pub fn set_peer_id(&mut self, id: String) {
+        self.peer_id = id;
     }
 
     #[wasm_bindgen]
