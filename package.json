@@ -39,9 +39,14 @@
     "node": ">=18.0.0"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "@types/node": "^24.0.15",
+    "concurrently": "^8.2.2",
+    "webrtc": "^1.14.1",
+    "webrtc-adapter": "^9.0.3"
   },
   "dependencies": {
-    "nodemailer": "^7.0.5"
+    "assemblyscript": "^0.28.3",
+    "nodemailer": "^7.0.5",
+    "standalone": "^0.0.1"
   }
 }

@@ -1,0 +1,19 @@
+[package]
+name = "p2p_network"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+path = "src/main.rs"
+
+[[bin]]
+name = "p2p_network_bin"
+path = "src/main.rs"
+
+[dependencies]
+webrtc-p2p = "0.1.0"
+
+[target.'cfg(wasm32)'.dependencies]
+[target.'cfg(wasm32)'.dependencies]
+getrandom = { version = "0.2.16", features = ["js"] }
