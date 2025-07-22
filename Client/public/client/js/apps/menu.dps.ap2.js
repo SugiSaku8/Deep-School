@@ -67,7 +67,7 @@ export function appInit(shell) {
         </div>
          <div class="menu-item">
           <img src="re/ico/MoralFruite.png" alt="MoralFruitアイコン" class="menu-icon" />
-          <div class="menu-label chalk-text" id="menu-feedback" style="cursor: pointer" data-lang-key="menu_feedback">MoralFruit</div>
+          <div class="menu-label chalk-text" id="menu-moralfruite" style="cursor: pointer" data-lang-key="menu_feedback">MoralFruit</div>
         </div>
       </div>
     </div>
