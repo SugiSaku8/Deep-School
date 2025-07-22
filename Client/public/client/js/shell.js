@@ -37,6 +37,7 @@ import * as eguideApp from './apps/eguide.dps.ap2.js';
 import * as tutorialApp from './apps/tutorial.app.js';
 import * as gamemakerApp from './apps/gamemaker.dps.ap2.js';
 import * as feedbackApp from './apps/feedback.dps.ap2.js';
+import * as moralfruitApp from './apps/moral-fruit.dps.ap2.js';
 
 const appModules = {
   chat: chatApp,
@@ -50,6 +51,7 @@ const appModules = {
   tutorial: tutorialApp,
   gamemaker: gamemakerApp,
   feedback: feedbackApp,
+  moralfruit: moralfruitApp
 };
 
 // Deep-School ログシステム

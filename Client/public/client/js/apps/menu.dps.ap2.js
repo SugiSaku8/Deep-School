@@ -65,6 +65,10 @@ export function appInit(shell) {
           <img src="re/ico/feed.svg" alt="フィードバックアイコン" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-feedback" style="cursor: pointer" data-lang-key="menu_feedback">フィードバック</div>
         </div>
+         <div class="menu-item">
+          <img src="re/ico/MoralFruite.png" alt="MoralFruitアイコン" class="menu-icon" />
+          <div class="menu-label chalk-text" id="menu-feedback" style="cursor: pointer" data-lang-key="menu_feedback">MoralFruit</div>
+        </div>
       </div>
     </div>
     
@@ -460,6 +464,10 @@ let disabled = `  <div class="menu-item">
     'menu-pickramu': () => {
       shell.log({from: 'dp.app.menu.out', message: 'MenuApp: Pickramuを開く', level: 'info'});
       shell.loadApp('pickramu');
+    },
+    'menu-moralfruite': () => {
+      shell.log({from: 'dp.app.menu.out', message: 'MenuApp: MoralFruitを開く', level: 'info'});
+      shell.loadApp('moralfruit');
     },/*
     'menu-gamemaker': () => {
       shell.log({from: 'dp.app.menu.out', message: 'MenuApp: GameMakerを開く', level: 'info'});
