@@ -58,25 +58,39 @@ class EthicsLesson {
     });
   }
 
-  async startLesson() {
-    // Lesson logic goes here
+ async startLesson() {
+    // Get the selected theme
+    const selectedTheme = this.themeSelect.value;
+
+    // Create a new lesson container
+    const lessonContainer = document.createElement('div');
+    lessonContainer.className = 'lesson-container';
+
+    // Add a title to the lesson container
+    const title = document.createElement('h2');
+    title.textContent = `Lesson: ${selectedTheme}`;
+    lessonContainer.appendChild(title);
+
+    // Add a paragraph to the lesson container
+    const paragraph = document.createElement('p');
+    paragraph.textContent = `This is the lesson content for ${selectedTheme}.`;
+    lessonContainer.appendChild(paragraph);
+
+    // Add a button to the lesson container
+    const button = document.createElement('button');
+    button.textContent = 'Next';
+    button.addEventListener('click', () => {
+      // Go to the next lesson
+      this.nextLesson();
+    });
+    lessonContainer.appendChild(button);
+
+    // Add the lesson container to the page
+    document.body.appendChild(lessonContainer);
   }
 }
 
-// Initialize EthicsLesson
-const ethicsLesson = new EthicsLesson();
 
-// Call showThemeSelectScreen when document is ready
-document.addEventListener('DOMContentLoaded', () => {
-  ethicsLesson.showThemeSelectScreen();
-});
-
-async function initializeEthicsLesson() {
-  const ethicsLesson = new EthicsLesson();
-  await ethicsLesson.startLesson();
-}
-
-document.addEventListener('DOMContentLoaded', initializeEthicsLesson);
 
 // appInit関数
 export async function appInit(shell) {
@@ -93,7 +107,6 @@ export async function appInit(shell) {
   // テーマ選択画面を表示
   const ethicsLesson = new EthicsLesson();
   await ethicsLesson.showThemeSelectScreen();
-
   // appInit関数内で対話を開始
   document.getElementById("theme-select").addEventListener('change', async (event) => {
     const selectedTheme = themes.find(t => t.title === event.target.value);
