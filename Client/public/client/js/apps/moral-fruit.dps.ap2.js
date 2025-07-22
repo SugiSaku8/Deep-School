@@ -6,7 +6,6 @@ export const appMeta = {
   title: "Moral-Fruit",
   icon: "re/ico/MoralFruite.png",
 };
-
 const aiRoles = ["neutral", "right-wing", "left-wing"];
 const aiSpeakers = [
   { role: aiRoles[Math.floor(Math.random() * aiRoles.length)], name: "AI1" },
@@ -18,7 +17,6 @@ const themes = [
   { title: "環境保護", description: "地球温暖化対策の必要性" },
   { title: "社会保障", description: "高齢者福祉制度の見直し" },
   { title: "教育改革", description: "学習内容と方法の変革" },
-  { title: "戦争と平和", debscription: "正しい戦争はあるのか" },
 ];
 
 class EthicsLesson {
@@ -35,15 +33,20 @@ class EthicsLesson {
     this.discussionArea = document.getElementById("discussion-area");
 
     this.themeSelect.addEventListener("change", async () => {
-      this.currentTheme = themes.find(
-        (t) => t.title === this.themeSelect.value
-      );
-
+      this.currentTheme = themes.find(t => t.title === this.themeSelect.value);
+      
       await this.displayAIStatement();
       await this.getUserResponse();
       await this.generateAIResponse();
       this.updateDiscussionArea();
     });
+
+    // 初期表示
+    this.themeSelect.value = themes[0].title;
+    await this.displayAIStatement();
+    await this.getUserResponse();
+    await this.generateAIResponse();
+    this.updateDiscussionArea();
   }
 
   async displayAIStatement() {
@@ -68,9 +71,7 @@ class EthicsLesson {
   }
 
   async getUserResponse() {
-    const userResponse = prompt(
-      `What's your opinion on ${this.currentTheme.title}?`
-    );
+    const userResponse = prompt(`What's your opinion on ${this.currentTheme.title}?`);
     this.discussionArea.innerHTML += `<p>ユーザー: ${userResponse}</p>`;
     this.userResponses.push(userResponse);
   }
@@ -84,9 +85,7 @@ class EthicsLesson {
     const conversationHistory = this.userResponses.join("\n");
     const prompt = `You are a neutral AI assistant for an ethics lesson. Your goal is to engage in a thoughtful discussion about ${this.currentTheme.title}. Consider the following points:\n\n1. Provide balanced arguments for both sides.\n2. Address potential consequences of each approach.\n3. Suggest practical steps individuals can take based on the discussion.\n4. Encourage critical thinking and open-mindedness.\n5. Use evidence-based reasoning when possible.\n\nContinue the discussion with a response that builds upon the user's previous statements and adds depth to the conversation.`;
 
-    const response = await ssession(
-      prompt + "\n\nConversation History:\n" + conversationHistory
-    );
+    const response = await ssession(prompt + "\n\nConversation History:\n" + conversationHistory);
     return response.trim();
   }
 
@@ -101,17 +100,15 @@ async function initializeEthicsLesson() {
   await ethicsLesson.startLesson();
 }
 
-document.addEventListener("DOMContentLoaded", initializeEthicsLesson);
+document.addEventListener('DOMContentLoaded', initializeEthicsLesson);
 
 // ユーザーインターフェースの作成
-const ethicsApp = document.createElement("div");
-ethicsApp.className = "ethics-lesson-app";
+const ethicsApp = document.createElement('div');
+ethicsApp.className = 'ethics-lesson-app';
 ethicsApp.innerHTML = `
   <h1>道徳の授業</h1>
   <select id="theme-select">
-    ${themes
-      .map((theme) => `<option value="${theme.title}">${theme.title}</option>`)
-      .join("")}
+    ${themes.map(theme => `<option value="${theme.title}">${theme.title}</option>`).join('')}
   </select>
   <button onclick="initializeEthicsLesson()">開始</button>
   <div id="discussion-area"></div>
@@ -120,28 +117,45 @@ ethicsApp.innerHTML = `
 document.body.appendChild(ethicsApp);
 
 // スタイルを追加
-const style = document.createElement("style");
+const style = document.createElement('style');
 style.textContent = `
   .ethics-lesson-app {
     max-width: 800px;
     margin: auto;
     padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
   }
   #theme-select {
     width: 100%;
     padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    background-color: white;
   }
   button {
     background-color: #007aff;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 15px 30px;
     cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background-color: #0056b3;
   }
   #discussion-area {
     margin-top: 20px;
     border: 1px solid #ccc;
-    padding: 10px;
+    padding: 15px;
+    background-color: white;
+    border-radius: 10px;
+    overflow-y: auto;
+    max-height: 300px;
   }
 `;
 document.head.appendChild(style);
@@ -165,8 +179,7 @@ export function appInit(shell) {
     </div>
   `;
 
-  document.getElementById("ethics-back-btn").onclick = () =>
-    shell.loadApp("menu");
+  document.getElementById("ethics-back-btn").onclick = () => shell.loadApp("menu");
 
   // EthicsLessonアプリの初期化
   initializeEthicsLesson();
