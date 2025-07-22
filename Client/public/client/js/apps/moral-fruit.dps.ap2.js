@@ -6,6 +6,7 @@ export const appMeta = {
   title: "Moral-Fruit",
   icon: "re/ico/MoralFruite.png",
 };
+
 const aiRoles = ["neutral", "right-wing", "left-wing"];
 const aiSpeakers = [
   { role: aiRoles[Math.floor(Math.random() * aiRoles.length)], name: "AI1" },
@@ -29,30 +30,60 @@ class EthicsLesson {
   }
 
   async startLesson() {
-    this.themeSelect = document.getElementById("theme-select");
-    this.discussionArea = document.getElementById("discussion-area");
+    // テーマ選択画面を表示
+    await this.showThemeSelectScreen();
 
-    this.themeSelect.addEventListener("change", async () => {
-      this.currentTheme = themes.find(
-        (t) => t.title === this.themeSelect.value
-      );
+    // 選択されたテーマに基づいて対話を開始
+    const selectedTheme = themes.find(t => t.title === this.themeSelect.value);
+    if (!selectedTheme) {
+      console.error("Invalid theme selected");
+      return;
+    }
+    this.currentTheme = selectedTheme;
 
-      await this.displayAIStatement();
-      await this.getUserResponse();
-      await this.generateAIResponse();
-      this.updateDiscussionArea();
+    await this.displayAIStatement();
+    await this.getUserResponse();
+    await this.generateAIResponse();
+    this.updateDiscussionArea();
+  }
+
+  async showThemeSelectScreen() {
+    const themeSelectContainer = document.createElement('div');
+    themeSelectContainer.className = 'theme-select-container';
+
+    const title = document.createElement('h2');
+    title.textContent = '道徳の授業';
+    themeSelectContainer.appendChild(title);
+
+    const themeList = document.createElement('ul');
+    themes.forEach(theme => {
+      const li = document.createElement('li');
+      li.textContent = theme.title;
+      li.addEventListener('click', () => {
+        this.themeSelect.value = theme.title;
+      });
+      themeList.appendChild(li);
     });
 
-    // 初期表示
-    if (themes.length > 0) {
-      this.currentTheme = themes[0];
-      await this.displayAIStatement();
-      await this.getUserResponse();
-      await this.generateAIResponse();
-      this.updateDiscussionArea();
-    } else {
-      console.error("No themes available");
-    }
+    themeSelectContainer.appendChild(themeList);
+
+    document.body.innerHTML += `
+      <div class="modal-overlay"></div>
+      ${themeSelectContainer.outerHTML}
+    `;
+
+    // モーダルオーバーレイとコンテンツをクリックで閉じる
+    document.querySelector('.modal-overlay').addEventListener('click', () => {
+      document.body.removeChild(document.querySelector('.modal-overlay'));
+      document.body.removeChild(document.querySelector('.theme-select-container'));
+    });
+
+    // OKボタンをクリックしたときの処理
+    document.querySelector('.theme-select-container button').addEventListener('click', () => {
+      document.body.removeChild(document.querySelector('.modal-overlay'));
+      document.body.removeChild(document.querySelector('.theme-select-container'));
+      this.startLesson();
+    });
   }
 
   async displayAIStatement() {
@@ -77,9 +108,7 @@ class EthicsLesson {
   }
 
   async getUserResponse() {
-    const userResponse = prompt(
-      `What's your opinion on ${this.currentTheme.title}?`
-    );
+    const userResponse = prompt(`What's your opinion on ${this.currentTheme.description}?`);
     this.discussionArea.innerHTML += `<p>ユーザー: ${userResponse}</p>`;
     this.userResponses.push(userResponse);
   }
@@ -91,11 +120,9 @@ class EthicsLesson {
 
   async getSmartAIResponse() {
     const conversationHistory = this.userResponses.join("\n");
-    const prompt = `You are a neutral AI assistant for an ethics lesson. Your goal is to engage in a thoughtful discussion about ${this.currentTheme.title}. Consider the following points:\n\n1. Provide balanced arguments for both sides.\n2. Address potential consequences of each approach.\n3. Suggest practical steps individuals can take based on the discussion.\n4. Encourage critical thinking and open-mindedness.\n5. Use evidence-based reasoning when possible.\n\nContinue the discussion with a response that builds upon the user's previous statements and adds depth to the conversation.`;
+    const prompt = `You are a neutral AI assistant for an ethics lesson. Your goal is to engage in a thoughtful discussion about ${this.currentTheme.description}. Consider the following points:\n\n1. Provide balanced arguments for both sides.\n2. Address potential consequences of each approach.\n3. Suggest practical steps individuals can take based on the discussion.\n4. Encourage critical thinking and open-mindedness.\n5. Use evidence-based reasoning when possible.\n\nContinue the discussion with a response that builds upon the user's previous statements and adds depth to the conversation.`;
 
-    const response = await ssession(
-      prompt + "\n\nConversation History:\n" + conversationHistory
-    );
+    const response = await ssession(prompt + "\n\nConversation History:\n" + conversationHistory);
     return response.trim();
   }
 
@@ -110,70 +137,10 @@ async function initializeEthicsLesson() {
   await ethicsLesson.startLesson();
 }
 
-document.addEventListener("DOMContentLoaded", initializeEthicsLesson);
-
-// ユーザーインターフェースの作成
-const ethicsApp = document.createElement("div");
-ethicsApp.className = "ethics-lesson-app";
-ethicsApp.innerHTML = `
-  <h1>道徳の授業</h1>
-  <select id="theme-select">
-    ${themes
-      .map((theme) => `<option value="${theme.title}">${theme.title}</option>`)
-      .join("")}
-  </select>
-  <button onclick="initializeEthicsLesson()">開始</button>
-  <div id="discussion-area"></div>
-`;
-
-document.body.appendChild(ethicsApp);
-
-// スタイルを追加
-const style = document.createElement("style");
-style.textContent = `
-  .ethics-lesson-app {
-    max-width: 800px;
-    margin: auto;
-    padding: 20px;
-    background-color: #f0f0f0;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  }
-  #theme-select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    background-color: white;
-  }
-  button {
-    background-color: #007aff;
-    color: white;
-    border: none;
-    padding: 15px 30px;
-    cursor: pointer;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-  }
-  button:hover {
-    background-color: #0056b3;
-  }
-  #discussion-area {
-    margin-top: 20px;
-    border: 1px solid #ccc;
-    padding: 15px;
-    background-color: white;
-    border-radius: 10px;
-    overflow-y: auto;
-    max-height: 300px;
-  }
-`;
-document.head.appendChild(style);
+document.addEventListener('DOMContentLoaded', initializeEthicsLesson);
 
 // appInit関数
-export function appInit(shell) {
+export async function appInit(shell) {
   const root = document.getElementById("app-root");
   if (!root) {
     ds.log({
@@ -183,17 +150,20 @@ export function appInit(shell) {
     });
     return;
   }
-  root.innerHTML = `
-    <div class="page-container full-screen ethics-bg">
-      <button class="go-back-button" id="ethics-back-btn" data-lang-key="back">←</button>
-      <h1 class="page-title" data-lang-key="ethics_note">道徳の授業</h1>
-      <div id="ethics-app" class="ethics-app"></div>
-    </div>
-  `;
 
-  document.getElementById("ethics-back-btn").onclick = () =>
-    shell.loadApp("menu");
+  // テーマ選択画面を表示
+  const ethicsLesson = new EthicsLesson();
+  await ethicsLesson.showThemeSelectScreen();
 
-  // EthicsLessonアプリの初期化
-  initializeEthicsLesson();
+  // appInit関数内で対話を開始
+  document.getElementById("theme-select").addEventListener('change', async (event) => {
+    const selectedTheme = themes.find(t => t.title === event.target.value);
+    if (selectedTheme) {
+      ethicsLesson.currentTheme = selectedTheme;
+      await ethicsLesson.displayAIStatement();
+      await ethicsLesson.getUserResponse();
+      await ethicsLesson.generateAIResponse();
+      ethicsLesson.updateDiscussionArea();
+    }
+  });
 }
