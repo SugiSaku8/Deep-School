@@ -1,5 +1,11 @@
 // moral-fruit.dps.ap2.js
-import { ssession } from "./toastermachine.dps.bap.js";
+import {
+  GeminiProcessor,
+  CoachingSession,
+  ChatHistoryManager,
+} from "../chat/tm/model.mjs";
+//nantonaku load
+import { GeminiIninter, ssession } from "./toastermachine.dps.bap.js";
 
 export const appMeta = {
   name: "moral-fruit",
@@ -8,114 +14,70 @@ export const appMeta = {
 };
 
 const aiRoles = ["neutral", "right-wing", "left-wing"];
-const aiSpeakers = [
-  { role: aiRoles[Math.floor(Math.random() * aiRoles.length)], name: "AI1" },
-  { role: aiRoles[Math.floor(Math.random() * aiRoles.length)], name: "AI2" },
-  { role: aiRoles[Math.floor(Math.random() * aiRoles.length)], name: "AI3" },
-];
 
 const themes = [
   { title: "環境保護", description: "地球温暖化対策の必要性" },
   { title: "社会保障", description: "高齢者福祉制度の見直し" },
   { title: "教育改革", description: "学習内容と方法の変革" },
 ];
-
-class EthicsLesson {
+class moral_desk {
   constructor() {
-    this.themeSelect = null;
+    this.theme = themes[Math.floor(Math.random() * themes.length)];
+    this.aiSpeakers = aiSpeakers;
+    this.session = ssession;
   }
 
-  async showThemeSelectScreen() {
-    const themeSelectContainer = document.createElement('div');
-    themeSelectContainer.className = 'theme-select-container';
-
-    const title = document.createElement('h2');
-    title.textContent = '道徳の授業';
-    themeSelectContainer.appendChild(title);
-
-    const themeList = document.createElement('ul');
-    themes.forEach(theme => {
-      const li = document.createElement('li');
-      li.textContent = theme.title;
-      li.addEventListener('click', () => {
-        this.themeSelect.value = theme.title;
-        this.startLesson(); // Call startLesson when a theme is selected
-      });
-      themeList.appendChild(li);
-    });
-
-    themeSelectContainer.appendChild(themeList);
-
-    document.body.innerHTML += `
-      <div class="modal-overlay"></div>
-      ${themeSelectContainer.outerHTML}
-    `;
-
-    // モーダルオーバーレイとコンテンツをクリックで閉じる
-    document.querySelector('.modal-overlay').addEventListener('click', () => {
-      document.body.removeChild(document.querySelector('.modal-overlay'));
-      document.body.removeChild(document.querySelector('.theme-select-container'));
-    });
+  getTheme() {
+    return themes[Math.floor(Math.random() * themes.length)];
   }
 
- async startLesson() {
-    // Get the selected theme
-    const selectedTheme = this.themeSelect.value;
-
-    // Create a new lesson container
-    const lessonContainer = document.createElement('div');
-    lessonContainer.className = 'lesson-container';
-
-    // Add a title to the lesson container
-    const title = document.createElement('h2');
-    title.textContent = `Lesson: ${selectedTheme}`;
-    lessonContainer.appendChild(title);
-
-    // Add a paragraph to the lesson container
-    const paragraph = document.createElement('p');
-    paragraph.textContent = `This is the lesson content for ${selectedTheme}.`;
-    lessonContainer.appendChild(paragraph);
-
-    // Add a button to the lesson container
-    const button = document.createElement('button');
-    button.textContent = 'Next';
-    button.addEventListener('click', () => {
-      // Go to the next lesson
-      this.nextLesson();
-    });
-    lessonContainer.appendChild(button);
-
-    // Add the lesson container to the page
-    document.body.appendChild(lessonContainer);
-  }
-}
-
-
-
-// appInit関数
-export async function appInit(shell) {
-  const root = document.getElementById("app-root");
-  if (!root) {
-    ds.log({
-      from: "dp.app.ethics.out",
-      message: "EthicsLessonApp: #app-rootが見つかりません",
-      level: "error",
-    });
-    return;
+  getAISpeakers() {
+    this.aiSpeakers._1.role = aiRoles[1];
+    this.aiSpeakers._2.role = aiRoles[1];
+    this.aiSpeakers._3.role = aiRoles[2];
+    this.aiSpeakers._4.role = aiRoles[2];
+    this.aiSpeakers._5.role = aiRoles[3];
+    this.aiSpeakers._6.role = aiRoles[3];
   }
 
-  // テーマ選択画面を表示
-  const ethicsLesson = new EthicsLesson();
-  await ethicsLesson.showThemeSelectScreen();
-  // appInit関数内で対話を開始
-  document.getElementById("theme-select").addEventListener('change', async (event) => {
-    const selectedTheme = themes.find(t => t.title === event.target.value);
-    if (selectedTheme) {
-      ethicsLesson.currentTheme = selectedTheme;
-      await ethicsLesson.displayAIStatement();
-      await ethicsLesson.getUserResponse();
-      await ethicsLesson.generateAIResponse();
-      ethicsLesson.updateDiscussionArea();
-    }
-  });
+  getSession() {
+    const gemini = GeminiIninter();
+    const session = ssession(gemini);
+    this.session = session;
+  }
+  latest(speakers) {
+    return speakers;
+  }
+  facilitate() {
+    this.facilitate._1 = this.latest(this.aiSpeakers._1.result);
+    this.facilitate._2 = this.latest(this.aiSpeakers._2.result);
+    this.facilitate._3 = this.latest(this.aiSpeakers._3.result);
+    this.facilitate._4 = this.latest(this.aiSpeakers._4.result);
+    this.facilitate._5 = this.latest(this.aiSpeakers._5.result);
+    this.facilitate._6 = this.latest(this.aiSpeakers._6.result);
+    this.facilitate.theme = this.theme;
+    this.facilitate.report = ```
+    この討論のテーマは、${this.facilitate.themme.title} です。
+    あなたは、この討論に参加しています。
+    参加者は、以下の通りです。
+    1.中立者
+    2.中立者
+    3.右派
+    4.右派
+    5.左派
+    6.左派
+    7.ユーザー
+    それぞれの意見者は、次のような意見を述べています。
+    1. ${this.facilitate._1}
+    2. ${this.facilitate._2}
+    3. ${this.facilitate._3}    
+    4. ${this.facilitate._4}    
+    5. ${this.facilitate._5}    
+    6. ${this.facilitate._6}  
+    7. ${this.user.result}
+    さて、あなたはこの答えのない質問にどのような答えを出しますか？
+    あなたは、
+    ```
+    return this.facilitate;
+  }
 }
