@@ -33,8 +33,10 @@ class EthicsLesson {
     this.discussionArea = document.getElementById("discussion-area");
 
     this.themeSelect.addEventListener("change", async () => {
-      this.currentTheme = themes.find(t => t.title === this.themeSelect.value);
-      
+      this.currentTheme = themes.find(
+        (t) => t.title === this.themeSelect.value
+      );
+
       await this.displayAIStatement();
       await this.getUserResponse();
       await this.generateAIResponse();
@@ -42,11 +44,15 @@ class EthicsLesson {
     });
 
     // 初期表示
-    this.themeSelect.value = themes[0].title;
-    await this.displayAIStatement();
-    await this.getUserResponse();
-    await this.generateAIResponse();
-    this.updateDiscussionArea();
+    if (themes.length > 0) {
+      this.currentTheme = themes[0];
+      await this.displayAIStatement();
+      await this.getUserResponse();
+      await this.generateAIResponse();
+      this.updateDiscussionArea();
+    } else {
+      console.error("No themes available");
+    }
   }
 
   async displayAIStatement() {
@@ -71,7 +77,9 @@ class EthicsLesson {
   }
 
   async getUserResponse() {
-    const userResponse = prompt(`What's your opinion on ${this.currentTheme.title}?`);
+    const userResponse = prompt(
+      `What's your opinion on ${this.currentTheme.title}?`
+    );
     this.discussionArea.innerHTML += `<p>ユーザー: ${userResponse}</p>`;
     this.userResponses.push(userResponse);
   }
@@ -85,7 +93,9 @@ class EthicsLesson {
     const conversationHistory = this.userResponses.join("\n");
     const prompt = `You are a neutral AI assistant for an ethics lesson. Your goal is to engage in a thoughtful discussion about ${this.currentTheme.title}. Consider the following points:\n\n1. Provide balanced arguments for both sides.\n2. Address potential consequences of each approach.\n3. Suggest practical steps individuals can take based on the discussion.\n4. Encourage critical thinking and open-mindedness.\n5. Use evidence-based reasoning when possible.\n\nContinue the discussion with a response that builds upon the user's previous statements and adds depth to the conversation.`;
 
-    const response = await ssession(prompt + "\n\nConversation History:\n" + conversationHistory);
+    const response = await ssession(
+      prompt + "\n\nConversation History:\n" + conversationHistory
+    );
     return response.trim();
   }
 
@@ -100,15 +110,17 @@ async function initializeEthicsLesson() {
   await ethicsLesson.startLesson();
 }
 
-document.addEventListener('DOMContentLoaded', initializeEthicsLesson);
+document.addEventListener("DOMContentLoaded", initializeEthicsLesson);
 
 // ユーザーインターフェースの作成
-const ethicsApp = document.createElement('div');
-ethicsApp.className = 'ethics-lesson-app';
+const ethicsApp = document.createElement("div");
+ethicsApp.className = "ethics-lesson-app";
 ethicsApp.innerHTML = `
   <h1>道徳の授業</h1>
   <select id="theme-select">
-    ${themes.map(theme => `<option value="${theme.title}">${theme.title}</option>`).join('')}
+    ${themes
+      .map((theme) => `<option value="${theme.title}">${theme.title}</option>`)
+      .join("")}
   </select>
   <button onclick="initializeEthicsLesson()">開始</button>
   <div id="discussion-area"></div>
@@ -117,7 +129,7 @@ ethicsApp.innerHTML = `
 document.body.appendChild(ethicsApp);
 
 // スタイルを追加
-const style = document.createElement('style');
+const style = document.createElement("style");
 style.textContent = `
   .ethics-lesson-app {
     max-width: 800px;
@@ -179,7 +191,8 @@ export function appInit(shell) {
     </div>
   `;
 
-  document.getElementById("ethics-back-btn").onclick = () => shell.loadApp("menu");
+  document.getElementById("ethics-back-btn").onclick = () =>
+    shell.loadApp("menu");
 
   // EthicsLessonアプリの初期化
   initializeEthicsLesson();
