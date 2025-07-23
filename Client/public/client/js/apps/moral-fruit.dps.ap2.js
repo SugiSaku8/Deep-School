@@ -605,9 +605,7 @@ export function appInit(shell) {
         color: white;
       }
   </style>
-`;
-
-  // メニューアイテムの設定
+  <script>
   const menuItems = {
     "menu-wars": () => {
       shell.log({
@@ -662,6 +660,12 @@ export function appInit(shell) {
       document.getElementById("mf-theme3").value = "人間は自然に干渉すべきか";
     },
   };
+  </script>
+
+`;
+
+  // メニューアイテムの設定
+  
   function selectTheme(element) {
     document
       .querySelectorAll(".mf-theme-btn")
