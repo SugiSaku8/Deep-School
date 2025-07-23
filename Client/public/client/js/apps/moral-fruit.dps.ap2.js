@@ -13,13 +13,22 @@ export const appMeta = {
   icon: "re/ico/MoralFruite.png",
 };
 
-const aiRoles = ["neutral", "right-wing", "left-wing"];
+const aiRoles = ["national", "right-wing", "left-wing"];
+const aiRoles_esk = {
+  neutral:
+    "常に中立的であり、客観的な情報を提供します。すべての意見を尊重し、偏りのない視点を維持します。",
+  "right-wing":
+    "保守的な視点から情報を提供し、伝統的な価値観を重視します。対立する左翼の意見を排除します。",
+  "left-wing":
+    "革新的な視点から情報を提供し、社会正義と平等を重視します。対立する右翼の意見を排除します。",
+};
 
 const themes = [
   { title: "環境保護", description: "地球温暖化対策の必要性" },
   { title: "社会保障", description: "高齢者福祉制度の見直し" },
   { title: "教育改革", description: "学習内容と方法の変革" },
 ];
+
 class moral_desk {
   constructor() {
     this.theme = themes[Math.floor(Math.random() * themes.length)];
@@ -27,6 +36,22 @@ class moral_desk {
     this.session = ssession;
   }
 
+  start(nfeath) {
+    this.getTheme();
+    this.getAISpeakers();
+    this.getSession();
+    for (let step = 0; step < nfeath; step++) {
+      const facilitated = this.facilitate();
+      const userResponse = this.getUserResponse();
+      this.generateAIresponce(1, facilitated);
+      this.generateAIresponce(2, facilitated);
+      this.generateAIresponce(3, facilitated);
+      this.generateAIresponce(4, facilitated);
+      this.generateAIresponce(5, facilitated);
+      this.generateAIresponce(6, facilitated);
+      this.showAllSpeakersResults(userResponse, _1, _2, _3, _4, _5, _6);
+    }
+  }
   getTheme() {
     return themes[Math.floor(Math.random() * themes.length)];
   }
@@ -40,10 +65,42 @@ class moral_desk {
     this.aiSpeakers._6.role = aiRoles[3];
   }
 
+  async generateAIresponce(id, prompt) {
+    const speakers = this.aiSpeakers[id];
+    let prompt = this.facilitate();
+    const role = speakers.role;
+    if (typeof speakers.session !== "undefined") {
+      const session = speakers.session;
+      const gemini = GeminiIninter();
+      const chatHistoryManager = new ChatHistoryManager(gemini, session);
+      const processor = new GeminiProcessor(gemini, chatHistoryManager);
+      speakers.session = processor;
+      this.generateAIresponce();
+      //recall
+    } else {
+      prompt += `${role}です。あなたは、必ず${aiRoles_esk[role]}をしてください。${role}であることを守るならば、どんな発言をしても良いです。`;
+      const reply = await speakers.session.start(prompt);
+      return reply;
+    }
+  }
+  getUserResponse() {
+    const input = document.getElementById("app-moral-fruit-user-input");
+    const userResponse = input.value.trim();
+    return userResponse;
+  }
   getSession() {
     const gemini = GeminiIninter();
     const session = ssession(gemini);
     this.session = session;
+  }
+  showAllSpeakersResults(user, _1, _2, _3, _4, _5, _6) {
+    this.user += user;
+    this.aiSpeakers._1.result += _1;
+    this.aiSpeakers._2.result += _2;
+    this.aiSpeakers._3.result += _3;
+    this.aiSpeakers._4.result += _4;
+    this.aiSpeakers._5.result += _5;
+    this.aiSpeakers._6.result += _6;
   }
   latest(speakers) {
     return speakers;
@@ -77,7 +134,7 @@ class moral_desk {
     7. ${this.user.result}
     さて、あなたはこの答えのない質問にどのような答えを出しますか？
     あなたは、
-    ```
+    `;
     return this.facilitate;
   }
 }
