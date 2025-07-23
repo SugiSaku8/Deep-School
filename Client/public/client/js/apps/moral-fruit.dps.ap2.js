@@ -606,7 +606,7 @@ export function appInit(shell) {
       }
   </style>
   <script>
-  const menuItems = {
+  const mfmenuItems = {
     "menu-wars": () => {
       shell.log({
         from: "dp.app.moralfruit.out",
@@ -661,7 +661,7 @@ export function appInit(shell) {
     },
   };
    // 各メニューアイテムにクリックイベントを設定
-  Object.entries(menuItems).forEach(([id, handler]) => {
+  Object.entries(mfmenuItems).forEach(([id, handler]) => {
     const menuItem = document.getElementById(id);
     if (id === "menu-scr") {
       menuItem.onclick = () => {
