@@ -489,6 +489,7 @@ export function appInit(shell) {
       const rand = window.crypto.getRandomValues(new Uint32Array(1))[0];
       return min + Math.floor((rand / (maxUint32 + 1)) * range);
     }
+    const now = Date.now();
     const usercommon = `${adjectives[secureRandomInt(0, adjectives.length - 1)]}${
       nouns[secureRandomInt(0, nouns.length - 1)]
     }`;
