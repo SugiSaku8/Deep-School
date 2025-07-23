@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Moral Fruit</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: sans-serif;
+        background-color: #006633;
+      }
+
+      .mf-container {
+        padding: 20px;
+      }
+
+      .mf-header {
+        display: flex;
+        align-items: center;
+        background-color: white;
+        padding: 10px 20px;
+        border-radius: 20px;
+        width: fit-content;
+        margin-bottom: 20px;
+      }
+
+      .mf-logo {
+        font-size: 32px;
+        font-weight: bold;
+        display: inline-block;
+        white-space: nowrap;
+        letter-spacing: -0.5px;
+      }
+      .mf-logo span {
+        display: inline;
+        padding: 0;
+        margin: 0;
+      }
+
+      .mf-logo span:nth-child(1) {
+        color: #e600b3;
+      }
+      .mf-logo span:nth-child(2) {
+        color: #007bff;
+      }
+      .mf-logo span:nth-child(3) {
+        color: #ffa500;
+      }
+
+      .mf-icon {
+        width: 50px;
+        height: 50px;
+        background: url("REPLACE_WITH_ICON_IMAGE_PATH") no-repeat center/cover;
+        border-radius: 10px;
+      }
+
+      .mf-chat-box {
+        display: flex;
+        background: white;
+        border-radius: 40px;
+        overflow: hidden;
+      }
+
+      .mf-sidebar {
+        background: #f0f5fc;
+        width: 280px;
+        padding: 20px;
+        border-top-left-radius: 40px;
+        border-bottom-left-radius: 40px;
+      }
+
+      .mf-theme-title {
+        background: #ccc;
+        padding: 20px;
+        border-radius: 30px;
+        font-size: 24px;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .mf-theme-btn {
+        background: #d9e2f3;
+        padding: 16px;
+        border-radius: 30px;
+        font-size: 20px;
+        text-align: center;
+        margin-bottom: 16px;
+        cursor: pointer;
+        user-select: none;
+        transition: background 0.2s;
+      }
+
+      .mf-theme-btn:hover {
+        background-color: #c0d4ef;
+      }
+
+      .mf-theme-btn.active {
+        background-color: #a4c3e6;
+        font-weight: bold;
+      }
+
+      .mf-chat-main {
+        flex: 1;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 20px;
+      }
+
+      .mf-message-bot,
+      .mf-message-user {
+        border-radius: 30px;
+        padding: 14px 24px;
+        font-size: 20px;
+        max-width: 300px;
+      }
+
+      .mf-message-bot {
+        align-self: flex-start;
+        background: #00cc66;
+        color: white;
+      }
+
+      .mf-message-user {
+        align-self: flex-end;
+        background: #007aff;
+        color: white;
+      }
+
+      .mf-footer {
+        height: 40px;
+        background: linear-gradient(to right, #bb7a00, #ffd700, #bb7a00);
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="mf-container">
+      <div class="mf-header">
+        <div class="mf-logo">
+          <span style="color: #e400c2">M</span>
+          <span style="color: #d600ff">o</span>
+          <span style="color: #6a70ff">r</span>
+          <span style="color: #0090ff">a</span>
+          <span style="color: #00c0ff">l</span>
+          <span style="color: #ffe000">F</span>
+          <span style="color: #ffc000">r</span>
+          <span style="color: #ff9000">u</span>
+          <span style="color: #ff5a00">i</span>
+          <span style="color: #ff3a00">t</span>
+        </div>
+        <div class="mf-icon"></div>
+      </div>
+
+      <div class="mf-chat-box">
+        <div class="mf-sidebar">
+          <div class="mf-theme-title">テーマ選択</div>
+          <div class="mf-theme-btn" onclick="selectTheme(this)">戦争犯罪</div>
+          <div class="mf-theme-btn" onclick="selectTheme(this)">無差別攻撃</div>
+          <div class="mf-theme-btn" onclick="selectTheme(this)">戦争</div>
+        </div>
+        <div class="mf-chat-main" id="mf-chat-main">
+          <!-- メッセージがここに追加されます -->
+        </div>
+      </div>
+
+      <div class="mf-footer"></div>
+    </div>
+
+    <script>
+      function selectTheme(element) {
+        document
+          .querySelectorAll(".mf-theme-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+        element.classList.add("active");
+        addUserMessage(`テーマ「${element.textContent}」を選択しました`);
+      }
+
+      function addBotMessage(text) {
+        const chat = document.getElementById("mf-chat-main");
+        const div = document.createElement("div");
+        div.className = "mf-message-bot";
+        div.textContent = text;
+        chat.appendChild(div);
+      }
+
+      function addUserMessage(text) {
+        const chat = document.getElementById("mf-chat-main");
+        const div = document.createElement("div");
+        div.className = "mf-message-user";
+        div.textContent = text;
+        chat.appendChild(div);
+      }
+
+      // 初期表示例（必要なら削除可）
+      addBotMessage("これメッセージ");
+      addBotMessage("これメッセージ");
+      addBotMessage("これメッセージ");
+      addUserMessage("ユーザーが打ったやつ");
+    </script>
+  </body>
+</html>

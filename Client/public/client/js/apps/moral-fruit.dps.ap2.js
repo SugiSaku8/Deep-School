@@ -29,117 +29,8 @@ const themes = [
   { title: "教育改革", description: "学習内容と方法の変革" },
 ];
 
-class moral_desk {
-  constructor() {
-    this.theme = themes[Math.floor(Math.random() * themes.length)];
-    this.aiSpeakers = aiSpeakers;
-    this.session = ssession;
-  }
-
-  start(nfeath) {
-    this.getTheme();
-    this.getAISpeakers();
-    this.getSession();
-    for (let step = 0; step < nfeath; step++) {
-      const facilitated = this.facilitate();
-      const userResponse = this.getUserResponse();
-      this.generateAIresponce(1, facilitated);
-      this.generateAIresponce(2, facilitated);
-      this.generateAIresponce(3, facilitated);
-      this.generateAIresponce(4, facilitated);
-      this.generateAIresponce(5, facilitated);
-      this.generateAIresponce(6, facilitated);
-      this.showAllSpeakersResults(userResponse, _1, _2, _3, _4, _5, _6);
-    }
-  }
-  getTheme() {
-    return themes[Math.floor(Math.random() * themes.length)];
-  }
-
-  getAISpeakers() {
-    this.aiSpeakers._1.role = aiRoles[1];
-    this.aiSpeakers._2.role = aiRoles[1];
-    this.aiSpeakers._3.role = aiRoles[2];
-    this.aiSpeakers._4.role = aiRoles[2];
-    this.aiSpeakers._5.role = aiRoles[3];
-    this.aiSpeakers._6.role = aiRoles[3];
-  }
-
-  async generateAIresponce(id, prompt) {
-    const speakers = this.aiSpeakers[id];
-    let prompt = this.facilitate();
-    const role = speakers.role;
-    if (typeof speakers.session !== "undefined") {
-      const session = speakers.session;
-      const gemini = GeminiIninter();
-      const chatHistoryManager = new ChatHistoryManager(gemini, session);
-      const processor = new GeminiProcessor(gemini, chatHistoryManager);
-      speakers.session = processor;
-      this.generateAIresponce();
-      //recall
-    } else {
-      prompt += `${role}です。あなたは、必ず${aiRoles_esk[role]}をしてください。${role}であることを守るならば、どんな発言をしても良いです。`;
-      const reply = await speakers.session.start(prompt);
-      return reply;
-    }
-  }
-  getUserResponse() {
-    const input = document.getElementById("app-moral-fruit-user-input");
-    const userResponse = input.value.trim();
-    return userResponse;
-  }
-  getSession() {
-    const gemini = GeminiIninter();
-    const session = ssession(gemini);
-    this.session = session;
-  }
-  showAllSpeakersResults(user, _1, _2, _3, _4, _5, _6) {
-    this.user += user;
-    this.aiSpeakers._1.result += _1;
-    this.aiSpeakers._2.result += _2;
-    this.aiSpeakers._3.result += _3;
-    this.aiSpeakers._4.result += _4;
-    this.aiSpeakers._5.result += _5;
-    this.aiSpeakers._6.result += _6;
-  }
-  latest(speakers) {
-    return speakers;
-  }
-  facilitate() {
-    this.facilitate._1 = this.latest(this.aiSpeakers._1.result);
-    this.facilitate._2 = this.latest(this.aiSpeakers._2.result);
-    this.facilitate._3 = this.latest(this.aiSpeakers._3.result);
-    this.facilitate._4 = this.latest(this.aiSpeakers._4.result);
-    this.facilitate._5 = this.latest(this.aiSpeakers._5.result);
-    this.facilitate._6 = this.latest(this.aiSpeakers._6.result);
-    this.facilitate.theme = this.theme;
-    this.facilitate.report = ```
-    この討論のテーマは、${this.facilitate.themme.title} です。
-    あなたは、この討論に参加しています。
-    参加者は、以下の通りです。
-    1.中立者
-    2.中立者
-    3.右派
-    4.右派
-    5.左派
-    6.左派
-    7.ユーザー
-    それぞれの意見者は、次のような意見を述べています。
-    1. ${this.facilitate._1}
-    2. ${this.facilitate._2}
-    3. ${this.facilitate._3}    
-    4. ${this.facilitate._4}    
-    5. ${this.facilitate._5}    
-    6. ${this.facilitate._6}  
-    7. ${this.user.result}
-    さて、あなたはこの答えのない質問にどのような答えを出しますか？
-    あなたは、
-    `;
-    return this.facilitate;
-  }
-}
-
 export function appInit(shell) {
+  let theme;
   shell.log({
     from: "dp.app.moralfruit.out",
     message: "MoralFruitApp: 初期化開始",
@@ -158,6 +49,18 @@ export function appInit(shell) {
   }
   root.innerHTML = `
       <div class="menu-content">
+       <div class="mf-logo">
+          <span style="color: #e400c2">M</span>
+          <span style="color: #d600ff">o</span>
+          <span style="color: #6a70ff">r</span>
+          <span style="color: #0090ff">a</span>
+          <span style="color: #00c0ff">l</span>
+          <span style="color: #ffe000">F</span>
+          <span style="color: #ffc000">r</span>
+          <span style="color: #ff9000">u</span>
+          <span style="color: #ff5a00">i</span>
+          <span style="color: #ff3a00">t</span>
+        </div>
         <div class="menu-item">
           <img src="re/ico/moral-fruit-wars-icon.png" alt="争い" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-wars" style="cursor: pointer" data-lang-key="menu_toaster">
@@ -185,7 +88,35 @@ export function appInit(shell) {
         </div>
       </div>
     </div>
-    
+     <div class="mf-container">
+      <div class="mf-header">
+        <div class="mf-logo">
+          <span style="color: #e400c2">M</span>
+          <span style="color: #d600ff">o</span>
+          <span style="color: #6a70ff">r</span>
+          <span style="color: #0090ff">a</span>
+          <span style="color: #00c0ff">l</span>
+          <span style="color: #ffe000">F</span>
+          <span style="color: #ffc000">r</span>
+          <span style="color: #ff9000">u</span>
+          <span style="color: #ff5a00">i</span>
+          <span style="color: #ff3a00">t</span>
+        </div>
+      </div>
+
+      <div class="mf-chat-box">
+        <div class="mf-sidebar">
+          <div class="mf-theme-title">テーマ選択</div>
+          <div class="mf-theme-btn" id="mf-theme1" onclick="selectTheme(this)"></div>
+          <div class="mf-theme-btn" id="mf-theme2" onclick="selectTheme(this)"></div>
+          <div class="mf-theme-btn" id="mf-theme3" onclick="selectTheme(this)"></div>
+        </div>
+        <div class="mf-chat-main" id="mf-chat-main">
+        </div>
+      </div>
+
+      <div class="mf-footer"></div>
+    </div>
     <div class="copyright-container horizontal-copyright">
       <p class="copyright chalk-text left-align" data-lang-key="copyright">(c) 2022-2025 Carnation Studio v0.4.0 25C1117X1</p>
     </div>
@@ -553,6 +484,125 @@ export function appInit(shell) {
       font-size: 0.7rem;
     }
   }
+
+
+      .mf-container {
+        padding: 20px;
+      }
+
+      .mf-header {
+        display: flex;
+        align-items: center;
+        background-color: white;
+        padding: 10px 20px;
+        border-radius: 20px;
+        width: fit-content;
+        margin-bottom: 20px;
+      }
+
+      .mf-logo {
+        font-size: 32px;
+        font-weight: bold;
+        display: inline-block;
+        white-space: nowrap;
+        letter-spacing: -0.5px;
+      }
+      .mf-logo span {
+        display: inline;
+        padding: 0;
+        margin: 0;
+      }
+
+      .mf-logo span:nth-child(1) {
+        color: #e600b3;
+      }
+      .mf-logo span:nth-child(2) {
+        color: #007bff;
+      }
+      .mf-logo span:nth-child(3) {
+        color: #ffa500;
+      }
+
+      .mf-icon {
+        width: 50px;
+        height: 50px;
+        background: url("REPLACE_WITH_ICON_IMAGE_PATH") no-repeat center/cover;
+        border-radius: 10px;
+      }
+
+      .mf-chat-box {
+        display: flex;
+        background: white;
+        border-radius: 40px;
+        overflow: hidden;
+      }
+
+      .mf-sidebar {
+        background: #f0f5fc;
+        width: 280px;
+        padding: 20px;
+        border-top-left-radius: 40px;
+        border-bottom-left-radius: 40px;
+      }
+
+      .mf-theme-title {
+        background: #ccc;
+        padding: 20px;
+        border-radius: 30px;
+        font-size: 24px;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .mf-theme-btn {
+        background: #d9e2f3;
+        padding: 16px;
+        border-radius: 30px;
+        font-size: 20px;
+        text-align: center;
+        margin-bottom: 16px;
+        cursor: pointer;
+        user-select: none;
+        transition: background 0.2s;
+      }
+
+      .mf-theme-btn:hover {
+        background-color: #c0d4ef;
+      }
+
+      .mf-theme-btn.active {
+        background-color: #a4c3e6;
+        font-weight: bold;
+      }
+
+      .mf-chat-main {
+        flex: 1;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 20px;
+      }
+
+      .mf-message-bot,
+      .mf-message-user {
+        border-radius: 30px;
+        padding: 14px 24px;
+        font-size: 20px;
+        max-width: 300px;
+      }
+
+      .mf-message-bot {
+        align-self: flex-start;
+        background: #00cc66;
+        color: white;
+      }
+
+      .mf-message-user {
+        align-self: flex-end;
+        background: #007aff;
+        color: white;
+      }
   </style>
 `;
 
@@ -564,7 +614,11 @@ export function appInit(shell) {
         message: "MoralFruitApp: WARSカテゴリで開始",
         level: "info",
       });
-      shell.loadApp("chat"); // chatアプリとして開く
+      document.getElementById("mf-theme1").value = "正しい戦争はあるのか";
+      document.getElementById("mf-theme2").value = "戦争は人類の進化に必要か";
+      document.getElementById("mf-theme3").value = "戦争はなくせるのか";
+      document.getElementById("mf-container").style.display = "block";
+      document.getElementById("mf-menu-content").style.display = "none";
     },
     "menu-edu": () => {
       shell.log({
@@ -572,7 +626,13 @@ export function appInit(shell) {
         message: "MoralFruitApp: EDUカテゴリで開始",
         level: "info",
       });
-      shell.loadApp("scr");
+      document.getElementById("mf-theme1").value = "学校に行く必要はあるのか";
+      document.getElementById("mf-theme2").value =
+        "なぜ学ばなくてはいけないのか";
+      document.getElementById("mf-theme3").value =
+        "何を学ばなくてはいけないのか";
+      document.getElementById("mf-container").style.display = "block";
+      document.getElementById("mf-menu-content").style.display = "none";
     },
     "menu-die": () => {
       shell.log({
@@ -580,7 +640,12 @@ export function appInit(shell) {
         message: "MoralFruitApp: DIEカテゴリで開始",
         level: "info",
       });
-      shell.loadApp("setting");
+      document.getElementById("mf-theme1").value = "人はなぜ死ぬのか";
+      document.getElementById("mf-theme2").value =
+        "人はなぜ明日への希望を持つのか";
+      document.getElementById("mf-theme3").value = "生存競争は必要か";
+      document.getElementById("mf-container").style.display = "block";
+      document.getElementById("mf-menu-content").style.display = "none";
     },
     "menu-earth": () => {
       shell.log({
@@ -588,16 +653,164 @@ export function appInit(shell) {
         message: "MoralFruitApp: EARTHを開く",
         level: "info",
       });
-      shell.loadApp("pickramu");
+      document.getElementById("mf-theme1").value = "地球環境は守るべきか";
+      document.getElementById("mf-theme2").value =
+        "自然生物は人間にとって必要か";
+      document.getElementById("mf-theme3").value = "人間は自然に干渉すべきか";
+      document.getElementById("mf-container").style.display = "block";
+      document.getElementById("mf-menu-content").style.display = "none";
     },
   };
+  function selectTheme(element) {
+    document
+      .querySelectorAll(".mf-theme-btn")
+      .forEach((btn) => btn.classList.remove("active"));
+    element.classList.add("active");
+    theme = element;
+  }
 
+  function addBotMessage(text) {
+    const chat = document.getElementById("mf-chat-main");
+    const div = document.createElement("div");
+    div.className = "mf-message-bot";
+    div.textContent = text;
+    chat.appendChild(div);
+  }
+
+  function addUserMessage(text) {
+    const chat = document.getElementById("mf-chat-main");
+    const div = document.createElement("div");
+    div.className = "mf-message-user";
+    div.textContent = text;
+    chat.appendChild(div);
+  }
+  function clearMessages() {
+    const chat = document.getElementById("mf-chat-main");
+    chat.innerHTML = ""; // すべて削除
+  }
+  class moral_desk {
+    constructor() {
+      this.theme = themes[Math.floor(Math.random() * themes.length)];
+      this.aiSpeakers = aiSpeakers;
+      this.session = ssession;
+      clearMessages();
+    }
+
+    start(nfeath) {
+      this.getTheme();
+      this.getAISpeakers();
+      this.getSession();
+      for (let step = 0; step < nfeath; step++) {
+        const facilitated = this.facilitate();
+        const userResponse = this.getUserResponse();
+        this.generateAIresponce(1, facilitated);
+        this.generateAIresponce(2, facilitated);
+        this.generateAIresponce(3, facilitated);
+        this.generateAIresponce(4, facilitated);
+        this.generateAIresponce(5, facilitated);
+        this.generateAIresponce(6, facilitated);
+        this.showAllSpeakersResults(userResponse, _1, _2, _3, _4, _5, _6);
+      }
+    }
+    getTheme() {
+      return theme;
+    }
+
+    getAISpeakers() {
+      this.aiSpeakers._1.role = aiRoles[1];
+      this.aiSpeakers._2.role = aiRoles[1];
+      this.aiSpeakers._3.role = aiRoles[2];
+      this.aiSpeakers._4.role = aiRoles[2];
+      this.aiSpeakers._5.role = aiRoles[3];
+      this.aiSpeakers._6.role = aiRoles[3];
+    }
+
+    async generateAIresponce(id, prompt) {
+      const speakers = this.aiSpeakers[id];
+      let prompt = this.facilitate();
+      const role = speakers.role;
+      if (typeof speakers.session !== "undefined") {
+        const session = speakers.session;
+        const gemini = GeminiIninter();
+        const chatHistoryManager = new ChatHistoryManager(gemini, session);
+        const processor = new GeminiProcessor(gemini, chatHistoryManager);
+        speakers.session = processor;
+        this.generateAIresponce();
+        //recall
+      } else {
+        prompt += `${role}です。あなたは、必ず${aiRoles_esk[role]}をしてください。${role}であることを守るならば、どんな発言をしても良いです。`;
+        const reply = await speakers.session.start(prompt);
+        return reply;
+      }
+    }
+    getUserResponse() {
+      const input = document.getElementById("app-moral-fruit-user-input");
+      const userResponse = input.value.trim();
+      return userResponse;
+    }
+    getSession() {
+      const gemini = GeminiIninter();
+      const session = ssession(gemini);
+      this.session = session;
+    }
+    showAllSpeakersResults(user, _1, _2, _3, _4, _5, _6) {
+      this.user += user;
+      addUserMessage(user);
+      this.aiSpeakers._1.result += _1;
+      addBotMessage(_1);
+      this.aiSpeakers._2.result += _2;
+      addBotMessage(_2);
+      this.aiSpeakers._3.result += _3;
+      addBotMessage(_3);
+      this.aiSpeakers._4.result += _4;
+      addBotMessage(_4);
+      this.aiSpeakers._5.result += _5;
+      addBotMessage(_5);
+      this.aiSpeakers._6.result += _6;
+      addBotMessage(_6);
+    }
+    latest(speakers) {
+      return speakers;
+    }
+    facilitate() {
+      this.facilitate._1 = this.latest(this.aiSpeakers._1.result);
+      this.facilitate._2 = this.latest(this.aiSpeakers._2.result);
+      this.facilitate._3 = this.latest(this.aiSpeakers._3.result);
+      this.facilitate._4 = this.latest(this.aiSpeakers._4.result);
+      this.facilitate._5 = this.latest(this.aiSpeakers._5.result);
+      this.facilitate._6 = this.latest(this.aiSpeakers._6.result);
+      this.facilitate.theme = this.theme;
+      this.facilitate.report = ```
+    この討論のテーマは、${this.facilitate.themme.title} です。
+    あなたは、この討論に参加しています。
+    参加者は、以下の通りです。
+    1.中立者
+    2.中立者
+    3.右派
+    4.右派
+    5.左派
+    6.左派
+    7.ユーザー
+    それぞれの意見者は、次のような意見を述べています。
+    1. ${this.facilitate._1}
+    2. ${this.facilitate._2}
+    3. ${this.facilitate._3}    
+    4. ${this.facilitate._4}    
+    5. ${this.facilitate._5}    
+    6. ${this.facilitate._6}  
+    7. ${this.user.result}
+    さて、あなたはこの答えのない質問にどのような答えを出しますか？
+    あなたは、
+    `;
+      return this.facilitate;
+    }
+  }
   // 各メニューアイテムにクリックイベントを設定
   Object.entries(menuItems).forEach(([id, handler]) => {
     const menuItem = document.getElementById(id);
     if (id === "menu-scr") {
       menuItem.onclick = () => {
-        handler();
+        document.getElementById("");
       };
     } else {
       menuItem.onclick = handler;
