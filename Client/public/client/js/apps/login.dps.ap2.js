@@ -418,21 +418,81 @@ export function appInit(shell) {
   if (demoLoginBtn) {
     demoLoginBtn.onclick = () => {
       // ランダムな単語リスト（安全な英単語）
-      const words = [
-        'apple', 'sky', 'river', 'tree', 'star', 'cloud', 'light', 'dream', 'stone', 'leaf',
-        'moon', 'sun', 'wind', 'wave', 'bird', 'seed', 'book', 'note', 'blue', 'green',
-        'fox', 'cat', 'dog', 'fish', 'rain', 'snow', 'fire', 'earth', 'mountain', 'ocean'
-      ];
-      const now = Date.now();
-      // Secure random integer generator
-      function secureRandomInt(min, max) {
-        const range = max - min + 1;
-        const maxUint32 = 0xffffffff;
-        const rand = window.crypto.getRandomValues(new Uint32Array(1))[0];
-        return min + Math.floor((rand / (maxUint32 + 1)) * range);
-      }
-      const randomWord = words[secureRandomInt(0, words.length - 1)];
-      window.googleUserId = `${now}.${randomWord}.demo_user`;
+      const adjectives = [
+      "Happy",
+      "Smart",
+      "Creative",
+      "Friendly",
+      "Bright",
+      "Clever",
+      "Wise",
+      "Kind",
+      "Brave",
+      "Calm",
+      "Speaking",
+      "InTheMorning",
+      "Wanted!",
+      "Whoo",
+      "LoveMe",
+      "LoveYou",
+      "AoToNatsu",
+      "Tenbyou",
+      "Romanticism",
+      "Soranji",
+      "I'm",
+      "Invincible",
+      "Inferno",
+      "On My MiND",
+      "Lilac",
+      "KUSUSHIKI",
+      "breakfast",
+      "Heaven",
+      "Darling",
+      "Bitter",
+      "Vacances",
+      "familie",
+      "Carrying",
+      "QueSeraSera",
+      "Magic",
+      "Heaven",
+      "Lion",
+      "OmochaNoHeitai",
+      "ZesseiSeibutsu",
+      "soFtdRink",
+      "KujiraNoUta",
+      "Ubu",
+      "SamamaFestival!",
+      "Oz",
+      "JustAFriend",
+      "FACTORY",
+      "umbrella",
+      "JOURNEY",
+      "Attitude",
+    ];
+    const nouns = [
+      "User",
+      "Person",
+      "Friend",
+      "Student",
+      "Learner",
+      "Explorer",
+      "Creator",
+      "Thinker",
+      "Dreamer",
+      "Builder",
+    ];
+
+    // Secure random integer generator
+    function secureRandomInt(min, max) {
+      const range = max - min + 1;
+      const maxUint32 = 0xffffffff;
+      const rand = window.crypto.getRandomValues(new Uint32Array(1))[0];
+      return min + Math.floor((rand / (maxUint32 + 1)) * range);
+    }
+    const usercommon = `${adjectives[secureRandomInt(0, adjectives.length - 1)]}${
+      nouns[secureRandomInt(0, nouns.length - 1)]
+    }`;
+      window.googleUserId = `${now}.${usercommon}.demo_user`;
       window.googleUserName = 'Demo_USER';
       window.isDemoUser = true;
       // メニューに遷移
