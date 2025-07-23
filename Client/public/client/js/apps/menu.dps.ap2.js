@@ -1,40 +1,48 @@
 export const appMeta = {
   name: "menu",
   title: "メニュー",
-  icon: "re/ico/menu.svg"
+  icon: "re/ico/menu.svg",
 };
 
 export function appInit(shell) {
-  shell.log({from: 'dp.app.menu.out', message: 'MenuApp: 初期化開始', level: 'info'});
+  shell.log({
+    from: "dp.app.menu.out",
+    message: "MenuApp: 初期化開始",
+    level: "info",
+  });
 
   // チュートリアル進行用ステップ
   const tutorialSteps = [
     {
-      id: 'menu-toaster',
-      title: 'ToasterMachineへようこそ',
-      desc: 'AIチャットで質問や相談ができます。まずはここから、今わからないことを教えてもらいましょう。始めましょう。',
+      id: "menu-toaster",
+      title: "ToasterMachineへようこそ",
+      desc: "AIチャットで質問や相談ができます。まずはここから、今わからないことを教えてもらいましょう。始めましょう。",
     },
     {
-      id: 'menu-pickramu',
-      title: 'Pickramu（教材ワーク）',
-      desc: '自由に教材を選んでどこでも学習・演習ができます。自分のペースで進めましょう。',
+      id: "menu-pickramu",
+      title: "Pickramu（教材ワーク）",
+      desc: "自由に教材を選んでどこでも学習・演習ができます。自分のペースで進めましょう。",
     },
     {
-      id: 'menu-scr',
-      title: 'SCR',
-      desc: 'わからないことがあったら、友達に聞きましょう。AIもいいけれど、人による支援の方がいいこともあるでしょう。すべてのツールを有効活用するのがおすすめです。',
+      id: "menu-scr",
+      title: "SCR",
+      desc: "わからないことがあったら、友達に聞きましょう。AIもいいけれど、人による支援の方がいいこともあるでしょう。すべてのツールを有効活用するのがおすすめです。",
     },
   ];
 
   // チュートリアル表示条件
   const isDemoUser = window.isDemoUser;
-  const tutorialCompleted = localStorage.getItem('tutorialCompleted');
+  const tutorialCompleted = localStorage.getItem("tutorialCompleted");
   const shouldShowTutorial = isDemoUser || !tutorialCompleted;
 
   // HTMLを#app-rootに描画
-  const root = document.getElementById('app-root');
+  const root = document.getElementById("app-root");
   if (!root) {
-    shell.log({from: 'dp.app.menu.err', message: 'MenuApp: #app-rootが見つかりません', level: 'error'});
+    shell.log({
+      from: "dp.app.menu.err",
+      message: "MenuApp: #app-rootが見つかりません",
+      level: "error",
+    });
     return;
   }
   root.innerHTML = `
@@ -55,16 +63,17 @@ export function appInit(shell) {
         <div class="menu-item">
           <img src="re/ico/note.svg" alt="Pickramuアイコン" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-pickramu" style="cursor: pointer" data-lang-key="menu_pickramu">Pickramu</div>
+        </div> 
+        
+           <div class="menu-item">
+          <img src="re/ico/MoralFruite-new-icon-v2.png" alt="MoralFruitアイコン" class="menu-icon" />
+          <div class="menu-label chalk-text" id="menu-moralfruite" style="cursor: pointer" data-lang-key="menu_feedback">MoralFruit</div>
         </div>
       
         <div class="menu-item">
           <img src="re/ico/Setting.png" alt="設定アイコン" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-setting" style="cursor: pointer" data-lang-key="menu_setting">設定</div>
-        </div>
-           <div class="menu-item">
-          <img src="re/ico/MoralFruite-new-icon-v2.png" alt="MoralFruitアイコン" class="menu-icon" />
-          <div class="menu-label chalk-text" id="menu-moralfruite" style="cursor: pointer" data-lang-key="menu_feedback">MoralFruit</div>
-        </div>
+       </div>
         
         <div class="menu-item">
           <img src="re/ico/feed.svg" alt="フィードバックアイコン" class="menu-icon" />
@@ -443,61 +452,88 @@ export function appInit(shell) {
   </style>
 `;
 
-let disabled = ` 
+  let disabled = ` 
          <div class="menu-item">
           <img src="re/ico/game.svg" alt="GameMakerアイコン" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-gamemaker" style="cursor: pointer" data-lang-key="menu_gamemaker">GameMaker</div>
         </div>
       
-        `
+        `;
 
   // メニューアイテムの設定
   const menuItems = {
-    'menu-toaster': () => {
-      shell.log({from: 'dp.app.menu.out', message: 'MenuApp: ToasterMachineを開く', level: 'info'});
-      shell.loadApp('chat'); // chatアプリとして開く
+    "menu-toaster": () => {
+      shell.log({
+        from: "dp.app.menu.out",
+        message: "MenuApp: ToasterMachineを開く",
+        level: "info",
+      });
+      shell.loadApp("chat"); // chatアプリとして開く
     },
-    'menu-scr': () => {
-      shell.log({from: 'dp.app.menu.out', message: 'MenuApp: SCRを開く', level: 'info'});
-      shell.loadApp('scr');
+    "menu-scr": () => {
+      shell.log({
+        from: "dp.app.menu.out",
+        message: "MenuApp: SCRを開く",
+        level: "info",
+      });
+      shell.loadApp("scr");
     },
-    'menu-setting': () => {
-      shell.log({from: 'dp.app.menu.out', message: 'MenuApp: 設定を開く', level: 'info'});
-      shell.loadApp('setting');
+    "menu-setting": () => {
+      shell.log({
+        from: "dp.app.menu.out",
+        message: "MenuApp: 設定を開く",
+        level: "info",
+      });
+      shell.loadApp("setting");
     },
-    'menu-pickramu': () => {
-      shell.log({from: 'dp.app.menu.out', message: 'MenuApp: Pickramuを開く', level: 'info'});
-      shell.loadApp('pickramu');
+    "menu-pickramu": () => {
+      shell.log({
+        from: "dp.app.menu.out",
+        message: "MenuApp: Pickramuを開く",
+        level: "info",
+      });
+      shell.loadApp("pickramu");
     },
-    'menu-moralfruite': () => {
+    "menu-moralfruite": () => {
       //shell.log({from: 'dp.app.menu.out', message: 'MenuApp: MoralFruitを開く', level: 'info'});
       //shell.loadApp('moralfruit');
-    },/*
+    } /*
     'menu-gamemaker': () => {
       shell.log({from: 'dp.app.menu.out', message: 'MenuApp: GameMakerを開く', level: 'info'});
       shell.loadApp('gamemaker');
-    },*/
-    'menu-feedback': () => {
-      shell.log({from: 'dp.app.menu.out', message: 'MenuApp: フィードバックを開く', level: 'info'});
-      shell.loadApp('feedback');
-    }
+    },*/,
+    "menu-feedback": () => {
+      shell.log({
+        from: "dp.app.menu.out",
+        message: "MenuApp: フィードバックを開く",
+        level: "info",
+      });
+      shell.loadApp("feedback");
+    },
   };
 
   // 各メニューアイテムにクリックイベントを設定
   Object.entries(menuItems).forEach(([id, handler]) => {
     const menuItem = document.getElementById(id);
-    if (id === 'menu-scr') {
+    if (id === "menu-scr") {
       menuItem.onclick = () => {
-            handler();
+        handler();
       };
     } else {
       menuItem.onclick = handler;
     }
     if (menuItem) {
-      
-      shell.log({from: 'dp.app.menu.out', message: `MenuApp: ${id}のイベントリスナーを設定`, level: 'info'});
+      shell.log({
+        from: "dp.app.menu.out",
+        message: `MenuApp: ${id}のイベントリスナーを設定`,
+        level: "info",
+      });
     } else {
-      shell.log({from: 'dp.app.menu.err', message: `MenuApp: ${id}のメニューアイテムが見つかりません`, level: 'warn'});
+      shell.log({
+        from: "dp.app.menu.err",
+        message: `MenuApp: ${id}のメニューアイテムが見つかりません`,
+        level: "warn",
+      });
     }
   });
 
@@ -505,7 +541,16 @@ let disabled = `
 
   // ユーザー情報の表示（ログイン済みの場合）
   if (window.googleUserName) {
-    shell.log({from: 'dp.app.menu.out', message: 'MenuApp: ユーザー情報 ' + JSON.stringify({name: window.googleUserName, id: window.googleUserId}), level: 'info'});
+    shell.log({
+      from: "dp.app.menu.out",
+      message:
+        "MenuApp: ユーザー情報 " +
+        JSON.stringify({
+          name: window.googleUserName,
+          id: window.googleUserId,
+        }),
+      level: "info",
+    });
   }
 
   // チュートリアルUI挿入（menu画面上でアイコン強調）
@@ -513,75 +558,102 @@ let disabled = `
     let step = 0;
     function showTutorialStep(idx) {
       // すべての強調をリセット
-      tutorialSteps.forEach(s => {
+      tutorialSteps.forEach((s) => {
         const el = document.getElementById(s.id);
         if (el) {
-          el.classList.remove('ds-tutorial-highlight');
-          el.style.zIndex = '';
+          el.classList.remove("ds-tutorial-highlight");
+          el.style.zIndex = "";
         }
       });
       // オーバーレイを消す
-      const oldOverlay = document.getElementById('ds-tutorial-overlay');
+      const oldOverlay = document.getElementById("ds-tutorial-overlay");
       if (oldOverlay) oldOverlay.remove();
       // ダイアログを消す
-      const oldModal = document.getElementById('ds-tutorial-modal');
+      const oldModal = document.getElementById("ds-tutorial-modal");
       if (oldModal) oldModal.remove();
 
       if (idx >= tutorialSteps.length) {
-        localStorage.setItem('tutorialCompleted', '1');
+        localStorage.setItem("tutorialCompleted", "1");
         return;
       }
       const s = tutorialSteps[idx];
       // 対象アイコンを強調
       const el = document.getElementById(s.id);
       if (el) {
-        el.classList.add('ds-tutorial-highlight');
+        el.classList.add("ds-tutorial-highlight");
         el.style.zIndex = 2001;
         // オーバーレイ生成
-        const overlay = document.createElement('div');
-        overlay.id = 'ds-tutorial-overlay';
+        const overlay = document.createElement("div");
+        overlay.id = "ds-tutorial-overlay";
         Object.assign(overlay.style, {
-          position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
-          background: 'rgba(0,0,0,0.7)', zIndex: 2000,
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          background: "rgba(0,0,0,0.7)",
+          zIndex: 2000,
         });
         document.body.appendChild(overlay);
         // ダイアログ生成
-        const modal = document.createElement('div');
-        modal.id = 'ds-tutorial-modal';
+        const modal = document.createElement("div");
+        modal.id = "ds-tutorial-modal";
         modal.innerHTML = `
           <div class=\"ds-tutorial-content\" role=\"dialog\" aria-modal=\"true\" tabindex=\"-1\">
             <h2 class=\"ds-tutorial-title\">${s.title}</h2>
             <p class=\"ds-tutorial-desc\">${s.desc}</p>
-            <button class=\"ds-tutorial-next button-chalk\" id=\"ds-tutorial-next-btn\">${idx < tutorialSteps.length - 1 ? '次へ' : '完了'}</button>
+            <button class=\"ds-tutorial-next button-chalk\" id=\"ds-tutorial-next-btn\">${
+              idx < tutorialSteps.length - 1 ? "次へ" : "完了"
+            }</button>
           </div>
         `;
         Object.assign(modal.style, {
-          position: 'fixed', zIndex: 2002, left: '50%', top: '70%', transform: 'translate(-50%, 0)',
-          background: 'rgba(30,30,40,0.98)', color: '#fff', borderRadius: '24px', boxShadow: '0 8px 32px rgba(0,0,0,0.25)',
-          padding: '2.5rem 2rem', maxWidth: '90vw', minWidth: '320px', textAlign: 'center', outline: 'none',
+          position: "fixed",
+          zIndex: 2002,
+          left: "50%",
+          top: "70%",
+          transform: "translate(-50%, 0)",
+          background: "rgba(30,30,40,0.98)",
+          color: "#fff",
+          borderRadius: "24px",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.25)",
+          padding: "2.5rem 2rem",
+          maxWidth: "90vw",
+          minWidth: "320px",
+          textAlign: "center",
+          outline: "none",
         });
         document.body.appendChild(modal);
         // ボタン挙動
-        const nextBtn = modal.querySelector('#ds-tutorial-next-btn');
+        const nextBtn = modal.querySelector("#ds-tutorial-next-btn");
         nextBtn.onclick = () => showTutorialStep(idx + 1);
-        nextBtn.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') nextBtn.click(); };
+        nextBtn.onkeydown = (e) => {
+          if (e.key === "Enter" || e.key === " ") nextBtn.click();
+        };
         nextBtn.focus();
         // ボタンの追加スタイル
         Object.assign(nextBtn.style, {
-          fontSize: '1.1rem', fontWeight: '600', borderRadius: '16px', padding: '0.8em 2.2em', border: 'none',
-          background: '#ced8eb', color: '#222', boxShadow: '0 2px 8px rgba(0,0,0,0.10)', cursor: 'pointer',
-          marginTop: '1.5rem',
+          fontSize: "1.1rem",
+          fontWeight: "600",
+          borderRadius: "16px",
+          padding: "0.8em 2.2em",
+          border: "none",
+          background: "#ced8eb",
+          color: "#222",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.10)",
+          cursor: "pointer",
+          marginTop: "1.5rem",
         });
         // スクロールして強調アイコンを中央付近に
         setTimeout(() => {
-          el.scrollIntoView({behavior: 'smooth', block: 'center'});
+          el.scrollIntoView({ behavior: "smooth", block: "center" });
         }, 200);
       }
     }
     // 強調用CSSを追加
-    if (!document.getElementById('ds-tutorial-style')) {
-      const style = document.createElement('style');
-      style.id = 'ds-tutorial-style';
+    if (!document.getElementById("ds-tutorial-style")) {
+      const style = document.createElement("style");
+      style.id = "ds-tutorial-style";
       style.textContent = `
         .ds-tutorial-highlight {
           box-shadow: 0 0 0 6px #fff, 0 0 32px 12px #2196f3cc;
@@ -597,5 +669,9 @@ let disabled = `
     setTimeout(() => showTutorialStep(0), 400);
   }
 
-  shell.log({from: 'dp.app.menu.out', message: 'MenuApp: 初期化完了', level: 'info'});
-} 
+  shell.log({
+    from: "dp.app.menu.out",
+    message: "MenuApp: 初期化完了",
+    level: "info",
+  });
+}
