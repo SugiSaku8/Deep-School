@@ -47,7 +47,7 @@ export function appInit(shell) {
     });
     return;
   }
-  root.innerHTML = `
+  root.innerHTML = ```
       <div class="menu-content">
        <div class="mf-logo">
           <span style="color: #e400c2">M</span>
@@ -660,9 +660,33 @@ export function appInit(shell) {
       document.getElementById("mf-theme3").value = "人間は自然に干渉すべきか";
     },
   };
+   // 各メニューアイテムにクリックイベントを設定
+  Object.entries(menuItems).forEach(([id, handler]) => {
+    const menuItem = document.getElementById(id);
+    if (id === "menu-scr") {
+      menuItem.onclick = () => {
+        document.getElementById("");
+      };
+    } else {
+      menuItem.onclick = handler;
+    }
+    if (menuItem) {
+      shell.log({
+        from: "dp.app.menu.out",
+        message: 'MenuApp:'+ id+'のイベントリスナーを設定',
+        level: "info",
+      });
+    } else {
+      shell.log({
+        from: "dp.app.menu.err",
+        message: 'MenuApp: '+id+の'メニューアイテムが見つかりません',
+        level: "warn",
+      });
+    }
+  });
   </script>
 
-`;
+```;
 
   // メニューアイテムの設定
   
@@ -809,30 +833,7 @@ export function appInit(shell) {
       return this.facilitate;
     }
   }
-  // 各メニューアイテムにクリックイベントを設定
-  Object.entries(menuItems).forEach(([id, handler]) => {
-    const menuItem = document.getElementById(id);
-    if (id === "menu-scr") {
-      menuItem.onclick = () => {
-        document.getElementById("");
-      };
-    } else {
-      menuItem.onclick = handler;
-    }
-    if (menuItem) {
-      shell.log({
-        from: "dp.app.menu.out",
-        message: `MenuApp: ${id}のイベントリスナーを設定`,
-        level: "info",
-      });
-    } else {
-      shell.log({
-        from: "dp.app.menu.err",
-        message: `MenuApp: ${id}のメニューアイテムが見つかりません`,
-        level: "warn",
-      });
-    }
-  });
+ 
 
   shell.log({
     from: "dp.app.moralfruit.out",
