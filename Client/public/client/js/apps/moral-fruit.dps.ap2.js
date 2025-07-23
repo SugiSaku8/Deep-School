@@ -660,30 +660,23 @@ export function appInit(shell) {
       document.getElementById("mf-theme3").value = "人間は自然に干渉すべきか";
     },
   };
-   // 各メニューアイテムにクリックイベントを設定
-  Object.entries(mfmenuItems).forEach(([id, handler]) => {
-    const menuItem = document.getElementById(id);
-    if (id === "menu-scr") {
-      menuItem.onclick = () => {
-        document.getElementById("");
-      };
-    } else {
-      menuItem.onclick = handler;
-    }
-    if (menuItem) {
-      shell.log({
-        from: "dp.app.menu.out",
-        message: 'MenuApp:'+ id+'のイベントリスナーを設定',
-        level: "info",
-      });
-    } else {
-      shell.log({
-        from: "dp.app.menu.err",
-        message: 'MenuApp: '+id+の'メニューアイテムが見つかりません',
-        level: "warn",
-      });
-    }
-  });
+ Object.entries(mfmenuItems).forEach(([id, handler]) => {
+  const menuItem = document.getElementById(id);
+  menuItem.onclick = handler; // 条件文を削除
+  if (menuItem) {
+    shell.log({
+      from: "dp.app.menu.out",
+      message: 'MenuApp:'+ id+'のイベントリスナーを設定',
+      level: "info",
+    });
+  } else {
+    shell.log({
+      from: "dp.app.menu.err",
+      message: 'MenuApp: '+id+の'メニューアイテムが見つかりません',
+      level: "warn",
+    });
+  }
+});
   </script>
 `;
 
