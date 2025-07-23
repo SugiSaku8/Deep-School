@@ -62,7 +62,7 @@ export function appInit(shell) {
           <span style="color: #ff3a00">t</span>
         </div>
         <div class="menu-item">
-          <img src="re/ico/moral-fruit-wars-icon.png" alt="争い" class="menu-icon" />
+          <img src="re/ico/moral-fruit-war-icon.png" alt="争い" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-wars" style="cursor: pointer" data-lang-key="menu_toaster">
             争い
           </div>
@@ -488,6 +488,7 @@ export function appInit(shell) {
 
       .mf-container {
         padding: 20px;
+        display:none;
       }
 
       .mf-header {
@@ -614,11 +615,11 @@ export function appInit(shell) {
         message: "MoralFruitApp: WARSカテゴリで開始",
         level: "info",
       });
+      document.getElementById("mf-container").style.display = "block";
+      document.getElementById("mf-menu-content").style.display = "none";
       document.getElementById("mf-theme1").value = "正しい戦争はあるのか";
       document.getElementById("mf-theme2").value = "戦争は人類の進化に必要か";
       document.getElementById("mf-theme3").value = "戦争はなくせるのか";
-      document.getElementById("mf-container").style.display = "block";
-      document.getElementById("mf-menu-content").style.display = "none";
     },
     "menu-edu": () => {
       shell.log({
@@ -626,13 +627,13 @@ export function appInit(shell) {
         message: "MoralFruitApp: EDUカテゴリで開始",
         level: "info",
       });
+      document.getElementById("mf-container").style.display = "block";
+      document.getElementById("mf-menu-content").style.display = "none";
       document.getElementById("mf-theme1").value = "学校に行く必要はあるのか";
       document.getElementById("mf-theme2").value =
         "なぜ学ばなくてはいけないのか";
       document.getElementById("mf-theme3").value =
         "何を学ばなくてはいけないのか";
-      document.getElementById("mf-container").style.display = "block";
-      document.getElementById("mf-menu-content").style.display = "none";
     },
     "menu-die": () => {
       shell.log({
@@ -640,12 +641,12 @@ export function appInit(shell) {
         message: "MoralFruitApp: DIEカテゴリで開始",
         level: "info",
       });
+      document.getElementById("mf-container").style.display = "block";
+      document.getElementById("mf-menu-content").style.display = "none";
       document.getElementById("mf-theme1").value = "人はなぜ死ぬのか";
       document.getElementById("mf-theme2").value =
         "人はなぜ明日への希望を持つのか";
       document.getElementById("mf-theme3").value = "生存競争は必要か";
-      document.getElementById("mf-container").style.display = "block";
-      document.getElementById("mf-menu-content").style.display = "none";
     },
     "menu-earth": () => {
       shell.log({
@@ -653,12 +654,12 @@ export function appInit(shell) {
         message: "MoralFruitApp: EARTHを開く",
         level: "info",
       });
+      document.getElementById("mf-container").style.display = "block";
+      document.getElementById("mf-menu-content").style.display = "none";
       document.getElementById("mf-theme1").value = "地球環境は守るべきか";
       document.getElementById("mf-theme2").value =
         "自然生物は人間にとって必要か";
       document.getElementById("mf-theme3").value = "人間は自然に干渉すべきか";
-      document.getElementById("mf-container").style.display = "block";
-      document.getElementById("mf-menu-content").style.display = "none";
     },
   };
   function selectTheme(element) {
@@ -725,7 +726,7 @@ export function appInit(shell) {
       this.aiSpeakers._6.role = aiRoles[3];
     }
 
-    async generateAIresponce(id,prompt) {
+    async generateAIresponce(id, prompt) {
       const speakers = this.aiSpeakers[id];
       const role = speakers.role;
       if (typeof speakers.session !== "undefined") {
