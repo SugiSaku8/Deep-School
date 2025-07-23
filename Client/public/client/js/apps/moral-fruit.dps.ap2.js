@@ -672,7 +672,7 @@ export function appInit(shell) {
   } else {
     shell.log({
       from: "dp.app.menu.err",
-      message: 'MenuApp: '+id+の'メニューアイテムが見つかりません',
+      message: 'MenuApp:'+id+'のメニューアイテムが見つかりません',
       level: "warn",
     });
   }
