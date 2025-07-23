@@ -47,7 +47,7 @@ export function appInit(shell) {
     });
     return;
   }
-  root.innerHTML = ```
+  root.innerHTML = `
       <div class="menu-content">
        <div class="mf-logo">
           <span style="color: #e400c2">M</span>
@@ -685,8 +685,7 @@ export function appInit(shell) {
     }
   });
   </script>
-
-```;
+`;
 
   // メニューアイテムの設定
   
