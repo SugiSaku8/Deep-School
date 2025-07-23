@@ -660,28 +660,31 @@ export function appInit(shell) {
       document.getElementById("mf-theme3").value = "人間は自然に干渉すべきか";
     },
   };
- Object.entries(mfmenuItems).forEach(([id, handler]) => {
-  const menuItem = document.getElementById(id);
-  menuItem.onclick = handler; // 条件文を削除
-  if (menuItem) {
-    shell.log({
-      from: "dp.app.menu.out",
-      message: 'MenuApp:'+ id+'のイベントリスナーを設定',
-      level: "info",
-    });
-  } else {
-    shell.log({
-      from: "dp.app.menu.err",
-      message: 'MenuApp:'+id+'のメニューアイテムが見つかりません',
-      level: "warn",
-    });
-  }
-});
+function addMenuItemListener() {
+  Object.entries(mfmenuItems).forEach(([id, handler]) => {
+    const menuItem = document.getElementById(id);
+    if (menuItem) {
+      menuItem.addEventListener('click', handler);
+      shell.log({
+        from: "dp.app.menu.out",
+        message: 'MenuApp:' + id + 'のイベントリスナーを設定',
+        level: "info",
+      });
+    } else {
+      shell.log({
+        from: "dp.app.menu.err",
+        message: 'MenuApp:' + id + 'のメニューアイテムが見つかりません',
+        level: "warn",
+      });
+    }
+  });
+}
+  addMenuItemListener();
   </script>
 `;
 
   // メニューアイテムの設定
-  
+
   function selectTheme(element) {
     document
       .querySelectorAll(".mf-theme-btn")
@@ -825,7 +828,6 @@ export function appInit(shell) {
       return this.facilitate;
     }
   }
- 
 
   shell.log({
     from: "dp.app.moralfruit.out",
