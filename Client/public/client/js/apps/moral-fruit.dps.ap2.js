@@ -49,18 +49,6 @@ export function appInit(shell) {
   }
   root.innerHTML = `
       <div class="menu-content">
-       <div class="mf-logo">
-          <span style="color: #e400c2">M</span>
-          <span style="color: #d600ff">o</span>
-          <span style="color: #6a70ff">r</span>
-          <span style="color: #0090ff">a</span>
-          <span style="color: #00c0ff">l</span>
-          <span style="color: #ffe000">F</span>
-          <span style="color: #ffc000">r</span>
-          <span style="color: #ff9000">u</span>
-          <span style="color: #ff5a00">i</span>
-          <span style="color: #ff3a00">t</span>
-        </div>
         <div class="menu-item">
           <img src="re/ico/moral-fruit-war-icon.png" alt="争い" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-wars" style="cursor: pointer" data-lang-key="menu_toaster">
