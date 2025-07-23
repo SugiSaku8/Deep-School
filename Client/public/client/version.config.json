@@ -1,8 +1,8 @@
 {
   "deepSchoolFamily": {
-    "version": "25C1117X1",
+    "version": "25C1149X1",
     "status": "beta",
-    "lastUpdated": "2025-07-14",
+    "lastUpdated": "2025-07-23",
     "description": "Deep-School Family Software - Initial release"
   },
   "deepSchoolClient": {
@@ -24,12 +24,12 @@
     "description": "Deep-School Server - Initial stable release"
   },
   "pickramu": {
-    "version": "1.0.83",
+    "version": "1.0.85",
     "status": "beta",
     "cycle": 1,
     "release": 0,
     "revision": 1,
-    "lastUpdated": "2025-07-17",
+    "lastUpdated": "2025-07-23",
     "description": "Pickramu - Initial stable release"
   },
   "eguide": {
@@ -51,30 +51,30 @@
     "description": "eStore - Initial beta release"
   },
   "login": {
-    "version": "0.0.12",
+    "version": "0.0.13",
     "status": "beta",
     "cycle": 0,
     "release": 0,
     "revision": 1,
-    "lastUpdated": "2025-07-09",
+    "lastUpdated": "2025-07-23",
     "description": "Login - Initial beta release"
   },
   "menu": {
-    "version": "0.0.19",
+    "version": "0.0.23",
     "status": "beta",
     "cycle": 0,
     "release": 0,
     "revision": 1,
-    "lastUpdated": "2025-07-09",
+    "lastUpdated": "2025-07-23",
     "description": "Menu - Initial beta release"
   },
   "setting": {
-    "version": "0.0.11",
+    "version": "0.0.15",
     "status": "beta",
     "cycle": 0,
     "release": 0,
     "revision": 1,
-    "lastUpdated": "2025-07-14",
+    "lastUpdated": "2025-07-23",
     "description": "Setting - Initial beta release"
   },
   "toasterMachine": {
@@ -103,6 +103,15 @@
     "revision": 0,
     "lastUpdated": "2025-07-09",
     "description": "GameMaker - 2Dゲーム制作アプリ - 初期ベータリリース"
+  },
+  "moralfruit": {
+    "version": "0.0.1",
+    "status": "beta",
+    "cycle": 0,
+    "release": 1,
+    "revision": 0,
+    "lastUpdated": "2025-07-23",
+    "description": "Moral Fruit - 道徳専用学習アプリ - 初期ベータリリース"
   },
   "releaseSchedule": {
     "deepSchoolCycles": [

@@ -495,8 +495,8 @@ export function appInit(shell) {
       shell.loadApp("pickramu");
     },
     "menu-moralfruite": () => {
-      //shell.log({from: 'dp.app.menu.out', message: 'MenuApp: MoralFruitを開く', level: 'info'});
-      //shell.loadApp('moralfruit');
+      shell.log({from: 'dp.app.menu.out', message: 'MenuApp: MoralFruitを開く', level: 'info'});
+      shell.loadApp('moralfruit');
     } /*
     'menu-gamemaker': () => {
       shell.log({from: 'dp.app.menu.out', message: 'MenuApp: GameMakerを開く', level: 'info'});

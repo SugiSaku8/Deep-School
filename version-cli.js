@@ -5,10 +5,10 @@
 
 /**
  * Deep-School Version Management CLI
- * 
+ *
  * Usage:
  *   node version-cli.js [command] [options]
- * 
+ *
  * Commands:
  *   all                    - Show all version information
  *   get <component>        - Show specific component version
@@ -18,12 +18,12 @@
  *   help                   - Show help information
  */
 
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 class VersionCLI {
   constructor() {
-    this.configPath = path.join(__dirname, 'version.config.json');
+    this.configPath = path.join(__dirname, "version.config.json");
     this.versionConfig = null;
   }
 
@@ -31,37 +31,38 @@ class VersionCLI {
   loadVersionConfig() {
     try {
       if (!fs.existsSync(this.configPath)) {
-        console.error('Error: version.config.json not found');
+        console.error("Error: version.config.json not found");
         process.exit(1);
       }
-      
-      const configData = fs.readFileSync(this.configPath, 'utf8');
+
+      const configData = fs.readFileSync(this.configPath, "utf8");
       this.versionConfig = JSON.parse(configData);
       return this.versionConfig;
     } catch (error) {
-      console.error('Error loading version config:', error.message);
+      console.error("Error loading version config:", error.message);
       process.exit(1);
     }
   }
 
   // バージョン情報を取得
-  getVersion(component = 'all') {
+  getVersion(component = "all") {
     if (!this.versionConfig) {
       this.loadVersionConfig();
     }
 
-    if (component === 'all') {
+    if (component === "all") {
       return this.versionConfig;
     }
 
     const componentMap = {
-      'family': 'deepSchoolFamily',
-      'client': 'deepSchoolClient',
-      'server': 'deepSchoolServer',
-      'pickramu': 'pickramu',
-      'scr': 'scr',
-      'toaster': 'toasterMachine',
-      'gamemaker': 'gamemaker'
+      family: "deepSchoolFamily",
+      client: "deepSchoolClient",
+      server: "deepSchoolServer",
+      pickramu: "pickramu",
+      scr: "scr",
+      toaster: "toasterMachine",
+      gamemaker: "gamemaker",
+      MoralFruit: "moralfruit",
     };
 
     const configKey = componentMap[component.toLowerCase()];
@@ -73,42 +74,87 @@ class VersionCLI {
   }
 
   // バージョン情報を表示用にフォーマット
-  formatVersion(component = 'all') {
+  formatVersion(component = "all") {
     try {
       const version = this.getVersion(component);
-      
-      if (component === 'all') {
-        let output = '=== Deep-School Family Software Versions ===\n\n';
+
+      if (component === "all") {
+        let output = "=== Deep-School Family Software Versions ===\n\n";
         // 全てのキーをループ
-        const skipKeys = ['releaseSchedule'];
+        const skipKeys = ["releaseSchedule"];
         for (const [key, value] of Object.entries(version)) {
           if (skipKeys.includes(key)) continue;
           // アイコンとラベルを決定
-          let icon = '';
+          let icon = "";
           let label = key;
           switch (key) {
-            case 'deepSchoolFamily': icon = '🌐'; label = 'Deep-School Family'; break;
-            case 'deepSchoolClient': icon = '💻'; label = 'Deep-School Client'; break;
-            case 'deepSchoolServer': icon = '🖥️'; label = 'Deep-School Server'; break;
-            case 'pickramu': icon = '📚'; label = 'Pickramu'; break;
-            case 'scr': icon = '📷'; label = 'SCR'; break;
-            case 'eguide': icon = '📖'; label = 'eGuide'; break;
-            case 'estore': icon = '🛒'; label = 'eStore'; break;
-            case 'login': icon = '🔑'; label = 'Login'; break;
-            case 'menu': icon = '📋'; label = 'Menu'; break;
-            case 'setting': icon = '⚙️'; label = 'Setting'; break;
-            case 'toasterMachine': icon = '🍞'; label = 'Toaster-Machine'; break;
-            case 'gamemaker': icon = '🎮'; label = 'GameMaker'; break;
+            case "deepSchoolFamily":
+              icon = "🌐";
+              label = "Deep-School Family";
+              break;
+            case "deepSchoolClient":
+              icon = "💻";
+              label = "Deep-School Client";
+              break;
+            case "deepSchoolServer":
+              icon = "🖥️";
+              label = "Deep-School Server";
+              break;
+            case "pickramu":
+              icon = "📚";
+              label = "Pickramu";
+              break;
+            case "scr":
+              icon = "📷";
+              label = "SCR";
+              break;
+            case "eguide":
+              icon = "📖";
+              label = "eGuide";
+              break;
+            case "estore":
+              icon = "🛒";
+              label = "eStore";
+              break;
+            case "login":
+              icon = "🔑";
+              label = "Login";
+              break;
+            case "menu":
+              icon = "📋";
+              label = "Menu";
+              break;
+            case "setting":
+              icon = "⚙️";
+              label = "Setting";
+              break;
+            case "toasterMachine":
+              icon = "🍞";
+              label = "Toaster-Machine";
+              break;
+            case "gamemaker":
+              icon = "🎮";
+              label = "GameMaker";
+              break;
+            case "moralfruit":
+              icon = "🍎";
+              label = "GameMaker";
+              break;
           }
           output += `${icon} ${label}: v${value.version} (${value.status})\n`;
-          if (value.cycle !== undefined) output += `   Cycle: ${value.cycle}, Release: ${value.release}, Revision: ${value.revision}\n`;
-          if (value.lastUpdated) output += `   Last Updated: ${value.lastUpdated}\n`;
-          if (value.description) output += `   Description: ${value.description}\n`;
+          if (value.cycle !== undefined)
+            output += `   Cycle: ${value.cycle}, Release: ${value.release}, Revision: ${value.revision}\n`;
+          if (value.lastUpdated)
+            output += `   Last Updated: ${value.lastUpdated}\n`;
+          if (value.description)
+            output += `   Description: ${value.description}\n`;
           output += `\n`;
         }
         if (version.releaseSchedule) {
-          output += '=== Release Schedule ===\n';
-          output += `Next Cycle Update: ${version.releaseSchedule.nextCycleUpdate || 'Not specified'}\n`;
+          output += "=== Release Schedule ===\n";
+          output += `Next Cycle Update: ${
+            version.releaseSchedule.nextCycleUpdate || "Not specified"
+          }\n`;
         }
         return output;
       } else {
@@ -141,12 +187,12 @@ class VersionCLI {
   // バージョン比較
   compareVersions(version1, version2) {
     const parseVersion = (version) => {
-      if (typeof version === 'string') {
-        const parts = version.replace('v', '').split('.');
+      if (typeof version === "string") {
+        const parts = version.replace("v", "").split(".");
         return {
           cycle: parseInt(parts[0]) || 0,
           release: parseInt(parts[1]) || 0,
-          revision: parseInt(parts[2]) || 0
+          revision: parseInt(parts[2]) || 0,
         };
       }
       return version;
@@ -182,11 +228,31 @@ class VersionCLI {
     // 実際のアップデートチェックロジックはここに実装
     // 現在はダミーデータを返す
     return {
-      client: { hasUpdate: false, current: currentClient.version, latest: currentClient.version },
-      server: { hasUpdate: false, current: currentServer.version, latest: currentServer.version },
-      pickramu: { hasUpdate: false, current: currentPickramu.version, latest: currentPickramu.version },
-      scr: { hasUpdate: false, current: currentScr.version, latest: currentScr.version },
-      toaster: { hasUpdate: false, current: currentToaster.version, latest: currentToaster.version }
+      client: {
+        hasUpdate: false,
+        current: currentClient.version,
+        latest: currentClient.version,
+      },
+      server: {
+        hasUpdate: false,
+        current: currentServer.version,
+        latest: currentServer.version,
+      },
+      pickramu: {
+        hasUpdate: false,
+        current: currentPickramu.version,
+        latest: currentPickramu.version,
+      },
+      scr: {
+        hasUpdate: false,
+        current: currentScr.version,
+        latest: currentScr.version,
+      },
+      toaster: {
+        hasUpdate: false,
+        current: currentToaster.version,
+        latest: currentToaster.version,
+      },
     };
   }
 
@@ -232,48 +298,68 @@ Examples:
     const args = process.argv.slice(2);
     const command = args[0];
 
-    if (!command || command === 'help') {
+    if (!command || command === "help") {
       this.showHelp();
       return;
     }
 
     try {
       switch (command) {
-        case 'all':
-          console.log(this.formatVersion('all'));
+        case "all":
+          console.log(this.formatVersion("all"));
           break;
 
-        case 'get':
-          const component = args[1] || 'client';
+        case "get":
+          const component = args[1] || "client";
           console.log(this.formatVersion(component));
           break;
 
-        case 'list':
-          const components = ['family', 'client', 'server', 'pickramu', 'toaster'];
-          console.log('Available components:', ['family', 'client', 'server', 'pickramu', 'scr', 'toaster', 'gamemaker'].join(', '));
+        case "list":
+          const components = [
+            "family",
+            "client",
+            "server",
+            "pickramu",
+            "toaster",
+          ];
+          console.log(
+            "Available components:",
+            [
+              "family",
+              "client",
+              "server",
+              "pickramu",
+              "scr",
+              "toaster",
+              "gamemaker",
+            ].join(", ")
+          );
           break;
 
-        case 'check':
+        case "check":
           const updates = this.checkForUpdates();
-          console.log('Update check results:');
+          console.log("Update check results:");
           console.log(JSON.stringify(updates, null, 2));
           break;
 
-        case 'compare':
+        case "compare":
           const version1 = args[1];
           const version2 = args[2];
           if (!version1 || !version2) {
-            console.error('Error: Two versions required for comparison');
+            console.error("Error: Two versions required for comparison");
             process.exit(1);
           }
           const result = this.compareVersions(version1, version2);
-          const comparison = result === 1 ? 'newer' : result === -1 ? 'older' : 'same';
-          console.log(`Version comparison: ${version1} is ${comparison} than ${version2}`);
+          const comparison =
+            result === 1 ? "newer" : result === -1 ? "older" : "same";
+          console.log(
+            `Version comparison: ${version1} is ${comparison} than ${version2}`
+          );
           break;
 
-        case '-update':
+        case "-update":
           if (args.length < 3) {
-            console.error('Error: Module name and new version are required');
+            console.error("Error: Module name and new version are required");
             process.exit(1);
           }
           const moduleName = args[1];
@@ -287,20 +373,20 @@ Examples:
           process.exit(1);
       }
     } catch (error) {
-      console.error('Error:', error.message);
+      console.error("Error:", error.message);
       process.exit(1);
     }
   }
 
   updateModuleVersion(moduleName, newVersion) {
     const configPaths = [
-      path.join(__dirname, 'version.config.json'),
-      path.join(__dirname, 'Client/public/client/version.config.json')
+      path.join(__dirname, "version.config.json"),
+      path.join(__dirname, "Client/public/client/version.config.json"),
     ];
     let updated = false;
-    configPaths.forEach(configPath => {
+    configPaths.forEach((configPath) => {
       if (fs.existsSync(configPath)) {
-        const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+        const config = JSON.parse(fs.readFileSync(configPath, "utf-8"));
         if (!config[moduleName]) {
           // Only warn if not found, don't exit
           console.warn(`Module '${moduleName}' not found in ${configPath}`);
@@ -309,12 +395,14 @@ Examples:
         const oldVersion = config[moduleName];
         config[moduleName] = newVersion;
         fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
-        console.log(`Updated ${moduleName} in ${configPath}: ${oldVersion} -> ${newVersion}`);
+        console.log(
+          `Updated ${moduleName} in ${configPath}: ${oldVersion} -> ${newVersion}`
+        );
         updated = true;
       }
     });
     if (!updated) {
-      console.error('No config file updated.');
+      console.error("No config file updated.");
       process.exit(1);
     }
     process.exit(0);
@@ -327,4 +415,4 @@ if (require.main === module) {
   cli.run();
 }
 
-module.exports = VersionCLI; 
+module.exports = VersionCLI;
