@@ -725,9 +725,8 @@ export function appInit(shell) {
       this.aiSpeakers._6.role = aiRoles[3];
     }
 
-    async generateAIresponce(id, prompt) {
+    async generateAIresponce(id,prompt) {
       const speakers = this.aiSpeakers[id];
-      let prompt = this.facilitate();
       const role = speakers.role;
       if (typeof speakers.session !== "undefined") {
         const session = speakers.session;
