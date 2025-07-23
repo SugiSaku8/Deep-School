@@ -61,10 +61,11 @@ export function appInit(shell) {
           <img src="re/ico/Setting.png" alt="設定アイコン" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-setting" style="cursor: pointer" data-lang-key="menu_setting">設定</div>
         </div>
-         <div class="menu-item">
-          <img src="re/ico/game.svg" alt="GameMakerアイコン" class="menu-icon" />
-          <div class="menu-label chalk-text" id="menu-gamemaker" style="cursor: pointer" data-lang-key="menu_gamemaker">GameMaker</div>
+           <div class="menu-item">
+          <img src="re/ico/MoralFruite.png" alt="MoralFruitアイコン" class="menu-icon" />
+          <div class="menu-label chalk-text" id="menu-moralfruite" style="cursor: pointer" data-lang-key="menu_feedback">MoralFruit</div>
         </div>
+        
         <div class="menu-item">
           <img src="re/ico/feed.svg" alt="フィードバックアイコン" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-feedback" style="cursor: pointer" data-lang-key="menu_feedback">フィードバック</div>
@@ -443,11 +444,11 @@ export function appInit(shell) {
 `;
 
 let disabled = ` 
-        
          <div class="menu-item">
-          <img src="re/ico/MoralFruite.png" alt="MoralFruitアイコン" class="menu-icon" />
-          <div class="menu-label chalk-text" id="menu-moralfruite" style="cursor: pointer" data-lang-key="menu_feedback">MoralFruit</div>
+          <img src="re/ico/game.svg" alt="GameMakerアイコン" class="menu-icon" />
+          <div class="menu-label chalk-text" id="menu-gamemaker" style="cursor: pointer" data-lang-key="menu_gamemaker">GameMaker</div>
         </div>
+      
         `
 
   // メニューアイテムの設定
