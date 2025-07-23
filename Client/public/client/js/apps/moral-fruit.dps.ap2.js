@@ -614,7 +614,7 @@ export function appInit(shell) {
         level: "info",
       });
       document.getElementById("mf-container").style.display = "block";
-      document.getElementById("mf-menu-content").style.display = "none";
+      document.getElementById("menu-content").style.display = "none";
       document.getElementById("mf-theme1").value = "正しい戦争はあるのか";
       document.getElementById("mf-theme2").value = "戦争は人類の進化に必要か";
       document.getElementById("mf-theme3").value = "戦争はなくせるのか";
@@ -626,7 +626,7 @@ export function appInit(shell) {
         level: "info",
       });
       document.getElementById("mf-container").style.display = "block";
-      document.getElementById("mf-menu-content").style.display = "none";
+      document.getElementById("menu-content").style.display = "none";
       document.getElementById("mf-theme1").value = "学校に行く必要はあるのか";
       document.getElementById("mf-theme2").value =
         "なぜ学ばなくてはいけないのか";
@@ -640,7 +640,7 @@ export function appInit(shell) {
         level: "info",
       });
       document.getElementById("mf-container").style.display = "block";
-      document.getElementById("mf-menu-content").style.display = "none";
+      document.getElementById("menu-content").style.display = "none";
       document.getElementById("mf-theme1").value = "人はなぜ死ぬのか";
       document.getElementById("mf-theme2").value =
         "人はなぜ明日への希望を持つのか";
@@ -653,7 +653,7 @@ export function appInit(shell) {
         level: "info",
       });
       document.getElementById("mf-container").style.display = "block";
-      document.getElementById("mf-menu-content").style.display = "none";
+      document.getElementById("menu-content").style.display = "none";
       document.getElementById("mf-theme1").value = "地球環境は守るべきか";
       document.getElementById("mf-theme2").value =
         "自然生物は人間にとって必要か";
