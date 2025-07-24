@@ -900,15 +900,30 @@ function addMenuItemListener() {
       addBotMessage(_6);
     }
     latest(speakers) {
-      return speakers;
+      return speakers || ''; // Ensure we return a string even if speakers is undefined
     }
+    
+    // Ensure this.latest is always a function
+    getLatest() {
+      return this.latest || ((speakers) => speakers || '');
+    }
+    
     facilitate() {
-      this.facilitate._1 = this.latest(this.aiSpeakers._1.result);
-      this.facilitate._2 = this.latest(this.aiSpeakers._2.result);
-      this.facilitate._3 = this.latest(this.aiSpeakers._3.result);
-      this.facilitate._4 = this.latest(this.aiSpeakers._4.result);
-      this.facilitate._5 = this.latest(this.aiSpeakers._5.result);
-      this.facilitate._6 = this.latest(this.aiSpeakers._6.result);
+      const latest = this.getLatest(); // Use the safe getter
+      this.facilitate = this.facilitate || {}; // Initialize if not exists
+      
+      // Safely get results with fallback to empty string
+      const getResult = (speaker) => {
+        return (this.aiSpeakers[speaker] && this.aiSpeakers[speaker].result) || '';
+      };
+      
+      // Use the latest function safely
+      this.facilitate._1 = latest(getResult('_1'));
+      this.facilitate._2 = latest(getResult('_2'));
+      this.facilitate._3 = latest(getResult('_3'));
+      this.facilitate._4 = latest(getResult('_4'));
+      this.facilitate._5 = latest(getResult('_5'));
+      this.facilitate._6 = latest(getResult('_6'));
       this.facilitate.theme = this.theme;
       this.facilitate.report = ```
     この討論のテーマは、${(this.facilitate.theme && this.facilitate.theme.title) || "テーマ未設定"} です。
