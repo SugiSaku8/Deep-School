@@ -792,7 +792,7 @@ function addMenuItemListener() {
         this.generateAIresponce();
         //recall
       } else {
-        prompt += `${role}です。あなたは、必ず${aiRoles_esk[role]}をしてください。${role}であることを守るならば、どんな発言をしても良いです。`;
+        prompt += `${role}です。あなたは、必ず${aiRoles_esk[role]}をしてください。${role}であることを最初は守って欲しいですが、他の人の意見を聞いて、自分の意見を変えてもいいです。あなたは人間です。`;
         const reply = await speakers.session.start(prompt);
         return reply;
       }
