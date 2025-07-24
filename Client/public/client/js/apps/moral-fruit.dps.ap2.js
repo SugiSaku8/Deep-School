@@ -899,9 +899,10 @@ function addMenuItemListener() {
       this.aiSpeakers._6.result += _6;
       addBotMessage(_6);
     }
-    latest(speakers) {
+    // Use arrow function to maintain 'this' binding
+    latest = (speakers) => {
       return speakers || ''; // Ensure we return a string even if speakers is undefined
-    }
+    };
     
     // Ensure this.latest is always a function
     getLatest() {
