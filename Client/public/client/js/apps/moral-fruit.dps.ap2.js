@@ -598,7 +598,6 @@ export function appInit(shell) {
         color: white;
       }
 </style>
-  // メニューアイテムのイベントリスナーを設定する関数
   function addMenuItemListener() {
   console.log('addMenuItemListener: attaching handlers');
     Object.entries(mfmenuItems).forEach(([id, handler]) => {
