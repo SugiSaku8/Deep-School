@@ -64,6 +64,7 @@ class GeminiProcessor {
     const requestBody = {
       contents: [
         {
+          role: "user",
           parts: [
             {
               text: fullMessage,
