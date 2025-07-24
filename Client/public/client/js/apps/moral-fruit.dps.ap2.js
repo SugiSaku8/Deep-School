@@ -599,6 +599,32 @@ export function appInit(shell) {
       }
   </style>
   <script>
+  // メニューアイテムのイベントリスナーを設定する関数
+  function addMenuItemListener() {
+    Object.entries(mfmenuItems).forEach(([id, handler]) => {
+      const menuItem = document.getElementById(id);
+      if (menuItem) {
+        menuItem.addEventListener('click', handler);
+        shell.log({
+          from: "dp.app.menu.out",
+          message: 'MenuApp:' + id + 'のイベントリスナーを設定',
+          level: "info",
+        });
+      } else {
+        shell.log({
+          from: "dp.app.menu.err",
+          message: 'MenuApp:' + id + 'のメニューアイテムが見つかりません',
+          level: "warn",
+        });
+      }
+    });
+  }
+
+  // DOMの読み込みが完了したらメニューアイテムのイベントリスナーを設定
+  document.addEventListener('DOMContentLoaded', function() {
+    addMenuItemListener();
+  });
+
   const mfmenuItems = {
     "menu-wars": () => {
       shell.log({
@@ -833,9 +859,6 @@ function addMenuItemListener() {
       return this.facilitate;
     }
   }
-
-  // メニューアイテムのイベントリスナーを設定
-  addMenuItemListener();
 
   shell.log({
     from: "dp.app.moralfruit.out",
