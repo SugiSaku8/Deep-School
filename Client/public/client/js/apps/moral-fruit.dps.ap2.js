@@ -928,7 +928,7 @@ function addMenuItemListener() {
     4. ${this.facilitate._4}    
     5. ${this.facilitate._5}    
     6. ${this.facilitate._6}  
-    7. ${this.user.result}
+    7. ${(this.user && this.user.result) || '（まだ入力がありません）'}
     さて、あなたはこの答えのない質問にどのような答えを出しますか？
     あなたは、
     `;
