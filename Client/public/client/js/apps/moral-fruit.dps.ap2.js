@@ -598,6 +598,7 @@ export function appInit(shell) {
         color: white;
       }
 </style>
+<script>
   function addMenuItemListener() {
   console.log('addMenuItemListener: attaching handlers');
     Object.entries(mfmenuItems).forEach(([id, handler]) => {
