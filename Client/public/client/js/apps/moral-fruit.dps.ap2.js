@@ -40,26 +40,7 @@ export function appInit(shell) {
   // HTMLを#app-rootに描画
   const root = document.getElementById("app-root");
   
-  // モラルフルーツを表示/非表示にする関数
-  function toggleMoralFruit() {
-    const container = document.querySelector('.mf-container');
-    const button = document.getElementById('showMoralFruit');
-    if (container.style.display === 'none') {
-      container.style.display = 'block';
-      button.querySelector('span').textContent = 'Moral Fruitを閉じる';
-    } else {
-      container.style.display = 'none';
-      button.querySelector('span').textContent = 'Moral Fruitを開く';
-    }
-  }
-  
-  // トグルボタンのクリックイベントを設定
-  document.addEventListener('DOMContentLoaded', function() {
-    const toggleButton = document.getElementById('showMoralFruit');
-    if (toggleButton) {
-      toggleButton.addEventListener('click', toggleMoralFruit);
-    }
-  });
+
   if (!root) {
     shell.log({
       from: "dp.app.MoralFruit.err",
@@ -97,10 +78,7 @@ export function appInit(shell) {
         </div>
       </div>
       </div>
-      <div class="mf-toggle-button" id="showMoralFruit">
-        <img src="re/ico/moral-fruit-war-icon.png" alt="Moral Fruit" class="toggle-icon" />
-        <span>Moral Fruitを開く</span>
-      </div>
+
      <div class="mf-container" style="display: none;">
       <div class="mf-header">
         <div class="mf-logo">
@@ -496,26 +474,7 @@ export function appInit(shell) {
   }
 
 
-      .mf-toggle-button {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background-color: #4a90e2;
-        color: white;
-        padding: 10px 20px;
-        border-radius: 25px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        z-index: 1000;
-      }
-      
-      .toggle-icon {
-        width: 24px;
-        height: 24px;
-      }
+
       
       .mf-container {
         display: none;
@@ -647,11 +606,15 @@ export function appInit(shell) {
         message: "MoralFruitApp: WARSカテゴリで開始",
         level: "info",
       });
-      document.getElementById("mf-container").style.display = "block";
-      document.querySelector(".menu-content").style.display = "none";
-      document.getElementById("mf-theme1").value = "正しい戦争はあるのか";
-      document.getElementById("mf-theme2").value = "戦争は人類の進化に必要か";
-      document.getElementById("mf-theme3").value = "戦争はなくせるのか";
+      const container = document.querySelector('.mf-container');
+      const menuContent = document.querySelector('.menu-content');
+      if (container && menuContent) {
+        container.style.display = 'block';
+        menuContent.style.display = 'none';
+      }
+      document.getElementById("mf-theme1").textContent = "正しい戦争はあるのか";
+      document.getElementById("mf-theme2").textContent = "戦争は人類の進化に必要か";
+      document.getElementById("mf-theme3").textContent = "戦争はなくせるのか";
     },
     "menu-edu": () => {
       shell.log({
@@ -659,13 +622,15 @@ export function appInit(shell) {
         message: "MoralFruitApp: EDUカテゴリで開始",
         level: "info",
       });
-      document.getElementById("mf-container").style.display = "block";
-      document.querySelector(".menu-content").style.display = "none";
-      document.getElementById("mf-theme1").value = "学校に行く必要はあるのか";
-      document.getElementById("mf-theme2").value =
-        "なぜ学ばなくてはいけないのか";
-      document.getElementById("mf-theme3").value =
-        "何を学ばなくてはいけないのか";
+      const container = document.querySelector('.mf-container');
+      const menuContent = document.querySelector('.menu-content');
+      if (container && menuContent) {
+        container.style.display = 'block';
+        menuContent.style.display = 'none';
+      }
+      document.getElementById("mf-theme1").textContent = "学校に行く必要はあるのか";
+      document.getElementById("mf-theme2").textContent = "なぜ学ばなくてはいけないのか";
+      document.getElementById("mf-theme3").textContent = "何を学ばなくてはいけないのか";
     },
     "menu-die": () => {
       shell.log({
@@ -673,12 +638,15 @@ export function appInit(shell) {
         message: "MoralFruitApp: DIEカテゴリで開始",
         level: "info",
       });
-      document.getElementById("mf-container").style.display = "block";
-      document.querySelector(".menu-content").style.display = "none";
-      document.getElementById("mf-theme1").value = "人はなぜ死ぬのか";
-      document.getElementById("mf-theme2").value =
-        "人はなぜ明日への希望を持つのか";
-      document.getElementById("mf-theme3").value = "生存競争は必要か";
+      const container = document.querySelector('.mf-container');
+      const menuContent = document.querySelector('.menu-content');
+      if (container && menuContent) {
+        container.style.display = 'block';
+        menuContent.style.display = 'none';
+      }
+      document.getElementById("mf-theme1").textContent = "人はなぜ死ぬのか";
+      document.getElementById("mf-theme2").textContent = "人はなぜ明日への希望を持つのか";
+      document.getElementById("mf-theme3").textContent = "生存競争は必要か";
     },
     "menu-earth": () => {
       shell.log({
@@ -686,12 +654,15 @@ export function appInit(shell) {
         message: "MoralFruitApp: EARTHを開く",
         level: "info",
       });
-      document.getElementById("mf-container").style.display = "block";
-      document.querySelector(".menu-content").style.display = "none";
-      document.getElementById("mf-theme1").value = "地球環境は守るべきか";
-      document.getElementById("mf-theme2").value =
-        "自然生物は人間にとって必要か";
-      document.getElementById("mf-theme3").value = "人間は自然に干渉すべきか";
+      const container = document.querySelector('.mf-container');
+      const menuContent = document.querySelector('.menu-content');
+      if (container && menuContent) {
+        container.style.display = 'block';
+        menuContent.style.display = 'none';
+      }
+      document.getElementById("mf-theme1").textContent = "地球環境は守るべきか";
+      document.getElementById("mf-theme2").textContent = "自然生物は人間にとって必要か";
+      document.getElementById("mf-theme3").textContent = "人間は自然に干渉すべきか";
     },
   };
 function addMenuItemListener() {
