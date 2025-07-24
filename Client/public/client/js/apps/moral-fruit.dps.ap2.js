@@ -723,6 +723,8 @@ function addMenuItemListener() {
     element.classList.add("active");
     theme = element;
   }
+  // expose globally for inline onclick before first use
+  window.selectTheme = selectTheme;
 
   function addBotMessage(text) {
     const chat = document.getElementById("mf-chat-main");
