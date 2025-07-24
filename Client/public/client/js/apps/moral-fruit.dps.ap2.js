@@ -899,35 +899,46 @@ function addMenuItemListener() {
       this.aiSpeakers._6.result += _6;
       addBotMessage(_6);
     }
-    // Use arrow function to maintain 'this' binding
-    latest = (speakers) => {
-      return speakers || ''; // Ensure we return a string even if speakers is undefined
-    };
-    
-    // Ensure this.latest is always a function
-    getLatest() {
-      return this.latest || ((speakers) => speakers || '');
+    // Simple latest function that can't be overridden
+    latest(speakers) {
+      return typeof speakers === 'string' ? speakers : '';
     }
     
     facilitate() {
-      const latest = this.getLatest(); // Use the safe getter
-      this.facilitate = this.facilitate || {}; // Initialize if not exists
+      // Initialize facilitate object if it doesn't exist
+      if (!this.facilitate || typeof this.facilitate !== 'object') {
+        this.facilitate = {};
+      }
       
-      // Safely get results with fallback to empty string
-      const getResult = (speaker) => {
-        return (this.aiSpeakers[speaker] && this.aiSpeakers[speaker].result) || '';
+      // Safely get speaker results
+      const getSafeResult = (speaker) => {
+        try {
+          return (this.aiSpeakers && this.aiSpeakers[speaker] && 
+                 typeof this.aiSpeakers[speaker].result === 'string') ? 
+                 this.aiSpeakers[speaker].result : '';
+        } catch (e) {
+          console.error('Error getting speaker result:', e);
+          return '';
+        }
       };
       
-      // Use the latest function safely
-      this.facilitate._1 = latest(getResult('_1'));
-      this.facilitate._2 = latest(getResult('_2'));
-      this.facilitate._3 = latest(getResult('_3'));
-      this.facilitate._4 = latest(getResult('_4'));
-      this.facilitate._5 = latest(getResult('_5'));
-      this.facilitate._6 = latest(getResult('_6'));
-      this.facilitate.theme = this.theme;
-      this.facilitate.report = ```
-    この討論のテーマは、${(this.facilitate.theme && this.facilitate.theme.title) || "テーマ未設定"} です。
+      // Get all speaker results safely
+      const results = {
+        _1: getSafeResult('_1'),
+        _2: getSafeResult('_2'),
+        _3: getSafeResult('_3'),
+        _4: getSafeResult('_4'),
+        _5: getSafeResult('_5'),
+        _6: getSafeResult('_6'),
+        theme: this.theme || { title: 'テーマ未設定' }
+      };
+      
+      // Build the report string directly
+      const userInput = (this.user && typeof this.user.result === 'string') ? 
+                       this.user.result : '（まだ入力がありません）';
+      
+      const report = `
+    この討論のテーマは、${results.theme.title || 'テーマ未設定'} です。
     あなたは、この討論に参加しています。
     参加者は、以下の通りです。
     1.中立者
@@ -938,16 +949,19 @@ function addMenuItemListener() {
     6.左派
     7.ユーザー
     それぞれの意見者は、次のような意見を述べています。
-    1. ${this.facilitate._1}
-    2. ${this.facilitate._2}
-    3. ${this.facilitate._3}    
-    4. ${this.facilitate._4}    
-    5. ${this.facilitate._5}    
-    6. ${this.facilitate._6}  
-    7. ${(this.user && this.user.result) || '（まだ入力がありません）'}
+    1. ${results._1 || '（意見なし）'}
+    2. ${results._2 || '（意見なし）'}
+    3. ${results._3 || '（意見なし）'}
+    4. ${results._4 || '（意見なし）'}
+    5. ${results._5 || '（意見なし）'}
+    6. ${results._6 || '（意見なし）'}
+    7. ${userInput}
     さて、あなたはこの答えのない質問にどのような答えを出しますか？
     あなたは、
     `;
+    
+      // Update facilitate object
+      Object.assign(this.facilitate, results, { report });
       return this.facilitate;
     }
   }
