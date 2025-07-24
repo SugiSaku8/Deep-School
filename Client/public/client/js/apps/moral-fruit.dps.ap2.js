@@ -105,9 +105,6 @@ export function appInit(shell) {
 
       <div class="mf-footer"></div>
     </div>
-    <div class="copyright-container horizontal-copyright">
-      <p class="copyright chalk-text left-align" data-lang-key="copyright">(c) 2022-2025 Carnation Studio v0.4.0 25C1117X1</p>
-    </div>
   
   <style>
   /* Main container */
