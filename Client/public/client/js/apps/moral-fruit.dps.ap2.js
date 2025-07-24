@@ -597,8 +597,7 @@ export function appInit(shell) {
         background: #007aff;
         color: white;
       }
-  </style>
-  <script>
+</style>
   // メニューアイテムのイベントリスナーを設定する関数
   function addMenuItemListener() {
   console.log('addMenuItemListener: attaching handlers');
@@ -621,10 +620,7 @@ export function appInit(shell) {
     });
   }
 
-  // DOMの読み込みが完了したらメニューアイテムのイベントリスナーを設定
-  document.addEventListener('DOMContentLoaded', function() {
-    addMenuItemListener();
-  });
+  
 
   const mfmenuItems = {
     "menu-wars": () => {
@@ -726,6 +722,67 @@ function addMenuItemListener() {
   }
   // expose globally for inline onclick before first use
   window.selectTheme = selectTheme;
+
+  // ----------------- Menu handler setup outside template -----------------
+  (function initMenuHandlers() {
+    const menuConfig = {
+      'menu-wars': {
+        themeObj: { title: '戦争', description: '正しい戦争はあるのか' },
+        texts: [
+          '正しい戦争はあるのか',
+          '戦争は人類の進化に必要か',
+          '戦争はなくせるのか'
+        ]
+      },
+      'menu-edu': {
+        themeObj: { title: '教育', description: '学校に行く必要はあるのか' },
+        texts: [
+          '学校に行く必要はあるのか',
+          'なぜ学ばなくてはいけないのか',
+          '何を学ばなくてはいけないのか'
+        ]
+      },
+      'menu-die': {
+        themeObj: { title: '生命', description: '人はなぜ死ぬのか' },
+        texts: [
+          '人はなぜ死ぬのか',
+          '人はなぜ明日への希望を持つのか',
+          '生存競争は必要か'
+        ]
+      },
+      'menu-earth': {
+        themeObj: { title: '環境', description: '地球環境は守るべきか' },
+        texts: [
+          '地球環境は守るべきか',
+          '自然生物は人間にとって必要か',
+          '人間は自然に干渉すべきか'
+        ]
+      }
+    };
+
+    function activate(cfg) {
+      const container = document.querySelector('.mf-container');
+      const menuContent = document.querySelector('.menu-content');
+      if (container && menuContent) {
+        container.style.display = 'block';
+        menuContent.style.display = 'none';
+      }
+      // set sidebar texts
+      ['mf-theme1', 'mf-theme2', 'mf-theme3'].forEach((id, idx) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = cfg.texts[idx] || '';
+      });
+      // start session
+      const session = new moral_desk(cfg.themeObj);
+      session.start(3);
+    }
+
+    // attach listeners
+    Object.entries(menuConfig).forEach(([id, cfg]) => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('click', () => activate(cfg));
+    });
+  })();
 
   function addBotMessage(text) {
     const chat = document.getElementById("mf-chat-main");
@@ -864,7 +921,7 @@ function addMenuItemListener() {
     }
   }
 
-  // --- Menu item handlers and event listener setup (executed) ---
+  
   const mfmenuItems = {
     "menu-wars": () => {
       const container = document.querySelector('.mf-container');
@@ -919,8 +976,7 @@ function addMenuItemListener() {
     });
   }
 
-  // Call once DOM elements exist (immediately after innerHTML assignment)
-  addMenuItemListener();
+  
 
   shell.log({
     from: "dp.app.moralfruit.out",
