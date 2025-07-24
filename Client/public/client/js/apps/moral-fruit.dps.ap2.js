@@ -834,6 +834,9 @@ function addMenuItemListener() {
     }
   }
 
+  // メニューアイテムのイベントリスナーを設定
+  addMenuItemListener();
+
   shell.log({
     from: "dp.app.moralfruit.out",
     message: "Moral-FruitApp: 初期化完了",
