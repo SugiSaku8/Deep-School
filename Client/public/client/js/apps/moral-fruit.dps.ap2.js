@@ -471,7 +471,7 @@ export function appInit(shell) {
   }
 
 
-      .mf-container fix:u#mf-container {
+      .mf-container #mf-container {
         padding: 20px;
         display:none;
       }
