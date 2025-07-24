@@ -746,14 +746,15 @@ function addMenuItemListener() {
     chat.innerHTML = ""; // すべて削除
   }
   class moral_desk {
-    constructor() {
-      this.theme = themes[Math.floor(Math.random() * themes.length)];
+    constructor(selectedTheme) {
+      // Use the selected theme if provided; otherwise fallback to random
+      this.theme = selectedTheme || themes[Math.floor(Math.random() * themes.length)];
       this.aiSpeakers = aiSpeakers;
       this.session = ssession;
       clearMessages();
     }
 
-    start(nfeath) {
+    start(nfeath = 3) {
       this.getTheme();
       this.getAISpeakers();
       this.getSession();
