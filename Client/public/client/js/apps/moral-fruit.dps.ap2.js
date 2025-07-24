@@ -601,6 +601,7 @@ export function appInit(shell) {
   <script>
   // メニューアイテムのイベントリスナーを設定する関数
   function addMenuItemListener() {
+  console.log('addMenuItemListener: attaching handlers');
     Object.entries(mfmenuItems).forEach(([id, handler]) => {
       const menuItem = document.getElementById(id);
       if (menuItem) {
@@ -754,7 +755,7 @@ function addMenuItemListener() {
       clearMessages();
     }
 
-    start(nfeath = 3) {
+    start(nfeath = 30) {
       this.getTheme();
       this.getAISpeakers();
       this.getSession();
