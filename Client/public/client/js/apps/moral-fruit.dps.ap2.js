@@ -827,56 +827,66 @@ function addMenuItemListener() {
       clearMessages();
     }
 
-    start(nfeath = 30) {
+    async start(nfeath = 30) {
       this.getTheme();
       this.getAISpeakers();
       this.getSession();
       for (let step = 0; step < nfeath; step++) {
         const facilitated = this.facilitate();
         const userResponse = this.getUserResponse();
-        this.generateAIresponce(1, facilitated);
-        this.generateAIresponce(2, facilitated);
-        this.generateAIresponce(3, facilitated);
-        this.generateAIresponce(4, facilitated);
-        this.generateAIresponce(5, facilitated);
-        this.generateAIresponce(6, facilitated);
-        this.showAllSpeakersResults(userResponse, _1, _2, _3, _4, _5, _6);
+        const r1 = await this.generateAIresponce(1, facilitated);
+        const r2 = await this.generateAIresponce(2, facilitated);
+        const r3 = await this.generateAIresponce(3, facilitated);
+        const r4 = await this.generateAIresponce(4, facilitated);
+        const r5 = await this.generateAIresponce(5, facilitated);
+        const r6 = await this.generateAIresponce(6, facilitated);
+        this.showAllSpeakersResults(userResponse, r1, r2, r3, r4, r5, r6);
       }
     }
     getTheme() {
-      return theme;
+      return this.theme;
     }
 
     getAISpeakers() {
-      this.aiSpeakers._1.role = aiRoles[1];
-      this.aiSpeakers._2.role = aiRoles[1];
-      this.aiSpeakers._3.role = aiRoles[2];
-      this.aiSpeakers._4.role = aiRoles[2];
-      this.aiSpeakers._5.role = aiRoles[3];
-      this.aiSpeakers._6.role = aiRoles[3];
+      this.aiSpeakers._1.role = aiRoles[0]; // national
+      this.aiSpeakers._2.role = aiRoles[0];
+      this.aiSpeakers._3.role = aiRoles[1]; // right-wing
+      this.aiSpeakers._4.role = aiRoles[1];
+      this.aiSpeakers._5.role = aiRoles[2]; // left-wing
+      this.aiSpeakers._6.role = aiRoles[2];
     }
 
     async generateAIresponce(id, prompt) {
-      const speakers = this.aiSpeakers[id];
-      const role = speakers.role;
-      if (typeof speakers.session !== "undefined") {
-        const session = speakers.session;
+      // Ensure id maps to string keys like '_1'
+      const key = `_${id}`;
+      const speakers = this.aiSpeakers[key];
+      if (!speakers) {
+        console.warn(`Invalid speaker id: ${id}`);
+        return;
+      }
+      // Ensure session exists
+      if (!speakers.session) {
         const gemini = GeminiIninter();
-        const chatHistoryManager = new ChatHistoryManager(gemini, session);
-        const processor = new GeminiProcessor(gemini, chatHistoryManager);
-        speakers.session = processor;
-        this.generateAIresponce();
-        //recall
-      } else {
-        prompt += `${role}です。あなたは、必ず${aiRoles_esk[role]}をしてください。${role}であることを最初は守って欲しいですが、他の人の意見を聞いて、自分の意見を変えてもいいです。あなたは人間です。`;
-        const reply = await speakers.session.start(prompt);
+        speakers.session = ssession(gemini);
+      }
+      const role = speakers.role || 'speaker';
+      const fullPrompt = `${prompt.report}\n${role}として回答してください。`;
+      try {
+        const reply = await speakers.session.start(fullPrompt);
+        speakers.result += reply;
+        addBotMessage(reply);
         return reply;
+      } catch (e) {
+        console.error('generateAIresponce error:', e);
       }
     }
     getUserResponse() {
       const input = document.getElementById("app-moral-fruit-user-input");
-      const userResponse = input.value.trim();
-      return userResponse;
+      if (!input) {
+        console.warn('User input element not found');
+        return '';
+      }
+      return input.value.trim();
     }
     getSession() {
       const gemini = GeminiIninter();
@@ -884,7 +894,7 @@ function addMenuItemListener() {
       this.session = session;
     }
     showAllSpeakersResults(user, _1, _2, _3, _4, _5, _6) {
-      this.user += user;
+      this.user = { result: user };
       addUserMessage(user);
       this.aiSpeakers._1.result += _1;
       addBotMessage(_1);
