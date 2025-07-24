@@ -903,7 +903,7 @@ function addMenuItemListener() {
       this.facilitate._6 = this.latest(this.aiSpeakers._6.result);
       this.facilitate.theme = this.theme;
       this.facilitate.report = ```
-    この討論のテーマは、${this.facilitate.themme.title} です。
+    この討論のテーマは、${(this.facilitate.theme && this.facilitate.theme.title) || "テーマ未設定"} です。
     あなたは、この討論に参加しています。
     参加者は、以下の通りです。
     1.中立者
