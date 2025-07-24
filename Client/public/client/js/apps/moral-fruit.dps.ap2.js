@@ -905,10 +905,8 @@ function addMenuItemListener() {
     }
     
     facilitate() {
-      // Initialize facilitate object if it doesn't exist
-      if (!this.facilitate || typeof this.facilitate !== 'object') {
-        this.facilitate = {};
-      }
+      // Use a local summary object; do NOT overwrite the facilitate method.
+      const summary = {};
       
       // Safely get speaker results
       const getSafeResult = (speaker) => {
@@ -960,9 +958,8 @@ function addMenuItemListener() {
     あなたは、
     `;
     
-      // Update facilitate object
-      Object.assign(this.facilitate, results, { report });
-      return this.facilitate;
+      // Return summary (results + report)
+      return { ...results, report };
     }
   }
 
