@@ -28,20 +28,20 @@ const CONFIG = {
   },
   SAFETY_SETTINGS: [
     {
-      category: "HARASSMENT",
-      threshold: "BLOCK_ALL",
+      category: "HARM_CATEGORY_HARASSMENT",
+      threshold: "BLOCK_NONE",
     },
     {
-      category: "HATE_SPEECH",
-      threshold: "BLOCK_ALL",
+      category: "HARM_CATEGORY_HATE_SPEECH",
+      threshold: "BLOCK_NONE",
     },
     {
-      category: "SEXUALLY_EXPLICIT",
-      threshold: "BLOCK_ALL",
+      category: "HARM_CATEGORY_SEXUAL",
+      threshold: "BLOCK_NONE",
     },
     {
-      category: "DANGEROUS_CONTENT",
-      threshold: "BLOCK_ALL",
+      category: "HARM_CATEGORY_DANGEROUS",
+      threshold: "BLOCK_NONE",
     },
   ],
 };
