@@ -814,7 +814,15 @@ function addMenuItemListener() {
     constructor(selectedTheme) {
       // Use the selected theme if provided; otherwise fallback to random
       this.theme = selectedTheme || themes[Math.floor(Math.random() * themes.length)];
-      this.aiSpeakers = aiSpeakers;
+      // Initialize fresh aiSpeakers for each session
+      this.aiSpeakers = {
+        _1: { role: "", result: "" },
+        _2: { role: "", result: "" },
+        _3: { role: "", result: "" },
+        _4: { role: "", result: "" },
+        _5: { role: "", result: "" },
+        _6: { role: "", result: "" }
+      };
       this.session = ssession;
       clearMessages();
     }
