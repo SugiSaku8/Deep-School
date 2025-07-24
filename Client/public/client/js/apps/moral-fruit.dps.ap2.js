@@ -39,6 +39,27 @@ export function appInit(shell) {
 
   // HTMLを#app-rootに描画
   const root = document.getElementById("app-root");
+  
+  // モラルフルーツを表示/非表示にする関数
+  function toggleMoralFruit() {
+    const container = document.querySelector('.mf-container');
+    const button = document.getElementById('showMoralFruit');
+    if (container.style.display === 'none') {
+      container.style.display = 'block';
+      button.querySelector('span').textContent = 'Moral Fruitを閉じる';
+    } else {
+      container.style.display = 'none';
+      button.querySelector('span').textContent = 'Moral Fruitを開く';
+    }
+  }
+  
+  // トグルボタンのクリックイベントを設定
+  document.addEventListener('DOMContentLoaded', function() {
+    const toggleButton = document.getElementById('showMoralFruit');
+    if (toggleButton) {
+      toggleButton.addEventListener('click', toggleMoralFruit);
+    }
+  });
   if (!root) {
     shell.log({
       from: "dp.app.MoralFruit.err",
@@ -75,8 +96,12 @@ export function appInit(shell) {
           </div>
         </div>
       </div>
-    </div>
-     <div class="mf-container">
+      </div>
+      <div class="mf-toggle-button" id="showMoralFruit">
+        <img src="re/ico/moral-fruit-war-icon.png" alt="Moral Fruit" class="toggle-icon" />
+        <span>Moral Fruitを開く</span>
+      </div>
+     <div class="mf-container" style="display: none;">
       <div class="mf-header">
         <div class="mf-logo">
           <span style="color: #e400c2">M</span>
@@ -471,9 +496,33 @@ export function appInit(shell) {
   }
 
 
+      .mf-toggle-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #4a90e2;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        z-index: 1000;
+      }
+      
+      .toggle-icon {
+        width: 24px;
+        height: 24px;
+      }
+      
+      .mf-container {
+        display: none;
+      }
+      
       .mf-container #mf-container {
         padding: 20px;
-        display:none;
       }
 
       .mf-header {
