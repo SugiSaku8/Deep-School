@@ -860,6 +860,64 @@ function addMenuItemListener() {
     }
   }
 
+  // --- Menu item handlers and event listener setup (executed) ---
+  const mfmenuItems = {
+    "menu-wars": () => {
+      const container = document.querySelector('.mf-container');
+      const menuContent = document.querySelector('.menu-content');
+      if (container && menuContent) {
+        container.style.display = 'block';
+        menuContent.style.display = 'none';
+      }
+      document.getElementById("mf-theme1").textContent = "正しい戦争はあるのか";
+      document.getElementById("mf-theme2").textContent = "戦争は人類の進化に必要か";
+      document.getElementById("mf-theme3").textContent = "戦争はなくせるのか";
+    },
+    "menu-edu": () => {
+      const container = document.querySelector('.mf-container');
+      const menuContent = document.querySelector('.menu-content');
+      if (container && menuContent) {
+        container.style.display = 'block';
+        menuContent.style.display = 'none';
+      }
+      document.getElementById("mf-theme1").textContent = "学校に行く必要はあるのか";
+      document.getElementById("mf-theme2").textContent = "なぜ学ばなくてはいけないのか";
+      document.getElementById("mf-theme3").textContent = "何を学ばなくてはいけないのか";
+    },
+    "menu-die": () => {
+      const container = document.querySelector('.mf-container');
+      const menuContent = document.querySelector('.menu-content');
+      if (container && menuContent) {
+        container.style.display = 'block';
+        menuContent.style.display = 'none';
+      }
+      document.getElementById("mf-theme1").textContent = "人はなぜ死ぬのか";
+      document.getElementById("mf-theme2").textContent = "人はなぜ明日への希望を持つのか";
+      document.getElementById("mf-theme3").textContent = "生存競争は必要か";
+    },
+    "menu-earth": () => {
+      const container = document.querySelector('.mf-container');
+      const menuContent = document.querySelector('.menu-content');
+      if (container && menuContent) {
+        container.style.display = 'block';
+        menuContent.style.display = 'none';
+      }
+      document.getElementById("mf-theme1").textContent = "地球環境は守るべきか";
+      document.getElementById("mf-theme2").textContent = "自然生物は人間にとって必要か";
+      document.getElementById("mf-theme3").textContent = "人間は自然に干渉すべきか";
+    }
+  };
+
+  function addMenuItemListener() {
+    Object.entries(mfmenuItems).forEach(([id, handler]) => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('click', handler);
+    });
+  }
+
+  // Call once DOM elements exist (immediately after innerHTML assignment)
+  addMenuItemListener();
+
   shell.log({
     from: "dp.app.moralfruit.out",
     message: "Moral-FruitApp: 初期化完了",
