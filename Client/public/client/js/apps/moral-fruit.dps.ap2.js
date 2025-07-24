@@ -28,7 +28,14 @@ const themes = [
   { title: "社会保障", description: "高齢者福祉制度の見直し" },
   { title: "教育改革", description: "学習内容と方法の変革" },
 ];
-
+window.aiSpeakers = {
+  _1: { role: "", result: "" },
+  _2: { role: "", result: "" },
+  _3: { role: "", result: "" },
+  _4: { role: "", result: "" },
+  _5: { role: "", result: "" },
+  _6: { role: "", result: "" },
+};
 export function appInit(shell) {
   let theme;
   shell.log({
