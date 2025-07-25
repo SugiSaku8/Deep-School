@@ -109,7 +109,7 @@ export function appInit(shell) {
           <div class="mf-theme-btn" id="mf-theme2" onclick="selectTheme(this)"></div>
           <div class="mf-theme-btn" id="mf-theme3" onclick="selectTheme(this)"></div>
         </div>
-        <div class="mf-chat-main" id="mf-chat-main">
+        <div class="mf-chat-main" id="mf-chat-main" style="overflow-y:auto;max-height:60vh;">
         </div>
       </div>
 
@@ -804,6 +804,7 @@ function addMenuItemListener() {
     div.className = "mf-message-bot";
     div.textContent = text;
     chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
   }
 
   function addUserMessage(text) {
@@ -812,6 +813,7 @@ function addMenuItemListener() {
     div.className = "mf-message-user";
     div.textContent = text;
     chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
   }
   function clearMessages() {
     const chat = document.getElementById("mf-chat-main");
@@ -849,6 +851,7 @@ function addMenuItemListener() {
        const handleSend = async () => {
          const userResponse = this.getUserResponse();
          if (!userResponse) return;
+         addUserMessage(userResponse);
          const facilitated = this.facilitate();
          const r1 = await this.generateAIresponce(1, facilitated);
          const r2 = await this.generateAIresponce(2, facilitated);
@@ -856,7 +859,7 @@ function addMenuItemListener() {
          const r4 = await this.generateAIresponce(4, facilitated);
          const r5 = await this.generateAIresponce(5, facilitated);
          const r6 = await this.generateAIresponce(6, facilitated);
-         this.showAllSpeakersResults(userResponse, r1, r2, r3, r4, r5, r6);
+         this.showAllSpeakersResults(null, r1, r2, r3, r4, r5, r6);
          inputEl.value = '';
        };
 
@@ -920,8 +923,7 @@ function addMenuItemListener() {
       this.session = session;
     }
     showAllSpeakersResults(user, _1, _2, _3, _4, _5, _6) {
-      this.user = { result: user };
-      addUserMessage(user);
+      if(user){ this.user = { result: user }; }
       this.aiSpeakers._1.result += _1;
       addBotMessage(_1);
       this.aiSpeakers._2.result += _2;
