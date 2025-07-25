@@ -973,6 +973,7 @@ function addMenuItemListener() {
     6. ${results._6 || '（意見なし）'}
     7. ${userInput}
     さて、あなたはこの答えのない質問にどのような答えを出しますか？
+    百文字以内で答えてください。
     あなたは、
     `;
     
