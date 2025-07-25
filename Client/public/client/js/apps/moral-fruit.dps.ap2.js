@@ -99,14 +99,15 @@ export function appInit(shell) {
   }
 
   root.innerHTML = `
-  <div id="mf-logoo" class="mf-header" style="display:flex;justify-content:center;text-align:center;margin:24px auto;">
+      <div id="mf-logoo" class="mf-header" style="display:flex;justify-content:center;margin:24px auto;">
         <div class="mf-logo">
-          <span style="color: #e400c2">M</span><span style="color: #d600ff">o</span><span style="color: #6a70ff">r</span><span style="color: #0090ff">a</span><span style="color: #00c0ff">l</span><span style="color: #ffe000">F</span><span style="color: #ffc000">r</span><span style="color: #ff9000">u</span><span style="color: #ff5a00">i</span><span style="color: #ff3a00">t</span>
+          <span style="color:#e400c2">M</span><span style="color:#d600ff">o</span><span style="color:#6a70ff">r</span><span style="color:#0090ff">a</span><span style="color:#00c0ff">l</span><span style="color:#ffe000">F</span><span style="color:#ffc000">r</span><span style="color:#ff9000">u</span><span style="color:#ff5a00">i</span><span style="color:#ff3a00">t</span>
         </div>
       </div>
-    </div>
-    <div class="menu-item">
-      <img src="re/ico/moral-fruit-war-icon.png" alt="争い" class="menu-icon" />
+      <div class="menu-content" style="display:flex;flex-wrap:wrap;gap:2rem;justify-content:center;">
+        <div class="menu-item" id="menu-wars-item">
+          <img src="re/ico/moral-fruit-war-icon.png" alt="争い" class="menu-icon" />
+          <div class="menu-label chalk-text" id="menu-wars" data-lang-key="menu_toaster">争い</div>
       <div class="menu-label chalk-text" id="menu-wars" style="cursor: pointer" data-lang-key="menu_toaster">
         争い
       </div>
@@ -201,7 +202,7 @@ export function appInit(shell) {
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    min-width: 200px;
+    flex: 0 0 200px;
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
   
