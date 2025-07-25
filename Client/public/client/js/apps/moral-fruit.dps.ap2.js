@@ -1,6 +1,4 @@
-// moral-fruit.dps.ap2.js
-import { GeminiProcessor } from "../chat/tm/moralmodel.js";
-//nantonaku load
+//moral-model load
 import { GeminiIninter, ssession } from "../chat/tm/moralmodel.js";
 
 export const appMeta = {
@@ -75,11 +73,18 @@ export function appInit(shell) {
     backBtn.addEventListener('click', () => {
       const menu = document.querySelector('.menu-content');
       const container = document.querySelector('.mf-container');
-      if (menu && container) {
-        // moral-fruit 内で表示を切り替え（テーマ選択画面→メニューなど）
-
-        menu.style.display = 'flex';
+      // if chat/lesson screen showing -> return to moralfruit internal menu
+      if (container && container.style.display !== 'none') {
+        if (menu) menu.style.display = 'flex';
         container.style.display = 'none';
+        return;
+      }
+      // else currently on moralfruit menu -> go back to deep-school main menu
+      const r = document.getElementById('app-root');
+      if (window.__ds_original_menu__ && r) {
+        r.innerHTML = window.__ds_original_menu__;
+        // optional: remove back button
+        backBtn.remove();
       } else {
         // Deep-School ルートに戻す
         const r = document.getElementById('app-root');
