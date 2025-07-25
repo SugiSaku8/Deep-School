@@ -907,7 +907,7 @@ function addMenuItemListener() {
       }
     }
     getUserResponse() {
-      const input = document.getElementById("app-moral-fruit-user-input");
+      const input = document.getElementById("mf-user-input");
       if (!input) {
         console.warn('User input element not found');
         return '';
