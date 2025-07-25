@@ -20,7 +20,7 @@ class GeminiProcessor {
   }
 
   async callGemini(message) {
-    const systemPrompt = `あなたは人間です。ユーザーの理解を助ける簡潔で明確な回答を生成してください。`;
+    const systemPrompt = `あなたは人間です。質問を質問に答えず、自分の意見だけを出してください`;
     const fullMessage = `${systemPrompt}\n\nUser: ${message}`;
 
     const requestBody = {
