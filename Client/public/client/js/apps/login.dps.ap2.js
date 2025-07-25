@@ -16,14 +16,6 @@ export function appInit(shell) {
     return;
   }
   // グローバル戻るボタン
-  if (!document.getElementById('global-back-btn')) {
-    const b=document.createElement('button');
-    b.id='global-back-btn';
-    b.textContent='← 戻る';
-    Object.assign(b.style,{position:'fixed',top:'12px',left:'12px',padding:'6px 10px',border:'none',borderRadius:'6px',background:'#444',color:'#fff',cursor:'pointer',zIndex:'1000'});
-    b.addEventListener('click',()=>window.history.back());
-    document.body.appendChild(b);
-  }
 
   root.innerHTML = `
     <div class="container_top" id="login-app">
