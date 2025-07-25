@@ -113,7 +113,7 @@ export function appInit(shell) {
           <span style="color: #ff3a00">t</span>
         </div>
       </div>
-<br><br>
+<br>
       <div class="menu-content">
         <div class="menu-item">
           <img src="re/ico/moral-fruit-war-icon.png" alt="争い" class="menu-icon" />
