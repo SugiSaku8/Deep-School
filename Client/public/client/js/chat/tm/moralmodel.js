@@ -79,4 +79,40 @@ class GeminiProcessor {
   }
 }
 
-export { GeminiProcessor };
+/**
+ * Factory helper: returns a fresh GeminiProcessor instance.
+ */
+function GeminiIninter() {
+  return new GeminiProcessor();
+}
+
+/**
+ * Simple conversational session wrapper using GeminiProcessor.
+ * Keeps local history and exposes start / handle like the original ToasterMachine helpers.
+ * @param {GeminiProcessor} gemini
+ */
+function ssession(gemini) {
+  const history = [];
+  return {
+    /**
+     * First call – treated same as handle but kept for compatibility.
+     */
+    async start(msg) {
+      const reply = await gemini.ask(msg, history);
+      history.push({ role: 'user', content: msg });
+      history.push({ role: 'model', content: reply });
+      return reply;
+    },
+    /**
+     * Subsequent user messages.
+     */
+    async handle(msg) {
+      const reply = await gemini.ask(msg, history);
+      history.push({ role: 'user', content: msg });
+      history.push({ role: 'model', content: reply });
+      return reply;
+    }
+  };
+}
+
+export { GeminiProcessor, GeminiIninter, ssession };

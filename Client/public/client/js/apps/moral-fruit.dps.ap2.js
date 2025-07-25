@@ -1,7 +1,7 @@
 // moral-fruit.dps.ap2.js
 import { GeminiProcessor } from "../chat/tm/moralmodel.js";
 //nantonaku load
-import { GeminiIninter, ssession } from "./toastermachine.dps.bap.js";
+import { GeminiIninter, ssession } from "../chat/tm/moralmodel.js";
 
 export const appMeta = {
   name: "moral-fruit",
