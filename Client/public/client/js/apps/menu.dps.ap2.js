@@ -45,7 +45,7 @@ export function appInit(shell) {
     });
     return;
   }
-  }
+
 
   root.innerHTML = `
       
