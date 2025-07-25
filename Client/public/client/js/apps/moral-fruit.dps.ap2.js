@@ -846,6 +846,7 @@ function addMenuItemListener() {
          const userResponse = this.getUserResponse();
          if (!userResponse) return;
          addUserMessage(userResponse);
+         inputEl.value = '';
          const facilitated = this.facilitate();
          const r1 = await this.generateAIresponce(1, facilitated);
          const r2 = await this.generateAIresponce(2, facilitated);
@@ -891,7 +892,6 @@ function addMenuItemListener() {
       try {
         const reply = await speakers.session.start(fullPrompt);
         speakers.result += reply;
-        addBotMessage(reply);
         return reply;
       } catch (e) {
         console.error('generateAIresponce error:', e);
