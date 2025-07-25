@@ -1,9 +1,5 @@
 // moral-fruit.dps.ap2.js
-import {
-  GeminiProcessor,
-  CoachingSession,
-  ChatHistoryManager,
-} from "../chat/tm/model.mjs";
+import { GeminiProcessor } from "../chat/tm/moralmodel.js";
 //nantonaku load
 import { GeminiIninter, ssession } from "./toastermachine.dps.bap.js";
 
