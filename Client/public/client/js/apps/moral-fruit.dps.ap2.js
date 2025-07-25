@@ -204,6 +204,7 @@ export function appInit(shell) {
     overflow: hidden;
     flex: 0 0 200px;
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    max-width: 25%;
   }
   
   .menu-item::before {
