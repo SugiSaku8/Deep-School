@@ -38,6 +38,9 @@ window.aiSpeakers = {
 };
 export function appInit(shell) {
   let theme;
+  // Hold menu configuration until user selects a theme
+  let pendingCfg = null;
+  let sessionStarted = false;
   shell.log({
     from: "dp.app.moralfruit.out",
     message: "MoralFruitApp: 初期化開始",
@@ -721,13 +724,18 @@ function addMenuItemListener() {
 
   // メニューアイテムの設定
 
-  function selectTheme(element) {
-    document
-      .querySelectorAll(".mf-theme-btn")
-      .forEach((btn) => btn.classList.remove("active"));
-    element.classList.add("active");
-    theme = element;
-  }
+   function selectTheme(element) {
+     document.querySelectorAll(".mf-theme-btn").forEach((btn) => btn.classList.remove("active"));
+     element.classList.add("active");
+     theme = element;
+
+     // If a menu has been chosen and session not yet started, start it now
+     if (pendingCfg && !sessionStarted) {
+       const session = new moral_desk(pendingCfg.themeObj);
+       session.start(3);
+       sessionStarted = true;
+     }
+   }
   // expose globally for inline onclick before first use
   window.selectTheme = selectTheme;
 
@@ -780,9 +788,8 @@ function addMenuItemListener() {
         const el = document.getElementById(id);
         if (el) el.textContent = cfg.texts[idx] || '';
       });
-      // start session
-      const session = new moral_desk(cfg.themeObj);
-      session.start(3);
+       // store selected menu configuration; actual session will start after theme selection
+       pendingCfg = cfg;
     }
 
     // attach listeners
