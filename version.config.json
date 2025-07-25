@@ -1,8 +1,8 @@
 {
   "deepSchoolFamily": {
-    "version": "25C1160X1",
+    "version": "25C1202X1",
     "status": "beta",
-    "lastUpdated": "2025-07-23",
+    "lastUpdated": "2025-07-25",
     "description": "Deep-School Family Software - Initial release"
   },
   "deepSchoolClient": {
@@ -105,12 +105,12 @@
     "description": "GameMaker - 2Dゲーム制作アプリ - 初期ベータリリース"
   },
   "moralfruit": {
-    "version": "0.0.2",
+    "version": "0.1.0",
     "status": "beta",
     "cycle": 0,
     "release": 1,
     "revision": 0,
-    "lastUpdated": "2025-07-23",
+    "lastUpdated": "2025-07-25",
     "description": "Moral Fruit - 道徳専用学習アプリ - 初期ベータリリース"
   },
   "releaseSchedule": {
