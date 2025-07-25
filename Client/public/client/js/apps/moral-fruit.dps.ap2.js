@@ -108,9 +108,6 @@ export function appInit(shell) {
         <div class="menu-item" id="menu-wars-item">
           <img src="re/ico/moral-fruit-war-icon.png" alt="争い" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-wars" data-lang-key="menu_toaster">争い</div>
-      <div class="menu-label chalk-text" id="menu-wars" style="cursor: pointer" data-lang-key="menu_toaster">
-        争い
-      </div>
     </div>
     <div class="menu-item" id="scr_menu_icon">
       <img src="re/ico/moral-fruit-edu-icon.png" alt="学び" class="menu-icon" />
@@ -125,7 +122,7 @@ export function appInit(shell) {
       </div>
     </div> 
         </div>
-        <div class="menu-item" id="scr_menu_icon">
+        <div class="menu-item">
           <img src="re/ico/moral-fruit-edu-icon.png" alt="学び" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-edu" style="cursor: pointer" data-lang-key="menu_scr">
             学び
