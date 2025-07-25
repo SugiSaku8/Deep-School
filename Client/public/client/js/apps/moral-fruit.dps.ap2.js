@@ -99,8 +99,7 @@ export function appInit(shell) {
   }
 
   root.innerHTML = `
-      <div class="menu-content">
-      <div class="mf-header" style="display:flex;justify-content:center;text-align:center;margin:auto;margin-top:auto; margin-bottom: auto">
+     <div class="mf-header" style="display:flex;justify-content:center;text-align:center;margin:auto;margin-top:auto; margin-bottom: auto">
         <div class="mf-logo">
           <span style="color: #e400c2">M</span>
           <span style="color: #d600ff">o</span>
@@ -115,6 +114,7 @@ export function appInit(shell) {
         </div>
       </div>
 <br><br><br><br><br><br>
+      <div class="menu-content">
         <div class="menu-item">
           <img src="re/ico/moral-fruit-war-icon.png" alt="争い" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-wars" style="cursor: pointer" data-lang-key="menu_toaster">
