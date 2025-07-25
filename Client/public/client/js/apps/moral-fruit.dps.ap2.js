@@ -106,19 +106,26 @@ export function appInit(shell) {
           <span style="color: #d600ff">o</span>
           <span style="color: #6a70ff">r</span>
           <span style="color: #0090ff">a</span>
-          <span style="color: #00c0ff">l</span>
-          <span style="color: #ffe000">F</span>
-          <span style="color: #ffc000">r</span>
-          <span style="color: #ff9000">u</span>
-          <span style="color: #ff5a00">i</span>
-          <span style="color: #ff3a00">t</span>
-        </div>      </div>
-     <div class="menu-content">
-        <div class="menu-item">
-          <img src="re/ico/moral-fruit-war-icon.png" alt="争い" class="menu-icon" />
-          <div class="menu-label chalk-text" id="menu-wars" style="cursor: pointer" data-lang-key="menu_toaster">
-            争い
-          </div>
+      </div>
+    </div>
+    <div class="menu-item">
+      <img src="re/ico/moral-fruit-war-icon.png" alt="争い" class="menu-icon" />
+      <div class="menu-label chalk-text" id="menu-wars" style="cursor: pointer" data-lang-key="menu_toaster">
+        争い
+      </div>
+    </div>
+    <div class="menu-item" id="scr_menu_icon">
+      <img src="re/ico/moral-fruit-edu-icon.png" alt="学び" class="menu-icon" />
+      <div class="menu-label chalk-text" id="menu-edu" style="cursor: pointer" data-lang-key="menu_scr">
+        学び
+      </div>
+    </div>
+    <div class="menu-item">
+      <img src="re/ico/moral-fruit-die-icon.png" alt="生命" class="menu-icon" />
+      <div class="menu-label chalk-text" id="menu-die" style="cursor: pointer" data-lang-key="menu_pickramu">
+      生命
+      </div>
+    </div> 
         </div>
         <div class="menu-item" id="scr_menu_icon">
           <img src="re/ico/moral-fruit-edu-icon.png" alt="学び" class="menu-icon" />
