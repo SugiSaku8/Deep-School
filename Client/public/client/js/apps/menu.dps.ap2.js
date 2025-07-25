@@ -63,7 +63,7 @@ export function appInit(shell) {
           </div>
         </div>
         <div class="menu-item">
-          <img src="re/ico/note.svg" alt="Pickramuアイコン" class="menu-icon" />
+          <img src="re/ico/Pickramu.png" alt="Pickramuアイコン" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-pickramu" style="cursor: pointer" data-lang-key="menu_pickramu">Pickramu</div>
         </div> 
         
