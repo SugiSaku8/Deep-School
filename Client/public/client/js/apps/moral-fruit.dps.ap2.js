@@ -9,7 +9,7 @@ export const appMeta = {
   icon: "re/ico/MoralFruite.png",
 };
 
-const aiRoles = ["national", "right-wing", "left-wing"];
+const aiRoles = ["neutral", "right-wing", "left-wing"];
 const aiRoles_esk = {
   neutral:
     "常に中立的であり、客観的な情報を提供します。すべての意見を尊重し、偏りのない視点を維持します。",
@@ -28,9 +28,6 @@ window.aiSpeakers = {
   _1: { role: "", result: "" },
   _2: { role: "", result: "" },
   _3: { role: "", result: "" },
-  _4: { role: "", result: "" },
-  _5: { role: "", result: "" },
-  _6: { role: "", result: "" },
 };
 export function appInit(shell) {
   let theme;
@@ -827,10 +824,7 @@ function addMenuItemListener() {
       this.aiSpeakers = {
         _1: { role: "", result: "" },
         _2: { role: "", result: "" },
-        _3: { role: "", result: "" },
-        _4: { role: "", result: "" },
-        _5: { role: "", result: "" },
-        _6: { role: "", result: "" }
+        _3: { role: "", result: "" }
       };
       this.session = ssession;
       clearMessages();
@@ -856,10 +850,7 @@ function addMenuItemListener() {
          const r1 = await this.generateAIresponce(1, facilitated);
          const r2 = await this.generateAIresponce(2, facilitated);
          const r3 = await this.generateAIresponce(3, facilitated);
-         const r4 = await this.generateAIresponce(4, facilitated);
-         const r5 = await this.generateAIresponce(5, facilitated);
-         const r6 = await this.generateAIresponce(6, facilitated);
-         this.showAllSpeakersResults(null, r1, r2, r3, r4, r5, r6);
+         this.showAllSpeakersResults(userResponse, r1, r2, r3);
          inputEl.value = '';
        };
 
@@ -877,12 +868,9 @@ function addMenuItemListener() {
     }
 
     getAISpeakers() {
-      this.aiSpeakers._1.role = aiRoles[0]; // national
-      this.aiSpeakers._2.role = aiRoles[0];
-      this.aiSpeakers._3.role = aiRoles[1]; // right-wing
-      this.aiSpeakers._4.role = aiRoles[1];
-      this.aiSpeakers._5.role = aiRoles[2]; // left-wing
-      this.aiSpeakers._6.role = aiRoles[2];
+      this.aiSpeakers._1.role = aiRoles[0]; // neutral
+      this.aiSpeakers._2.role = aiRoles[1]; // right-wing
+      this.aiSpeakers._3.role = aiRoles[2]; // left-wing
     }
 
     async generateAIresponce(id, prompt) {
@@ -922,7 +910,7 @@ function addMenuItemListener() {
       const session = ssession(gemini);
       this.session = session;
     }
-    showAllSpeakersResults(user, _1, _2, _3, _4, _5, _6) {
+    showAllSpeakersResults(user, _1, _2, _3) {
       if(user){ this.user = { result: user }; }
       this.aiSpeakers._1.result += _1;
       addBotMessage(_1);
@@ -930,12 +918,6 @@ function addMenuItemListener() {
       addBotMessage(_2);
       this.aiSpeakers._3.result += _3;
       addBotMessage(_3);
-      this.aiSpeakers._4.result += _4;
-      addBotMessage(_4);
-      this.aiSpeakers._5.result += _5;
-      addBotMessage(_5);
-      this.aiSpeakers._6.result += _6;
-      addBotMessage(_6);
     }
     // Simple latest function that can't be overridden
     latest(speakers) {
@@ -978,20 +960,14 @@ function addMenuItemListener() {
     あなたは、この討論に参加しています。
     参加者は、以下の通りです。
     1.中立者
-    2.中立者
-    3.右派
-    4.右派
-    5.左派
-    6.左派
-    7.ユーザー
+    2.右派
+    3.左派
+    4.ユーザー
     それぞれの意見者は、次のような意見を述べています。
     1. ${results._1 || '（意見なし）'}
     2. ${results._2 || '（意見なし）'}
     3. ${results._3 || '（意見なし）'}
-    4. ${results._4 || '（意見なし）'}
-    5. ${results._5 || '（意見なし）'}
-    6. ${results._6 || '（意見なし）'}
-    7. ${userInput}
+    4. ${userInput}
     さて、あなたはこの答えのない質問にどのような答えを出しますか？
     他の人と同じ意見ではだめです。
     自分だけの意見を述べてください。
