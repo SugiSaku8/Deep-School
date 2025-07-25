@@ -121,12 +121,11 @@ export function appInit(shell) {
       生命
       </div>
     </div> 
-        </div>
-        
            <div class="menu-item">
           <img src="re/ico/moral-fruit-earth-icon.png" alt="環境" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-earth" style="cursor: pointer" data-lang-key="menu_feedback">
           環境
+          </div>
           </div>
         </div>
       </div>
