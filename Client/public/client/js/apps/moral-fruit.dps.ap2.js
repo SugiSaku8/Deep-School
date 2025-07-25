@@ -483,7 +483,7 @@ export function appInit(shell) {
     }
     
     .menu-item {
-      min-width: 180px;
+      max-width: 25%;
       padding: 1.5rem;
     }
     
