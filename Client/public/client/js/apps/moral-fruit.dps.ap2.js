@@ -99,8 +99,8 @@ export function appInit(shell) {
   }
 
   root.innerHTML = `
-     <div class="menu-content">
-        <div class="mf-header" style="display:flex;justify-content:center;text-align:center;margin:auto;margin-top:auto; margin-bottom: auto">
+  <br>
+    <div id="mf-logoo" class="mf-header" style="display:flex;justify-content:center;text-align:center;margin:auto;margin-top:auto; margin-bottom: auto">
         <div class="mf-logo">
           <span style="color: #e400c2">M</span>
           <span style="color: #d600ff">o</span>
@@ -112,8 +112,8 @@ export function appInit(shell) {
           <span style="color: #ff9000">u</span>
           <span style="color: #ff5a00">i</span>
           <span style="color: #ff3a00">t</span>
-        </div>
-      </div>
+        </div>      </div>
+     <div class="menu-content">
         <div class="menu-item">
           <img src="re/ico/moral-fruit-war-icon.png" alt="争い" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-wars" style="cursor: pointer" data-lang-key="menu_toaster">
@@ -687,6 +687,7 @@ export function appInit(shell) {
         container.style.display = 'block';
         menuContent.style.display = 'none';
       }
+      document.getElementById("mf-logoo").style.display = 'none';
       document.getElementById("mf-theme1").textContent = "正しい戦争はあるのか";
       document.getElementById("mf-theme2").textContent = "戦争は人類の進化に必要か";
       document.getElementById("mf-theme3").textContent = "戦争はなくせるのか";
@@ -703,6 +704,7 @@ export function appInit(shell) {
         container.style.display = 'block';
         menuContent.style.display = 'none';
       }
+      document.getElementById("mf-logoo").style.display = 'none';
       document.getElementById("mf-theme1").textContent = "学校に行く必要はあるのか";
       document.getElementById("mf-theme2").textContent = "なぜ学ばなくてはいけないのか";
       document.getElementById("mf-theme3").textContent = "何を学ばなくてはいけないのか";
@@ -719,6 +721,7 @@ export function appInit(shell) {
         container.style.display = 'block';
         menuContent.style.display = 'none';
       }
+      document.getElementById("mf-logoo").style.display = 'none';
       document.getElementById("mf-theme1").textContent = "人はなぜ死ぬのか";
       document.getElementById("mf-theme2").textContent = "人はなぜ明日への希望を持つのか";
       document.getElementById("mf-theme3").textContent = "生存競争は必要か";
@@ -735,6 +738,7 @@ export function appInit(shell) {
         container.style.display = 'block';
         menuContent.style.display = 'none';
       }
+      document.getElementById("mf-logoo").style.display = 'none';
       document.getElementById("mf-theme1").textContent = "地球環境は守るべきか";
       document.getElementById("mf-theme2").textContent = "自然生物は人間にとって必要か";
       document.getElementById("mf-theme3").textContent = "人間は自然に干渉すべきか";
