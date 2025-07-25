@@ -45,6 +45,16 @@ export function appInit(shell) {
     });
     return;
   }
+  // グローバル戻るボタン生成
+  if (!document.getElementById('global-back-btn')) {
+    const backBtn = document.createElement('button');
+    backBtn.id = 'global-back-btn';
+    backBtn.textContent = '← 戻る';
+    Object.assign(backBtn.style, {position:'fixed',top:'12px',left:'12px',padding:'6px 10px',border:'none',borderRadius:'6px',background:'#444',color:'#fff',cursor:'pointer',zIndex:'1000'});
+    backBtn.addEventListener('click',()=>window.history.back());
+    document.body.appendChild(backBtn);
+  }
+
   root.innerHTML = `
       
       <div class="menu-content">

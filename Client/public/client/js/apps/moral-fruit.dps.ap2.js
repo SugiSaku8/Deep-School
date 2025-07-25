@@ -103,7 +103,7 @@ export function appInit(shell) {
       </div>
 
      <div class="mf-container" style="display: none;">
-      <div class="mf-header">
+      <div class="mf-header" style="display:flex;justify-content:center;">
         <div class="mf-logo">
           <span style="color: #e400c2">M</span>
           <span style="color: #d600ff">o</span>
