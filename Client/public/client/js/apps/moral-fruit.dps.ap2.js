@@ -144,8 +144,8 @@ export function appInit(shell) {
         </div>
       </div>
 
-      <div class="mf-footer" style="display:flex;gap:8px;padding:8px 16px;">
-        <input id="mf-user-input" type="text" placeholder="Ctrl+Enter で送信" style="flex:1;padding:8px;border-radius:6px;border:1px solid #ccc;" />
+      <div class="mf-footer" style="display:flex;gap:8px;padding:16px 32px;">
+        <input id="mf-user-input" type="text" placeholder="Ctrl+Enter で送信" style="flex:1;padding:10px;border-radius:20px;border:1px solid #ccc;" />
         <button id="mf-send-btn" style="padding:8px 12px;border:none;border-radius:6px;background:#007aff;color:#fff;cursor:pointer;">送信</button>
       </div>
     </div>
