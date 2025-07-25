@@ -113,7 +113,10 @@ export function appInit(shell) {
         </div>
       </div>
 
-      <div class="mf-footer"></div>
+      <div class="mf-footer" style="display:flex;gap:8px;padding:8px 16px;">
+        <input id="mf-user-input" type="text" placeholder="あなたの意見を入力" style="flex:1;padding:8px;border-radius:6px;border:1px solid #ccc;" />
+        <button id="mf-send-btn" style="padding:8px 12px;border:none;border-radius:6px;background:#007aff;color:#fff;cursor:pointer;">送信</button>
+      </div>
     </div>
   
   <style>
@@ -831,22 +834,41 @@ function addMenuItemListener() {
       clearMessages();
     }
 
-    async start(nfeath = 30) {
-      this.getTheme();
-      this.getAISpeakers();
-      this.getSession();
-      for (let step = 0; step < nfeath; step++) {
-        const facilitated = this.facilitate();
-        const userResponse = this.getUserResponse();
-        const r1 = await this.generateAIresponce(1, facilitated);
-        const r2 = await this.generateAIresponce(2, facilitated);
-        const r3 = await this.generateAIresponce(3, facilitated);
-        const r4 = await this.generateAIresponce(4, facilitated);
-        const r5 = await this.generateAIresponce(5, facilitated);
-        const r6 = await this.generateAIresponce(6, facilitated);
-        this.showAllSpeakersResults(userResponse, r1, r2, r3, r4, r5, r6);
-      }
-    }
+    async start() {
+       this.getTheme();
+       this.getAISpeakers();
+       this.getSession();
+
+       const inputEl = document.getElementById("mf-user-input");
+       const sendBtn = document.getElementById("mf-send-btn");
+       if (!inputEl || !sendBtn) {
+         console.warn('Input elements not found');
+         return;
+       }
+
+       const handleSend = async () => {
+         const userResponse = this.getUserResponse();
+         if (!userResponse) return;
+         const facilitated = this.facilitate();
+         const r1 = await this.generateAIresponce(1, facilitated);
+         const r2 = await this.generateAIresponce(2, facilitated);
+         const r3 = await this.generateAIresponce(3, facilitated);
+         const r4 = await this.generateAIresponce(4, facilitated);
+         const r5 = await this.generateAIresponce(5, facilitated);
+         const r6 = await this.generateAIresponce(6, facilitated);
+         this.showAllSpeakersResults(userResponse, r1, r2, r3, r4, r5, r6);
+         inputEl.value = '';
+       };
+
+       // click and Enter key
+       sendBtn.addEventListener('click', handleSend);
+       inputEl.addEventListener('keypress', (e) => {
+         if (e.key === 'Enter') {
+           e.preventDefault();
+           handleSend();
+         }
+       });
+     }
     getTheme() {
       return this.theme;
     }
