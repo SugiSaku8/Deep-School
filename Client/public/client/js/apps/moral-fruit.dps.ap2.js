@@ -49,6 +49,7 @@ export function appInit(shell) {
   
 
   if (!root) {
+    
     shell.log({
       from: "dp.app.MoralFruit.err",
       message: "MoralFruitApp: #app-rootが見つかりません",
