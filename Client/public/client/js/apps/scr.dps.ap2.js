@@ -243,18 +243,20 @@ export function appInit(shell) {
    * フィードをAPIから取得し描画
    * @param {string|number} [highlightId] - ハイライト表示する投稿ID
    */
-  async function fetchFeed(highlightId) {
-    try {
-      const res = await fetchWithRetry(`${getApiBase()}/all`);
-      const posts = await res.json();
+async function fetchFeed(highlightId) {
+  try {
+    const res = await fetchWithRetry(`${getApiBase()}/all`);
+    const posts = await res.json();
+    const feedContent = document.querySelector("#feed-content");
+    if (feedContent) {
       renderFeed(posts, highlightId);
-    } catch (e) {
-      console.error("[SCR] Feed fetch failed after retries:", e);
-      document.getElementById(
-        "feed-content"
-      ).innerHTML = `<div class="scr-feed-error">フィードの取得に失敗しました (${e.message})</div>`;
+    } else {
+      console.error("Element with id 'feed-content' not found");
     }
+  } catch (e) {
+    console.error("[SCR] Feed fetch failed after retries:", e);
   }
+}
 
   /**
    * フィードを描画
