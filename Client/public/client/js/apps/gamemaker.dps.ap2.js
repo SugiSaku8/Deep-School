@@ -1,25 +1,33 @@
 // --- Apple HIG風グローバルCSSを動的に挿入 ---
-(function addAppleHIGStyle() {
-  if (document.getElementById('apple-hig-style')) return;
+function addStyles(css) {
+  if (document.getElementById('gamemaker-styles')) {
+    document.getElementById('gamemaker-styles').textContent = css;
+    return;
+  }
   const style = document.createElement('style');
-  style.id = 'apple-hig-style';
-  style.textContent = `
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', 'Helvetica Neue', Arial, sans-serif;
-      min-height: 100vh;
-      width: 100vw;
-      overflow-x: hidden;
-    }
-    #app-root, .page-container {
-      min-height: 100vh;
-      width: 100vw;
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      justify-content: flex-start;
+  style.id = 'gamemaker-styles';
+  style.textContent = css;
+  document.head.appendChild(style);
+}
+
+// 初期スタイルを追加
+const gameMakerStyles = `
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', 'Helvetica Neue', Arial, sans-serif;
+    min-height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+  }
+  #app-root, .page-container {
+    min-height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
       box-sizing: border-box;
     }
     .gm-main-layout {
@@ -189,10 +197,12 @@
         padding: 1rem 0.5rem;
         border-radius: 14px;
       }
-    }
-  `;
-  document.head.appendChild(style);
-})();
+  }
+`;
+
+// スタイルを追加
+addStyles(gameMakerStyles);
+
 // GameMakerアプリ（gamemaker.dps.ap2.js）
 // Deep-Schoolデフォルト搭載 2Dゲーム制作アプリ
 // Apple HIG準拠・講座/創造モード・アクセシビリティ配慮
@@ -201,9 +211,9 @@ import { t, LANG_DATA } from '../core/lang.js';
 import { CURRENT_LANG } from '../core/config.js';
 
 export const appMeta = {
-  name: "gamemaker",
-  title: "GameMaker【一時停止中】",
-  icon: "re/icon/game.svg" // 仮アイコン
+  name: 'gamemaker',
+  title: 'GameMaker【一時停止中】',
+  icon: 're/icon/game.svg' // 仮アイコン
 };
 
 // プロジェクト管理（ローカルストレージ）
@@ -237,64 +247,366 @@ function getProjectVersions(projectId) {
 }
 
 export function appInit(shell) {
-  alert('GameMakerは現在一時的に無効化されています。しばらくお待ちください。');
-  return;
-  // ホーム画面をグローバル化
-  window.renderHome = renderHome;
+  // シェル参照をグローバルに保存
+  window.GameMakerShell = shell;
+  
+  // 初期化ログ
   shell.log({from: 'dp.app.gamemaker.out', message: 'GameMaker: 初期化開始', level: 'info'});
 
-  // 初期化時にCURRENT_LANGをlocalStorageから取得
-  let lang = localStorage.getItem('gamemaker_lang') || CURRENT_LANG;
-  if (lang !== CURRENT_LANG) {
-    window.CURRENT_LANG = lang;
-  }
+  // 言語設定の読み込み
+  let lang = localStorage.getItem('gamemaker_lang') || 'ja';
+  window.CURRENT_LANG = lang;
+  // ホーム画面をグローバル化
+  window.renderHome = renderHome;
 
-  // レッスンデータを外部JSONから読み込む
-  window.LESSONS = null;
-  fetch('lessons.json')
-    .then(res => res.json())
-    .then(data => {
-      window.LESSONS = data;
-      renderHome();
-      shell.log({from: 'dp.app.gamemaker.out', message: 'LESSONS loaded', level: 'info'});
-    })
-    .catch(e => {
-      shell.log({from: 'dp.app.gamemaker.out', message: 'LESSONS load failed: '+e, level: 'error'});
-      window.LESSONS = [];
-      renderHome();
-    });
+  // レッスンデータの初期化
+  window.LESSONS = [
+    {
+      id: 'lesson1',
+      title: 'はじめてのゲーム作成',
+      description: '基本操作を学んで簡単なゲームを作ろう',
+      difficulty: '初級',
+      estimatedTime: '30分',
+      icon: 'fa-gamepad',
+      completed: false
+    },
+    {
+      id: 'lesson2',
+      title: 'キャラクターを動かそう',
+      description: 'キーボード操作でキャラクターを動かす方法を学びます',
+      difficulty: '初級',
+      estimatedTime: '45分',
+      icon: 'fa-running',
+      completed: false
+    },
+    {
+      id: 'lesson3',
+      title: '敵キャラを追加しよう',
+      description: '敵キャラの動きと当たり判定を実装します',
+      difficulty: '中級',
+      estimatedTime: '60分',
+      icon: 'fa-ghost',
+      completed: false
+    }
+  ];
+  
+  // サンプルプロジェクトデータの読み込み
+  const sampleProjects = [
+    { id: 'proj1', name: '初めてのゲーム', type: 'lecture', lastModified: Date.now() - 86400000 },
+    { id: 'proj2', name: 'アクションゲーム', type: 'creative', lastModified: Date.now() - 172800000 },
+    { id: 'proj3', name: 'パズルゲーム', type: 'creative', lastModified: Date.now() - 259200000 }
+  ];
+  
+  // ローカルストレージからプロジェクトを読み込み、なければサンプルを設定
+  if (!localStorage.getItem('gamemaker_projects')) {
+    localStorage.setItem('gamemaker_projects', JSON.stringify(sampleProjects));
+  }
+  
+  // ホーム画面をレンダリング
+  renderHome();
 
   // 画面描画関数
   function renderHome() {
     const root = document.getElementById('app-root');
     if (!root) return;
-    const projects = loadProjects();
+    
+    const projects = JSON.parse(localStorage.getItem('gamemaker_projects') || '[]');
+    
     root.innerHTML = `
-      <div class="page-container" id="gamemaker-app" role="main" aria-label="GameMakerホーム画面" style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-        <header class="card" style="width:100%;max-width:480px;">
-          <h1 class="title" id="gm-title">${LANG_DATA[lang] && LANG_DATA[lang].gamemaker_title ? t('gamemaker_title', lang) : 'GameMaker'}</h1>
-          <p class="desc">${LANG_DATA[lang] && LANG_DATA[lang].gamemaker_desc ? t('gamemaker_desc', lang) : '2Dゲームを作ろう！モードを選んでスタート'}</p>
-          <button class="pickramu-load-button secondary" id="gm-lang-btn" style="position:absolute;right:1.5rem;top:1.5rem;z-index:2;">${lang==='ja'?'EN':'JA'}</button>
-        </header>
-        <main class="card" style="width:100%;max-width:480px;display:flex;flex-direction:column;align-items:center;">
-          <div class="mode-select" role="group" aria-label="モード選択" style="width:100%;justify-content:space-between;gap:1.5rem;margin-bottom:2.5rem;">
-            <button class="pickramu-load-button primary" id="gm-lesson-btn" aria-label="講座モード (L)" accesskey="l" style="flex:1;min-width:120px;">${LANG_DATA[lang] && LANG_DATA[lang].lesson_mode ? t('lesson_mode', lang) : '講座モード'}</button>
-            <button class="pickramu-load-button secondary" id="gm-create-btn" aria-label="創造モード (C)" accesskey="c" style="flex:1;min-width:120px;">${LANG_DATA[lang] && LANG_DATA[lang].create_mode ? t('create_mode', lang) : '創造モード'}</button>
+      <div class='page-container' id='gamemaker-app' role='main' aria-label='GameMakerホーム画面'>
+        <header class='card' style='margin-top: 2rem;'>
+          <h1 class='title'>GameMaker</h1>
+          <p class='desc'>ゲームを作って学ぼう！</p>
+          
+          <div class='mode-select'>
+            <button class='pickramu-load-button primary' onclick='enterMode('lecture')'>
+              <i class='fas fa-graduation-cap'></i> 講座モード
+            </button>
+            <button class='pickramu-load-button primary' onclick='enterMode('creative')'>
+              <i class='fas fa-magic'></i> 創造モード
+            </button>
           </div>
-          <button class="pickramu-load-button primary" id="gm-import-drive-btn" aria-label="Google Driveからインポート (I)" accesskey="i" style="width:100%;margin-bottom:2rem;">${LANG_DATA[lang] && LANG_DATA[lang].import_from_drive ? t('import_from_drive', lang) : 'Google Driveからインポート'}</button>
-          <div class="recent-projects" id="gm-recent-projects" role="region" aria-label="最近のプロジェクト" style="width:100%;">
-            <h2 class="section-title" style="margin-bottom:0.7rem;">${LANG_DATA[lang] && LANG_DATA[lang].recent_projects ? t('recent_projects', lang) : '最近のプロジェクト'}</h2>
-            <ul class="project-list" id="gm-project-list" role="list">
+        </header>
+        
+        <section class='card' style='width: 100%;'>
+          <h2 class='section-title'>最近のプロジェクト</h2>
+          <div class='recent-projects'>
+            ${projects.length > 0 ? `
+              <ul class='project-list'>
+                ${projects.map(project => `
+                  <li class='project-item' onclick='loadProject('${project.id}')'>
+                    <span>${project.name}</span>
+                    <span style='color: #888; font-size: 0.9em;'>
+                      ${new Date(project.lastModified).toLocaleDateString()}
+                    </span>
+                  </li>
+                `).join('')}
+              </ul>
+            ` : `
+              <div class='project-item empty'>プロジェクトがありません</div>
+            `}
+          </div>
+        </section>
+        
+        <footer class='copyright'>
+          &copy; ${new Date().getFullYear()} Deep-School GameMaker
+        </footer>
+      </div>
+    `;
+    
+    // 必要なイベントリスナーを設定
+    setupEventListeners();
+  }
+  
+  // モード選択時の処理
+  function enterMode(mode, lessonId = null) {
+    const shell = window.GameMakerShell;
+    shell.log({from: 'dp.app.gamemaker.out', message: `Entering ${mode} mode`, level: 'info'});
+    
+    if (mode === 'lecture') {
+      if (lessonId) {
+        startLesson(lessonId);
+      } else {
+        showLectureMenu();
+      }
+    } else if (mode === 'creative') {
+      shell.showMessage('創造モードを開始します', 'info');
+      // TODO: エディタ画面に遷移
+      renderHome(); // 一時的にホームに戻す
+    }
+  }
+  
+  // 講座メニューを表示
+  function showLectureMenu() {
+    const root = document.getElementById('app-root');
+    if (!root) return;
+    
+    root.innerHTML = `
+      <div class='page-container' id='lecture-menu'>
+        <header class='card'>
+          <div style='display: flex; align-items: center; margin-bottom: 1.5rem;'>
+            <button class='pickramu-load-button secondary' onclick='renderHome()' style='margin-right: 1rem;'>
+              <i class='fas fa-arrow-left'></i> 戻る
+            </button>
+            <h1 class='title'>講座を選ぶ</h1>
+          </div>
+          <p class='desc'>学びたい講座を選んでゲーム作りを始めましょう！</p>
+        </header>
+        
+        <section class='card' style='width: 100%;'>
+          <div class='lessons-grid'>
+            ${window.LESSONS.map(lesson => `
+              <div class='lesson-card' onclick='enterMode('lecture', '${lesson.id}')'>
+                <div class='lesson-icon'>
+                  <i class='fas ${lesson.icon} fa-2x'></i>
+                </div>
+                <div class='lesson-details'>
+                  <h3>${lesson.title}</h3>
+                  <p>${lesson.description}</p>
+                  <div class='lesson-meta'>
+                    <span class='difficulty ${lesson.difficulty === '初級' ? 'beginner' : 'intermediate'}'>
+                      ${lesson.difficulty}
+                    </span>
+                    <span class='time'>${lesson.estimatedTime}</span>
+                  </div>
+                </div>
+                <div class='lesson-actions'>
+                  <i class='fas fa-chevron-right'></i>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </section>
+      </div>
+    `;
+    
+    // スタイルを追加
+    addStyles(`
+      .lessons-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1rem;
+      }
+      
+      .lesson-card {
+        background: #fff;
+        border-radius: 16px;
+        padding: 1.5rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+        border: 1px solid #eaeaea;
+      }
+      
+      .lesson-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      }
+      
+      .lesson-icon {
+        background: #f0f7ff;
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #4a90e2;
+        flex-shrink: 0;
+      }
+      
+      .lesson-details {
+        flex: 1;
+      }
+      
+      .lesson-details h3 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.1rem;
+        color: #222;
+      }
+      
+      .lesson-details p {
+        margin: 0 0 0.75rem 0;
+        color: #666;
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+      
+      .lesson-meta {
+        display: flex;
+        gap: 0.75rem;
+        font-size: 0.85rem;
+      }
+      
+      .difficulty {
+        padding: 0.2rem 0.6rem;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.75rem;
+      }
+      
+      .beginner { background: #e3f9e5; color: #1a7f37; }
+      .intermediate { background: #e0f2fe; color: #0369a1; }
+      
+      .time {
+        color: #666;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+      }
+      
+      .time::before {
+        content: '⏱️';
+        font-size: 0.9em;
+      }
+      
+      .lesson-actions {
+        color: #999;
+        display: flex;
+        align-items: center;
+        padding: 0 0.5rem;
+      }
+    `);
+  }
+  
+  // レッスンを開始
+  function startLesson(lessonId) {
+    const shell = window.GameMakerShell;
+    const lesson = window.LESSONS.find(l => l.id === lessonId);
+    
+    if (!lesson) {
+      shell.showMessage('レッスンが見つかりません', 'error');
+      return showLectureMenu();
+    }
+    
+    shell.showMessage(`「${lesson.title}」を開始します`, 'info');
+    
+    // ここにレッスン画面の実装を追加
+    renderHome(); // 一時的にホームに戻す
+  }
+  
+  // プロジェクト読み込み処理
+  function loadProject(projectId) {
+    const shell = window.GameMakerShell;
+    shell.log({from: 'dp.app.gamemaker.out', message: `Loading project: ${projectId}`, level: 'info'});
+    // TODO: プロジェクト読み込み処理を実装
+    shell.showMessage('プロジェクトを読み込み中...', 'info');
+  }
+  
+  // イベントリスナーの設定
+  function setupEventListeners() {
+    // 必要に応じて追加のイベントリスナーを設定
+  }
+
+  // ホーム画面をレンダリングする関数
+  function renderHome() {
+    const lang = localStorage.getItem('gamemaker_lang') || CURRENT_LANG;
+    const projects = loadProjects();
+    
+    const root = document.getElementById('app-root');
+    if (!root) return;
+    
+    root.innerHTML = `
+      <div class='page-container' id='gm-home'>
+        <header class='card' style='width:100%;max-width:480px;position:relative;text-align:center;padding:2rem 1.5rem;margin-bottom:1.5rem;'>
+          <h1 class='title' id='gm-title'>${LANG_DATA[lang] && LANG_DATA[lang].gamemaker_title ? t('gamemaker_title', lang) : 'GameMaker'}</h1>
+          <p class='desc'>${LANG_DATA[lang] && LANG_DATA[lang].gamemaker_desc ? t('gamemaker_desc', lang) : '2Dゲームを作ろう！モードを選んでスタート'}</p>
+          <button class='pickramu-load-button secondary' id='gm-lang-btn' style='position:absolute;right:1.5rem;top:1.5rem;z-index:2;'>${lang==='ja'?'EN':'JA'}</button>
+        </header>
+        <main class='card' style='width:100%;max-width:480px;display:flex;flex-direction:column;align-items:center;'>
+          <div class='mode-select' role='group' aria-label='モード選択' style='width:100%;justify-content:space-between;gap:1.5rem;margin-bottom:2.5rem;'>
+            <button class='pickramu-load-button primary' id='gm-lesson-btn' aria-label='講座モード (L)' accesskey='l' style='flex:1;min-width:120px;'>${LANG_DATA[lang] && LANG_DATA[lang].lesson_mode ? t('lesson_mode', lang) : '講座モード'}</button>
+            <button class='pickramu-load-button secondary' id='gm-create-btn' aria-label='創造モード (C)' accesskey='c' style='flex:1;min-width:120px;'>${LANG_DATA[lang] && LANG_DATA[lang].create_mode ? t('create_mode', lang) : '創造モード'}</button>
+          </div>
+          <button class='pickramu-load-button primary' id='gm-import-drive-btn' aria-label='Google Driveからインポート (I)' accesskey='i' style='width:100%;margin-bottom:2rem;'>${LANG_DATA[lang] && LANG_DATA[lang].import_from_drive ? t('import_from_drive', lang) : 'Google Driveからインポート'}</button>
+          <div class='recent-projects' id='gm-recent-projects' role='region' aria-label='最近のプロジェクト' style='width:100%;'>
+            <h2 class='section-title' style='margin-bottom:0.7rem;'>${LANG_DATA[lang] && LANG_DATA[lang].recent_projects ? t('recent_projects', lang) : '最近のプロジェクト'}</h2>
+            <ul class='project-list' id='gm-project-list' role='list'>
               ${projects.length === 0
-                ? `<li class="project-item empty" role="listitem">${LANG_DATA[lang] && LANG_DATA[lang].no_projects ? t('no_projects', lang) : 'プロジェクトはまだありません'}</li>`
-                : projects.map(p => `<li class="project-item" role="listitem"><span style="font-weight:500;">${p.name}</span> <button class="pickramu-load-button secondary gm-load-btn" data-id="${p.id}" aria-label="${p.name}を開く" style="margin-left:1.2rem;">${LANG_DATA[lang] && LANG_DATA[lang].open ? t('open', lang) : '開く'}</button></li>`).join('')}
+                ? `<li class='project-item empty' role='listitem'>${LANG_DATA[lang] && LANG_DATA[lang].no_projects ? t('no_projects', lang) : 'プロジェクトはまだありません'}</li>`
+                : projects.map(p => `
+                  <li class='project-item' role='listitem'>
+                    <span style='font-weight:500;'>${p.name}</span>
+                    <button class='pickramu-load-button secondary gm-load-btn' data-id='${p.id}' aria-label='${p.name}を開く'>
+                      ${LANG_DATA[lang] && LANG_DATA[lang].open ? t('open', lang) : '開く'}
+                    </button>
+                  </li>`).join('')
+              }
             </ul>
           </div>
         </main>
-        <footer class="card" style="width:100%;max-width:480px;background:transparent;box-shadow:none;margin-top:0.5rem;">
-          <p class="copyright">${LANG_DATA[lang] && LANG_DATA[lang].copyright ? t('copyright', lang) : 'Copyright ©2024 Deep-School. All rights reserved.'}</p>
-        </footer>
       </div>
+    `;
+    
+    // イベントリスナーの設定
+    const lessonBtn = document.getElementById('gm-lesson-btn');
+    const createBtn = document.getElementById('gm-create-btn');
+    const langBtn = document.getElementById('gm-lang-btn');
+    const importDriveBtn = document.getElementById('gm-import-drive-btn');
+    
+    if (lessonBtn) lessonBtn.onclick = () => renderLesson(0);
+    if (createBtn) createBtn.onclick = () => renderCreate();
+    if (langBtn) langBtn.onclick = () => {
+      const newLang = lang === 'ja' ? 'en' : 'ja';
+      localStorage.setItem('gamemaker_lang', newLang);
+      renderHome();
+    };
+    if (importDriveBtn) importDriveBtn.onclick = () => {
+      // TODO: Google Driveからのインポート機能を実装
+      const shell = window.GameMakerShell;
+      shell.showMessage('Google Driveからのインポート機能は準備中です', 'info');
+    };
+    
+    // プロジェクト読み込みボタンのイベントリスナー
+    document.querySelectorAll('.gm-load-btn').forEach(btn => {
+      btn.onclick = (e) => {
+        const projectId = e.currentTarget.getAttribute('data-id');
+        if (projectId) loadProject(projectId);
+      };
+    });
     `;
     // 言語切替ボタン
     const langBtn = document.getElementById('gm-lang-btn');
@@ -319,29 +631,73 @@ export function appInit(shell) {
     });
     // Google Driveからインポート
     const importBtn = document.getElementById('gm-import-drive-btn');
-    if (importBtn) importBtn.onclick = async () => {
-      importBtn.disabled = true;
-      importBtn.textContent = '取得中...';
-      const files = await listDriveProjects();
-      importBtn.disabled = false;
-      importBtn.textContent = 'Google Driveからインポート';
-      if (!files.length) {
-        alert('Google Drive上にインポート可能なプロジェクトが見つかりませんでした');
-        return;
-      }
-      // 選択ダイアログ
-      const fileName = prompt('インポートするプロジェクトを選択してください:\n' + files.map((f,i)=>`${i+1}: ${f.name}`).join('\n'));
-      const idx = Number(fileName) - 1;
-      if (isNaN(idx) || idx < 0 || idx >= files.length) return;
-      const file = files[idx];
-      const project = await downloadDriveProject(file.id);
-      if (project && project.id && project.name) {
-        addProject(project);
-        alert('Google Driveからプロジェクトをインポートしました');
-        renderHome();
-      } else {
-        alert('インポートに失敗しました');
-      }
+    if (importBtn) {
+      importBtn.onclick = async () => {
+        try {
+          // ボタンの状態を更新
+          const originalText = importBtn.textContent;
+          importBtn.disabled = true;
+          importBtn.textContent = '読み込み中...';
+          
+          // プロジェクト一覧を取得
+          const files = await listDriveProjects();
+          
+          if (!files || !files.length) {
+            alert('Google Drive上にインポート可能なプロジェクトが見つかりませんでした');
+            return;
+          }
+          
+          // プロジェクト選択用のダイアログを作成
+          const fileList = files.map((f, i) => `${i + 1}: ${f.name}`).join('\n');
+          const selection = prompt(`インポートするプロジェクトを選択してください:\n${fileList}`);
+          
+          if (selection === null) return; // ユーザーがキャンセル
+          
+          const idx = Number(selection) - 1;
+          if (isNaN(idx) || idx < 0 || idx >= files.length) {
+            alert('無効な選択です');
+            return;
+          }
+          
+          // ローディング表示
+          const loadingMsg = document.createElement('div');
+          loadingMsg.textContent = 'プロジェクトを読み込んでいます...';
+          document.body.appendChild(loadingMsg);
+          
+          try {
+            // プロジェクトをダウンロード
+            const file = files[idx];
+            const project = await downloadDriveProject(file.id);
+            
+            // ローディング表示を削除
+            document.body.removeChild(loadingMsg);
+            
+            if (project && project.id) {
+              // プロジェクトを追加してホームを再描画
+              addProject(project);
+              alert('Google Driveからプロジェクトをインポートしました');
+              renderHome();
+            } else {
+              throw new Error('無効なプロジェクトデータです');
+            }
+          } catch (error) {
+            // エラーが発生した場合はローディング表示を削除してエラーを表示
+            if (document.body.contains(loadingMsg)) {
+              document.body.removeChild(loadingMsg);
+            }
+            console.error('プロジェクトのインポート中にエラーが発生しました:', error);
+            alert(`エラーが発生しました: ${error.message || '不明なエラー'}`);
+          }
+        } catch (error) {
+          console.error('Google Driveからのインポート中にエラーが発生しました:', error);
+          alert(`エラーが発生しました: ${error.message || '不明なエラー'}`);
+        } finally {
+          // ボタンの状態を元に戻す
+          if (importBtn) {
+            importBtn.disabled = false;
+            importBtn.textContent = 'Google Driveからインポート';
+          }
+        }
     };
     // キーボードショートカット
     document.addEventListener('keydown', function(e) {
@@ -356,13 +712,13 @@ export function appInit(shell) {
     let lang = localStorage.getItem('gamemaker_lang') || CURRENT_LANG;
     if (!window.LESSONS) {
       const root = document.getElementById('app-root');
-      if (root) root.innerHTML = '<div class="page-container"><div class="card" style="text-align:center;">Loading lessons...</div></div>';
+      if (root) root.innerHTML = '<div class='page-container'><div class='card' style='text-align:center;'>Loading lessons...</div></div>';
       return;
     }
     const steps = window.LESSONS;
     const root = document.getElementById('app-root');
     if (!Array.isArray(steps) || steps.length === 0) {
-      if (root) root.innerHTML = '<div class="card">レッスンデータがありません</div>';
+      if (root) root.innerHTML = '<div class='card'>レッスンデータがありません</div>';
       return;
     }
     if (stepIdx === null) stepIdx = Number(localStorage.getItem('gamemaker_lesson_progress') || 0);
@@ -380,67 +736,68 @@ export function appInit(shell) {
             <h2 style="text-align:center;margin-bottom:1.2rem;">
               <span class="step-title" style="font-size:1.25rem;font-weight:600;">${step.title[lang] || step.title.ja}</span>
               <span class="step-count" style="font-size:1rem;color:#2cb4ad;margin-left:0.7em;">(${stepIdx+1}/${steps.length})</span>
+              <span class='step-count' style='font-size:1rem;color:#2cb4ad;margin-left:0.7em;'>(${stepIdx+1}/${steps.length})</span>
             </h2>
-            <p class="step-desc" style="text-align:center;color:#555;margin-bottom:1.5rem;">${step.desc[lang] || step.desc.ja}</p>
-            <div class="progress-bar" aria-label="進捗バー" style="background:#e0e7ef;border-radius:8px;height:18px;position:relative;margin-bottom:1.5rem;">
-              <div class="progress" style="width: ${progress}%;background:linear-gradient(90deg,#4f8cff,#2cb4ad);height:100%;border-radius:8px;"></div>
-              <span class="progress-percent" style="position:absolute;right:12px;top:0;color:#222;font-size:0.98rem;line-height:18px;">${progress}%</span>
+            <p class='step-desc' style='text-align:center;color:#555;margin-bottom:1.5rem;'>${step.desc[lang] || step.desc.ja}</p>
+            <div class='progress-bar' aria-label='進捗バー' style='background:#e0e7ef;border-radius:8px;height:18px;position:relative;margin-bottom:1.5rem;'>
+              <div class='progress' style='width: ${progress}%;background:linear-gradient(90deg,#4f8cff,#2cb4ad);height:100%;border-radius:8px;'></div>
+              <span class='progress-percent' style='position:absolute;right:12px;top:0;color:#222;font-size:0.98rem;line-height:18px;'>${progress}%</span>
             </div>
-            <div class="lesson-nav" style="display:flex;gap:1.2rem;justify-content:center;margin-bottom:2rem;">
-              <button class="pickramu-load-button secondary" id="gm-prev-step" ${stepIdx===0?'disabled':''} style="display:flex;align-items:center;gap:0.5em;">
-                <span style="font-size:1.2em;">⬅️</span> 前へ
+            <div class='lesson-nav' style='display:flex;gap:1.2rem;justify-content:center;margin-bottom:2rem;'>
+              <button class='pickramu-load-button secondary' id='gm-prev-step' ${stepIdx===0?'disabled':''} style='display:flex;align-items:center;gap:0.5em;'>
+                <span style='font-size:1.2em;'>⬅️</span> 前へ
               </button>
-              <button class="pickramu-load-button primary" id="gm-next-step" ${stepIdx===steps.length-1?'disabled':''} style="display:flex;align-items:center;gap:0.5em;">
-                次へ <span style="font-size:1.2em;">➡️</span>
+              <button class='pickramu-load-button primary' id='gm-next-step' ${stepIdx===steps.length-1?'disabled':''} style='display:flex;align-items:center;gap:0.5em;'>
+                次へ <span style='font-size:1.2em;'>➡️</span>
               </button>
-              <button class="pickramu-load-button secondary" id="gm-progress-report-btn" style="display:flex;align-items:center;gap:0.5em;">
-                <span style="font-size:1.2em;">📈</span> 進捗レポート
+              <button class='pickramu-load-button secondary' id='gm-progress-report-btn' style='display:flex;align-items:center;gap:0.5em;'>
+                <span style='font-size:1.2em;'>📈</span> 進捗レポート
               </button>
             </div>
-            <div class="ai-support-panel" style="background:#f7fafc;border-radius:18px;box-shadow:0 2px 8px rgba(44,180,173,0.07);padding:1.2rem 1rem 1.5rem 1rem;margin-bottom:0.5rem;">
-              <div style="display:flex;align-items:center;gap:0.7em;margin-bottom:1em;">
-                <span style="font-size:1.5em;">🤖</span>
-                <strong style="font-size:1.1em;">AIサポート</strong>
+            <div class='ai-support-panel' style='background:#f7fafc;border-radius:18px;box-shadow:0 2px 8px rgba(44,180,173,0.07);padding:1.2rem 1rem 1.5rem 1rem;margin-bottom:0.5rem;'>
+              <div style='display:flex;align-items:center;gap:0.7em;margin-bottom:1em;'>
+                <span style='font-size:1.5em;'>🤖</span>
+                <strong style='font-size:1.1em;'>AIサポート</strong>
               </div>
-              <div class="ai-message" aria-live="polite" role="status" style="background:#fff;border-radius:12px;padding:1em 1.2em;margin-bottom:1.2em;box-shadow:0 1px 4px rgba(44,180,173,0.06);display:flex;align-items:center;gap:0.7em;min-height:2.5em;">
-                <span style="font-size:1.3em;">💡</span>
-                <span id="ai-message-text">困ったらAIに質問しよう！</span>
+              <div class='ai-message' aria-live='polite' role='status' style='background:#fff;border-radius:12px;padding:1em 1.2em;margin-bottom:1.2em;box-shadow:0 1px 4px rgba(44,180,173,0.06);display:flex;align-items:center;gap:0.7em;min-height:2.5em;'>
+                <span style='font-size:1.3em;'>💡</span>
+                <span id='ai-message-text'>困ったらAIに質問しよう！</span>
               </div>
-              <div class="ai-btn-row" style="display:flex;flex-wrap:wrap;gap:0.7em;justify-content:center;">
-                <button class="pickramu-load-button primary" id="gm-ai-ask-btn" aria-label="AIに質問" style="display:flex;align-items:center;gap:0.5em;min-width:110px;">
-                  <span style="font-size:1.2em;">💬</span> 質問
+              <div class='ai-btn-row' style='display:flex;flex-wrap:wrap;gap:0.7em;justify-content:center;'>
+                <button class='pickramu-load-button primary' id='gm-ai-ask-btn' aria-label='AIに質問' style='display:flex;align-items:center;gap:0.5em;min-width:110px;'>
+                  <span style='font-size:1.2em;'>💬</span> 質問
                 </button>
-                <button class="pickramu-load-button secondary" id="gm-ai-hint-btn" aria-label="ヒント例を表示" style="display:flex;align-items:center;gap:0.5em;min-width:110px;">
-                  <span style="font-size:1.2em;">💡</span> ヒント
+                <button class='pickramu-load-button secondary' id='gm-ai-hint-btn' aria-label='ヒント例を表示' style='display:flex;align-items:center;gap:0.5em;min-width:110px;'>
+                  <span style='font-size:1.2em;'>💡</span> ヒント
                 </button>
-                <button class="pickramu-load-button secondary" id="gm-ai-faq-btn" aria-label="よくある質問を表示" style="display:flex;align-items:center;gap:0.5em;min-width:110px;">
-                  <span style="font-size:1.2em;">❓</span> FAQ
+                <button class='pickramu-load-button secondary' id='gm-ai-faq-btn' aria-label='よくある質問を表示' style='display:flex;align-items:center;gap:0.5em;min-width:110px;'>
+                  <span style='font-size:1.2em;'>❓</span> FAQ
                 </button>
-                <button class="pickramu-load-button secondary" id="gm-ai-clear-btn" aria-label="AIサポートをクリア" style="display:flex;align-items:center;gap:0.5em;min-width:110px;">
-                  <span style="font-size:1.2em;">🧹</span> クリア
+                <button class='pickramu-load-button secondary' id='gm-ai-clear-btn' aria-label='AIサポートをクリア' style='display:flex;align-items:center;gap:0.5em;min-width:110px;'>
+                  <span style='font-size:1.2em;'>🧹</span> クリア
                 </button>
-                <button class="pickramu-load-button secondary" id="gm-ai-copy-btn" aria-label="AIサポートをコピー" style="display:flex;align-items:center;gap:0.5em;min-width:110px;">
-                  <span style="font-size:1.2em;">📋</span> コピー
+                <button class='pickramu-load-button secondary' id='gm-ai-copy-btn' aria-label='AIサポートをコピー' style='display:flex;align-items:center;gap:0.5em;min-width:110px;'>
+                  <span style='font-size:1.2em;'>📋</span> コピー
                 </button>
-                <button class="pickramu-load-button secondary" id="gm-ai-speak-btn" aria-label="AIサポートを音声で読み上げ" style="display:flex;align-items:center;gap:0.5em;min-width:110px;">
-                  <span style="font-size:1.2em;">🔊</span> 音声
+                <button class='pickramu-load-button secondary' id='gm-ai-speak-btn' aria-label='AIサポートを音声で読み上げ' style='display:flex;align-items:center;gap:0.5em;min-width:110px;'>
+                  <span style='font-size:1.2em;'>🔊</span> 音声
                 </button>
-                <button class="pickramu-load-button primary" id="gm-ai-guide-btn" aria-label="AIガイド自動生成" style="display:flex;align-items:center;gap:0.5em;min-width:110px;">
-                  <span style="font-size:1.2em;">📝</span> ガイド
+                <button class='pickramu-load-button primary' id='gm-ai-guide-btn' aria-label='AIガイド自動生成' style='display:flex;align-items:center;gap:0.5em;min-width:110px;'>
+                  <span style='font-size:1.2em;'>📝</span> ガイド
                 </button>
               </div>
             </div>
-            <div class="lesson-hints-faqs" style="margin-top:1.2em;">
-              <div style="display:flex;gap:1.5em;justify-content:center;flex-wrap:wrap;">
-                <div style="min-width:120px;">
-                  <div style="font-weight:600;color:#2cb4ad;margin-bottom:0.3em;">ヒント</div>
-                  <ul style="padding-left:1.2em;margin:0;">
+            <div class='lesson-hints-faqs' style='margin-top:1.2em;'>
+              <div style='display:flex;gap:1.5em;justify-content:center;flex-wrap:wrap;'>
+                <div style='min-width:120px;'>
+                  <div style='font-weight:600;color:#2cb4ad;margin-bottom:0.3em;'>ヒント</div>
+                  <ul style='padding-left:1.2em;margin:0;'>
                     ${(step.hints||[]).map(h=>`<li style='font-size:0.98em;color:#555;'>${h[lang]||h.ja}</li>`).join('')}
                   </ul>
                 </div>
-                <div style="min-width:120px;">
-                  <div style="font-weight:600;color:#2cb4ad;margin-bottom:0.3em;">FAQ</div>
-                  <ul style="padding-left:1.2em;margin:0;">
+                <div style='min-width:120px;'>
+                  <div style='font-weight:600;color:#2cb4ad;margin-bottom:0.3em;'>FAQ</div>
+                  <ul style='padding-left:1.2em;margin:0;'>
                     ${(step.faqs||[]).map(f=>`<li style='font-size:0.98em;color:#555;'>${f[lang]||f.ja}</li>`).join('')}
                   </ul>
                 </div>
@@ -554,41 +911,41 @@ export function appInit(shell) {
     let codeValue = loadedProject?.codeValue || '';
     // 横分割レイアウト
     root.innerHTML = `
-      <div class="page-container" id="gm-create-mode">
-        <div class="gm-main-layout">
-          <div class="gm-main-col" style="min-width:340px;max-width:600px;">
-            <header style="display:flex;align-items:center;gap:1.2rem;margin-bottom:1.2rem;">
-              <button class="pickramu-load-button secondary gm-back" id="gm-back-home" aria-label="ホームに戻る">← ホーム</button>
-              <h1 class="title" style="margin:0;">創造モード</h1>
+      <div class='page-container' id='gm-create-mode'>
+        <div class='gm-main-layout'>
+          <div class='gm-main-col' style='min-width:340px;max-width:600px;'>
+            <header style='display:flex;align-items:center;gap:1.2rem;margin-bottom:1.2rem;'>
+              <button class='pickramu-load-button secondary gm-back' id='gm-back-home' aria-label='ホームに戻る'>← ホーム</button>
+              <h1 class='title' style='margin:0;'>創造モード</h1>
             </header>
-            <div class="editor-switch" style="display:flex;gap:1rem;margin-bottom:1.2rem;">
-              <button class="pickramu-load-button primary" id="gm-scratch-btn">スクラッチ型</button>
-              <button class="pickramu-load-button secondary" id="gm-code-btn">コード型</button>
+            <div class='editor-switch' style='display:flex;gap:1rem;margin-bottom:1.2rem;'>
+              <button class='pickramu-load-button primary' id='gm-scratch-btn'>スクラッチ型</button>
+              <button class='pickramu-load-button secondary' id='gm-code-btn'>コード型</button>
             </div>
-            <div class="editor-panel" id="gm-editor-panel">エディタ（仮）</div>
-            <div class="asset-panel">
-              <div class="asset-panel-header" style="display:flex;align-items:center;justify-content:space-between;">
+            <div class='editor-panel' id='gm-editor-panel'>エディタ（仮）</div>
+            <div class='asset-panel'>
+              <div class='asset-panel-header' style='display:flex;align-items:center;justify-content:space-between;'>
                 <span>アセット管理</span>
-                <button class="pickramu-load-button primary gm-add-btn" id="gm-add-asset-btn">＋追加</button>
+                <button class='pickramu-load-button primary gm-add-btn' id='gm-add-asset-btn'>＋追加</button>
               </div>
-              <ul class="asset-list" id="gm-asset-list"></ul>
+              <ul class='asset-list' id='gm-asset-list'></ul>
             </div>
-            <div class="project-actions" style="margin-top:1.2rem;display:flex;gap:1rem;align-items:center;">
-              <button class="pickramu-load-button primary" id="gm-save-project-btn">プロジェクトを保存</button>
+            <div class='project-actions' style='margin-top:1.2rem;display:flex;gap:1rem;align-items:center;'>
+              <button class='pickramu-load-button primary' id='gm-save-project-btn'>プロジェクトを保存</button>
             </div>
           </div>
-          <div class="gm-main-col preview" style="min-width:320px;max-width:520px;">
-            <div style="display:flex;align-items:center;gap:1.2rem;margin-bottom:1.2rem;">
-              <span style="font-size:1.5em;">🖥️</span>
-              <span style="font-size:1.15em;font-weight:600;">プレビュー & サポート</span>
+          <div class='gm-main-col preview' style='min-width:320px;max-width:520px;'>
+            <div style='display:flex;align-items:center;gap:1.2rem;margin-bottom:1.2rem;'>
+              <span style='font-size:1.5em;'>🖥️</span>
+              <span style='font-size:1.15em;font-weight:600;'>プレビュー & サポート</span>
             </div>
-            <div id="gm-preview-panel" style="width:100%;max-width:420px;"></div>
-            <div class="support-btns" style="margin-top:1.5rem;display:flex;flex-wrap:wrap;gap:0.7em;">
-              <button class="pickramu-load-button secondary" id="gm-scr-btn">SCRサポート</button>
-              <button class="pickramu-load-button primary" id="gm-toaster-btn" style="background:#2cb4ad;color:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(44,180,173,0.12);font-weight:600;">ToasterMachineに質問</button>
-              <span id="gm-toaster-status" style="margin-left:8px;color:#2cb4ad;font-weight:500;"></span>
+            <div id='gm-preview-panel' style='width:100%;max-width:420px;'></div>
+            <div class='support-btns' style='margin-top:1.5rem;display:flex;flex-wrap:wrap;gap:0.7em;'>
+              <button class='pickramu-load-button secondary' id='gm-scr-btn'>SCRサポート</button>
+              <button class='pickramu-load-button primary' id='gm-toaster-btn' style='background:#2cb4ad;color:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(44,180,173,0.12);font-weight:600;'>ToasterMachineに質問</button>
+              <span id='gm-toaster-status' style='margin-left:8px;color:#2cb4ad;font-weight:500;'></span>
             </div>
-            <div id="gm-support-result" style="margin-top:1.2em;min-height:2.5em;background:#f7fafc;border-radius:10px;padding:1em 1.2em;color:#222;box-shadow:0 1px 4px rgba(44,180,173,0.06);"></div>
+            <div id='gm-support-result' style='margin-top:1.2em;min-height:2.5em;background:#f7fafc;border-radius:10px;padding:1em 1.2em;color:#222;box-shadow:0 1px 4px rgba(44,180,173,0.06);'></div>
           </div>
         </div>
       </div>
@@ -719,30 +1076,30 @@ export function appInit(shell) {
               border-left: 12px solid rgba(0,0,0,0.08);
             }
           </style>
-          <div style="display:flex;gap:2em;align-items:flex-start;">
-            <div style="min-width:160px;">
-              <div style="font-weight:700;margin-bottom:0.7em;">ブロック一覧</div>
-              <div id="gm-block-palette" style="display:flex;flex-direction:column;gap:0.7em;">
+          <div style='display:flex;gap:2em;align-items:flex-start;'>
+            <div style='min-width:160px;'>
+              <div style='font-weight:700;margin-bottom:0.7em;'>ブロック一覧</div>
+              <div id='gm-block-palette' style='display:flex;flex-direction:column;gap:0.7em;'>
                 ${blockPalette.map(b=>`
-                  <div class="gm-block-palette-item" draggable="true" data-id="${b.id}" style="background:${b.color};">${b.text}</div>
+                  <div class='gm-block-palette-item' draggable='true' data-id='${b.id}' style='background:${b.color};'>${b.text}</div>
                 `).join('')}
               </div>
             </div>
-            <div style="flex:1;min-width:200px;">
-              <div style="font-weight:700;margin-bottom:0.7em;">キャンバス</div>
-              <div id="gm-block-canvas" style="min-height:120px;min-width:180px;background:#f6faff;border-radius:16px;box-shadow:0 2px 8px rgba(44,180,173,0.07);padding:1.2em 1em 1.2em 1em;display:flex;flex-direction:column;gap:0.2em;">
+            <div style='flex:1;min-width:200px;'>
+              <div style='font-weight:700;margin-bottom:0.7em;'>キャンバス</div>
+              <div id='gm-block-canvas' style='min-height:120px;min-width:180px;background:#f6faff;border-radius:16px;box-shadow:0 2px 8px rgba(44,180,173,0.07);padding:1.2em 1em 1.2em 1em;display:flex;flex-direction:column;gap:0.2em;'>
                 ${scratchBlocks.map((b,i)=>{
                   // 色分け
                   const palette = blockPalette.find(p=>p.text===b.text);
                   const color = palette ? palette.color : '#888';
-                  return `<div class="gm-block-scratch" draggable="true" data-idx="${i}" style="background:${color};">
+                  return `<div class='gm-block-scratch' draggable='true' data-idx='${i}' style='background:${color};'>
                     <span>${b.text}</span>
-                    <button class="gm-remove-block-btn" data-idx="${i}">削除</button>
+                    <button class='gm-remove-block-btn' data-idx='${i}'>削除</button>
                   </div>`;
                 }).join('')}
               </div>
-              <div style="margin-top:1.2em;text-align:right;">
-                <button class="pickramu-load-button primary" id="gm-run-btn" style="font-size:1.1em;padding:0.7em 2em;">実行 ▶</button>
+              <div style='margin-top:1.2em;text-align:right;'>
+                <button class='pickramu-load-button primary' id='gm-run-btn' style='font-size:1.1em;padding:0.7em 2em;'>実行 ▶</button>
               </div>
             </div>
           </div>
@@ -818,7 +1175,7 @@ export function appInit(shell) {
         });
       } else if (type === 'code') {
         // コード型エディタ（仮）
-        panel.innerHTML = `<textarea id="gm-code-editor" style="width:100%;height:180px;font-size:1.1em;border-radius:8px;padding:0.7em;">${codeValue||''}</textarea>`;
+        panel.innerHTML = `<textarea id='gm-code-editor' style='width:100%;height:180px;font-size:1.1em;border-radius:8px;padding:0.7em;'>${codeValue||''}</textarea>`;
         const codeEditor = document.getElementById('gm-code-editor');
         if (codeEditor) codeEditor.oninput = e => {
           codeValue = codeEditor.value;
@@ -869,10 +1226,10 @@ export function appInit(shell) {
     const previewPanel = document.getElementById('gm-preview-panel');
     if (previewPanel) {
       previewPanel.innerHTML = `
-        <div id="gm-preview-area" style="position:relative;width:320px;height:180px;background:#222;border-radius:12px;overflow:hidden;margin:0 auto;">
-          <img id="gm-char" src="https://cdn.jsdelivr.net/gh/googlefonts/noto-emoji@main/png/128/emoji_u1f47e.png" alt="キャラクター" style="position:absolute;left:20px;bottom:20px;width:48px;height:48px;transition:all 0.4s cubic-bezier(.4,2,.6,1);">
-          <div id="gm-score" style="position:absolute;top:10px;right:16px;color:#fff;font-size:1.1em;font-weight:700;">スコア: 0</div>
-          <div id="gm-msg" style="position:absolute;left:50px;bottom:70px;color:#fff;font-size:1.1em;background:rgba(44,180,173,0.95);border-radius:12px;padding:0.4em 1em;display:none;white-space:nowrap;">メッセージ</div>
+        <div id='gm-preview-area' style='position:relative;width:320px;height:180px;background:#222;border-radius:12px;overflow:hidden;margin:0 auto;'>
+          <img id='gm-char' src='https://cdn.jsdelivr.net/gh/googlefonts/noto-emoji@main/png/128/emoji_u1f47e.png' alt='キャラクター' style='position:absolute;left:20px;bottom:20px;width:48px;height:48px;transition:all 0.4s cubic-bezier(.4,2,.6,1);'>
+          <div id='gm-score' style='position:absolute;top:10px;right:16px;color:#fff;font-size:1.1em;font-weight:700;'>スコア: 0</div>
+          <div id='gm-msg' style='position:absolute;left:50px;bottom:70px;color:#fff;font-size:1.1em;background:rgba(44,180,173,0.95);border-radius:12px;padding:0.4em 1em;display:none;white-space:nowrap;'>メッセージ</div>
         </div>
       `;
     }
@@ -942,12 +1299,12 @@ export function appInit(shell) {
     const root = document.getElementById('app-root');
     if (!root) return;
     root.innerHTML = `
-      <div class="page-container" id="gm-preview-mode">
-        <header class="card" style="width:100%;max-width:900px;position:relative;">
-          <button class="pickramu-load-button secondary gm-back" id="gm-back-home" aria-label="ホームに戻る" style="position:absolute;left:1.2rem;top:1.2rem;z-index:2;">← ホーム</button>
-          <h1 class="title" style="margin-top:0.5rem;">ゲームプレビュー</h1>
+      <div class='page-container' id='gm-preview-mode'>
+        <header class='card' style='width:100%;max-width:900px;position:relative;'>
+          <button class='pickramu-load-button secondary gm-back' id='gm-back-home' aria-label='ホームに戻る' style='position:absolute;left:1.2rem;top:1.2rem;z-index:2;'>← ホーム</button>
+          <h1 class='title' style='margin-top:0.5rem;'>ゲームプレビュー</h1>
         </header>
-        <main class="card" style="width:100%;max-width:900px;">
+        <main class='card' style='width:100%;max-width:900px;'>
           <!-- ...rest of preview UI... -->
         </main>
       </div>
@@ -962,7 +1319,7 @@ export function appInit(shell) {
     let lang = localStorage.getItem('gamemaker_lang') || CURRENT_LANG;
     const root = document.getElementById('app-root');
     if (!root) return;
-    root.innerHTML = `<div class="page-container"><header class="card" style="position:relative;"><button class="pickramu-load-button secondary gm-back" id="gm-back-home" aria-label="ホームに戻る" style="position:absolute;left:1.2rem;top:1.2rem;z-index:2;">← ホーム</button><h1>Test & QA</h1></header><main class="card"><button class="pickramu-load-button primary" id="run-test-btn">Run Tests</button><ul id="test-result-list"></ul></main></div>`;
+    root.innerHTML = `<div class='page-container'><header class='card' style='position:relative;'><button class='pickramu-load-button secondary gm-back' id='gm-back-home' aria-label='ホームに戻る' style='position:absolute;left:1.2rem;top:1.2rem;z-index:2;'>← ホーム</button><h1>Test & QA</h1></header><main class='card'><button class='pickramu-load-button primary' id='run-test-btn'>Run Tests</button><ul id='test-result-list'></ul></main></div>`;
     const backBtn = document.getElementById('gm-back-home');
     if (backBtn) backBtn.onclick = () => renderHome();
     // ... existing code ...
@@ -973,7 +1330,7 @@ export function appInit(shell) {
     let lang = localStorage.getItem('gamemaker_lang') || CURRENT_LANG;
     const root = document.getElementById('app-root');
     if (!root) return;
-    root.innerHTML = `<div class="page-container"><header class="card" style="position:relative;"><button class="pickramu-load-button secondary gm-back" id="gm-back-home" aria-label="ホームに戻る" style="position:absolute;left:1.2rem;top:1.2rem;z-index:2;">← ホーム</button><h1>Feedback</h1></header><main class="card"><textarea id="feedback-text" rows="5" style="width:100%;font-size:1.1rem;"></textarea><button class="pickramu-load-button primary" id="send-feedback-btn">送信</button><div id="feedback-result"></div></main></div>`;
+    root.innerHTML = `<div class='page-container'><header class='card' style='position:relative;'><button class='pickramu-load-button secondary gm-back' id='gm-back-home' aria-label='ホームに戻る' style='position:absolute;left:1.2rem;top:1.2rem;z-index:2;'>← ホーム</button><h1>Feedback</h1></header><main class='card'><textarea id='feedback-text' rows='5' style='width:100%;font-size:1.1rem;'></textarea><button class='pickramu-load-button primary' id='send-feedback-btn'>送信</button><div id='feedback-result'></div></main></div>`;
     const backBtn = document.getElementById('gm-back-home');
     if (backBtn) backBtn.onclick = () => renderHome();
     // ... existing code ...
@@ -988,7 +1345,7 @@ export function appInit(shell) {
     try { allProgress = JSON.parse(localStorage.getItem('gamemaker_lesson_history')||'[]'); } catch {}
     let feedback = [];
     try { feedback = JSON.parse(localStorage.getItem('gamemaker_feedback')||'[]'); } catch {}
-    root.innerHTML = `<div class="page-container"><header class="card" style="position:relative;"><button class="pickramu-load-button secondary gm-back" id="gm-back-home" aria-label="ホームに戻る" style="position:absolute;left:1.2rem;top:1.2rem;z-index:2;">← ホーム</button><h1>管理者ダッシュボード</h1></header><main class="card"><h2>進捗履歴</h2><ul>${allProgress.map(h=>`<li>ステップ${h.step} - ${h.date}</li>`).join('')||'<li>データなし</li>'}</ul><h2>フィードバック</h2><ul>${feedback.map(f=>`<li>${f.text} <span style='color:#888;'>(${f.date})</span></li>`).join('')||'<li>データなし</li>'}</ul></main></div>`;
+    root.innerHTML = `<div class='page-container'><header class='card' style='position:relative;'><button class='pickramu-load-button secondary gm-back' id='gm-back-home' aria-label='ホームに戻る' style='position:absolute;left:1.2rem;top:1.2rem;z-index:2;'>← ホーム</button><h1>管理者ダッシュボード</h1></header><main class='card'><h2>進捗履歴</h2><ul>${allProgress.map(h=>`<li>ステップ${h.step} - ${h.date}</li>`).join('')||'<li>データなし</li>'}</ul><h2>フィードバック</h2><ul>${feedback.map(f=>`<li>${f.text} <span style='color:#888;'>(${f.date})</span></li>`).join('')||'<li>データなし</li>'}</ul></main></div>`;
     const backBtn = document.getElementById('gm-back-home');
     if (backBtn) backBtn.onclick = () => renderHome();
     // ... existing code ...
@@ -997,6 +1354,45 @@ export function appInit(shell) {
   // window.LESSONS = null; // グローバルで管理
 } // ← appInitの閉じカッコ
 // --- CodeMirror CDN動的ロード ---
+// プロジェクト管理関数
+function loadProjects() {
+  return JSON.parse(localStorage.getItem('gamemaker_projects') || '[]');
+}
+
+function saveProjects(projects) {
+  localStorage.setItem('gamemaker_projects', JSON.stringify(projects));
+}
+
+function addProject(project) {
+  const projects = loadProjects();
+  projects.unshift(project); // 新しいプロジェクトを先頭に追加
+  saveProjects(projects);
+  return project;
+}
+
+// バージョン管理・履歴
+function addProjectVersion(project) {
+  const versions = getProjectVersions(project.id) || [];
+  versions.push({
+    id: Date.now().toString(),
+    timestamp: Date.now(),
+    project: JSON.parse(JSON.stringify(project)) // ディープコピー
+  });
+  
+  // 最新10バージョンを保持
+  if (versions.length > 10) {
+    versions.shift();
+  }
+  
+  localStorage.setItem(`gamemaker_project_${project.id}_versions`, JSON.stringify(versions));
+  return versions;
+}
+
+function getProjectVersions(projectId) {
+  return JSON.parse(localStorage.getItem(`gamemaker_project_${projectId}_versions`) || '[]');
+}
+
+// CodeMirrorの動的ロード
 function loadCodeMirrorIfNeeded(cb) {
   if (window.CodeMirror) return cb();
   // CSS
