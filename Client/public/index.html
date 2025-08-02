@@ -68,7 +68,7 @@
             <video src="./img/Deep-School-ICON-ANIME.mp4" loop muted playsinline autoplay height="90%" width="90%" style="display: block;">
             </div>
             <p>いつも見慣れた黒板のようなインターフェイスに仕上げ、見やすく、直感的で統一されたインターフェイスに仕上げました。</p><br>
-            <button class="open-client-btn">デザインについてもっと詳しく見る</button>
+            <button class="open-modal-btn" data-modal="designModal">デザインについてもっと詳しく見る</button>
           </div>
           
           <div class="highlight">
@@ -80,7 +80,8 @@
                 </svg>
               </div>
             </div>
-            <p>SCRというアプリを使えば、同じ学校の人に、勉強に関することを相談できます。<br>チャット形式なので、恥ずかしがらずになんでも聞くことができます。</p>
+            <p>SCRというアプリを使えば、同じ学校の人に、勉強に関することを相談できます。<br>チャット形式なので、恥ずかしがらずになんでも聞くことができます。</p><br>
+            <button class="open-modal-btn" data-modal="scrModal">SCRについてもっと詳しく見る</button>
           </div>
           
           <div class="highlight">
@@ -94,7 +95,8 @@
                 </svg>
               </div>
             </div>
-            <p>Pickramuではたくさんのワークを、いつでも好きなタイミングで。<br>MoralFruitではAI相手に道徳の授業を。<br>学びのための専用アプリを活用できるのはDeep-Schoolだけです。</p>
+            <p>Pickramuではたくさんのワークを、いつでも好きなタイミングで。<br>MoralFruitではAI相手に道徳の授業を。<br>学びのための専用アプリを活用できるのはDeep-Schoolだけです。</p><br>
+            <button class="open-modal-btn" data-modal="appsModal">アプリについてもっと詳しく見る</button>
           </div>
           
           <div class="highlight">
@@ -106,7 +108,8 @@
                 </svg>
               </div>
             </div>
-            <p>ToasterMachineがあなたの学びをサポート。わからないことの相談、対話演習、ワークのサポートなど、Deep-School上のすべてのアプリと連携して、これまでにない学習体験を提供します。</p>
+            <p>ToasterMachineがあなたの学びをサポート。わからないことの相談、対話演習、ワークのサポートなど、Deep-School上のすべてのアプリと連携して、これまでにない学習体験を提供します。</p><br>
+            <button class="open-modal-btn" data-modal="toasterModal">ToasterMachineについてもっと詳しく見る</button>
           </div>
           
           <div class="highlight">
@@ -126,13 +129,14 @@
               
               そして、ToasterMachineは、AIなので、間違えてしまうことがあるでしょう。<br>しかし、間違える確率を減らすことはできるでしょう。<br>そこで、AI用のファクトチェッカーをToasterMachineのコアシステムに導入しました。<br>
               
-              安全保護機能たちによって、Deep-Schoolでは、安全に学ぶことができるようになります。</p>
+              安全保護機能たちによって、Deep-Schoolでは、安全に学ぶことができるようになります。</p><br>
+            <button class="open-modal-btn" data-modal="securityModal">セキュリティについてもっと詳しく見る</button>
           </div>
         </div>
       </section>
     </main>
     
-    <!-- Design Details Modal -->
+    <!-- Design Modal -->
     <div id="designModal" class="modal">
       <div class="modal-content">
         <span class="close-modal">&times;</span>
@@ -143,17 +147,137 @@
           </div>
           <div class="modal-text">
             <h3>直感的な操作性</h3>
-            <p>黒板をモチーフにしたインターフェイスで、自然な操作感を実現しました。直感的に使えるよう、余計な要素を排し、必要な情報に集中できるデザインです。</p>
+            <p>
+              あなたが学習に集中できるように、学校っぽい黒板をテーマとして、シンプルでわかりやすいインターフェイスにしました。</p>
             
-            <h3>視認性の高さ</h3>
-            <p>文字の大きさや行間を最適化し、長時間の学習でも目が疲れにくいデザインです。また、コントラストにも配慮し、誰にでも見やすいUIを心がけました。</p>
+            <h3>アイコンとアニメーション</h3>
+            <p>カラフルで、でもわかりやすいデザインを目指しました。<br>
+              アニメーションも、学習を邪魔しないように、幾度も調整しました。</p>
             
             <h3>統一感のあるデザイン</h3>
-            <p>アプリ全体で統一されたデザインシステムを採用し、どの画面でも同じ操作感で使えるよう設計されています。</p>
+            <p>純正アプリはもちろん、CStoreからダウンロードしたアプリでも、統一感あるデザインのおかげで、アプリたちを完璧に活用することができます。</p>
           </div>
         </div>
         <button class="open-client-btn modal-close-btn">アプリを開く</button>
       </div>
+    </div>
+
+    <!-- SCR Modal -->
+    <div id="scrModal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>SCR</h2>
+        <div class="modal-body">
+          <div class="modal-image">
+            <div style="background-color: #f5f5f7; padding: 2rem; text-align: center; border-radius: 12px; height: 100%; display: flex; align-items: center; justify-content: center;">
+              <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#86868b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+            </div>
+          </div>
+          <div class="modal-text">
+            <h3>気軽に質問・共有</h3>
+            <p>わからない問題や気になるトピックを、チャット形式で気軽に質問できます。<br>同じ学校の仲間と学びを共有し、理解を深めましょう。</p>
+            
+            <h3>24時間いつでも利用可能</h3>
+            <p>授業後や自宅学習中など、いつでも質問や相談が可能。<br>気になったら、すぐ質問できます。</p>
+            
+            <h3>先生やAIからのサポート</h3>
+            <p>難しい質問には先生やAIが丁寧に回答。<br>プロに聞いて、プロの技を身につけよう。</p>
+          </div>
+        </div>
+        <button class="open-client-btn modal-close-btn">SCRを開く</button>
+      </div>
+    </div>
+
+    <!-- Apps Modal -->
+    <div id="appsModal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>学びを支える専用アプリ</h2>
+        <div class="modal-body">
+          <div class="modal-image">
+            <div style="background-color: #f5f5f7; padding: 2rem; text-align: center; border-radius: 12px; height: 100%; display: flex; align-items: center; justify-content: center;">
+              <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#86868b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+              </svg>
+            </div>
+          </div>
+          <div class="modal-text">
+            <h3>Pickramu - ワーク</h3>
+            <p>Pickramuには、あらゆる教科のワークがあり、いつでもどこでも活用できます。<br>
+            もちろんすべてのワークは無料で、必要があればSCRやToasterMachineによるサポートを受けることができます。</p>
+            
+            <h3>MoralFruit - 道徳学習</h3>
+            <p>AIを相手に、ジレンマや価値観について考えを深めます。普段の授業では恥ずかしいというあなたでも、自分の考えを持ち、道徳を学ぶことができます。</p>
+            
+            <h3>その他の学習ツール</h3>
+            <p>各教科・目的に特化したアプリが揃っています。あなたの学習スタイルに合わせて、最適なツールを選べます。</p>
+          </div>
+        </div>
+        <button class="open-client-btn modal-close-btn">アプリを開く</button>
+      </div>
+    </div>
+
+    <!-- ToasterMachine Modal -->
+    <div id="toasterModal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>ToasterMachine - AI学習アシスタント</h2>
+        <div class="modal-body">
+          <div class="modal-image">
+            <div style="background-color: #f5f5f7; padding: 2rem; text-align: center; border-radius: 12px; height: 100%; display: flex; align-items: center; justify-content: center;">
+              <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#86868b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+              </svg>
+            </div>
+          </div>
+          <div class="modal-text">
+            <h3>いつでもどこでもサポート</h3>
+            <p>いつでもどこでも、学習の悩みを相談できます。<br>
+              さらに、ToasterMachineは、独自開発の、「あなたのためになる」サポートを提供しているので、ただのAIからは得ることのできない学びを体験することができます。</p>
+            
+            <h3>パーソナライズ学習</h3>
+            <p>あなたの学習スタイルや理解度に合わせて、すべての教科で、最適な学習方法を提案。あなたの学びを、効率的にします。</p>
+            
+            <h3>他アプリとの連携</h3>
+            <p>Deep-Schoolの各アプリと連携し、シームレスな学習体験を提供。わからないことは、すぐ解決。</p>
+          </div>
+        </div>
+        <button class="open-client-btn modal-close-btn">ToasterMachineを開く</button>
+      </div>
+    </div>
+
+    <!-- Security Modal -->
+    <div id="securityModal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>安心・安全な学習環境</h2>
+        <div class="modal-body">
+          <div class="modal-image">
+            <div style="background-color: #f5f5f7; padding: 2rem; text-align: center; border-radius: 12px; height: 100%; display: flex; align-items: center; justify-content: center;">
+              <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#86868b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M16 8v5a3 3 0 0 0 3 3h1a10 10 0 0 1-14.2 4.5"></path>
+                <path d="M12 2.8V12l5.5 3.1"></path>
+              </svg>
+            </div>
+          </div>
+          <div class="modal-text">
+            <h3>高度なセキュリティ対策</h3>
+            <p>最新の暗号化技術を採用し、個人情報を厳重に保護。安心して学習に集中できます。</p>
+            
+            <h3>AIによる監視</h3>
+            <p>不適切なコンテンツを自動検出・削除。健全な学習環境を維持します。</p>
+            
+            <h3>プライバシー保護</h3>
+            <p>個人情報の取り扱いを厳格に管理。データの不正利用を防ぎます。</p>
+          </div>
+        </div>
+        <button class="open-client-btn modal-close-btn">セキュリティポリシーを確認</button>
+  </div>
     </div>
     
     <hutter>
@@ -170,50 +294,52 @@
     <script>
       // Modal functionality
       document.addEventListener('DOMContentLoaded', function() {
-        const modal = document.getElementById('designModal');
-        const modalBtns = document.querySelectorAll('.open-client-btn:not(.modal-close-btn)');
-        const closeBtn = document.querySelector('.close-modal');
-        const modalCloseBtn = document.querySelector('.modal-close-btn');
-
-        // Open modal when any "詳細を見る" button is clicked
-        modalBtns.forEach(btn => {
+        // Get all modal open buttons and close buttons
+        const modalOpenBtns = document.querySelectorAll('.open-modal-btn');
+        const modalCloseBtns = document.querySelectorAll('.close-modal, .modal-close-btn');
+        
+        // Add click event to all open buttons
+        modalOpenBtns.forEach(btn => {
           btn.addEventListener('click', function(e) {
-            // Only open modal if it's the design details button
-            if (btn.textContent.includes('デザインについて')) {
-              e.preventDefault();
+            e.preventDefault();
+            const modalId = this.getAttribute('data-modal');
+            const modal = document.getElementById(modalId);
+            
+            if (modal) {
               modal.classList.add('active');
               document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
             }
           });
         });
 
-        // Close modal when X is clicked
-        closeBtn.addEventListener('click', function() {
-          modal.classList.remove('active');
-          document.body.style.overflow = ''; // Re-enable scrolling
-        });
-
-        // Close modal when "アプリを開く" button in modal is clicked
-        modalCloseBtn.addEventListener('click', function(e) {
-          e.preventDefault();
-          modal.classList.remove('active');
-          document.body.style.overflow = ''; // Re-enable scrolling
-          // Optional: Add code to open the app here
+        // Add click event to all close buttons
+        modalCloseBtns.forEach(btn => {
+          btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const modal = this.closest('.modal');
+            if (modal) {
+              modal.classList.remove('active');
+              document.body.style.overflow = ''; // Re-enable scrolling
+            }
+          });
         });
 
         // Close modal when clicking outside the modal content
         window.addEventListener('click', function(e) {
-          if (e.target === modal) {
-            modal.classList.remove('active');
+          if (e.target.classList.contains('modal')) {
+            e.target.classList.remove('active');
             document.body.style.overflow = ''; // Re-enable scrolling
           }
         });
 
         // Close modal with Escape key
         document.addEventListener('keydown', function(e) {
-          if (e.key === 'Escape' && modal.classList.contains('active')) {
-            modal.classList.remove('active');
-            document.body.style.overflow = ''; // Re-enable scrolling
+          if (e.key === 'Escape') {
+            const activeModal = document.querySelector('.modal.active');
+            if (activeModal) {
+              activeModal.classList.remove('active');
+              document.body.style.overflow = ''; // Re-enable scrolling
+            }
           }
         });
       });
