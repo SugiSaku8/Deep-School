@@ -5,19 +5,11 @@
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-  gap: 0; /* Remove gap to make items touch each other */
-  padding: 2rem 0; /* Remove horizontal padding */
-  margin: 0;
   width: 100%;
-  max-width: 100vw;
   scrollbar-width: none; /* Firefox */
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-  padding-left: calc(50vw - 50%);
-  padding-right: calc(50vw - 50%);
+  padding: 2rem 0;
+  margin: 0;
+  justify-content: center;
 }
 
 .galally::-webkit-scrollbar {
@@ -27,9 +19,9 @@
 .highlight {
   flex: 0 0 100%;
   width: 100%;
-  max-width: 1200px; /* Set a max-width for content */
+  max-width: 1200px;
   margin: 0 auto;
-  scroll-snap-align: center; /* Center the active slide */
+  scroll-snap-align: center;
   background: #fff;
   border-radius: 0;
   padding: 3rem 2rem;
@@ -37,20 +29,27 @@
   position: relative;
   box-shadow: none;
   border: none;
-}
-
-.highlight {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   justify-content: center;
-  min-height: 500px; /* Set a minimum height for better visibility */
+  min-height: 500px;
+  box-sizing: border-box;
 }
+.highlight video {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  max-width: 100%;
+  height: auto;
+}
+
+/* Removed duplicate .highlight styles */
 
 .highlight h2 {
   color: #1d1d1f;
-  font-size: 1.8rem;
+  font-size: 3.8rem;
   font-weight: 600;
   margin: 0 0 1.2rem 0;
   line-height: 1.3;
@@ -96,7 +95,7 @@
 }
 
 .hero-section h2 {
-  font-size: 3.5rem;
+  font-size: 2.0rem;
   font-weight: 700;
   letter-spacing: -0.5px;
   margin: 0 0 1.2rem;
@@ -469,6 +468,7 @@ body {
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   margin-bottom: 16px;
+  min-width:90%;
 }
 
 .highlight h3 {
@@ -594,7 +594,7 @@ body {
 }
 
 .ds-section h2 {
-  font-size: 1.6rem;
+  font-size: 1.3rem;
 }
 .ds-section h3 {
   font-size: 1.3rem;
