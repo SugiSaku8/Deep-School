@@ -48,7 +48,6 @@ const appModules = {
   estore: estoreApp,
   eguide: eguideApp,
   tutorial: tutorialApp,
-  gamemaker: gamemakerApp,
   feedback: feedbackApp,
   moralfruit: moralfruitApp
 };

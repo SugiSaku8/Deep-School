@@ -5,11 +5,15 @@
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-  width: 100%;
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
   scrollbar-width: none; /* Firefox */
   padding: 2rem 0;
-  margin: 0;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .galally::-webkit-scrollbar {
@@ -17,25 +21,22 @@
 }
 
 .highlight {
-  flex: 0 0 100%;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
+  flex: 0 0 100vw;
+  width: 100vw;
+  height: 100%;
   scroll-snap-align: center;
   background: #fff;
-  border-radius: 0;
-  padding: 3rem 2rem;
-  transition: all 0.3s ease;
-  position: relative;
-  box-shadow: none;
-  border: none;
+  padding: 3rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
   justify-content: center;
-  min-height: 500px;
+  min-height: 70vh;
   box-sizing: border-box;
+  position: relative;
+  margin: 0;
+  border: none;
+  box-shadow: none;
 }
 .highlight video {
   border-radius: 16px;
@@ -43,6 +44,125 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   max-width: 100%;
   height: auto;
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  overflow-y: auto;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.modal.active {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 2.5rem;
+  position: relative;
+  animation: modalFadeIn 0.3s ease-out;
+  box-shadow: 0 10px 60px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes modalFadeIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.close-modal {
+  position: absolute;
+  top: 1.5rem;
+  right: 2rem;
+  font-size: 2rem;
+  color: #86868b;
+  cursor: pointer;
+  transition: color 0.2s;
+  line-height: 1;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+}
+
+.close-modal:hover {
+  color: #000;
+}
+
+.modal h2 {
+  font-size: 2.2rem;
+  margin-bottom: 2rem;
+  color: #1d1d1f;
+  text-align: center;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.modal-image {
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.modal-image video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.modal-text h3 {
+  font-size: 1.5rem;
+  color: #1d1d1f;
+  margin: 1.8rem 0 1rem;
+}
+
+.modal-text p {
+  color: #424245;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.modal-close-btn {
+  display: block;
+  margin: 2.5rem auto 0;
+  padding: 0.8rem 2.5rem;
+  font-size: 1.1rem;
+}
+
+@media (min-width: 768px) {
+  .modal-body {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  
+  .modal-image {
+    flex: 0 0 50%;
+  }
+  
+  .modal-text {
+    flex: 1;
+    padding-left: 2.5rem;
+  }
 }
 
 /* Removed duplicate .highlight styles */

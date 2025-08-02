@@ -67,7 +67,8 @@
             <div class="media-container">
             <video src="./img/Deep-School-ICON-ANIME.mp4" loop muted playsinline autoplay height="90%" width="90%" style="display: block;">
             </div>
-            <p>いつも見慣れた黒板のようなインターフェイスに仕上げ、見やすく、直感的で統一されたインターフェイスに仕上げました。</p>
+            <p>いつも見慣れた黒板のようなインターフェイスに仕上げ、見やすく、直感的で統一されたインターフェイスに仕上げました。</p><br>
+            <button class="open-client-btn">デザインについてもっと詳しく見る</button>
           </div>
           
           <div class="highlight">
@@ -130,6 +131,31 @@
         </div>
       </section>
     </main>
+    
+    <!-- Design Details Modal -->
+    <div id="designModal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>デザインのこだわり</h2>
+        <div class="modal-body">
+          <div class="modal-image">
+            <video src="./img/Deep-School-ICON-ANIME.mp4" loop muted playsinline autoplay></video>
+          </div>
+          <div class="modal-text">
+            <h3>直感的な操作性</h3>
+            <p>黒板をモチーフにしたインターフェイスで、自然な操作感を実現しました。直感的に使えるよう、余計な要素を排し、必要な情報に集中できるデザインです。</p>
+            
+            <h3>視認性の高さ</h3>
+            <p>文字の大きさや行間を最適化し、長時間の学習でも目が疲れにくいデザインです。また、コントラストにも配慮し、誰にでも見やすいUIを心がけました。</p>
+            
+            <h3>統一感のあるデザイン</h3>
+            <p>アプリ全体で統一されたデザインシステムを採用し、どの画面でも同じ操作感で使えるよう設計されています。</p>
+          </div>
+        </div>
+        <button class="open-client-btn modal-close-btn">アプリを開く</button>
+      </div>
+    </div>
+    
     <hutter>
       <p>
         Deep-School developed by Carnation Studios<br />
@@ -137,8 +163,60 @@
         <br />
       </p>
       <p>
-        <a href="https://deep-fried.com/">Deep-School</a>
-      </p></hutter
-    >
+        <a href="https://sugisaku8.github.io/Deep-School/client/">Deep-School</a>
+      </p>
+    </hutter>
+
+    <script>
+      // Modal functionality
+      document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('designModal');
+        const modalBtns = document.querySelectorAll('.open-client-btn:not(.modal-close-btn)');
+        const closeBtn = document.querySelector('.close-modal');
+        const modalCloseBtn = document.querySelector('.modal-close-btn');
+
+        // Open modal when any "詳細を見る" button is clicked
+        modalBtns.forEach(btn => {
+          btn.addEventListener('click', function(e) {
+            // Only open modal if it's the design details button
+            if (btn.textContent.includes('デザインについて')) {
+              e.preventDefault();
+              modal.classList.add('active');
+              document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+            }
+          });
+        });
+
+        // Close modal when X is clicked
+        closeBtn.addEventListener('click', function() {
+          modal.classList.remove('active');
+          document.body.style.overflow = ''; // Re-enable scrolling
+        });
+
+        // Close modal when "アプリを開く" button in modal is clicked
+        modalCloseBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          modal.classList.remove('active');
+          document.body.style.overflow = ''; // Re-enable scrolling
+          // Optional: Add code to open the app here
+        });
+
+        // Close modal when clicking outside the modal content
+        window.addEventListener('click', function(e) {
+          if (e.target === modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = ''; // Re-enable scrolling
+          }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && modal.classList.contains('active')) {
+            modal.classList.remove('active');
+            document.body.style.overflow = ''; // Re-enable scrolling
+          }
+        });
+      });
+    </script>
   </body>
 </html>
