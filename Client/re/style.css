@@ -37,13 +37,30 @@
   margin: 0;
   border: none;
   box-shadow: none;
+  text-align: center;
 }
+/* Media container for videos and images */
+.media-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
 .highlight video {
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   max-width: 100%;
+  max-height: 60vh;
+  width: auto;
   height: auto;
+  display: block;
+  margin: 0 auto;
+  object-fit: contain;
 }
 
 /* Modal Styles */
@@ -422,7 +439,7 @@ hutter {
 
 hutter p {
   color: #86868b;
-  font-size: 0.9rem;
+  font-size: 1.0rem;
   line-height: 1.5;
   margin: 0.5rem 0;
 }
