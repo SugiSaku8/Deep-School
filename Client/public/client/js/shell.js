@@ -4,7 +4,17 @@ import * as coreSecurity from './core/security.js';
 import * as coreUtils from './core/utils.mjs';
 import { versionManager } from './core/version.mjs';
 import { parallaxManager } from './core/parallax.mjs';
-
+import * as chatApp from './apps/chat.dps.ap2.js';
+import * as scrApp from './apps/scr.dps.ap2.js';
+import * as settingApp from './apps/setting.dps.ap2.js';
+import * as pickramuApp from './apps/pickramu.dps.ap2.js';
+import * as loginApp from './apps/login.dps.ap2.js';
+import * as menuApp from './apps/menu.dps.ap2.js';
+import * as estoreApp from './apps/estore.dps.ap2.js';
+import * as eguideApp from './apps/eguide.dps.ap2.js';
+import * as tutorialApp from './apps/tutorial.app.js';
+import * as feedbackApp from './apps/feedback.dps.ap2.js';
+import * as moralfruitApp from './apps/moral-fruit.dps.ap2.js';
 window.coreConfig = coreConfig;
 window.coreLang = coreLang;
 window.coreSecurity = coreSecurity;
@@ -26,17 +36,7 @@ function applyLangToDOM() {
 window.applyLangToDOM = applyLangToDOM;
 
 // Deep-School-Shell: 全アプリの初期化・表示制御ハブ
-import * as chatApp from './apps/chat.dps.ap2.js';
-import * as scrApp from './apps/scr.dps.ap2.js';
-import * as settingApp from './apps/setting.dps.ap2.js';
-import * as pickramuApp from './apps/pickramu.dps.ap2.js';
-import * as loginApp from './apps/login.dps.ap2.js';
-import * as menuApp from './apps/menu.dps.ap2.js';
-import * as estoreApp from './apps/estore.dps.ap2.js';
-import * as eguideApp from './apps/eguide.dps.ap2.js';
-import * as tutorialApp from './apps/tutorial.app.js';
-import * as feedbackApp from './apps/feedback.dps.ap2.js';
-import * as moralfruitApp from './apps/moral-fruit.dps.ap2.js';
+
 
 const appModules = {
   chat: chatApp,

@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>GameMaker Test</title>
+    <meta charset="utf-8" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/dracula.min.css"
+    />
+    <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background-color: #282a36;
+        color: #f8f8f2;
+      }
+      .editor-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      }
+      .CodeMirror {
+        height: 500px;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      .search-bar {
+        background: #44475a;
+        padding: 10px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .search-bar input,
+      .search-bar button {
+        padding: 6px 12px;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+      .search-bar input {
+        flex: 1;
+        min-width: 200px;
+        background: #f8f8f2;
+      }
+      .search-bar button {
+        background: #6272a4;
+        color: white;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .search-bar button:hover {
+        background: #7a8bc1;
+      }
+      .run-button {
+        background: #50fa7b !important;
+        color: #282a36 !important;
+        font-weight: bold;
+      }
+      .run-button:hover {
+        background: #69ff94 !important;
+      }
+      #output {
+        background: #1e1f29;
+        color: #f8f8f2;
+        padding: 15px;
+        margin-top: 10px;
+        border-radius: 4px;
+        min-height: 50px;
+        font-family: monospace;
+        white-space: pre-wrap;
+      }
+      #output {
+        background: #1e1f29;
+        color: #f8f8f2;
+        padding: 15px;
+        margin-top: 10px;
+        border-radius: 4px;
+        min-height: 50px;
+        font-family: monospace;
+        white-space: pre-wrap;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="editor-container">
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="検索..." />
+        <button onclick="findNext()">次を検索 (Enter)</button>
+        <button onclick="findPrev()">前を検索 (Shift+Enter)</button>
+        <input type="text" id="replaceInput" placeholder="置換..." />
+        <button onclick="replaceNext()">置換</button>
+        <button onclick="replaceAll()">すべて置換</button>
+        <button id="runButton" class="run-button" onclick="runCode()">
+          ▶ 実行 (Ctrl+Enter)
+        </button>
+      </div>
+      <textarea id="editor">
+// JavaScript コードをここに書きます
+function hello() {
+    console.log("Say hello to Game-Maker");
+}
+hello();
+</textarea
+      >
+      <div id="output">実行結果がここに表示されます</div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/edit/closebrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/hint/show-hint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/hint/javascript-hint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/search/search.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/search/searchcursor.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/addon/hint/show-hint.min.css"
+    />
+
+    <script>
+      // エディタの初期化
+      const editor = CodeMirror.fromTextArea(
+        document.getElementById("editor"),
+        {
+          mode: "javascript",
+          theme: "dracula",
+          lineNumbers: true,
+          lineWrapping: true,
+          autoCloseBrackets: true,
+          extraKeys: {
+            Tab: function (cm) {
+              if (cm.state.completionActive) {
+                cm.closeHint();
+                return;
+              }
+              CodeMirror.commands.autocomplete(cm);
+            },
+            "Ctrl-F": function (cm) {
+              document.getElementById("searchInput").focus();
+            },
+            F3: findNext,
+            "Shift-F3": findPrev,
+            "Ctrl-Enter": function () {
+              runCode();
+            },
+          },
+        }
+      );
+
+      // 検索機能
+      function getSearchCursor(query, pos) {
+        return editor.getSearchCursor(query, pos, {
+          caseFold: true,
+          multiline: true,
+        });
+      }
+
+      function findNext() {
+        const query = document.getElementById("searchInput").value;
+        if (!query) return;
+
+        const cursor = getSearchCursor(query, editor.getCursor("from"));
+        if (cursor.findNext()) {
+          editor.setSelection(cursor.from(), cursor.to());
+          editor.scrollIntoView(cursor.from());
+        } else {
+          // 見つからなかったら最初から再検索
+          const cursor = getSearchCursor(query, { line: 0, ch: 0 });
+          if (cursor.findNext()) {
+            editor.setSelection(cursor.from(), cursor.to());
+            editor.scrollIntoView(cursor.from());
+          }
+        }
+      }
+
+      function findPrev() {
+        const query = document.getElementById("searchInput").value;
+        if (!query) return;
+
+        const cursor = getSearchCursor(query, editor.getCursor("from"));
+        if (cursor.findPrevious()) {
+          editor.setSelection(cursor.from(), cursor.to());
+          editor.scrollIntoView(cursor.from());
+        } else {
+          // 見つからなかったら最後から再検索
+          const cursor = getSearchCursor(query, {
+            line: Infinity,
+            ch: Infinity,
+          });
+          if (cursor.findPrevious()) {
+            editor.setSelection(cursor.from(), cursor.to());
+            editor.scrollIntoView(cursor.from());
+          }
+        }
+      }
+
+      function replaceNext() {
+        const query = document.getElementById("searchInput").value;
+        const replace = document.getElementById("replaceInput").value;
+        if (!query) return;
+
+        const cursor = getSearchCursor(query, editor.getCursor("from"));
+        if (cursor.findNext()) {
+          editor.setSelection(cursor.from(), cursor.to());
+          editor.replaceRange(replace, cursor.from(), cursor.to());
+          editor.focus();
+        }
+      }
+
+      function replaceAll() {
+        const query = document.getElementById("searchInput").value;
+        const replace = document.getElementById("replaceInput").value;
+        if (!query) return;
+
+        let count = 0;
+        let cursor = getSearchCursor(query, { line: 0, ch: 0 });
+        while (cursor.findNext()) {
+          editor.replaceRange(replace, cursor.from(), cursor.to());
+          count++;
+          // 置換後にカーソル位置を更新
+          cursor = getSearchCursor(query, cursor.to());
+        }
+
+        if (count > 0) {
+          editor.focus();
+          alert(`${count}箇所を置換しました`);
+        } else {
+          alert("一致する文字列が見つかりませんでした");
+        }
+      }
+
+      // 検索ボックスでEnter/Shift+Enterを検出
+      document
+        .getElementById("searchInput")
+        .addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.shiftKey ? findPrev() : findNext();
+            e.preventDefault();
+          }
+        });
+      // 実行ボタンの機能
+      async function runCode() {
+        const output = document.getElementById("output");
+        output.textContent = "実行中...";
+
+        // Clear previous outputs
+        const container = document.getElementById("output-container");
+        if (container) container.remove();
+
+        // Create new output container
+        const outputContainer = document.createElement("div");
+        outputContainer.id = "output-container";
+        outputContainer.style.maxHeight = "500px";
+        outputContainer.style.overflowY = "auto";
+        outputContainer.style.padding = "10px";
+        outputContainer.style.backgroundColor = "#1e1f29";
+        outputContainer.style.borderRadius = "4px";
+        outputContainer.style.marginTop = "10px";
+        document
+          .querySelector(".editor-container")
+          .appendChild(outputContainer);
+
+        // Get and process code
+        let code = editor.getValue();
+
+        // Replace let with var
+        code = code.replace(/\blet\b/g, "var");
+
+        // Handle lib.import
+        const imports = [];
+        code = code.replace(/lib\.import\(['"](.+?)['"]\)/g, (_, lib) => {
+          imports.push(lib);
+          return `await loadLibrary('${lib}')`;
+        });
+
+        // Wrap in async function to handle imports
+        const wrappedCode = `
+        (async function() {
+            ${code}
+        })();
+    `;
+
+        // Capture console output
+        const originalConsoleLog = console.log;
+        let consoleOutput = "";
+
+        console.log = function () {
+          const args = Array.from(arguments);
+          const message = args
+            .map((arg) =>
+              typeof arg === "object"
+                ? JSON.stringify(arg, null, 2)
+                : String(arg)
+            )
+            .join(" ");
+
+          consoleOutput += message + "\n";
+          originalConsoleLog.apply(console, arguments);
+
+          // Update output
+          const outputText = document.createElement("div");
+          outputText.style.color = "#f8f8f2";
+          outputText.style.fontFamily = "monospace";
+          outputText.style.whiteSpace = "pre";
+          outputText.textContent = message;
+          outputContainer.appendChild(outputText);
+          outputContainer.scrollTop = outputContainer.scrollHeight;
+        };
+
+        try {
+          // Load libraries first
+          for (const lib of imports) {
+            await loadLibrary(lib);
+          }
+
+          // Execute the code
+          await new Function("loadLibrary", wrappedCode)(loadLibrary);
+
+          if (!consoleOutput.trim()) {
+            output.textContent =
+              "コードは正常に実行されました（出力はありません）";
+          }
+        } catch (error) {
+          const errorDiv = document.createElement("div");
+          errorDiv.style.color = "#ff5555";
+          errorDiv.textContent = `エラー: ${error.message}`;
+          outputContainer.appendChild(errorDiv);
+          console.error(error);
+        } finally {
+          console.log = originalConsoleLog;
+        }
+      }
+
+      // Library loader function
+      async function loadLibrary(name) {
+        return new Promise((resolve, reject) => {
+          if (window[name]) return resolve();
+
+          const script = document.createElement("script");
+          script.src = `https://cdn.jsdelivr.net/npm/${name}`;
+          script.onload = () => {
+            // Some libraries expose themselves in different ways
+            if (!window[name]) {
+              const libName = name.split("/").pop().split("@")[0];
+              if (window[libName]) window[name] = window[libName];
+            }
+            resolve();
+          };
+          script.onerror = () =>
+            reject(new Error(`ライブラリの読み込みに失敗しました: ${name}`));
+          document.head.appendChild(script);
+        });
+      }
+      // Load library from CDN
+      function loadLibrary(name) {
+        return new Promise((resolve, reject) => {
+          if (window[name]) return resolve();
+
+          const script = document.createElement("script");
+          script.src = `https://cdn.jsdelivr.net/npm/${name}`;
+          script.onload = () => {
+            // Some libraries expose themselves in different ways
+            if (!window[name]) {
+              const libName = name.split("/").pop().split("@")[0];
+              if (window[libName]) window[name] = window[libName];
+            }
+            resolve();
+          };
+          script.onerror = () =>
+            reject(new Error(`ライブラリの読み込みに失敗しました。: ${name}`));
+          document.head.appendChild(script);
+        });
+      }
+      // Add this Output class definition before the runCode function
+      class Output {
+        constructor(type = "text", options = {}) {
+          this.type = type;
+          this.element = this.createOutputElement(type, options);
+          this.container =
+            document.getElementById("output-container") ||
+            this.createOutputContainer();
+          this.container.appendChild(this.element);
+          this.scrollToBottom();
+        }
+
+        createOutputContainer() {
+          const container = document.createElement("div");
+          container.id = "output-container";
+          container.style.maxHeight = "300px";
+          container.style.overflowY = "auto";
+          container.style.padding = "10px";
+          container.style.backgroundColor = "#1e1f29";
+          container.style.borderRadius = "4px";
+          container.style.marginTop = "10px";
+          document.querySelector(".editor-container").appendChild(container);
+          return container;
+        }
+
+        createOutputElement(type, options) {
+          const element = document.createElement("div");
+          element.className = `output-${type}`;
+          element.style.margin = "10px 0";
+          element.style.padding = "10px";
+          element.style.borderRadius = "4px";
+          element.style.backgroundColor =
+            type === "text" ? "#282a36" : "#1e1f29";
+
+          switch (type) {
+            case "text":
+              element.textContent = options.text || "";
+              break;
+            case "canvas":
+              const canvas = document.createElement("canvas");
+              canvas.width = options.width || 400;
+              canvas.height = options.height || 200;
+              canvas.style.border = "1px solid #44475a";
+              element.appendChild(canvas);
+              this.ctx = canvas.getContext("2d");
+              break;
+            case "html":
+              if (options.html) {
+                element.innerHTML = options.html;
+              }
+              break;
+            case "list":
+              const ul = document.createElement("ul");
+              ul.style.listStyle = "none";
+              ul.style.padding = "0";
+              element.appendChild(ul);
+              this.listElement = ul;
+              break;
+          }
+
+          return element;
+        }
+
+        // Text output methods
+        text(content) {
+          if (this.type === "text") {
+            this.element.textContent += content + "\n";
+          } else if (this.type === "list") {
+            const li = document.createElement("li");
+            li.textContent = content;
+            li.style.padding = "4px 0";
+            this.listElement.appendChild(li);
+          }
+          this.scrollToBottom();
+          return this;
+        }
+
+        // Canvas drawing methods
+        drawRect(x, y, width, height, color = "#50fa7b") {
+          if (this.ctx) {
+            this.ctx.fillStyle = color;
+            this.ctx.fillRect(x, y, width, height);
+          }
+          return this;
+        }
+
+        drawCircle(x, y, radius, color = "#ff79c6") {
+          if (this.ctx) {
+            this.ctx.beginPath();
+            this.ctx.arc(x, y, radius, 0, Math.PI * 2);
+            this.ctx.fillStyle = color;
+            this.ctx.fill();
+          }
+          return this;
+        }
+
+        // HTML manipulation
+        append(html) {
+          if (this.type === "html") {
+            this.element.innerHTML += html;
+          }
+          return this;
+        }
+
+        // Clear the output
+        clear() {
+          if (this.type === "canvas" && this.ctx) {
+            this.ctx.clearRect(
+              0,
+              0,
+              this.ctx.canvas.width,
+              this.ctx.canvas.height
+            );
+          } else {
+            this.element.innerHTML = "";
+          }
+          return this;
+        }
+
+        // Utility methods
+        scrollToBottom() {
+          this.element.scrollIntoView({ behavior: "smooth", block: "end" });
+        }
+
+        // Chainable style method
+        style(styles) {
+          Object.assign(this.element.style, styles);
+          return this;
+        }
+      }
+      // Output クラスの定義の後に追加
+      const output = {
+        create: (type, options) => new Output(type, options),
+        text: (content) => new Output("text", { text: content }),
+        canvas: (width, height) => new Output("canvas", { width, height }),
+        html: (content) => new Output("html", { html: content }),
+        list: () => new Output("list"),
+      };
+    </script>
+  </body>
+</html>
