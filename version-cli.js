@@ -61,7 +61,7 @@ class VersionCLI {
       pickramu: "pickramu",
       scr: "scr",
       toaster: "toasterMachine",
-      gamemaker: "gamemaker",
+      koodistudio: "koodistudio",
       MoralFruit: "moralfruit",
     };
 
@@ -132,13 +132,13 @@ class VersionCLI {
               icon = "🍞";
               label = "Toaster-Machine";
               break;
-            case "gamemaker":
-              icon = "🎮";
-              label = "GameMaker";
+            case "koodistudio":
+              icon = "🧑‍💻";
+              label = "Koodi Studio";
               break;
             case "moralfruit":
               icon = "🍎";
-              label = "GameMaker";
+              label = "Moral Fruit";
               break;
           }
           output += `${icon} ${label}: v${value.version} (${value.status})\n`;

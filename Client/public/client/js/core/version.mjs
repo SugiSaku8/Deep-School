@@ -40,7 +40,7 @@ class VersionManager {
       'scr': 'scr',
       'workmaker': 'workMaker',
       'toaster': 'toasterMachine',
-      'gamemaker': 'gamemaker',
+      'koodistudio': 'koodistudio',
       'moralfruit': 'moralfruit'
     };
 
@@ -81,7 +81,7 @@ class VersionManager {
           case 'menu': icon = '📋'; label = 'Menu'; break;
           case 'setting': icon = '⚙️'; label = 'Setting'; break;
           case 'toasterMachine': icon = '🍞'; label = 'Toaster-Machine'; break;
-          case 'gamemaker': icon = '🎮'; label = 'GameMaker'; break;
+          case 'koodistudio': icon = '🧑‍💻'; label = 'Koodi Studio'; break;
           case 'moralfruit': icon = '🍎'; label = 'Moral Fruit'; break;
         }
         output += `${icon} ${label}: v${value.version} (${value.status})\n`;

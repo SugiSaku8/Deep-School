@@ -1,6 +1,6 @@
 {
   "deepSchoolFamily": {
-    "version": "25C1250X1",
+    "version": "25C1251X1",
     "status": "beta",
     "lastUpdated": "2025-08-06",
     "description": "Deep-School Family Software - Initial release"
@@ -95,14 +95,14 @@
     "lastUpdated": "2025-07-14",
     "description": "SCR - Screen Capture and Recording tool - Initial beta release"
   },
-  "gamemaker": {
-    "version": "0.1.6",
+  "koodistudio": {
+    "version": "0.17.7",
     "status": "beta",
     "cycle": 0,
     "release": 1,
     "revision": 0,
     "lastUpdated": "2025-08-06",
-    "description": "GameMaker - 2Dゲーム制作アプリ - 初期ベータリリース"
+    "description": "Koodi Studio - coding studio - Initial beta release"
   },
   "moralfruit": {
     "version": "0.0.65",
@@ -111,7 +111,7 @@
     "release": 1,
     "revision": 0,
     "lastUpdated": "2025-07-25",
-    "description": "Moral Fruit - 道徳専用学習アプリ - 初期ベータリリース"
+    "description": "Moral Fruit - Moral Fruit is a moral education app - Initial beta release"
   },
   "releaseSchedule": {
     "deepSchoolCycles": [

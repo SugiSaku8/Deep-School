@@ -71,7 +71,11 @@ export function appInit(shell) {
           <img src="re/ico/MoralFruite-new-icon-v2.png" alt="MoralFruitアイコン" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-moralfruite" style="cursor: pointer" data-lang-key="menu_feedback">MoralFruit</div>
         </div>
-      
+         
+        <div class="menu-item">
+          <img src="re/ico/Koodi-Studio-icon.png" alt="KoodiStudioアイコン" class="menu-icon" />
+          <div class="menu-label chalk-text" id="menu-koodistudio" style="cursor: pointer" data-lang-key="menu_koodistudio">KoodiStudio</div>
+        </div>
         <div class="menu-item">
           <img src="re/ico/Setting.png" alt="設定アイコン" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-setting" style="cursor: pointer" data-lang-key="menu_setting">設定</div>
@@ -511,6 +515,10 @@ export function appInit(shell) {
         level: "info",
       });
       shell.loadApp("feedback");
+    },
+    'menu-koodistudio': () => {
+      shell.log({from: 'dp.app.menu.out', message: 'MenuApp: KoodiStudioを開く', level: 'info'});
+      shell.loadApp('koodistudio');
     },
   };
 

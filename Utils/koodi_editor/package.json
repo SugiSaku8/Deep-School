@@ -1,0 +1,33 @@
+{
+  "name": "koodi_editor",
+  "version": "0.0.1",
+  "description": "Base system for KoodiStudio editors",
+  "type": "module",
+  "main": "dist/koodi-editor.cjs",
+  "module": "dist/koodi-editor.esm.js",
+  "browser": "dist/koodi-editor.umd.js",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w"
+  },
+  "keywords": [
+    "koodi",
+    "code",
+    "editor",
+    "codemirror"
+  ],
+  "author": "Carnation Studio",
+  "license": "MIT",
+  "dependencies": {
+    "@codemirror/lang-javascript": "^6.2.1",
+    "@codemirror/view": "^6.23.1",
+    "codemirror": "^5.65.16"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.4",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "rollup": "^3.29.5",
+    "rollup-plugin-copy": "^3.5.0",
+    "rollup-plugin-postcss": "^4.0.2"
+  }
+}
