@@ -459,48 +459,31 @@ function setupEventListeners() {
 }
 
 // CodeMirrorの依存関係を動的にロードする関数
-function loadCodeMirrorDependencies(callback) {
+async function loadCodeMirrorDependencies() {
   const baseUrl = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2';
-  const dependencies = [
-    { type: 'link', href: `${baseUrl}/codemirror.min.css` },
-    { type: 'link', href: `${baseUrl}/theme/dracula.min.css` },
-    { type: 'script', src: `${baseUrl}/codemirror.min.js` },
-    { type: 'script', src: `${baseUrl}/mode/javascript/javascript.min.js` },
-    { type: 'script', src: `${baseUrl}/addon/edit/closebrackets.min.js` },
-    { type: 'script', src: `${baseUrl}/addon/edit/matchbrackets.min.js` },
-    { type: 'script', src: `${baseUrl}/addon/display/placeholder.min.js` }
+  const deps = [
+    { type: 'link', url: `${baseUrl}/codemirror.min.css` },
+    { type: 'link', url: `${baseUrl}/theme/dracula.min.css` },
+    { type: 'script', url: `${baseUrl}/codemirror.min.js` },
+    { type: 'script', url: `${baseUrl}/mode/javascript/javascript.min.js` },
+    { type: 'script', url: `${baseUrl}/addon/edit/closebrackets.min.js` },
+    { type: 'script', url: `${baseUrl}/addon/edit/matchbrackets.min.js` },
+    { type: 'script', url: `${baseUrl}/addon/display/placeholder.min.js` }
   ];
 
-  let loadedCount = 0;
-  const totalDependencies = dependencies.length;
-
-  function checkAllLoaded() {
-    loadedCount++;
-    if (loadedCount === totalDependencies && typeof callback === 'function') {
-      callback();
-    }
+  for (const dep of deps) {
+    await new Promise((resolve) => {
+      const element = document.createElement(dep.type);
+      if (dep.type === 'link') {
+        element.rel = 'stylesheet';
+        element.href = dep.url;
+      } else {
+        element.src = dep.url;
+      }
+      element.onload = resolve;
+      document.head.appendChild(element);
+    });
   }
-
-  dependencies.forEach(dep => {
-    if (dep.type === 'link') {
-      if (!document.querySelector(`link[href="${dep.href}"]`)) {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = dep.href;
-        document.head.appendChild(link).onload = checkAllLoaded;
-      } else {
-        checkAllLoaded();
-      }
-    } else if (dep.type === 'script') {
-      if (!document.querySelector(`script[src="${dep.src}"]`)) {
-        const script = document.createElement('script');
-        script.src = dep.src;
-        document.head.appendChild(script).onload = checkAllLoaded;
-      } else {
-        checkAllLoaded();
-      }
-    }
-  });
 }
 
 export function appInit(shell) {

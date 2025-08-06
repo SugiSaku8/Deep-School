@@ -1,6 +1,6 @@
 {
   "deepSchoolFamily": {
-    "version": "25C1253X1",
+    "version": "25C1254X1",
     "status": "beta",
     "lastUpdated": "2025-08-06",
     "description": "Deep-School Family Software - Initial release"
@@ -96,7 +96,7 @@
     "description": "SCR - Screen Capture and Recording tool - Initial beta release"
   },
   "koodistudio": {
-    "version": "0.17.9",
+    "version": "0.18.0",
     "status": "beta",
     "cycle": 0,
     "release": 1,

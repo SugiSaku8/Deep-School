@@ -89,7 +89,7 @@ export function appInit(shell) {
     </div>
     
     <div class="copyright-container horizontal-copyright">
-      <p class="copyright chalk-text left-align" data-lang-key="copyright">(c) 2022-2025 Carnation Studio v0.4.1 25C1253X1</p>
+      <p class="copyright chalk-text left-align" data-lang-key="copyright">(c) 2022-2025 Carnation Studio v0.4.1 25C1254X1</p>
     </div>
   
   <style>
