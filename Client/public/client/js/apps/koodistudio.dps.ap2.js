@@ -90,6 +90,7 @@ function renderApp() {
           <div class="editor-toolbar">
             <button class="run-button">▶ 実行 (Ctrl+Enter)</button>
             <div class="lesson-navigation">
+              <button class="nav-button back-to-menu">← メニューに戻る</button>
               ${currentLessonIndex > 0 ? 
                 `<button class="nav-button prev-lesson">← 前のレッスン</button>` : ''}
               ${currentLessonIndex < lessons.length - 1 ? 
@@ -439,11 +440,66 @@ function setupEventListeners() {
     });
   }
   
-  // レッスンメニュークリック
+  // メニューに戻るボタンのイベントリスナー
+  const backToMenuButton = document.querySelector('.back-to-menu');
+  if (backToMenuButton) {
+    backToMenuButton.addEventListener('click', () => {
+      if (window.shell) {
+        window.shell.loadApp('menu');
+      }
+    });
+  }
+
+  // レッスンリストのイベントリスナー
   document.querySelectorAll('.lesson-list li').forEach((item, index) => {
     item.addEventListener('click', () => {
       loadLesson(index);
     });
+  });
+}
+
+// CodeMirrorの依存関係を動的にロードする関数
+function loadCodeMirrorDependencies(callback) {
+  const baseUrl = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2';
+  const dependencies = [
+    { type: 'link', href: `${baseUrl}/codemirror.min.css` },
+    { type: 'link', href: `${baseUrl}/theme/dracula.min.css` },
+    { type: 'script', src: `${baseUrl}/codemirror.min.js` },
+    { type: 'script', src: `${baseUrl}/mode/javascript/javascript.min.js` },
+    { type: 'script', src: `${baseUrl}/addon/edit/closebrackets.min.js` },
+    { type: 'script', src: `${baseUrl}/addon/edit/matchbrackets.min.js` },
+    { type: 'script', src: `${baseUrl}/addon/display/placeholder.min.js` }
+  ];
+
+  let loadedCount = 0;
+  const totalDependencies = dependencies.length;
+
+  function checkAllLoaded() {
+    loadedCount++;
+    if (loadedCount === totalDependencies && typeof callback === 'function') {
+      callback();
+    }
+  }
+
+  dependencies.forEach(dep => {
+    if (dep.type === 'link') {
+      if (!document.querySelector(`link[href="${dep.href}"]`)) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = dep.href;
+        document.head.appendChild(link).onload = checkAllLoaded;
+      } else {
+        checkAllLoaded();
+      }
+    } else if (dep.type === 'script') {
+      if (!document.querySelector(`script[src="${dep.src}"]`)) {
+        const script = document.createElement('script');
+        script.src = dep.src;
+        document.head.appendChild(script).onload = checkAllLoaded;
+      } else {
+        checkAllLoaded();
+      }
+    }
   });
 }
 
@@ -452,26 +508,58 @@ export function appInit(shell) {
   window.shell = shell;
   
   const root = document.getElementById('app-root');
-  if (window.CodeMirror) {
-    initCodeEditor();
-    
-    // 初期レッスンを読み込み
-    loadLesson(Math.min(Math.max(0, currentLessonIndex), lessons.length - 1));
-    
-    // イベントリスナーを設定
-    setupEventListeners();
-    
-    // シェルに初期化完了を通知
-    shell.log({from: 'dp.app.koodistudio', message: 'Koodi Studioが初期化されました', level: 'info'});
-  } else {
-    shell.log({from: 'dp.app.koodistudio.err', message: 'CodeMirrorが読み込まれていません', level: 'error'});
-    root.innerHTML = `
-      <div class="error-message">
-        <h2>エラーが発生しました</h2>
-        <p>コードエディタの初期化に失敗しました。ページを再読み込みしてください。</p>
-      </div>
-    `;
-  }
+  root.id = 'koodi-studio-root';
+  root.className = 'koodi-studio-app';
+  
+  // ローディング表示
+  root.innerHTML = `
+    <div class="loading-container">
+      <div class="loading-spinner"></div>
+      <p>Koodi Studioを読み込み中...</p>
+    </div>
+  `;
+  
+  // CodeMirrorの依存関係をロード
+  loadCodeMirrorDependencies(() => {
+    if (window.CodeMirror) {
+      // アプリケーションのUIをレンダリング
+      renderApp();
+      
+      // コードエディタを初期化
+      initCodeEditor();
+      
+      // URLからレッスンインデックスを取得
+      const urlParams = new URLSearchParams(window.location.search);
+      currentLessonIndex = parseInt(urlParams.get('lesson')) || 0;
+      
+      // 初期レッスンを読み込み
+      loadLesson(Math.min(Math.max(0, currentLessonIndex), lessons.length - 1));
+      
+      // イベントリスナーを設定
+      setupEventListeners();
+      
+      // シェルに初期化完了を通知
+      shell.log({from: 'dp.app.koodistudio', message: 'Koodi Studioが初期化されました', level: 'info'});
+    } else {
+      // エラー表示
+      shell.log({from: 'dp.app.koodistudio.err', message: 'CodeMirrorの読み込みに失敗しました', level: 'error'});
+      root.innerHTML = `
+        <div class="error-message">
+          <h2>エラーが発生しました</h2>
+          <p>コードエディタの初期化に失敗しました。ページを再読み込みしてください。</p>
+          <button class="retry-button">再試行</button>
+        </div>
+      `;
+      
+      // 再試行ボタンのイベントリスナー
+      const retryButton = root.querySelector('.retry-button');
+      if (retryButton) {
+        retryButton.addEventListener('click', () => {
+          window.location.reload();
+        });
+      }
+    }
+  });
   
   root.id = 'koodi-studio-root';
   root.className = 'koodi-studio-app';
@@ -486,6 +574,55 @@ export function appInit(shell) {
   // アプリケーションのスタイルを追加
   const styleElement = document.createElement('style');
   styleElement.textContent = `
+    /* ローディングとエラースタイル */
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      color: #666;
+    }
+    
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 16px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .error-message {
+      padding: 20px;
+      text-align: center;
+      color: #721c24;
+      background-color: #f8d7da;
+      border: 1px solid #f5c6cb;
+      border-radius: 4px;
+      margin: 20px;
+    }
+    
+    .retry-button {
+      margin-top: 16px;
+      padding: 8px 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .retry-button:hover {
+      background-color: #0056b3;
+    }
+
     /* メインアプリケーションのスタイル */
     .koodi-app {
       display: flex;

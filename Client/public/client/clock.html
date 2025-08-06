@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotating Face Clock</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* --- General Body Styling --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #1a1a1a;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* --- Clock Container --- */
+        .clock {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            position: relative;
+            background-color: #2c2c2c;
+            border: 8px solid #444;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5), inset 0 0 15px rgba(0,0,0,0.4);
+        }
+
+        /* --- Rotating Clock Face --- */
+        .clock-face {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            /* Smooth 'tick' effect for rotation, especially when resetting at 0 seconds */
+            transition: transform 0.2s cubic-bezier(0.4, 1.8, 0.5, 1);
+        }
+
+        /* --- Clock Numbers --- */
+        .number {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #e0e0e0;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+            /* Each number container is rotated into position */
+        }
+        
+        /* Position each number around the clock face */
+        .number-1 { transform: rotate(30deg); }
+        .number-2 { transform: rotate(60deg); }
+        .number-3 { transform: rotate(90deg); }
+        .number-4 { transform: rotate(120deg); }
+        .number-5 { transform: rotate(150deg); }
+        .number-6 { transform: rotate(180deg); }
+        .number-7 { transform: rotate(210deg); }
+        .number-8 { transform: rotate(240deg); }
+        .number-9 { transform: rotate(270deg); }
+        .number-10 { transform: rotate(300deg); }
+        .number-11 { transform: rotate(330deg); }
+        .number-12 { transform: rotate(0deg); }
+
+        .number span {
+            display: inline-block;
+            /* Counter-rotate the number text to keep it upright */
+        }
+        .number-1 span { transform: rotate(-30deg); }
+        .number-2 span { transform: rotate(-60deg); }
+        .number-3 span { transform: rotate(-90deg); }
+        .number-4 span { transform: rotate(-120deg); }
+        .number-5 span { transform: rotate(-150deg); }
+        .number-6 span { transform: rotate(-180deg); }
+        .number-7 span { transform: rotate(-210deg); }
+        .number-8 span { transform: rotate(-240deg); }
+        .number-9 span { transform: rotate(-270deg); }
+        .number-10 span { transform: rotate(-300deg); }
+        .number-11 span { transform: rotate(-330deg); }
+        .number-12 span { transform: rotate(0deg); }
+
+        /* --- Clock Hands --- */
+        .hand {
+            width: 6px;
+            height: 50%;
+            background-color: #e0e0e0;
+            position: absolute;
+            bottom: 50%;
+            left: 50%;
+            transform-origin: bottom;
+            border-radius: 3px 3px 0 0;
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+            transition: transform 0.5s cubic-bezier(0.4, 2.3, 0.6, 1);
+        }
+
+        .hour-hand {
+            width: 8px;
+            height: 28%;
+            background-color: #b0b0b0;
+            transform: translateX(-50%);
+        }
+
+        .minute-hand {
+            width: 6px;
+            height: 40%;
+            background-color: #cccccc;
+            transform: translateX(-50%);
+        }
+
+        .second-hand {
+            width: 3px;
+            height: 45%;
+            background-color: #ff6b6b;
+            transform: translateX(-50%) rotate(0deg); /* Stays fixed at 12 o'clock */
+            z-index: 10;
+        }
+
+        /* --- Center Dot --- */
+        .center-dot {
+            width: 16px;
+            height: 16px;
+            background-color: #ff6b6b;
+            border: 3px solid #2c2c2c;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 11;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="clock">
+        <!-- The clock face will contain the numbers and hands, and will be the rotating element -->
+        <div class="clock-face" data-clock-face>
+            <!-- Numbers -->
+            <div class="number number-1"><span>1</span></div>
+            <div class="number number-2"><span>2</span></div>
+            <div class="number number-3"><span>3</span></div>
+            <div class="number number-4"><span>4</span></div>
+            <div class="number number-5"><span>5</span></div>
+            <div class="number number-6"><span>6</span></div>
+            <div class="number number-7"><span>7</span></div>
+            <div class="number number-8"><span>8</span></div>
+            <div class="number number-9"><span>9</span></div>
+            <div class="number number-10"><span>10</span></div>
+            <div class="number number-11"><span>11</span></div>
+            <div class="number number-12"><span>12</span></div>
+            <!-- Hour and Minute hands are now inside the clock-face -->
+            <div class="hand hour-hand" data-hour-hand></div>
+            <div class="hand minute-hand" data-minute-hand></div>
+        </div>
+
+        <!-- The second hand is static, always pointing to the top -->
+        <div class="hand second-hand"></div>
+        
+        <!-- A decorative dot in the center -->
+        <div class="center-dot"></div>
+    </div>
+
+    <script>
+        // Select the elements from the DOM
+        const hourHand = document.querySelector('[data-hour-hand]');
+        const minuteHand = document.querySelector('[data-minute-hand]');
+        const clockFace = document.querySelector('[data-clock-face]');
+
+        /**
+         * Sets the clock hands and face rotation based on the current time.
+         */
+        function setClock() {
+            const currentDate = new Date();
+            const seconds = currentDate.getSeconds();
+            const minutes = currentDate.getMinutes();
+            const hours = currentDate.getHours();
+
+            // Calculate rotation degrees
+            // Each second is 6 degrees (360 / 60)
+            // The face rotates counter-clockwise to give the illusion of the second hand moving clockwise
+            const faceRotation = seconds * -6; 
+
+            // Each minute is 6 degrees (360 / 60). Add seconds fraction for smooth movement.
+            const minutesRotation = minutes * 6 + seconds * 0.1;
+
+            // Each hour is 30 degrees (360 / 12). Add minutes fraction for smooth movement.
+            const hoursRotation = (hours % 12) * 30 + minutes * 0.5;
+
+            // Apply the rotation transforms to the elements
+            // We use a temporary transition disable on the face for the 59 -> 0 second jump to avoid a full spin animation
+            if (seconds === 0) {
+                clockFace.style.transition = 'none';
+            } else {
+                // Restore transition for normal ticking
+                clockFace.style.transition = 'transform 0.2s cubic-bezier(0.4, 1.8, 0.5, 1)';
+            }
+            
+            // Rotate the entire clock face (including numbers and hands)
+            clockFace.style.transform = `rotate(${faceRotation}deg)`;
+            
+            // Rotate the hands to their correct positions relative to the face
+            hourHand.style.transform = `translateX(-50%) rotate(${hoursRotation}deg)`;
+            minuteHand.style.transform = `translateX(-50%) rotate(${minutesRotation}deg)`;
+        }
+
+        // Set the clock every second
+        setInterval(setClock, 1000);
+
+        // Set the clock immediately on load
+        setClock();
+    </script>
+
+</body>
+</html>
