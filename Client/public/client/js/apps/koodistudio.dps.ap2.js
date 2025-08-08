@@ -403,51 +403,79 @@ function loadLesson(index) {
 
 // イベントリスナーを設定
 function setupEventListeners() {
+  console.log('Setting up event listeners...');
+  
   // 実行ボタン
   const runButton = document.querySelector('.run-button');
   if (runButton) {
-    runButton.addEventListener('click', executeCode);
+    console.log('Run button found, adding click handler');
+    runButton.onclick = executeCode;
+  } else {
+    console.warn('Run button not found');
   }
   
   // ヒントボタン
   const hintButton = document.querySelector('.hint-button');
   if (hintButton) {
-    hintButton.addEventListener('click', () => {
+    console.log('Hint button found, adding click handler');
+    hintButton.onclick = () => {
       const hintElement = document.querySelector('.hint');
       if (hintElement) {
         hintElement.style.display = hintElement.style.display === 'none' ? 'block' : 'none';
       }
-    });
+    };
+  } else {
+    console.warn('Hint button not found');
   }
   
   // 前のレッスンボタン
   const prevButton = document.querySelector('.prev-lesson');
   if (prevButton) {
-    prevButton.addEventListener('click', () => {
+    console.log('Previous button found, adding click handler');
+    prevButton.onclick = () => {
+      console.log('Previous button clicked');
       if (currentLessonIndex > 0) {
         loadLesson(currentLessonIndex - 1);
+      } else {
+        console.log('Already at first lesson');
       }
-    });
+    };
+  } else {
+    console.warn('Previous button not found');
   }
   
   // 次のレッスンボタン
   const nextButton = document.querySelector('.next-lesson');
   if (nextButton) {
-    nextButton.addEventListener('click', () => {
+    console.log('Next button found, adding click handler');
+    nextButton.onclick = () => {
+      console.log('Next button clicked');
       if (currentLessonIndex < lessons.length - 1) {
         loadLesson(currentLessonIndex + 1);
+      } else {
+        console.log('Already at last lesson');
       }
-    });
+    };
+  } else {
+    console.warn('Next button not found');
   }
   
-  // メニューに戻るボタンのイベントリスナー
+  // メニューに戻るボタン
   const backToMenuButton = document.querySelector('.back-to-menu');
   if (backToMenuButton) {
-    backToMenuButton.addEventListener('click', () => {
-      if (window.shell) {
+    console.log('Back to menu button found, adding click handler');
+    backToMenuButton.onclick = () => {
+      console.log('Back to menu button clicked');
+      if (globalShell) {
+        globalShell.loadApp('menu');
+      } else if (window.shell) {
         window.shell.loadApp('menu');
+      } else {
+        console.error('Shell reference not found');
       }
-    });
+    };
+  } else {
+    console.warn('Back to menu button not found');
   }
 
   // レッスンリストのイベントリスナー
@@ -486,8 +514,12 @@ async function loadCodeMirrorDependencies() {
   }
 }
 
+// グローバル変数としてシェル参照を保持
+let globalShell = null;
+
 export function appInit(shell) {
   // シェルの参照を保持
+  globalShell = shell;
   window.shell = shell;
   
   const root = document.getElementById('app-root');
@@ -502,34 +534,43 @@ export function appInit(shell) {
     </div>
   `;
   
+  // URLからレッスンインデックスを取得
+  const urlParams = new URLSearchParams(window.location.search);
+  currentLessonIndex = parseInt(urlParams.get('lesson')) || 0;
+  
   // CodeMirrorの依存関係をロード
-  loadCodeMirrorDependencies(() => {
-    if (window.CodeMirror) {
+  loadCodeMirrorDependencies()
+    .then(() => {
+      if (!window.CodeMirror) {
+        throw new Error('CodeMirrorが正しく読み込まれませんでした');
+      }
+      
       // アプリケーションのUIをレンダリング
       renderApp();
       
       // コードエディタを初期化
       initCodeEditor();
       
-      // URLからレッスンインデックスを取得
-      const urlParams = new URLSearchParams(window.location.search);
-      currentLessonIndex = parseInt(urlParams.get('lesson')) || 0;
-      
       // 初期レッスンを読み込み
       loadLesson(Math.min(Math.max(0, currentLessonIndex), lessons.length - 1));
       
-      // イベントリスナーを設定
-      setupEventListeners();
+      // イベントリスナーを設定（少し遅延させて確実にDOMが準備されていることを確認）
+      setTimeout(() => {
+        setupEventListeners();
+      }, 100);
       
       // シェルに初期化完了を通知
       shell.log({from: 'dp.app.koodistudio', message: 'Koodi Studioが初期化されました', level: 'info'});
-    } else {
+    })
+    .catch(error => {
+      console.error('初期化エラー:', error);
       // エラー表示
-      shell.log({from: 'dp.app.koodistudio.err', message: 'CodeMirrorの読み込みに失敗しました', level: 'error'});
+      shell.log({from: 'dp.app.koodistudio.err', message: '初期化に失敗しました: ' + error.message, level: 'error'});
       root.innerHTML = `
         <div class="error-message">
           <h2>エラーが発生しました</h2>
-          <p>コードエディタの初期化に失敗しました。ページを再読み込みしてください。</p>
+          <p>アプリケーションの初期化に失敗しました: ${error.message}</p>
+          <p>ページを再読み込みしてください。</p>
           <button class="retry-button">再試行</button>
         </div>
       `;
@@ -537,22 +578,11 @@ export function appInit(shell) {
       // 再試行ボタンのイベントリスナー
       const retryButton = root.querySelector('.retry-button');
       if (retryButton) {
-        retryButton.addEventListener('click', () => {
+        retryButton.onclick = () => {
           window.location.reload();
-        });
+        };
       }
-    }
-  });
-  
-  root.id = 'koodi-studio-root';
-  root.className = 'koodi-studio-app';
-  
-  // アプリケーションのUIをレンダリング
-  renderApp();
-  
-  // URLからレッスンインデックスを取得
-  const urlParams = new URLSearchParams(window.location.search);
-  currentLessonIndex = parseInt(urlParams.get('lesson')) || 0;
+    });
   
   // アプリケーションのスタイルを追加
   const styleElement = document.createElement('style');
