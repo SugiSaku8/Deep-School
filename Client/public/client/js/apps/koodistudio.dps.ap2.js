@@ -464,14 +464,40 @@ function setupEventListeners() {
   const backToMenuButton = document.querySelector('.back-to-menu');
   if (backToMenuButton) {
     console.log('Back to menu button found, adding click handler');
-    backToMenuButton.onclick = () => {
+    backToMenuButton.onclick = (e) => {
+      e.preventDefault();
       console.log('Back to menu button clicked');
-      if (globalShell) {
-        globalShell.loadApp('menu');
-      } else if (window.shell) {
-        window.shell.loadApp('menu');
+      console.log('Shell references - globalShell:', globalShell, 'window.shell:', window.shell);
+      
+      // デバッグ用にwindowオブジェクトのプロパティを確認
+      console.log('Available window properties:', Object.keys(window).filter(key => key.includes('shell') || key.includes('Shell')));
+      
+      // シェル参照を取得するための複数の方法を試す
+      const shellRef = globalShell || window.shell || window.parent?.shell || window.top?.shell;
+      
+      if (shellRef && typeof shellRef.loadApp === 'function') {
+        console.log('Calling loadApp on shell reference');
+        try {
+          shellRef.loadApp('menu');
+        } catch (error) {
+          console.error('Error calling loadApp:', error);
+          // エラーフォールバック: トップレベルに移動を試みる
+          try {
+            window.top.location.href = '/index.html';
+          } catch (e) {
+            console.error('Failed to navigate to menu:', e);
+            alert('メニューに戻れませんでした。ページを再読み込みしてください。');
+          }
+        }
       } else {
-        console.error('Shell reference not found');
+        console.error('No valid shell reference found');
+        // 最終的なフォールバック
+        try {
+          window.location.href = '/index.html';
+        } catch (e) {
+          console.error('Failed to navigate:', e);
+          alert('メニューに戻れませんでした。ページを再読み込みしてください。');
+        }
       }
     };
   } else {
