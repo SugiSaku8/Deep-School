@@ -487,31 +487,54 @@ function setupEventListeners() {
 }
 
 // CodeMirrorの依存関係を動的にロードする関数
-async function loadCodeMirrorDependencies() {
-  const baseUrl = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2';
-  const deps = [
-    { type: 'link', url: `${baseUrl}/codemirror.min.css` },
-    { type: 'link', url: `${baseUrl}/theme/dracula.min.css` },
-    { type: 'script', url: `${baseUrl}/codemirror.min.js` },
-    { type: 'script', url: `${baseUrl}/mode/javascript/javascript.min.js` },
-    { type: 'script', url: `${baseUrl}/addon/edit/closebrackets.min.js` },
-    { type: 'script', url: `${baseUrl}/addon/edit/matchbrackets.min.js` },
-    { type: 'script', url: `${baseUrl}/addon/display/placeholder.min.js` }
-  ];
+function loadCodeMirrorDependencies() {
+  return new Promise((resolve, reject) => {
+    const baseUrl = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2';
+    const deps = [
+      { type: 'link', url: `${baseUrl}/codemirror.min.css` },
+      { type: 'link', url: `${baseUrl}/theme/dracula.min.css` },
+      { type: 'script', url: `${baseUrl}/codemirror.min.js` },
+      { type: 'script', url: `${baseUrl}/mode/javascript/javascript.min.js` },
+      { type: 'script', url: `${baseUrl}/addon/edit/closebrackets.min.js` },
+      { type: 'script', url: `${baseUrl}/addon/edit/matchbrackets.min.js` },
+      { type: 'script', url: `${baseUrl}/addon/display/placeholder.min.js` }
+    ];
 
-  for (const dep of deps) {
-    await new Promise((resolve) => {
+    let loadedCount = 0;
+    const totalDeps = deps.length;
+
+    function checkAllLoaded() {
+      loadedCount++;
+      if (loadedCount === totalDeps) {
+        // すべての依存関係が読み込まれたことを確認
+        if (window.CodeMirror) {
+          resolve();
+        } else {
+          reject(new Error('CodeMirror の初期化に失敗しました'));
+        }
+      }
+    }
+
+    deps.forEach(dep => {
       const element = document.createElement(dep.type);
+      
       if (dep.type === 'link') {
         element.rel = 'stylesheet';
         element.href = dep.url;
+        element.onload = checkAllLoaded;
       } else {
         element.src = dep.url;
+        element.onload = checkAllLoaded;
       }
-      element.onload = resolve;
+      
+      element.onerror = () => {
+        console.error(`Failed to load: ${dep.url}`);
+        reject(new Error(`依存関係の読み込みに失敗しました: ${dep.url}`));
+      };
+      
       document.head.appendChild(element);
     });
-  }
+  });
 }
 
 // グローバル変数としてシェル参照を保持
@@ -538,29 +561,30 @@ export function appInit(shell) {
   const urlParams = new URLSearchParams(window.location.search);
   currentLessonIndex = parseInt(urlParams.get('lesson')) || 0;
   
+  // まずUIをレンダリング
+  renderApp();
+  
   // CodeMirrorの依存関係をロード
   loadCodeMirrorDependencies()
     .then(() => {
-      if (!window.CodeMirror) {
-        throw new Error('CodeMirrorが正しく読み込まれませんでした');
-      }
-      
-      // アプリケーションのUIをレンダリング
-      renderApp();
+      console.log('CodeMirror dependencies loaded successfully');
       
       // コードエディタを初期化
-      initCodeEditor();
-      
-      // 初期レッスンを読み込み
-      loadLesson(Math.min(Math.max(0, currentLessonIndex), lessons.length - 1));
-      
-      // イベントリスナーを設定（少し遅延させて確実にDOMが準備されていることを確認）
-      setTimeout(() => {
+      try {
+        initCodeEditor();
+        
+        // 初期レッスンを読み込み
+        loadLesson(Math.min(Math.max(0, currentLessonIndex), lessons.length - 1));
+        
+        // イベントリスナーを設定
         setupEventListeners();
-      }, 100);
-      
-      // シェルに初期化完了を通知
-      shell.log({from: 'dp.app.koodistudio', message: 'Koodi Studioが初期化されました', level: 'info'});
+        
+        // シェルに初期化完了を通知
+        shell.log({from: 'dp.app.koodistudio', message: 'Koodi Studioが初期化されました', level: 'info'});
+      } catch (error) {
+        console.error('初期化エラー:', error);
+        throw error; // エラーをキャッチするために再スロー
+      }
     })
     .catch(error => {
       console.error('初期化エラー:', error);
