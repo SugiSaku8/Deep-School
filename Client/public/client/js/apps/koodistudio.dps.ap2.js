@@ -346,40 +346,10 @@ function loadLesson(index) {
   root.innerHTML = renderApp();
   
   // エディタを再初期化
-  const script = document.createElement('script');
-  script.src = 'https://sugisaku8.github.io/Deep-School/client/js/koodi_editor/index.js';
-  script.onload = () => {
-    // エディタを初期化
-    const editorElement = document.getElementById('code-editor');
-    if (!editorElement) return;
-    
-    koodiEditor = CodeMirror(editorElement, {
-      value: currentLesson.code,
-      mode: 'javascript',
-      theme: 'dracula',
-      lineNumbers: true,
-      autoCloseBrackets: true,
-      indentUnit: 2,
-      tabSize: 2,
-      lineWrapping: true,
-      matchBrackets: true,
-      extraKeys: {
-        'Ctrl-Enter': executeCode,
-        'Cmd-Enter': executeCode
-      }
-    });
-    
-    // エディタの参照を保持
-    window.koodiEditor = koodiEditor;
-    
-    // エディタにフォーカスを設定
-    koodiEditor.focus();
-    
-    // イベントリスナーを設定
-    setupEventListeners();
-  };
+  initCodeEditor();
   
-  document.head.appendChild(script);
+  // イベントリスナーを設定
+  setupEventListeners();
   
   // ヒントを非表示に設定
   const hintElement = document.querySelector('.hint');
@@ -403,112 +373,54 @@ function loadLesson(index) {
 
 // イベントリスナーを設定
 function setupEventListeners() {
-  console.log('Setting up event listeners...');
-  
   // 実行ボタン
   const runButton = document.querySelector('.run-button');
-  if (runButton) {
-    console.log('Run button found, adding click handler');
-    runButton.onclick = executeCode;
-  } else {
-    console.warn('Run button not found');
-  }
-  
+  if (runButton) runButton.onclick = executeCode;
+
   // ヒントボタン
   const hintButton = document.querySelector('.hint-button');
   if (hintButton) {
-    console.log('Hint button found, adding click handler');
     hintButton.onclick = () => {
       const hintElement = document.querySelector('.hint');
       if (hintElement) {
         hintElement.style.display = hintElement.style.display === 'none' ? 'block' : 'none';
       }
     };
-  } else {
-    console.warn('Hint button not found');
   }
-  
+
   // 前のレッスンボタン
   const prevButton = document.querySelector('.prev-lesson');
   if (prevButton) {
-    console.log('Previous button found, adding click handler');
     prevButton.onclick = () => {
-      console.log('Previous button clicked');
-      if (currentLessonIndex > 0) {
-        loadLesson(currentLessonIndex - 1);
-      } else {
-        console.log('Already at first lesson');
-      }
+      if (currentLessonIndex > 0) loadLesson(currentLessonIndex - 1);
     };
-  } else {
-    console.warn('Previous button not found');
   }
-  
+
   // 次のレッスンボタン
   const nextButton = document.querySelector('.next-lesson');
   if (nextButton) {
-    console.log('Next button found, adding click handler');
     nextButton.onclick = () => {
-      console.log('Next button clicked');
-      if (currentLessonIndex < lessons.length - 1) {
-        loadLesson(currentLessonIndex + 1);
-      } else {
-        console.log('Already at last lesson');
-      }
+      if (currentLessonIndex < lessons.length - 1) loadLesson(currentLessonIndex + 1);
     };
-  } else {
-    console.warn('Next button not found');
   }
-  
+
   // メニューに戻るボタン
   const backToMenuButton = document.querySelector('.back-to-menu');
   if (backToMenuButton) {
-    console.log('Back to menu button found, adding click handler');
     backToMenuButton.onclick = (e) => {
       e.preventDefault();
-      console.log('Back to menu button clicked');
-      console.log('Shell references - globalShell:', globalShell, 'window.shell:', window.shell);
-      
-      // デバッグ用にwindowオブジェクトのプロパティを確認
-      console.log('Available window properties:', Object.keys(window).filter(key => key.includes('shell') || key.includes('Shell')));
-      
-      // シェル参照を取得するための複数の方法を試す
       const shellRef = globalShell || window.shell || window.parent?.shell || window.top?.shell;
-      
       if (shellRef && typeof shellRef.loadApp === 'function') {
-        console.log('Calling loadApp on shell reference');
-        try {
-          shellRef.loadApp('menu');
-        } catch (error) {
-          console.error('Error calling loadApp:', error);
-          // エラーフォールバック: トップレベルに移動を試みる
-          try {
-            window.top.location.href = '/index.html';
-          } catch (e) {
-            console.error('Failed to navigate to menu:', e);
-            alert('メニューに戻れませんでした。ページを再読み込みしてください。');
-          }
-        }
+        try { shellRef.loadApp('menu'); } catch {}
       } else {
-        console.error('No valid shell reference found');
-        // 最終的なフォールバック
-        try {
-          window.location.href = '/index.html';
-        } catch (e) {
-          console.error('Failed to navigate:', e);
-          alert('メニューに戻れませんでした。ページを再読み込みしてください。');
-        }
+        window.location.href = '/';
       }
     };
-  } else {
-    console.warn('Back to menu button not found');
   }
 
-  // レッスンリストのイベントリスナー
+  // レッスンリスト
   document.querySelectorAll('.lesson-list li').forEach((item, index) => {
-    item.addEventListener('click', () => {
-      loadLesson(index);
-    });
+    item.addEventListener('click', () => loadLesson(index));
   });
 }
 
@@ -595,7 +507,7 @@ export function appInit(shell) {
   // CodeMirrorの依存関係をロード
   loadCodeMirrorDependencies()
     .then(() => {
-      console.log('CodeMirror dependencies loaded successfully');
+      
       
       // コードエディタを初期化
       try {
