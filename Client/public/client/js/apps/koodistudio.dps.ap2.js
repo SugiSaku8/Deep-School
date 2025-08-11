@@ -346,8 +346,67 @@ function loadLesson(index) {
 
 // イベントリスナーを設定
 function setupEventListeners() {
-  // 実行ボタン
-  const runButton = document.querySelector('.run-button');
+  // --- Run button ---
+  const runBtn = document.querySelector('.run-button');
+  if (runBtn) runBtn.onclick = executeCode;
+
+  // --- Hint button ---
+  const hintBtn = document.querySelector('.hint-button');
+  if (hintBtn) {
+    hintBtn.onclick = () => {
+      const hintEl = document.querySelector('.hint');
+      if (hintEl) hintEl.style.display = hintEl.style.display === 'none' ? 'block' : 'none';
+    };
+  }
+
+  // --- Navigation buttons (ID based) ---
+  const btnBack     = document.getElementById('btn-back');
+  const btnPrev     = document.getElementById('btn-prev');
+  const btnNext     = document.getElementById('btn-next');
+  const btnComplete = document.getElementById('btn-complete');
+
+  if (btnBack) {
+    btnBack.onclick = (e) => {
+      e.preventDefault();
+      if (window.shell && typeof window.shell.loadApp === 'function') {
+        window.shell.loadApp('menu');
+      } else {
+        window.location.href = '/';
+      }
+    };
+  }
+
+  if (btnPrev) btnPrev.onclick = () => loadLesson(Math.max(0, currentLessonIndex - 1));
+  if (btnNext) btnNext.onclick = () => loadLesson(Math.min(lessons.length - 1, currentLessonIndex + 1));
+  if (btnComplete) btnComplete.onclick = () => alert('おめでとうございます！すべてのレッスンを完了しました！');
+
+  // --- Lesson list (event delegation) ---
+  const lessonList = document.querySelector('.lesson-list');
+  if (lessonList) {
+    lessonList.onclick = (e) => {
+      const li = e.target.closest('li[data-lesson-index]');
+      if (!li) return;
+      const idx = parseInt(li.dataset.lessonIndex, 10);
+      if (!isNaN(idx) && idx !== currentLessonIndex) loadLesson(idx);
+    };
+  }
+
+  // --- Keyboard shortcut (Ctrl/Cmd + Enter) ---
+  if (window._koodiKeydownHandler) {
+    document.removeEventListener('keydown', window._koodiKeydownHandler);
+  }
+  window._koodiKeydownHandler = (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      e.preventDefault();
+      executeCode();
+    }
+  };
+  document.addEventListener('keydown', window._koodiKeydownHandler);
+
+  // Update nav button visibility
+  if (typeof refreshNavigationState === 'function') refreshNavigationState();
+}
+  
   if (runButton) runButton.onclick = executeCode;
 
   // ヒントボタン
@@ -392,13 +451,7 @@ function setupEventListeners() {
     };
   }
 
-  refreshNavigationState();
-
-  // レッスンリスト
-  document.querySelectorAll('.lesson-list li').forEach((item, index) => {
-    item.addEventListener('click', () => loadLesson(index));
-  });
-}
+   
 
 // ナビゲーションボタンの表示状態を更新
 function refreshNavigationState() {
