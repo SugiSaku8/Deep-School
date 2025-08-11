@@ -1359,9 +1359,6 @@ span.CodeMirror-selectedtext { background: none; }
   // アプリケーションを初期化
   root.innerHTML = renderApp();
   
-  // コードエディターのスクリプトを動的に読み込む
-  const script = document.createElement('script');
-  script.src = 'https://sugisaku8.github.io/Deep-School/client/js/koodi_editor/index.js';
-  script.onload = initCodeEditor;
-  document.head.appendChild(script);
+  // loadCodeMirrorDependencies() の then ブロックで initCodeEditor が呼ばれるため、
+  // ここで追加スクリプトを読み込む必要はありません。
 }
