@@ -514,43 +514,40 @@ function setupEventListeners() {
 
 // CodeMirrorの依存関係を動的にロードする関数
 function loadCodeMirrorDependencies() {
-  return new Promise((resolve, reject) => {
-    const baseUrl = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2';
-    const deps = [
-      { type: 'link', url: `${baseUrl}/codemirror.min.css` },
-      { type: 'link', url: `${baseUrl}/theme/dracula.min.css` },
-      { type: 'script', url: `${baseUrl}/codemirror.min.js` },
-      { type: 'script', url: `${baseUrl}/mode/javascript/javascript.min.js` },
-      { type: 'script', url: `${baseUrl}/addon/edit/closebrackets.min.js` },
-      { type: 'script', url: `${baseUrl}/addon/edit/matchbrackets.min.js` },
-      { type: 'script', url: `${baseUrl}/addon/display/placeholder.min.js` }
-    ];
+  const baseUrl = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2';
+  const deps = [
+    { type: 'link', url: `${baseUrl}/codemirror.min.css` },
+    { type: 'link', url: `${baseUrl}/theme/dracula.min.css` },
+    { type: 'script', url: `${baseUrl}/codemirror.min.js` },
+    { type: 'script', url: `${baseUrl}/mode/javascript/javascript.min.js` },
+    { type: 'script', url: `${baseUrl}/addon/edit/closebrackets.min.js` },
+    { type: 'script', url: `${baseUrl}/addon/edit/matchbrackets.min.js` },
+    { type: 'script', url: `${baseUrl}/addon/display/placeholder.min.js` }
+  ];
 
-    let loadedCount = 0;
-    const totalDeps = deps.length;
-
-    function checkAllLoaded() {
-      loadedCount++;
-      if (loadedCount === totalDeps) {
+  // 依存関係を順番にロードする関数
+  function loadDependenciesSequentially(index = 0) {
+    return new Promise((resolve, reject) => {
+      if (index >= deps.length) {
         // すべての依存関係が読み込まれたことを確認
         if (window.CodeMirror) {
           resolve();
         } else {
           reject(new Error('CodeMirror の初期化に失敗しました'));
         }
+        return;
       }
-    }
 
-    deps.forEach(dep => {
+      const dep = deps[index];
       const element = document.createElement(dep.type);
       
       if (dep.type === 'link') {
         element.rel = 'stylesheet';
         element.href = dep.url;
-        element.onload = checkAllLoaded;
+        element.onload = () => loadDependenciesSequentially(index + 1).then(resolve).catch(reject);
       } else {
         element.src = dep.url;
-        element.onload = checkAllLoaded;
+        element.onload = () => loadDependenciesSequentially(index + 1).then(resolve).catch(reject);
       }
       
       element.onerror = () => {
@@ -560,7 +557,9 @@ function loadCodeMirrorDependencies() {
       
       document.head.appendChild(element);
     });
-  });
+  }
+
+  return loadDependenciesSequentially();
 }
 
 // グローバル変数としてシェル参照を保持
