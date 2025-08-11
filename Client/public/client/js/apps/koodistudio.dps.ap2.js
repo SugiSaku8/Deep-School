@@ -370,24 +370,19 @@ function setupEventListeners() {
   if (btnBack) {
     btnBack.onclick = (e) => {
       e.preventDefault();
-      const shellRef = globalShell || window.shell || window.parent?.shell || window.top?.shell;
-      if (shellRef && typeof shellRef.loadApp === 'function') {
-        try { shell.loadApp('menu'); } catch {}
-      } else {
-        shell.loadApp('menu');
-      }
+      shell.loadApp("menu")
     };
   }
 
   if (btnPrev) {
     btnPrev.onclick = () => {
-      if (currentLessonIndex > 0) loadLesson(currentLessonIndex - 1);
+      loadLesson(currentLessonIndex - 1);
     };
   }
 
   if (btnNext) {
     btnNext.onclick = () => {
-      if (currentLessonIndex < lessons.length - 1) loadLesson(currentLessonIndex + 1);
+    loadLesson(currentLessonIndex + 1);
     };
   }
 
