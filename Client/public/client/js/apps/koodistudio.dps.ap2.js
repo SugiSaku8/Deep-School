@@ -370,7 +370,13 @@ function setupEventListeners() {
       e.preventDefault();
       const shellRef = globalShell || window.shell || window.parent?.shell || window.top?.shell;
       if (shellRef && typeof shellRef.loadApp === 'function') {
-        try { shellRef.loadApp('menu'); } catch { window.location.href = '/'; }
+        shellRef.loadApp('menu');
+        // フレーム外で遷移できない場合のフォールバック
+        setTimeout(() => {
+          if (document.body.dataset.app === 'koodistudio') {
+            window.location.href = '/';
+          }
+        }, 500);
       } else {
         window.location.href = '/';
       }
