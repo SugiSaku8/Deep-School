@@ -16,7 +16,7 @@ const lessons = [
       <p>右側のエディタでコードを書いて、実行ボタンを押してみましょう。</p>
     `,
     code: '// 最初のプログラムを書いてみよう！\nconsole.log("Hello, Koodi Studio!");',
-    hint: '「実行」ボタンを押して、コンソールにメッセージを表示させてみましょう。'
+    hint: '「実行」ボタンを押して、出力にメッセージを表示させてみましょう。'
   },
   {
     id: 'variables',
@@ -36,7 +36,7 @@ console.log(message); // 変数の値を表示</code></pre>
     title: '関数を書いてみよう',
     content: `
       <h2>関数の基本</h2>
-      <p>関数は、再利用可能なコードのブロックです。</p>
+      <p>関数は、何回でも使えるコードのブロックです。</p>
       <pre><code>function greet(name) {
   return "こんにちは、" + name + "さん！";
 }
