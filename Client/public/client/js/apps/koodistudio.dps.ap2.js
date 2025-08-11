@@ -368,16 +368,10 @@ function setupEventListeners() {
   if (btnBack) {
     btnBack.onclick = (e) => {
       e.preventDefault();
-      const shellRef = globalShell || window.shell || window.parent?.shell || window.top?.shell;
-      if (shellRef && typeof shellRef.loadApp === 'function') {
-        shellRef.loadApp('menu');
-        // フレーム外で遷移できない場合のフォールバック
-        setTimeout(() => {
-          if (document.body.dataset.app === 'koodistudio') {
-            window.location.href = '/';
-          }
-        }, 500);
+      if (window.shell && typeof window.shell.loadApp === 'function') {
+        window.shell.loadApp('menu');
       } else {
+        console.warn('[KoodiStudio] shell.loadApp が利用できません。window.location でフォールバックします');
         window.location.href = '/';
       }
     };
