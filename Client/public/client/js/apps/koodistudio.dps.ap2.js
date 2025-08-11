@@ -707,6 +707,8 @@ export function appInit(shell) {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: relative;
+      z-index: 5;
     }
     
     .run-button {
