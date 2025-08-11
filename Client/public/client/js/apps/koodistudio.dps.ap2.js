@@ -515,20 +515,30 @@ function setupEventListeners() {
 // CodeMirrorの依存関係を動的にロードする関数
 function loadCodeMirrorDependencies() {
   const baseUrl = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2';
-  const deps = [
-    { type: 'link', url: `${baseUrl}/codemirror.min.css` },
-    { type: 'link', url: `${baseUrl}/theme/dracula.min.css` },
-    { type: 'script', url: `${baseUrl}/codemirror.min.js` },
-    { type: 'script', url: `${baseUrl}/mode/javascript/javascript.min.js` },
-    { type: 'script', url: `${baseUrl}/addon/edit/closebrackets.min.js` },
-    { type: 'script', url: `${baseUrl}/addon/edit/matchbrackets.min.js` },
-    { type: 'script', url: `${baseUrl}/addon/display/placeholder.min.js` }
+    const cssDeps = [
+    `${baseUrl}/codemirror.min.css`,
+    `${baseUrl}/theme/dracula.min.css`
+  ];
+  const scriptDeps = [
+    `${baseUrl}/codemirror.min.js`,
+    `${baseUrl}/mode/javascript/javascript.min.js`,
+    `${baseUrl}/addon/edit/closebrackets.min.js`,
+    `${baseUrl}/addon/edit/matchbrackets.min.js`,
+    `${baseUrl}/addon/display/placeholder.min.js`
   ];
 
-  // 依存関係を順番にロードする関数
+    // CSS は待たずに非同期で読み込む
+  cssDeps.forEach(url => {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = url;
+    document.head.appendChild(link);
+  });
+
+  // スクリプトを順番にロードする関数
   function loadDependenciesSequentially(index = 0) {
     return new Promise((resolve, reject) => {
-      if (index >= deps.length) {
+      if (index >= scriptDeps.length) {
         // すべての依存関係が読み込まれたことを確認
         if (window.CodeMirror) {
           resolve();
@@ -538,28 +548,21 @@ function loadCodeMirrorDependencies() {
         return;
       }
 
-      const dep = deps[index];
-      const element = document.createElement(dep.type);
-      
-      if (dep.type === 'link') {
-        element.rel = 'stylesheet';
-        element.href = dep.url;
-        element.onload = () => loadDependenciesSequentially(index + 1).then(resolve).catch(reject);
-      } else {
-        element.src = dep.url;
-        element.onload = () => loadDependenciesSequentially(index + 1).then(resolve).catch(reject);
-      }
-      
-      element.onerror = () => {
-        console.error(`Failed to load: ${dep.url}`);
-        reject(new Error(`依存関係の読み込みに失敗しました: ${dep.url}`));
+      const url = scriptDeps[index];
+      const script = document.createElement('script');
+      script.src = url;
+      script.onload = () => loadDependenciesSequentially(index + 1).then(resolve).catch(reject);
+      script.onerror = () => {
+        console.error(`Failed to load: ${url}`);
+        reject(new Error(`依存関係の読み込みに失敗しました: ${url}`));
       };
+      document.head.appendChild(script);
       
-      document.head.appendChild(element);
+
     });
   }
 
-  return loadDependenciesSequentially();
+    return loadDependenciesSequentially();
 }
 
 // グローバル変数としてシェル参照を保持
