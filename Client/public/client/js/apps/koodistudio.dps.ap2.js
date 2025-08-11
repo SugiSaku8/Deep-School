@@ -90,12 +90,10 @@ function renderApp() {
           <div class="editor-toolbar">
             <button class="run-button">▶ 実行 (Ctrl+Enter)</button>
             <div class="lesson-navigation">
-              <button class="nav-button back-to-menu">← メニューに戻る</button>
-              ${currentLessonIndex > 0 ? 
-                `<button class="nav-button prev-lesson">← 前のレッスン</button>` : ''}
-              ${currentLessonIndex < lessons.length - 1 ? 
-                `<button class="nav-button next-lesson">次のレッスン →</button>` : 
-                '<button class="nav-button complete-lesson">おめでとうございます！</button>'}
+              <button id="btn-back" class="nav-button">← メニューに戻る</button>
+              <button id="btn-prev" class="nav-button">← 前のレッスン</button>
+              <button id="btn-next" class="nav-button">次のレッスン →</button>
+              <button id="btn-complete" class="nav-button complete-lesson">おめでとうございます！</button>
             </div>
           </div>
           <div id="code-editor"></div>
@@ -350,6 +348,11 @@ function loadLesson(index) {
   
   // イベントリスナーを設定
   setupEventListeners();
+
+  // ナビゲーションボタンの状態を更新
+  if (typeof refreshNavigationState === 'function') {
+    refreshNavigationState();
+  }
   
   // ヒントを非表示に設定
   const hintElement = document.querySelector('.hint');
@@ -388,26 +391,14 @@ function setupEventListeners() {
     };
   }
 
-  // 前のレッスンボタン
-  const prevButton = document.querySelector('.prev-lesson');
-  if (prevButton) {
-    prevButton.onclick = () => {
-      if (currentLessonIndex > 0) loadLesson(currentLessonIndex - 1);
-    };
-  }
+  // ----- Navigation buttons -----
+  const btnBack    = document.getElementById('btn-back');
+  const btnPrev    = document.getElementById('btn-prev');
+  const btnNext    = document.getElementById('btn-next');
+  const btnComplete= document.getElementById('btn-complete');
 
-  // 次のレッスンボタン
-  const nextButton = document.querySelector('.next-lesson');
-  if (nextButton) {
-    nextButton.onclick = () => {
-      if (currentLessonIndex < lessons.length - 1) loadLesson(currentLessonIndex + 1);
-    };
-  }
-
-  // メニューに戻るボタン
-  const backToMenuButton = document.querySelector('.back-to-menu');
-  if (backToMenuButton) {
-    backToMenuButton.onclick = (e) => {
+  if (btnBack) {
+    btnBack.onclick = (e) => {
       e.preventDefault();
       const shellRef = globalShell || window.shell || window.parent?.shell || window.top?.shell;
       if (shellRef && typeof shellRef.loadApp === 'function') {
@@ -417,6 +408,26 @@ function setupEventListeners() {
       }
     };
   }
+
+  if (btnPrev) {
+    btnPrev.onclick = () => {
+      if (currentLessonIndex > 0) loadLesson(currentLessonIndex - 1);
+    };
+  }
+
+  if (btnNext) {
+    btnNext.onclick = () => {
+      if (currentLessonIndex < lessons.length - 1) loadLesson(currentLessonIndex + 1);
+    };
+  }
+
+  if (btnComplete) {
+    btnComplete.onclick = () => {
+      alert('おめでとうございます！すべてのレッスンを完了しました！');
+    };
+  }
+
+  refreshNavigationState();
 
   // レッスンリスト
   document.querySelectorAll('.lesson-list li').forEach((item, index) => {
