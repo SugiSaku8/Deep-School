@@ -429,40 +429,47 @@ function loadCodeMirrorDependencies() {
   return new Promise((resolve, reject) => {
     const baseUrl = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2';
 
-    // CSS
-    [
-      `${baseUrl}/codemirror.min.css`,
-      `${baseUrl}/theme/dracula.min.css`
-    ].forEach(url => {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = url;
-      document.head.appendChild(link);
-    });
+    // --- helper to load JS/CSS ---
+    const loadCSS = (href) => {
+      return new Promise((res) => {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = href;
+        link.onload = () => res();
+        // CSS load errors are rare; still resolve to continue.
+        link.onerror = () => res();
+        document.head.appendChild(link);
+      });
+    };
 
-    // Core JS – must load first
-    const coreScript = document.createElement('script');
-    coreScript.src = `${baseUrl}/codemirror.min.js`;
-    coreScript.onload = () => {
-      if (!window.CodeMirror) {
-        reject(new Error('CodeMirror core failed to load'));
-        return;
-      }
-      // Load plugins (no need to await)
-      [
-        `${baseUrl}/mode/javascript/javascript.min.js`,
-        `${baseUrl}/addon/edit/closebrackets.min.js`,
-        `${baseUrl}/addon/edit/matchbrackets.min.js`,
-        `${baseUrl}/addon/display/placeholder.min.js`
-      ].forEach(url => {
+    const loadScript = (src) => {
+      return new Promise((res, rej) => {
         const s = document.createElement('script');
-        s.src = url;
+        s.src = src;
+        s.onload = () => res();
+        s.onerror = () => rej(new Error(`Failed to load script: ${src}`));
         document.head.appendChild(s);
       });
-      resolve();
     };
-    coreScript.onerror = () => reject(new Error('Failed to load CodeMirror core'));
-    document.head.appendChild(coreScript);
+
+    // CSS (theme and base)
+    Promise.all([
+      loadCSS(`${baseUrl}/codemirror.min.css`),
+      loadCSS(`${baseUrl}/theme/dracula.min.css`)
+    ])
+      .then(() => loadScript(`${baseUrl}/codemirror.min.js`))
+      .then(() => {
+        if (!window.CodeMirror) throw new Error('CodeMirror core failed to load');
+        // Load required addons & mode scripts
+        return Promise.all([
+          loadScript(`${baseUrl}/mode/javascript/javascript.min.js`),
+          loadScript(`${baseUrl}/addon/edit/closebrackets.min.js`),
+          loadScript(`${baseUrl}/addon/edit/matchbrackets.min.js`),
+          loadScript(`${baseUrl}/addon/display/placeholder.min.js`)
+        ]);
+      })
+      .then(() => resolve())
+      .catch(reject);
   });
 }
 
