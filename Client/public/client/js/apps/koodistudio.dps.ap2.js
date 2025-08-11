@@ -306,8 +306,8 @@ function loadLesson(index) {
   currentLessonIndex = index;
   const currentLesson = lessons[currentLessonIndex];
   
-  // ルート要素を取得
-  const root = document.getElementById('app-root');
+  // ルート要素を取得（appInit で id が変更される可能性がある）
+  const root = document.getElementById('koodi-studio-root') || document.getElementById('app-root');
   if (!root) return;
   
   // UIを再レンダリング
@@ -368,8 +368,9 @@ function setupEventListeners() {
   if (btnBack) {
     btnBack.onclick = (e) => {
       e.preventDefault();
-      if (window.shell && typeof window.shell.loadApp === 'function') {
-        window.shell.loadApp('menu');
+      const shellRef = globalShell || window.shell || window.parent?.shell || window.top?.shell;
+      if (shellRef && typeof shellRef.loadApp === 'function') {
+        try { shellRef.loadApp('menu'); } catch { window.location.href = '/'; }
       } else {
         window.location.href = '/';
       }

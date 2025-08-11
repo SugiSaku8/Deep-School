@@ -1,17 +1,17 @@
 {
   "deepSchoolFamily": {
-    "version": "25C1254X1",
+    "version": "25C1272X1",
     "status": "beta",
-    "lastUpdated": "2025-08-06",
+    "lastUpdated": "2025-08-11",
     "description": "Deep-School Family Software - Initial release"
   },
   "deepSchoolClient": {
-    "version": "0.4.1",
+    "version": "0.4.2",
     "status": "stable",
     "cycle": 1,
     "release": 0,
     "revision": 1,
-    "lastUpdated": "2025-08-06",
+    "lastUpdated": "2025-08-11",
     "description": "Deep-School Client - Initial beta release"
   },
   "deepSchoolServer": {
@@ -96,12 +96,12 @@
     "description": "SCR - Screen Capture and Recording tool - Initial beta release"
   },
   "koodistudio": {
-    "version": "0.18.0",
+    "version": "0.20.0",
     "status": "beta",
     "cycle": 0,
     "release": 1,
     "revision": 0,
-    "lastUpdated": "2025-08-06",
+    "lastUpdated": "2025-08-11",
     "description": "Koodi Studio - coding studio - Initial beta release"
   },
   "moralfruit": {
