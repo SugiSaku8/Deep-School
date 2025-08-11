@@ -435,6 +435,23 @@ function setupEventListeners() {
   });
 }
 
+// ナビゲーションボタンの表示状態を更新
+function refreshNavigationState() {
+  const btnPrev     = document.getElementById('btn-prev');
+  const btnNext     = document.getElementById('btn-next');
+  const btnComplete = document.getElementById('btn-complete');
+
+  if (!btnPrev || !btnNext || !btnComplete) return;
+
+  // 前レッスン
+  btnPrev.style.display = currentLessonIndex > 0 ? 'inline-block' : 'none';
+
+  // 次レッスン or 完了
+  const isLast = currentLessonIndex >= lessons.length - 1;
+  btnNext.style.display     = isLast ? 'none' : 'inline-block';
+  btnComplete.style.display = isLast ? 'inline-block' : 'none';
+}
+
 // CodeMirrorの依存関係を動的にロードする関数
 function loadCodeMirrorDependencies() {
   return new Promise((resolve, reject) => {
