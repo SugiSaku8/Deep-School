@@ -306,8 +306,8 @@ function loadLesson(index) {
   currentLessonIndex = index;
   const currentLesson = lessons[currentLessonIndex];
   
-  // ルート要素を取得（appInit で id が変更される可能性がある）
-  const root = document.getElementById('koodi-studio-root') || document.getElementById('app-root');
+  // ルート要素を取得
+  const root = document.getElementById('app-root');
   if (!root) return;
   
   // UIを再レンダリング
@@ -485,7 +485,7 @@ export function appInit(shell) {
   window.shell = shell;
   
   const root = document.getElementById('app-root');
-  root.id = 'koodi-studio-root';
+
   root.className = 'koodi-studio-app';
   
   // ローディング表示
