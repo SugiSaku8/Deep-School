@@ -764,6 +764,8 @@ export function appInit(shell) {
     .lesson-navigation {
       display: flex;
       gap: 10px;
+      position: relative;
+      z-index: 7;
     }
     
     .nav-button {
@@ -773,6 +775,8 @@ export function appInit(shell) {
       border-radius: 4px;
       cursor: pointer;
       transition: background-color 0.2s;
+      position: relative;
+      z-index: 7;
     }
     
     .nav-button:hover {
@@ -1358,7 +1362,10 @@ span.CodeMirror-selectedtext { background: none; }
   
   // アプリケーションを初期化
   root.innerHTML = renderApp();
+
+  // 初期レンダリング直後にイベントリスナーを設定
+  setupEventListeners();
+  if (typeof refreshNavigationState === 'function') refreshNavigationState();
   
-  // loadCodeMirrorDependencies() の then ブロックで initCodeEditor が呼ばれるため、
-  // ここで追加スクリプトを読み込む必要はありません。
+  // CodeMirror は非同期ロード後に初期化される
 }
