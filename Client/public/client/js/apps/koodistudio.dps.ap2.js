@@ -426,56 +426,47 @@ function setupEventListeners() {
 
 // CodeMirrorの依存関係を動的にロードする関数
 function loadCodeMirrorDependencies() {
-  const baseUrl = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2';
-    const cssDeps = [
-    `${baseUrl}/codemirror.min.css`,
-    `${baseUrl}/theme/dracula.min.css`
-  ];
-  const scriptDeps = [
-    `${baseUrl}/codemirror.min.js`,
-    `${baseUrl}/mode/javascript/javascript.min.js`,
-    `${baseUrl}/addon/edit/closebrackets.min.js`,
-    `${baseUrl}/addon/edit/matchbrackets.min.js`,
-    `${baseUrl}/addon/display/placeholder.min.js`
-  ];
+  return new Promise((resolve, reject) => {
+    const baseUrl = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2';
 
-    // CSS は待たずに非同期で読み込む
-  cssDeps.forEach(url => {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = url;
-    document.head.appendChild(link);
-  });
+    // CSS
+    [
+      `${baseUrl}/codemirror.min.css`,
+      `${baseUrl}/theme/dracula.min.css`
+    ].forEach(url => {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = url;
+      document.head.appendChild(link);
+    });
 
-  // スクリプトを順番にロードする関数
-  function loadDependenciesSequentially(index = 0) {
-    return new Promise((resolve, reject) => {
-      if (index >= scriptDeps.length) {
-        // すべての依存関係が読み込まれたことを確認
-        if (window.CodeMirror) {
-          resolve();
-        } else {
-          reject(new Error('CodeMirror の初期化に失敗しました'));
-        }
+    // Core JS – must load first
+    const coreScript = document.createElement('script');
+    coreScript.src = `${baseUrl}/codemirror.min.js`;
+    coreScript.onload = () => {
+      if (!window.CodeMirror) {
+        reject(new Error('CodeMirror core failed to load'));
         return;
       }
-
-      const url = scriptDeps[index];
-      const script = document.createElement('script');
-      script.src = url;
-      script.onload = () => loadDependenciesSequentially(index + 1).then(resolve).catch(reject);
-      script.onerror = () => {
-        console.error(`Failed to load: ${url}`);
-        reject(new Error(`依存関係の読み込みに失敗しました: ${url}`));
-      };
-      document.head.appendChild(script);
-      
-
-    });
-  }
-
-    return loadDependenciesSequentially();
+      // Load plugins (no need to await)
+      [
+        `${baseUrl}/mode/javascript/javascript.min.js`,
+        `${baseUrl}/addon/edit/closebrackets.min.js`,
+        `${baseUrl}/addon/edit/matchbrackets.min.js`,
+        `${baseUrl}/addon/display/placeholder.min.js`
+      ].forEach(url => {
+        const s = document.createElement('script');
+        s.src = url;
+        document.head.appendChild(s);
+      });
+      resolve();
+    };
+    coreScript.onerror = () => reject(new Error('Failed to load CodeMirror core'));
+    document.head.appendChild(coreScript);
+  });
 }
+
+
 
 // グローバル変数としてシェル参照を保持
 let globalShell = null;
