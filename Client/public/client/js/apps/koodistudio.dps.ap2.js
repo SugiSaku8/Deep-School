@@ -150,43 +150,13 @@ function initCodeEditor() {
     });
   }
   
-  // レッスンナビゲーションのイベントリスナー
-  document.querySelectorAll('.lesson-list li').forEach(item => {
-    item.addEventListener('click', (e) => {
-      const lessonIndex = parseInt(e.currentTarget.getAttribute('data-lesson-index'));
-      if (!isNaN(lessonIndex) && lessonIndex !== currentLessonIndex) {
-        loadLesson(lessonIndex);
-      }
-    });
-  });
+
   
-  // 前のレッスンボタン
-  const prevButton = document.querySelector('.prev-lesson');
-  if (prevButton) {
-    prevButton.addEventListener('click', () => {
-      if (currentLessonIndex > 0) {
-        loadLesson(currentLessonIndex - 1);
-      }
-    });
-  }
+
   
-  // 次のレッスンボタン
-  const nextButton = document.querySelector('.next-lesson');
-  if (nextButton) {
-    nextButton.addEventListener('click', () => {
-      if (currentLessonIndex < lessons.length - 1) {
-        loadLesson(currentLessonIndex + 1);
-      }
-    });
-  }
+
   
-  // 完了ボタン
-  const completeButton = document.querySelector('.complete-lesson');
-  if (completeButton) {
-    completeButton.addEventListener('click', () => {
-      alert('おめでとうございます！すべてのレッスンを完了しました！');
-    });
-  }
+
   
   // キーボードショートカット
   document.addEventListener('keydown', (e) => {
@@ -402,9 +372,9 @@ function setupEventListeners() {
       e.preventDefault();
       const shellRef = globalShell || window.shell || window.parent?.shell || window.top?.shell;
       if (shellRef && typeof shellRef.loadApp === 'function') {
-        try { shellRef.loadApp('menu'); } catch {}
+        try { shell.loadApp('menu'); } catch {}
       } else {
-        window.location.href = '/';
+        shell.loadApp('menu');
       }
     };
   }
