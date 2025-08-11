@@ -406,52 +406,6 @@ function setupEventListeners() {
   // Update nav button visibility
   if (typeof refreshNavigationState === 'function') refreshNavigationState();
 }
-  
-  if (runButton) runButton.onclick = executeCode;
-
-  // ヒントボタン
-  const hintButton = document.querySelector('.hint-button');
-  if (hintButton) {
-    hintButton.onclick = () => {
-      const hintElement = document.querySelector('.hint');
-      if (hintElement) {
-        hintElement.style.display = hintElement.style.display === 'none' ? 'block' : 'none';
-      }
-    };
-  }
-
-  // ----- Navigation buttons -----
-  const btnBack    = document.getElementById('btn-back');
-  const btnPrev    = document.getElementById('btn-prev');
-  const btnNext    = document.getElementById('btn-next');
-  const btnComplete= document.getElementById('btn-complete');
-
-  if (btnBack) {
-    btnBack.onclick = (e) => {
-      e.preventDefault();
-      shell.loadApp("menu")
-    };
-  }
-
-  if (btnPrev) {
-    btnPrev.onclick = () => {
-      loadLesson(currentLessonIndex - 1);
-    };
-  }
-
-  if (btnNext) {
-    btnNext.onclick = () => {
-    loadLesson(currentLessonIndex + 1);
-    };
-  }
-
-  if (btnComplete) {
-    btnComplete.onclick = () => {
-      alert('おめでとうございます！すべてのレッスンを完了しました！');
-    };
-  }
-
-   
 
 // ナビゲーションボタンの表示状態を更新
 function refreshNavigationState() {
