@@ -295,20 +295,46 @@ export function appInit(shell) {
   
   // Initialize the application
   function init() {
-    initUI();
     renderIndex();
-    setupEventListeners();
   }
   
-  // Render the index characters
+  // Render the index with only characters that have words in the dictionary
   function renderIndex() {
     indexContainer.innerHTML = '';
-    const chars = LANGUAGES[currentLanguage].indexChars;
+    const currentLang = LANGUAGES[currentLanguage];
+    const availableChars = [];
     
-    chars.forEach(char => {
+    // Get all characters that have words in the current language's dictionary
+    if (DICTIONARY[currentLanguage]) {
+      Object.keys(DICTIONARY[currentLanguage]).forEach(char => {
+        if (DICTIONARY[currentLanguage][char] && DICTIONARY[currentLanguage][char].length > 0) {
+          availableChars.push(char);
+        }
+      });
+    }
+    
+    // If no characters found in dictionary, show a message
+    if (availableChars.length === 0) {
+      const noWordsMsg = document.createElement('div');
+      noWordsMsg.className = 'no-words-msg';
+      noWordsMsg.textContent = 'No dictionary data available';
+      indexContainer.appendChild(noWordsMsg);
+      return;
+    }
+    
+    // Sort the characters based on the current language's index order
+    availableChars.sort((a, b) => {
+      const indexA = currentLang.indexChars.indexOf(a);
+      const indexB = currentLang.indexChars.indexOf(b);
+      return indexA - indexB;
+    });
+    
+    // Create index elements for each character with words
+    availableChars.forEach(char => {
       const charElement = document.createElement('div');
       charElement.className = 'index-char';
       charElement.textContent = char;
+      charElement.title = `${DICTIONARY[currentLanguage][char].length} words`;
       charElement.addEventListener('click', () => showWordsForChar(char));
       indexContainer.appendChild(charElement);
     });
@@ -344,26 +370,9 @@ export function appInit(shell) {
     });
   }
   
-  // Get sample words (replace with API call in production)
+  // Get words from the external dictionary
   function getSampleWords(char) {
-    const samples = {
-      en: {
-        'A': ['apple', 'animal', 'ant', 'art', 'ask'],
-        'B': ['ball', 'book', 'bird', 'big', 'blue'],
-        'C': ['cat', 'car', 'call', 'come', 'can']
-      },
-      ja: {
-        'あ': ['あいさつ', 'あおい', 'あかい', 'あさ', 'あした'],
-        'い': ['いぬ', 'いちご', 'いもうと', 'いえ', 'いく'],
-        'か': ['かばん', 'かさ', 'かみ', 'かわ', 'かぞく']
-      },
-      ko: {
-        '가': ['가다', '가방', '가족', '가수', '가격'],
-        '나': ['나무', '나비', '나라', '나이', '나중'],
-        '다': ['다리', '다음', '다양하다', '다이어리', '다리미']
-      }
-    };
-    return samples[currentLanguage]?.[char] || [];
+    return DICTIONARY[currentLanguage]?.[char] || [];
   }
   
   // Show word details
