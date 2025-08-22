@@ -398,6 +398,10 @@ export function appInit(shell) {
     }
     
     // If no characters found in dictionary, show a message
+    // Get the available characters for the current language
+    availableChars = LANGUAGES[currentLanguage].indexChars || [];
+
+    // Check if there are any characters available
     if (availableChars.length === 0) {
       const noWordsMsg = document.createElement('div');
       noWordsMsg.className = 'no-words-msg';
@@ -405,15 +409,15 @@ export function appInit(shell) {
       indexContainer.appendChild(noWordsMsg);
       return;
     }
-    
-    // Create buttons for each character that has words
-    availableChars.sort().forEach(char => {
-      const charButton = document.createElement('button');
-      charButton.className = 'index-char';
-      charButton.textContent = char;
-      charButton.addEventListener('click', () => navigateTo('wordList', { char }));
-      indexContainer.appendChild(charButton);
-    });
+
+// Now we can use availableChars here without redeclaring it
+availableChars.sort().forEach(char => {
+  const charButton = document.createElement('button');
+  charButton.className = 'index-char';
+  charButton.textContent = char;
+  charButton.addEventListener('click', () => navigateTo('wordList', { char }));
+  indexContainer.appendChild(charButton);
+});
   }
 
 // Render word list for a specific character
