@@ -57,14 +57,15 @@ export function appInit(shell) {
     title.className = 'app-title';
     title.textContent = 'Skrift';
     
-    // Language selector
+    // Language display (English only)
     languageSelect.className = 'language-select';
-    ['en', 'ja', 'ko'].forEach(lang => {
-      const option = document.createElement('option');
-      option.value = lang;
-      option.textContent = LANGUAGES[lang].name;
-      languageSelect.appendChild(option);
-    });
+    languageSelect.style.display = 'none'; // Hide the language selector
+    
+    // Add English as the only language
+    const option = document.createElement('option');
+    option.value = 'en';
+    option.textContent = LANGUAGE.name;
+    languageSelect.appendChild(option);
     
     // Assemble header
     header.appendChild(backButton);
