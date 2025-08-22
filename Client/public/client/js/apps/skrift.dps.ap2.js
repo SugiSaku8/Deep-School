@@ -1,8 +1,7 @@
-
 export const appMeta = {
-      name: "SKRIFT",
+  name: "SKRIFT",
   title: "Skrift",
-  icon: "re/ico/dictionary.png",
+  icon: "re/ico/dictionary.png"
 };
 
 export function appInit(shell) {
@@ -12,452 +11,421 @@ export function appInit(shell) {
   
   // Language configuration
   const LANGUAGES = {
-    en: { name: 'English', code: 'en', placeholder: 'Enter a word...' },
-    ja: { name: '日本語', code: 'ja', placeholder: '単語を入力...' },
-    ko: { name: '한국어', code: 'ko', placeholder: '단어를 입력하세요...' }
+    en: { 
+      name: 'English', 
+      code: 'en',
+      indexChars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+    },
+    ja: { 
+      name: '日本語',
+      code: 'ja',
+      indexChars: 'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん'.split('')
+    },
+    ko: { 
+      name: '한국어',
+      code: 'ko',
+      indexChars: '가나다라마바사아자차카타파하'.split('')
+    }
   };
   
+  // Cache for word lists and definitions
+  const wordCache = {};
+  
   if (!root) {
-    console.error("SkriftApp: #app-rootが見つかりません");
+    console.error("SkriftApp: #app-root not found");
     return;
   }
 
-  // 初期表示
-  root.innerHTML = `
-    <div class="splash-container" id="splash">
-      <div class="card">
-        <div class="title_t chalk-text" data-lang-key="menu_skrift">Skrift</div>
-        <div class="version">v1.0.0</div>
-        <div class="input-group">
-          <select id="languageSelect" class="language-select">
-            <option value="en">English</option>
-            <option value="ja">日本語</option>
-            <option value="ko">한국어</option>
-          </select>
-          <input type="text" id="searchInput" placeholder="Enter a word..." data-lang-key="search_placeholder" />
-          <button id="searchBtn" class="button-chalk" data-lang-key="search">→</button>
-        </div>
-      </div>
-    </div>
-    <div id="dictionary-container" class="dictionary-container" style="display:none;">
-      <div class="content-container">
-        <div class="word-list">
-          <h2 class="chalk-text">検索履歴</h2>
-          <ul id="searchHistory"></ul>
-        </div>
-        <div class="word-details">
-          <div id="loading" style="display: none;" class="chalk-text">読み込み中...</div>
-          <h2 id="selectedWord" class="chalk-text">単語を検索してください</h2>
-          <div id="wordDefinition" class="definition">
-            <p class="chalk-text">単語を検索すると、ここに意味が表示されます。</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <style>
-      /* Base styles */
-      body {
-        font-family: 'Helvetica Neue', Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #1a1a1a;
-        color: #e0e0e0;
-        min-height: 100vh;
-      }
-
-      /* Splash screen */
-      .splash-container {
-        min-height: 100vh;
+  // DOM Elements
+  const indexContainer = document.createElement('div');
+  const wordListContainer = document.createElement('div');
+  const wordDetailsContainer = document.createElement('div');
+  const backButton = document.createElement('button');
+  const languageSelect = document.createElement('select');
+  
+  // Initialize the UI
+  function initUI() {
+    // Create header
+    const header = document.createElement('div');
+    header.className = 'app-header';
+    
+    // Back button
+    backButton.className = 'back-button';
+    backButton.style.display = 'none';
+    backButton.innerHTML = '<i class="fas fa-arrow-left"></i>';
+    
+    // Title
+    const title = document.createElement('div');
+    title.className = 'app-title';
+    title.textContent = 'Skrift';
+    
+    // Language selector
+    languageSelect.className = 'language-select';
+    ['en', 'ja', 'ko'].forEach(lang => {
+      const option = document.createElement('option');
+      option.value = lang;
+      option.textContent = LANGUAGES[lang].name;
+      languageSelect.appendChild(option);
+    });
+    
+    // Assemble header
+    header.appendChild(backButton);
+    header.appendChild(title);
+    header.appendChild(languageSelect);
+    
+    // Create dictionary container
+    const dictContainer = document.createElement('div');
+    dictContainer.className = 'dictionary-container';
+    
+    // Create index section
+    const indexSection = document.createElement('div');
+    indexSection.className = 'index-section';
+    
+    const indexTitle = document.createElement('div');
+    indexTitle.className = 'index-title';
+    indexTitle.textContent = 'Index';
+    
+    indexContainer.className = 'index-characters';
+    
+    indexSection.appendChild(indexTitle);
+    indexSection.appendChild(indexContainer);
+    
+    // Create word list section
+    const wordListSection = document.createElement('div');
+    wordListSection.className = 'word-list-section';
+    
+    wordListContainer.className = 'word-list';
+    const initialMessage = document.createElement('div');
+    initialMessage.className = 'initial-message';
+    initialMessage.innerHTML = '<p>Select a character from the index to view words</p>';
+    
+    wordListContainer.appendChild(initialMessage);
+    wordListSection.appendChild(wordListContainer);
+    
+    // Create word details section
+    wordDetailsContainer.className = 'word-details';
+    wordDetailsContainer.style.display = 'none';
+    
+    const wordHeader = document.createElement('div');
+    wordHeader.id = 'wordHeader';
+    wordHeader.className = 'word-header';
+    
+    const wordDefinition = document.createElement('div');
+    wordDefinition.id = 'wordDefinition';
+    wordDefinition.className = 'word-definition';
+    
+    wordDetailsContainer.appendChild(wordHeader);
+    wordDetailsContainer.appendChild(wordDefinition);
+    
+    // Assemble dictionary container
+    dictContainer.appendChild(indexSection);
+    dictContainer.appendChild(wordListSection);
+    dictContainer.appendChild(wordDetailsContainer);
+    
+    // Add everything to root
+    root.innerHTML = '';
+    root.appendChild(header);
+    root.appendChild(dictContainer);
+    
+    // Add styles
+    addStyles();
+  }
+  
+  // Add styles to the document
+  function addStyles() {
+    const style = document.createElement('style');
+    style.textContent = `
+      .app-header {
         display: flex;
-        justify-content: center;
         align-items: center;
-        background-color: #1a1a1a;
-        padding: 20px;
+        padding: 10px 20px;
+        background-color: #2c2c2c;
+        color: white;
+        border-bottom: 1px solid #444;
       }
-
-      .card {
-        background: #2d2d2d;
-        padding: 2rem;
-        border-radius: 10px;
-        text-align: center;
-        max-width: 600px;
-        width: 100%;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      
+      .back-button {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        margin-right: 15px;
       }
-
-      .title_t {
-        font-size: 2.5rem;
-        margin-bottom: 0.5rem;
-        color: #fff;
+      
+      .app-title {
+        font-size: 20px;
+        font-weight: bold;
+        flex-grow: 1;
       }
-
-      .version {
-        color: #888;
-        margin-bottom: 1.5rem;
-        font-size: 0.9rem;
+      
+      .language-select {
+        padding: 5px 10px;
+        border-radius: 4px;
+        background-color: #3a3a3a;
+        color: white;
+        border: 1px solid #555;
       }
-
-      .input-group {
-        display: flex;
-        gap: 10px;
-        margin-top: 1.5rem;
-      }
-
-      /* Dictionary container */
+      
       .dictionary-container {
         display: flex;
-        flex-direction: column;
-        height: 100vh;
-        background-color: #1a1a1a;
+        height: calc(100vh - 50px);
+        background-color: #2c2c2c;
         color: #e0e0e0;
-      }
-
-      .content-container {
-        display: flex;
-        flex: 1;
-        overflow: hidden;
-      }
-
-      /* Language select */
-      .language-select {
-        padding: 0.8rem 1rem;
-        border: 1px solid #444;
-        border-radius: 20px;
-        font-size: 1rem;
-        background-color: #2d2d2d;
-        color: #e0e0e0;
-        cursor: pointer;
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23e0e0e0%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-        background-repeat: no-repeat;
-        background-position: right 0.7rem top 50%;
-        background-size: 0.65rem auto;
-        padding-right: 2.5rem;
-        min-width: 120px;
-      }
-
-      /* Search input */
-      #searchInput {
-        flex: 1;
-        padding: 0.8rem 1rem;
-        border: 1px solid #444;
-        border-radius: 20px;
-        font-size: 1rem;
-        background-color: #2d2d2d;
-        color: #e0e0e0;
-        outline: none;
-        transition: border-color 0.3s;
-      }
-
-      #searchInput:focus {
-        border-color: #4d90fe;
-      }
-
-      /* Buttons */
-      .button-chalk {
-        background-color: #2d2d2d;
-        color: #e0e0e0;
-        border: 1px solid #444;
-        border-radius: 20px;
-        padding: 0.8rem 1.5rem;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: all 0.3s;
-        min-width: 60px;
-        text-align: center;
-      }
-
-      .button-chalk:hover {
-        background-color: #3d3d3d;
-        border-color: #666;
       }
       
-      .content-container {
-        display: flex;
-        flex: 1;
-        overflow: hidden;
-      }
-      
-      /* Word list */
-      .word-list {
-        width: 300px;
-        border-right: 1px solid #333;
+      .index-section {
+        width: 80px;
+        background-color: #1e1e1e;
+        border-right: 1px solid #444;
         overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        background-color: #222;
       }
       
-      .word-list h2 {
-        padding: 1rem;
-        margin: 0;
-        background-color: #2a2a2a;
-        border-bottom: 1px solid #333;
-        font-size: 1.1rem;
-        position: sticky;
-        top: 0;
-        z-index: 1;
-        color: #fff;
+      .index-title {
+        padding: 10px;
+        font-weight: bold;
+        text-align: center;
+        border-bottom: 1px solid #444;
+      }
+      
+      .index-characters {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 0;
+        gap: 8px;
+      }
+      
+      .index-char {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+      
+      .index-char:hover, .index-char.active {
+        background-color: #444;
+      }
+      
+      .word-list-section {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+      }
+      
+      .word-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 10px;
+      }
+      
+      .word-item {
+        padding: 12px;
+        background-color: #3a3a3a;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+      
+      .word-item:hover {
+        background-color: #4a4a4a;
+      }
+      
+      .initial-message {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 40px 20px;
+        color: #888;
       }
       
       .word-details {
-        flex: 1;
-        padding: 1.5rem;
+        width: 400px;
+        padding: 20px;
+        background-color: #2c2c2c;
+        border-left: 1px solid #444;
         overflow-y: auto;
-        background-color: #1a1a1a;
       }
       
-      ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-      }
-      
-      li {
-        padding: 1rem 1.5rem;
-        border-bottom: 1px solid #333;
-        cursor: pointer;
-        transition: background-color 0.2s;
-        color: #e0e0e0;
-      }
-      
-      li:hover {
-        background-color: #2d2d2d;
-      }
-      
-      .definition {
-        padding: 1rem;
-        line-height: 1.6;
-        color: #e0e0e0;
-      }
-
       .word-header {
-        margin-bottom: 1.5rem;
-        padding-bottom: 1rem;
-        border-bottom: 1px solid #333;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #444;
       }
-
-      .word-header h3 {
-        margin: 0 0 0.5rem 0;
-        font-size: 1.8rem;
-        color: #fff;
+      
+      .word-header h2 {
+        margin: 0 0 5px 0;
+        font-size: 24px;
       }
-
+      
       .phonetic {
         color: #888;
         font-style: italic;
-        margin: 0.5rem 0;
-        font-size: 1.1rem;
+        margin: 0;
       }
-
+      
       .meaning {
-        margin-bottom: 2rem;
+        margin-bottom: 20px;
       }
-
-      .meaning h4 {
-        color: #4d90fe;
-        margin: 1.5rem 0 1rem 0;
-        font-size: 1.2rem;
-        text-transform: capitalize;
+      
+      .meaning h3 {
+        margin: 0 0 10px 0;
+        font-size: 18px;
+        color: #4caf50;
       }
-
-      .meaning ol {
-        padding-left: 1.5rem;
+      
+      .definition {
+        margin: 5px 0;
+        line-height: 1.5;
       }
-
-      .meaning li {
-        margin-bottom: 1rem;
-        padding: 0;
-        border: none;
-      }
-
+      
       .example {
         color: #888;
         font-style: italic;
-        margin: 0.5rem 0 0 1rem;
-        padding-left: 1rem;
-        border-left: 2px solid #444;
+        margin: 5px 0 5px 15px;
+        padding-left: 10px;
+        border-left: 2px solid #4caf50;
       }
-
-      .error {
-        color: #ff6b6b;
-        font-weight: 500;
-        margin-bottom: 1rem;
-      }
-      
-      /* Responsive styles */
-      @media (max-width: 768px) {
-        .content-container {
-          flex-direction: column;
-        }
-        
-        .word-list, .word-details {
-          width: 100%;
-        }
-        
-        .word-list {
-          height: 200px;
-          border-right: none;
-          border-bottom: 1px solid #333;
-        }
-
-        .card {
-          padding: 1.5rem;
-        }
-
-        .input-group {
-          flex-direction: column;
-          gap: 10px;
-        }
-
-        .language-select, #searchInput, .button-chalk {
-          width: 100%;
-          margin: 0;
-        }
-      }
-    </style>
-  `;
-
-  // DOM要素の取得
-  const searchInput = document.getElementById('searchInput');
-  const searchBtn = document.getElementById('searchBtn');
-  const languageSelect = document.getElementById('languageSelect');
-  const searchHistory = document.getElementById('searchHistory');
-  const selectedWordElement = document.getElementById('selectedWord');
-  const wordDefinitionElement = document.getElementById('wordDefinition');
-  const loadingElement = document.getElementById('loading');
-
-  // 検索履歴をローカルストレージから読み込む
-  let searchHistoryList = JSON.parse(localStorage.getItem('dictionaryHistory')) || [];
-  
-  // 言語変更イベント
-  languageSelect.addEventListener('change', (e) => {
-    currentLanguage = e.target.value;
-    searchInput.placeholder = LANGUAGES[currentLanguage].placeholder;
-    updateUIForLanguage();
-  });
-  
-  // 言語に基づいてUIを更新
-  function updateUIForLanguage() {
-    const lang = LANGUAGES[currentLanguage];
-    searchInput.placeholder = lang.placeholder;
-    searchBtn.textContent = currentLanguage === 'ja' ? '検索' : 
-                          currentLanguage === 'ko' ? '검색' : 'Search';
-    
-    // Update UI text based on language
-    const uiTexts = {
-      searchHistory: {
-        en: 'Search History',
-        ja: '検索履歴',
-        ko: '검색 기록'
-      },
-      searchPlaceholder: {
-        en: 'Search for a word...',
-        ja: '単語を検索...',
-        ko: '단어 검색...'
-      },
-      noWordSelected: {
-        en: 'Search for a word to see its definition',
-        ja: '単語を検索すると、ここに意味が表示されます',
-        ko: '단어를 검색하면 여기에 의미가 표시됩니다'
-      }
-    };
-    
-    document.querySelector('.word-list h2').textContent = uiTexts.searchHistory[currentLanguage];
-    document.querySelector('#selectedWord').textContent = uiTexts.searchPlaceholder[currentLanguage];
+    `;
+    document.head.appendChild(style);
   }
-
-  // 検索履歴を表示する関数
-  function displaySearchHistory() {
-    searchHistory.innerHTML = '';
-    searchHistoryList.forEach(word => {
-      const li = document.createElement('li');
-      li.textContent = word;
-      li.addEventListener('click', () => searchWord(word));
-      searchHistory.appendChild(li);
+  
+  // Initialize the application
+  function init() {
+    initUI();
+    renderIndex();
+    setupEventListeners();
+  }
+  
+  // Render the index characters
+  function renderIndex() {
+    indexContainer.innerHTML = '';
+    const chars = LANGUAGES[currentLanguage].indexChars;
+    
+    chars.forEach(char => {
+      const charElement = document.createElement('div');
+      charElement.className = 'index-char';
+      charElement.textContent = char;
+      charElement.addEventListener('click', () => showWordsForChar(char));
+      indexContainer.appendChild(charElement);
     });
   }
-
-  // 単語を検索する関数
-  async function searchWord(word) {
-    if (!word) return;
-
-    loadingElement.style.display = 'block';
-    wordDefinitionElement.innerHTML = '';
+  
+  // Show words for the selected character
+  function showWordsForChar(char) {
+    // In a real app, fetch words from an API
+    const words = getSampleWords(char);
     
-    // Update loading message based on language
-    const loadingMessages = {
-      en: `Searching: ${word}`,
-      ja: `検索中: ${word}`,
-      ko: `검색 중: ${word}`
+    // Update active character
+    document.querySelectorAll('.index-char').forEach(el => {
+      el.classList.toggle('active', el.textContent === char);
+    });
+    
+    // Display words
+    wordListContainer.innerHTML = '';
+    
+    if (words.length === 0) {
+      const message = document.createElement('div');
+      message.className = 'initial-message';
+      message.textContent = `No words found starting with "${char}"`;
+      wordListContainer.appendChild(message);
+      return;
+    }
+    
+    words.forEach(word => {
+      const wordElement = document.createElement('div');
+      wordElement.className = 'word-item';
+      wordElement.textContent = word;
+      wordElement.addEventListener('click', () => showWordDetails(word));
+      wordListContainer.appendChild(wordElement);
+    });
+  }
+  
+  // Get sample words (replace with API call in production)
+  function getSampleWords(char) {
+    const samples = {
+      en: {
+        'A': ['apple', 'animal', 'ant', 'art', 'ask'],
+        'B': ['ball', 'book', 'bird', 'big', 'blue'],
+        'C': ['cat', 'car', 'call', 'come', 'can']
+      },
+      ja: {
+        'あ': ['あいさつ', 'あおい', 'あかい', 'あさ', 'あした'],
+        'い': ['いぬ', 'いちご', 'いもうと', 'いえ', 'いく'],
+        'か': ['かばん', 'かさ', 'かみ', 'かわ', 'かぞく']
+      },
+      ko: {
+        '가': ['가다', '가방', '가족', '가수', '가격'],
+        '나': ['나무', '나비', '나라', '나이', '나중'],
+        '다': ['다리', '다음', '다양하다', '다이어리', '다리미']
+      }
     };
-    selectedWordElement.textContent = loadingMessages[currentLanguage] || `Searching: ${word}`;
-
+    return samples[currentLanguage]?.[char] || [];
+  }
+  
+  // Show word details
+  async function showWordDetails(word) {
+    // Show loading state
+    wordDetailsContainer.style.display = 'block';
+    wordHeader.innerHTML = `<h2>${word}</h2><p>Loading...</p>`;
+    wordDefinition.textContent = '';
+    
+    // Show back button
+    backButton.style.display = 'block';
+    
     try {
+      // Check cache first
+      const cacheKey = `${currentLanguage}:${word}`;
+      
+      if (wordCache[cacheKey]) {
+        displayWordDetails(word, wordCache[cacheKey]);
+        return;
+      }
+      
+      // Fetch from API
       const response = await fetch(`${API_BASE_URL}/${currentLanguage}/${encodeURIComponent(word)}`);
       
       if (!response.ok) {
-        const errorMessages = {
-          en: 'Word not found',
-          ja: '単語が見つかりませんでした',
-          ko: '단어를 찾을 수 없습니다'
-        };
-        throw new Error(errorMessages[currentLanguage] || 'Word not found');
+        throw new Error('Word not found');
       }
       
       const data = await response.json();
+      
+      // Cache the result
+      wordCache[cacheKey] = data[0];
+      
+      // Display the word details
       displayWordDetails(word, data[0]);
-      
-      // 検索履歴に追加
-      if (!searchHistoryList.includes(word.toLowerCase())) {
-        searchHistoryList.unshift(word.toLowerCase());
-        // 最新10件だけ保持
-        searchHistoryList = searchHistoryList.slice(0, 10);
-        localStorage.setItem('dictionaryHistory', JSON.stringify(searchHistoryList));
-        displaySearchHistory();
-      }
-      
     } catch (error) {
-      const errorMessages = {
-        en: 'Please enter a valid word',
-        ja: '正しい単語を入力してください',
-        ko: '올바른 단어를 입력하세요'
-      };
-      
-      wordDefinitionElement.innerHTML = `
-        <p class="error">${error.message}</p>
-        <p>${errorMessages[currentLanguage] || 'Please try a different word'}</p>
-      `;
-    } finally {
-      loadingElement.style.display = 'none';
+      wordDefinition.textContent = 'Word not found. Please try another word.';
+      console.error('Error fetching word details:', error);
     }
   }
-
-  // 単語の詳細を表示する関数
+  
+  // Display word details
   function displayWordDetails(word, data) {
-    selectedWordElement.textContent = word;
-    
-    let html = `
-      <div class="word-header">
-        <h3>${word}</h3>
-        ${data.phonetic ? `<p class="phonetic">${data.phonetic}</p>` : ''}
-      </div>
+    wordHeader.innerHTML = `
+      <h2>${word}</h2>
+      ${data.phonetic ? `<p class="phonetic">${data.phonetic}</p>` : ''}
     `;
-
+    
+    let html = '';
+    
     data.meanings.forEach(meaning => {
       html += `
         <div class="meaning">
-          <h4>${meaning.partOfSpeech}</h4>
+          <h3>${meaning.partOfSpeech}</h3>
           <ol>
       `;
       
       meaning.definitions.slice(0, 3).forEach(def => {
         html += `
-          <li>
+          <li class="definition">
             <p>${def.definition}</p>
-            ${def.example ? `<p class="example">例: ${def.example}</p>` : ''}
+            ${def.example ? `<p class="example">${def.example}</p>` : ''}
           </li>
         `;
       });
@@ -467,34 +435,28 @@ export function appInit(shell) {
         </div>
       `;
     });
-
-    wordDefinitionElement.innerHTML = html;
+    
+    wordDefinition.innerHTML = html;
   }
-
-  // イベントリスナーの設定
-  searchBtn.addEventListener('click', () => searchWord(searchInput.value.trim()));
-  searchInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      searchWord(searchInput.value.trim());
-    }
-  });
-
-  // 初期化
-  updateUIForLanguage();
-  displaySearchHistory();
-
-  // スプラッシュ画面を非表示にし、メインコンテンツを表示
-  document.getElementById('searchInput').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      document.getElementById('splash').style.display = 'none';
-      document.getElementById('dictionary-container').style.display = 'block';
-      searchWord(searchInput.value.trim());
-    }
-  });
-
-  document.getElementById('searchBtn').addEventListener('click', () => {
-    document.getElementById('splash').style.display = 'none';
-    document.getElementById('dictionary-container').style.display = 'block';
-    searchWord(searchInput.value.trim());
-  });
+  
+  // Set up event listeners
+  function setupEventListeners() {
+    // Language change
+    languageSelect.addEventListener('change', (e) => {
+      currentLanguage = e.target.value;
+      renderIndex();
+      wordListContainer.innerHTML = '';
+      wordDetailsContainer.style.display = 'none';
+      backButton.style.display = 'none';
+    });
+    
+    // Back button
+    backButton.addEventListener('click', () => {
+      wordDetailsContainer.style.display = 'none';
+      backButton.style.display = 'none';
+    });
+  }
+  
+  // Start the application
+  init();
 }
