@@ -19,24 +19,15 @@ export function appInit(shell) {
   let currentLanguage = 'en'; // Default to English
   const API_BASE_URL = "https://api.dictionaryapi.dev/api/v2/entries";
   
-  // Language configuration
-  const LANGUAGES = {
-    en: { 
-      name: 'English', 
-      code: 'en',
-      indexChars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
-    },
-    ja: { 
-      name: '日本語',
-      code: 'ja',
-      indexChars: 'あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん'.split('')
-    },
-    ko: { 
-      name: '한국어',
-      code: 'ko',
-      indexChars: '가나다라마바사아자차카타파하'.split('')
-    }
+  // English language configuration
+  const LANGUAGE = {
+    name: 'English', 
+    code: 'en',
+    indexChars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
   };
+  
+  // Set current language to English
+  currentLanguage = 'en';
   
   if (!root) {
     console.error("SkriftApp: #app-root not found");
@@ -397,9 +388,8 @@ export function appInit(shell) {
       });
     }
     
-    // If no characters found in dictionary, show a message
-    // Get the available characters for the current language
-    availableChars = LANGUAGES[currentLanguage].indexChars || [];
+    // Get the available characters for English
+    availableChars = LANGUAGE.indexChars || [];
 
     // Check if there are any characters available
     if (availableChars.length === 0) {
