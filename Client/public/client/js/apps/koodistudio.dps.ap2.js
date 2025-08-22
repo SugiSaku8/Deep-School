@@ -29,7 +29,7 @@ const lessons = [
 console.log(message); // 変数の値を表示</code></pre>
     `,
     code: '// 変数を使ってみよう\nlet greeting = "こんにちは";\nconsole.log(greeting);',
-    hint: '変数 greeting にメッセージを代入して、コンソールに表示させてみましょう。'
+    hint: '変数 greeting にメッセージを代入して、出力に表示させてみましょう。'
   },
   {
     id: 'functions',
