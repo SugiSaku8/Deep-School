@@ -6,7 +6,6 @@ export const appMeta = {
 };
 
 export function appInit(shell) {
-  const historyManager = new ChatHistoryManager("dictionary_history");
   const root = document.getElementById("app-root");
   let currentLanguage = 'en'; // Default to English
   const API_BASE_URL = "https://api.dictionaryapi.dev/api/v2/entries";
