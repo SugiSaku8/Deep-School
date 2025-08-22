@@ -41,7 +41,8 @@ class VersionManager {
       'workmaker': 'workMaker',
       'toaster': 'toasterMachine',
       'koodistudio': 'koodistudio',
-      'moralfruit': 'moralfruit'
+      'moralfruit': 'moralfruit',
+      'skrift': 'skrift'
     };
 
     const configKey = componentMap[component.toLowerCase()];
@@ -83,6 +84,7 @@ class VersionManager {
           case 'toasterMachine': icon = '🍞'; label = 'Toaster-Machine'; break;
           case 'koodistudio': icon = '🧑‍💻'; label = 'Koodi Studio'; break;
           case 'moralfruit': icon = '🍎'; label = 'Moral Fruit'; break;
+          case 'skrift': icon = '📚'; label = 'Skrift'; break;
         }
         output += `${icon} ${label}: v${value.version} (${value.status})\n`;
         if (value.cycle !== undefined) output += `   Cycle: ${value.cycle}, Release: ${value.release}, Revision: ${value.revision}\n`;

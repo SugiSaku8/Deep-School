@@ -76,6 +76,12 @@ export function appInit(shell) {
           <img src="re/ico/Koodi-Studio-icon.png" alt="KoodiStudioアイコン" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-koodistudio" style="cursor: pointer" data-lang-key="menu_koodistudio">KoodiStudio</div>
         </div>
+
+         <div class="menu-item">
+          <img src="re/ico/feed.svg" alt="Skriftアイコン" class="menu-icon" />
+          <div class="menu-label chalk-text" id="menu-feedback" style="cursor: pointer" data-lang-key="menu_feedback">Skrift</div>
+        </div>
+
         <div class="menu-item">
           <img src="re/ico/Setting.png" alt="設定アイコン" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-setting" style="cursor: pointer" data-lang-key="menu_setting">設定</div>
@@ -85,6 +91,8 @@ export function appInit(shell) {
           <img src="re/ico/feed.svg" alt="フィードバックアイコン" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-feedback" style="cursor: pointer" data-lang-key="menu_feedback">フィードバック</div>
         </div>
+
+        
       </div>
     </div>
     
@@ -519,6 +527,10 @@ export function appInit(shell) {
     'menu-koodistudio': () => {
       shell.log({from: 'dp.app.menu.out', message: 'MenuApp: KoodiStudioを開く', level: 'info'});
       shell.loadApp('koodistudio');
+    },
+    'menu-skrift': () => {
+      shell.log({from: 'dp.app.menu.out', message: 'SkriftApp: KoodiStudioを開く', level: 'info'});
+      shell.loadApp('skrift');
     },
   };
 
