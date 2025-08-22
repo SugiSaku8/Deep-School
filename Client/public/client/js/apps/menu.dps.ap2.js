@@ -529,7 +529,7 @@ export function appInit(shell) {
       shell.loadApp('koodistudio');
     },
     'menu-skrift': () => {
-      shell.log({from: 'dp.app.menu.out', message: 'SkriftApp: KoodiStudioを開く', level: 'info'});
+      shell.log({from: 'dp.app.menu.out', message: 'SkriftApp: Skriftを開く', level: 'info'});
       shell.loadApp('skrift');
     },
   };
