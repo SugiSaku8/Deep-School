@@ -312,6 +312,9 @@ export function appInit(shell) {
       navigateTo('index');
     });
     
+    // Initialize UI
+    initUI();
+    
     // Initial render
     navigateTo('index');
   }
@@ -412,25 +415,6 @@ export function appInit(shell) {
       indexContainer.appendChild(charButton);
     });
   }
-  
-  // If no characters found in dictionary, show a message
-  if (availableChars.length === 0) {
-    const noWordsMsg = document.createElement('div');
-    noWordsMsg.className = 'no-words-msg';
-    noWordsMsg.textContent = 'No dictionary data available for this language';
-    indexContainer.appendChild(noWordsMsg);
-    return;
-  }
-  
-  // Create buttons for each character that has words
-  availableChars.sort().forEach(char => {
-    const charButton = document.createElement('button');
-    charButton.className = 'index-char';
-    charButton.textContent = char;
-    charButton.addEventListener('click', () => navigateTo('wordList', { char }));
-    indexContainer.appendChild(charButton);
-  });
-}
 
 // Render word list for a specific character
 function renderWordList(char) {
@@ -480,4 +464,41 @@ function renderWordDetails(word) {
   
   // Fetch from API if not in cache
   fetchWordDetails(word);
+}
+
+// Fetch word details from API
+async function fetchWordDetails(word) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/${currentLanguage}/${encodeURIComponent(word)}`);
+    if (!response.ok) {
+      throw new Error('Word not found');
+    }
+    const data = await response.json();
+    wordCache[word] = data; // Cache the result
+    updateWordDetails(word, data);
+  } catch (error) {
+    console.error('Error fetching word details:', error);
+    wordDetailsContainer.innerHTML = `
+      <div class="error">
+        <h2>${word}</h2>
+        <p>Could not load definition: ${error.message}</p>
+      </div>
+    `;
+  }
+}
+
+// Update word details in the UI
+function updateWordDetails(word, data) {
+  // This is a simplified version - you can expand this to show more details
+  wordDetailsContainer.innerHTML = `
+    <h2>${word}</h2>
+    <div class="word-definition">
+      <p>Definition for ${word} will be displayed here.</p>
+      <pre>${JSON.stringify(data, null, 2)}</pre>
+    </div>
+  `;
+}
+
+  // Start the application
+  init();
 }
