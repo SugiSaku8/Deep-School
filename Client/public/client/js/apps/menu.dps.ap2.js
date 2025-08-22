@@ -78,8 +78,8 @@ export function appInit(shell) {
         </div>
 
          <div class="menu-item">
-          <img src="re/ico/feed.svg" alt="Skriftアイコン" class="menu-icon" />
-          <div class="menu-label chalk-text" id="menu-feedback" style="cursor: pointer" data-lang-key="menu_feedback">Skrift</div>
+          <img src="re/ico/skrift.png" alt="Skriftアイコン" class="menu-icon" />
+          <div class="menu-label chalk-text" id="menu-skrift" style="cursor: pointer" data-lang-key="menu_skrift">Skrift</div>
         </div>
 
         <div class="menu-item">
