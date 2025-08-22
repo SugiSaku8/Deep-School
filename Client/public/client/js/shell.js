@@ -55,7 +55,6 @@ const appModules = {
   moralfruit: moralfruitApp,
   koodistudio: koodistudioApp,
   skrift: skriftApp
-
 };
 
 // Deep-School ログシステム
