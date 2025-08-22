@@ -4,6 +4,16 @@ export const appMeta = {
   icon: "re/ico/dictionary.png"
 };
 
+// Import the dictionary (will be replaced with actual import in the final build)
+let DICTIONARY = window.DICTIONARY || {};
+
+// Track navigation history
+const navigationHistory = [];
+let currentView = 'index';
+
+// Cache for word definitions
+const wordCache = {};
+
 export function appInit(shell) {
   const root = document.getElementById("app-root");
   let currentLanguage = 'en'; // Default to English
@@ -27,9 +37,6 @@ export function appInit(shell) {
       indexChars: '가나다라마바사아자차카타파하'.split('')
     }
   };
-  
-  // Cache for word lists and definitions
-  const wordCache = {};
   
   if (!root) {
     console.error("SkriftApp: #app-root not found");
@@ -295,7 +302,80 @@ export function appInit(shell) {
   
   // Initialize the application
   function init() {
-    renderIndex();
+    // Set up back button event listener
+    backButton.addEventListener('click', handleBack);
+    
+    // Set up language selector change handler
+    languageSelect.addEventListener('change', (e) => {
+      currentLanguage = e.target.value;
+      navigationHistory.length = 0; // Clear navigation history on language change
+      navigateTo('index');
+    });
+    
+    // Initial render
+    navigateTo('index');
+  }
+  
+  // Navigation handler
+  function navigateTo(view, data = {}) {
+    // Save current view to history if it's changing
+    if (currentView !== view) {
+      navigationHistory.push({ view: currentView, data: { ...data } });
+    }
+    
+    currentView = view;
+    
+    // Update UI based on view
+    switch(view) {
+      case 'index':
+        renderIndex();
+        backButton.style.display = 'none';
+        wordListContainer.style.display = 'none';
+        wordDetailsContainer.style.display = 'none';
+        indexContainer.style.display = 'grid';
+        break;
+        
+      case 'wordList':
+        if (!data.char) {
+          console.error('No character provided for word list');
+          return;
+        }
+        renderWordList(data.char);
+        backButton.style.display = 'block';
+        wordListContainer.style.display = 'block';
+        wordDetailsContainer.style.display = 'none';
+        indexContainer.style.display = 'none';
+        break;
+        
+      case 'wordDetails':
+        if (!data.word) {
+          console.error('No word provided for details');
+          return;
+        }
+        renderWordDetails(data.word);
+        backButton.style.display = 'block';
+        wordListContainer.style.display = 'none';
+        wordDetailsContainer.style.display = 'block';
+        indexContainer.style.display = 'none';
+        break;
+        
+      default:
+        console.error('Unknown view:', view);
+    }
+  }
+  
+  // Handle back button click
+  function handleBack() {
+    if (navigationHistory.length > 0) {
+      const previous = navigationHistory.pop();
+      if (previous) {
+        currentView = ''; // Reset current view to force update
+        navigateTo(previous.view, previous.data);
+        return;
+      }
+    }
+    // If no history or invalid history entry, go to index
+    navigateTo('index');
   }
   
   // Render the index with only characters that have words in the dictionary
@@ -305,9 +385,10 @@ export function appInit(shell) {
     const availableChars = [];
     
     // Get all characters that have words in the current language's dictionary
-    if (DICTIONARY[currentLanguage]) {
+    if (DICTIONARY && DICTIONARY[currentLanguage]) {
       Object.keys(DICTIONARY[currentLanguage]).forEach(char => {
-        if (DICTIONARY[currentLanguage][char] && DICTIONARY[currentLanguage][char].length > 0) {
+        const words = DICTIONARY[currentLanguage][char];
+        if (words && words.length > 0) {
           availableChars.push(char);
         }
       });
@@ -317,155 +398,86 @@ export function appInit(shell) {
     if (availableChars.length === 0) {
       const noWordsMsg = document.createElement('div');
       noWordsMsg.className = 'no-words-msg';
-      noWordsMsg.textContent = 'No dictionary data available';
+      noWordsMsg.textContent = 'No dictionary data available for this language';
       indexContainer.appendChild(noWordsMsg);
       return;
     }
     
-    // Sort the characters based on the current language's index order
-    availableChars.sort((a, b) => {
-      const indexA = currentLang.indexChars.indexOf(a);
-      const indexB = currentLang.indexChars.indexOf(b);
-      return indexA - indexB;
-    });
-    
-    // Create index elements for each character with words
-    availableChars.forEach(char => {
-      const charElement = document.createElement('div');
-      charElement.className = 'index-char';
-      charElement.textContent = char;
-      charElement.title = `${DICTIONARY[currentLanguage][char].length} words`;
-      charElement.addEventListener('click', () => showWordsForChar(char));
-      indexContainer.appendChild(charElement);
+    // Create buttons for each character that has words
+    availableChars.sort().forEach(char => {
+      const charButton = document.createElement('button');
+      charButton.className = 'index-char';
+      charButton.textContent = char;
+      charButton.addEventListener('click', () => navigateTo('wordList', { char }));
+      indexContainer.appendChild(charButton);
     });
   }
   
+  // If no characters found in dictionary, show a message
+  if (availableChars.length === 0) {
+    const noWordsMsg = document.createElement('div');
+    noWordsMsg.className = 'no-words-msg';
+    noWordsMsg.textContent = 'No dictionary data available for this language';
+    indexContainer.appendChild(noWordsMsg);
+    return;
+  }
+  
+  // Create buttons for each character that has words
+  availableChars.sort().forEach(char => {
+    const charButton = document.createElement('button');
+    charButton.className = 'index-char';
+    charButton.textContent = char;
+    charButton.addEventListener('click', () => navigateTo('wordList', { char }));
+    indexContainer.appendChild(charButton);
+  });
+}
+
+// Render word list for a specific character
+function renderWordList(char) {
+  wordListContainer.innerHTML = '';
+  
+  const wordListTitle = document.createElement('h2');
+  wordListTitle.className = 'word-list-title';
+  wordListTitle.textContent = `Words starting with ${char}`;
+  wordListContainer.appendChild(wordListTitle);
+  
+  const wordList = document.createElement('div');
+  wordList.className = 'word-items';
+  
   // Show words for the selected character
-  function showWordsForChar(char) {
-    // In a real app, fetch words from an API
-    const words = getSampleWords(char);
-    
-    // Update active character
-    document.querySelectorAll('.index-char').forEach(el => {
-      el.classList.toggle('active', el.textContent === char);
-    });
-    
-    // Display words
-    wordListContainer.innerHTML = '';
-    
-    if (words.length === 0) {
-      const message = document.createElement('div');
-      message.className = 'initial-message';
-      message.textContent = `No words found starting with "${char}"`;
-      wordListContainer.appendChild(message);
-      return;
-    }
-    
-    words.forEach(word => {
+  if (DICTIONARY && DICTIONARY[currentLanguage] && DICTIONARY[currentLanguage][char]) {
+    DICTIONARY[currentLanguage][char].forEach(word => {
       const wordElement = document.createElement('div');
       wordElement.className = 'word-item';
       wordElement.textContent = word;
-      wordElement.addEventListener('click', () => showWordDetails(word));
-      wordListContainer.appendChild(wordElement);
+      wordElement.addEventListener('click', () => navigateTo('wordDetails', { word }));
+      wordList.appendChild(wordElement);
     });
+  } else {
+    const noWordsMsg = document.createElement('div');
+    noWordsMsg.className = 'no-words-msg';
+    noWordsMsg.textContent = 'No words found for this character';
+    wordList.appendChild(noWordsMsg);
   }
   
-  // Get words from the external dictionary
-  function getSampleWords(char) {
-    return DICTIONARY[currentLanguage]?.[char] || [];
+  wordListContainer.appendChild(wordList);
+}
+
+// Render word details
+function renderWordDetails(word) {
+  wordDetailsContainer.innerHTML = `
+    <h2>${word}</h2>
+    <div class="word-definition">
+      <p>Loading definition...</p>
+    </div>
+  `;
+  
+  // Check cache first
+  if (wordCache[word]) {
+    updateWordDetails(word, wordCache[word]);
+    return;
   }
   
-  // Show word details
-  async function showWordDetails(word) {
-    // Show loading state
-    wordDetailsContainer.style.display = 'block';
-    wordHeader.innerHTML = `<h2>${word}</h2><p>Loading...</p>`;
-    wordDefinition.textContent = '';
-    
-    // Show back button
-    backButton.style.display = 'block';
-    
-    try {
-      // Check cache first
-      const cacheKey = `${currentLanguage}:${word}`;
-      
-      if (wordCache[cacheKey]) {
-        displayWordDetails(word, wordCache[cacheKey]);
-        return;
-      }
-      
-      // Fetch from API
-      const response = await fetch(`${API_BASE_URL}/${currentLanguage}/${encodeURIComponent(word)}`);
-      
-      if (!response.ok) {
-        throw new Error('Word not found');
-      }
-      
-      const data = await response.json();
-      
-      // Cache the result
-      wordCache[cacheKey] = data[0];
-      
-      // Display the word details
-      displayWordDetails(word, data[0]);
-    } catch (error) {
-      wordDefinition.textContent = 'Word not found. Please try another word.';
-      console.error('Error fetching word details:', error);
-    }
-  }
-  
-  // Display word details
-  function displayWordDetails(word, data) {
-    wordHeader.innerHTML = `
-      <h2>${word}</h2>
-      ${data.phonetic ? `<p class="phonetic">${data.phonetic}</p>` : ''}
-    `;
-    
-    let html = '';
-    
-    data.meanings.forEach(meaning => {
-      html += `
-        <div class="meaning">
-          <h3>${meaning.partOfSpeech}</h3>
-          <ol>
-      `;
-      
-      meaning.definitions.slice(0, 3).forEach(def => {
-        html += `
-          <li class="definition">
-            <p>${def.definition}</p>
-            ${def.example ? `<p class="example">${def.example}</p>` : ''}
-          </li>
-        `;
-      });
-      
-      html += `
-          </ol>
-        </div>
-      `;
-    });
-    
-    wordDefinition.innerHTML = html;
-  }
-  
-  // Set up event listeners
-  function setupEventListeners() {
-    // Language change
-    languageSelect.addEventListener('change', (e) => {
-      currentLanguage = e.target.value;
-      renderIndex();
-      wordListContainer.innerHTML = '';
-      wordDetailsContainer.style.display = 'none';
-      backButton.style.display = 'none';
-    });
-    
-    // Back button
-    backButton.addEventListener('click', () => {
-      wordDetailsContainer.style.display = 'none';
-      backButton.style.display = 'none';
-    });
-  }
-  
-  // Start the application
-  init();
+  // Fetch from API if not in cache
+  fetchWordDetails(word);
 }
