@@ -305,9 +305,9 @@ export function appInit(shell) {
   }
   
   // Show words for the selected character
-  function showWordsForChar(char) {
+  async function showWordsForChar(char) {
     // In a real app, fetch words from an API
-    const words = getSampleWords(char);
+    const words = await getSampleWords(char);
     
     // Update active character
     document.querySelectorAll('.index-char').forEach(el => {
