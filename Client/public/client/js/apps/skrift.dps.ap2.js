@@ -376,10 +376,9 @@ export function appInit(shell) {
   // Render the index with only characters that have words in the dictionary
   function renderIndex() {
     indexContainer.innerHTML = '';
-    const currentLang = LANGUAGES[currentLanguage];
     const availableChars = [];
     
-    // Get all characters that have words in the current language's dictionary
+    // Get all characters that have words in the English dictionary
     if (DICTIONARY && DICTIONARY[currentLanguage]) {
       Object.keys(DICTIONARY[currentLanguage]).forEach(char => {
         const words = DICTIONARY[currentLanguage][char];

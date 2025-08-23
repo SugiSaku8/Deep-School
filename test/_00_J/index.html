@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Friction Example</title>
+    <style>
+      body {
+        margin: 0;
+      }
+      canvas {
+        display: block;
+        cursor: crosshair;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="canvas" width="1024" height="768"></canvas>
+    </div>
+
+    <script type="module">
+      import { LazyBrush } from 'https://cdn.jsdelivr.net/npm/lazy-brush@2.0.0/lib/lazy-brush.js'
+
+      // The lazy radius.
+      const LAZY_RADIUS = 10
+      const BRUSH_RADIUS = 10
+
+      let x = 0
+      let y = 0
+
+      // Create new LazyBrush instance.
+      const lazy = new LazyBrush({
+        enabled: true,
+        radius: LAZY_RADIUS
+      })
+      const lazyFriction = new LazyBrush({
+        enabled: true,
+        radius: LAZY_RADIUS
+      })
+      const canvas = document.getElementById('canvas')
+
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+
+      const ctx = canvas.getContext('2d')
+      let isDrawing = false
+      
+      // ブラシの初期設定
+      // マウス位置を追跡するための変数
+      let mouseX = 0
+      let mouseY = 0
+      let isMouseDown = false
+
+      // マウスイベントの設定
+      canvas.addEventListener('mousedown', (e) => {
+        isMouseDown = true
+        updateMousePosition(e)
+      })
+
+      canvas.addEventListener('mousemove', (e) => {
+        updateMousePosition(e)
+      })
+
+      canvas.addEventListener('mouseup', () => {
+        isMouseDown = false
+      })
+
+      canvas.addEventListener('mouseout', () => {
+        isMouseDown = false
+      })
+
+      // マウス位置を更新
+      function updateMousePosition(e) {
+        const rect = canvas.getBoundingClientRect()
+        mouseX = e.clientX - rect.left
+        mouseY = e.clientY - rect.top
+      }
+
+      // メインの描画ループ
+      function draw() {
+        // キャンバスをクリア
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        
+        // マウスが押されているときだけ描画
+        if (isMouseDown) {
+          // ブラシを描画
+          ctx.beginPath()
+          ctx.fillStyle = '#000000'
+          ctx.arc(mouseX, mouseY, BRUSH_RADIUS, 0, Math.PI * 2)
+          ctx.fill()
+          
+          // LazyBrushの位置を更新
+          lazy.update({ x: mouseX, y: mouseY }, { both: true })
+        }
+        
+        // 現在のマウス位置にブラシを表示
+        ctx.beginPath()
+        ctx.strokeStyle = '#000000'
+        ctx.lineWidth = 2
+        ctx.arc(mouseX, mouseY, BRUSH_RADIUS, 0, Math.PI * 2)
+        ctx.stroke()
+      }
+
+      function loop() {
+        // Animation loop can be used for additional effects
+        // When using friction we have to continously call the update method
+        // because the brush can move even if the cursor position remains the
+        // same.
+        lazy.update({ x, y })
+        lazyFriction.update({ x, y }, { friction: 0.5 })
+
+        // Get the updated brush coordinates.
+        const brush = lazy.getBrushCoordinates()
+        const brushFriction = lazyFriction.getBrushCoordinates()
+
+        // Draw the canvas.
+        const ctx = canvas.getContext('2d')
+
+        // Clear entire canvaas.
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+        // Draw brush point
+        ctx.beginPath()
+        ctx.fillStyle = 'red'
+        ctx.arc(brushFriction.x, brushFriction.y, BRUSH_RADIUS, 0, Math.PI * 2, true)
+        ctx.fill()
+
+        // Draw the lazy radius.
+        ctx.beginPath()
+        ctx.strokeStyle = '#ccc'
+        ctx.arc(brush.x, brush.y, LAZY_RADIUS, 0, Math.PI * 2, true)
+        ctx.stroke()
+
+        // Request next loop tick.
+        requestAnimationFrame(loop)
+      }
+
+      loop()
+    </script>
+  </body>
+</html>
