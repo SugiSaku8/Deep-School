@@ -51,28 +51,65 @@
       let isMouseDown = false
 
       // マウスイベントの設定
-      canvas.addEventListener('mousedown', (e) => {
+      function setupEventListeners() {
+        // マウスイベント
+        canvas.addEventListener('mousedown', handleMouseDown)
+        canvas.addEventListener('mousemove', handleMouseMove)
+        canvas.addEventListener('mouseup', handleMouseUp)
+        canvas.addEventListener('mouseout', handleMouseUp)
+        
+        // タッチイベント
+        canvas.addEventListener('touchstart', handleTouchStart, { passive: false })
+        canvas.addEventListener('touchmove', handleTouchMove, { passive: false })
+        canvas.addEventListener('touchend', handleTouchEnd)
+      }
+      
+      function handleMouseDown(e) {
+        e.preventDefault()
         isMouseDown = true
         updateMousePosition(e)
-      })
-
-      canvas.addEventListener('mousemove', (e) => {
+        draw()
+      }
+      
+      function handleMouseMove(e) {
+        e.preventDefault()
         updateMousePosition(e)
-      })
-
-      canvas.addEventListener('mouseup', () => {
+        if (isMouseDown) {
+          draw()
+        }
+      }
+      
+      function handleMouseUp() {
         isMouseDown = false
-      })
-
-      canvas.addEventListener('mouseout', () => {
+      }
+      
+      function handleTouchStart(e) {
+        e.preventDefault()
+        isMouseDown = true
+        updateMousePosition(e.touches[0])
+        draw()
+      }
+      
+      function handleTouchMove(e) {
+        e.preventDefault()
+        updateMousePosition(e.touches[0])
+        if (isMouseDown) {
+          draw()
+        }
+      }
+      
+      function handleTouchEnd() {
         isMouseDown = false
-      })
+      }
 
       // マウス位置を更新
       function updateMousePosition(e) {
         const rect = canvas.getBoundingClientRect()
-        mouseX = e.clientX - rect.left
-        mouseY = e.clientY - rect.top
+        const scaleX = canvas.width / rect.width
+        const scaleY = canvas.height / rect.height
+        
+        mouseX = (e.clientX - rect.left) * scaleX
+        mouseY = (e.clientY - rect.top) * scaleY
       }
 
       // メインの描画ループ
@@ -98,7 +135,13 @@
         ctx.lineWidth = 2
         ctx.arc(mouseX, mouseY, BRUSH_RADIUS, 0, Math.PI * 2)
         ctx.stroke()
+        
+        // アニメーションフレームを要求
+        requestAnimationFrame(draw)
       }
+      
+      // 描画ループを開始
+      draw()
 
       function loop() {
         // Animation loop can be used for additional effects
