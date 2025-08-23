@@ -1,8 +1,8 @@
 {
   "deepSchoolFamily": {
-    "version": "25C1272X1",
+    "version": "25C1285X1",
     "status": "beta",
-    "lastUpdated": "2025-08-11",
+    "lastUpdated": "2025-08-23",
     "description": "Deep-School Family Software - Initial release"
   },
   "deepSchoolClient": {
@@ -112,6 +112,15 @@
     "revision": 0,
     "lastUpdated": "2025-07-25",
     "description": "Moral Fruit - Moral Fruit is a moral education app - Initial beta release"
+  },
+  "skrift": {
+    "version": "0.0.1",
+    "status": "beta",
+    "cycle": 0,
+    "release": 1,
+    "revision": 0,
+    "lastUpdated": "2025-08-23",
+    "description": "Skrift - Skrift is a dictionary app - Initial beta release"
   },
   "releaseSchedule": {
     "deepSchoolCycles": [

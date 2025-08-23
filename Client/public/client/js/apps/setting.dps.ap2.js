@@ -143,11 +143,11 @@ export function appInit(shell) {
           </div>
           <div class="setting-item">
             <label>ビルド番号:</label>
-            <span id="setting-build">25C1272X1</span>
+            <span id="setting-build">25C1285X1</span>
           </div>
           <div class="setting-item">
             <label>最終更新:</label>
-            <span id="setting-updated">2025-08-11</span>
+            <span id="setting-updated">2025-08-23</span>
           </div>
           <div class="setting-item">
             <button class="auto-btn" id="check-update-btn">アップデートをチェック</button>
