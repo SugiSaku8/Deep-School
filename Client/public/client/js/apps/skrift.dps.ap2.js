@@ -345,8 +345,12 @@ export function appInit(shell) {
       const allWords = text.split('\n').filter(word => word.trim() !== '');
       
       // Filter words starting with the given character (case-insensitive)
+      // and exclude words containing spaces or apostrophes
       const matchingWords = allWords.filter(word => 
-        word.length > 0 && word[0].toUpperCase() === char.toUpperCase()
+        word.length > 0 && 
+        word[0].toUpperCase() === char.toUpperCase() &&
+        !word.includes(' ') && 
+        !word.includes("'")
       );
       
       // Return all matching words in lowercase
@@ -361,14 +365,6 @@ export function appInit(shell) {
       };
       return defaultSamples[char.toUpperCase()] || [];
     }
-  }
-  
-  // Show word details
-  // Check if a word is valid
-  // Must contain at least 2 letters, can include hyphens or apostrophes
-  // But must not start/end with a hyphen/apostrophe
-  function isValidWord(word) {
-    return true;
   }
 
   async function showWordDetails(word) {
