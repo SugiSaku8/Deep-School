@@ -364,6 +364,11 @@ export function appInit(shell) {
   }
   
   // Show word details
+  // Check if a word is valid (contains only letters and possibly hyphens or apostrophes)
+  function isValidWord(word) {
+    return /^[a-zA-Z'-]+$/.test(word);
+  }
+
   async function showWordDetails(word) {
     // Show loading state
     wordDetailsContainer.style.display = 'block';
@@ -372,6 +377,17 @@ export function appInit(shell) {
     
     // Show back button
     backButton.style.display = 'block';
+    
+    // Check if the word is valid before making the API call
+    if (!isValidWord(word)) {
+      wordDefinition.innerHTML = `
+        <div class="error-message">
+          <p>"${word}" doesn't appear to be a valid word.</p>
+          <p>Please try another word containing only letters, hyphens, or apostrophes.</p>
+        </div>
+      `;
+      return;
+    }
     
     try {
       // Check cache first
@@ -386,7 +402,11 @@ export function appInit(shell) {
       const response = await fetch(`${API_BASE_URL}/${currentLanguage}/${encodeURIComponent(word)}`);
       
       if (!response.ok) {
-        throw new Error('Word not found');
+        if (response.status === 404) {
+          throw new Error(`The word "${word}" was not found in the dictionary.`);
+        } else {
+          throw new Error(`Error: ${response.statusText}`);
+        }
       }
       
       const data = await response.json();
@@ -397,7 +417,12 @@ export function appInit(shell) {
       // Display the word details
       displayWordDetails(word, data[0]);
     } catch (error) {
-      wordDefinition.textContent = 'Word not found. Please try another word.';
+      wordDefinition.innerHTML = `
+        <div class="error-message">
+          <p>${error.message || 'An error occurred while fetching the word details.'}</p>
+          <p>Please try another word or check your internet connection.</p>
+        </div>
+      `;
       console.error('Error fetching word details:', error);
     }
   }
