@@ -380,16 +380,7 @@ export function appInit(shell) {
     // Show back button
     backButton.style.display = 'block';
     
-    // Check if the word is valid before making the API call
-    if (!isValidWord(word)) {
-      wordDefinition.innerHTML = `
-        <div class="error-message">
-          <p>"${word}" doesn't appear to be a valid word.</p>
-          <p>Please try another word containing only letters, hyphens, or apostrophes.</p>
-        </div>
-      `;
-      return;
-    }
+    // Check if the word is valid before making the API cal
     
     try {
       // Check cache first
