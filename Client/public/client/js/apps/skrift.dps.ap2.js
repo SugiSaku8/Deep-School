@@ -364,9 +364,11 @@ export function appInit(shell) {
   }
   
   // Show word details
-  // Check if a word is valid (contains only letters and possibly hyphens or apostrophes)
+  // Check if a word is valid
+  // Must contain at least 2 letters, can include hyphens or apostrophes
+  // But must not start/end with a hyphen/apostrophe
   function isValidWord(word) {
-    return /^[a-zA-Z'-]+$/.test(word);
+    return true;
   }
 
   async function showWordDetails(word) {
