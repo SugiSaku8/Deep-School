@@ -345,12 +345,14 @@ export function appInit(shell) {
       const allWords = text.split('\n').filter(word => word.trim() !== '');
       
       // Filter words starting with the given character (case-insensitive)
-      // and exclude words containing spaces or apostrophes
+      // and exclude words containing spaces, apostrophes, numbers, or hyphens
       const matchingWords = allWords.filter(word => 
         word.length > 0 && 
         word[0].toUpperCase() === char.toUpperCase() &&
         !word.includes(' ') && 
-        !word.includes("'")
+        !word.includes("'") &&
+        !/[0-9]/.test(word) &&
+        !word.includes('-')
       );
       
       // Return all matching words in lowercase
