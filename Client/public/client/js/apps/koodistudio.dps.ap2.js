@@ -557,7 +557,6 @@ export function appInit(shell) {
       justify-content: center;
       align-items: center;
       height: 100%;
-      color: #666;
     }
     
     .loading-spinner {
@@ -610,7 +609,6 @@ export function appInit(shell) {
     /* サイドバーのスタイル */
     .lesson-sidebar {
       width: 250px;
-      background-color: #2d2d2d;
       color: #e0e0e0;
       padding: 20px 0;
       overflow-y: auto;
@@ -757,13 +755,13 @@ export function appInit(shell) {
     }
     
     .nav-button.complete-lesson {
-      background-color: #4caf50;
+      background-color:rgb(76, 86, 175);
       color: white;
-      border-color: #43a047;
+      border-color:rgb(76, 86, 175);
     }
     
     .nav-button.complete-lesson:hover {
-      background-color: #3d8b40;
+      background-color:rgb(83, 97, 226);
     }
     
     /* コードエディタのスタイル */

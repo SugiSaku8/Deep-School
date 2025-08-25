@@ -129,18 +129,20 @@ export function appInit(shell) {
         display: flex;
         align-items: center;
         padding: 10px 20px;
-        background-color: #2c2c2c;
-        color: white;
-        border-bottom: 1px solid #444;
+        background-color: transparent;
+        color: #333;
+        border-bottom: 1px solid #ddd;
       }
       
       .back-button {
-        background: none;
+        background: #2196F3;
         border: none;
         color: white;
-        font-size: 18px;
+        font-size: 14px;
         cursor: pointer;
         margin-right: 15px;
+        padding: 5px 10px;
+        border-radius: 4px;
       }
       
       .app-title {
@@ -152,22 +154,22 @@ export function appInit(shell) {
       .language-select {
         padding: 5px 10px;
         border-radius: 4px;
-        background-color: #3a3a3a;
-        color: white;
-        border: 1px solid #555;
+        background-color: #e6f0ff;
+        color: #333;
+        border: 1px solid #b3d1ff;
       }
       
       .dictionary-container {
         display: flex;
         height: calc(100vh - 50px);
-        background-color: #2c2c2c;
-        color: #e0e0e0;
+        background-color: transparent;
+        color: #333;
       }
       
       .index-section {
         width: 80px;
-        background-color: #1e1e1e;
-        border-right: 1px solid #444;
+        background-color: transparent;
+        border-right: 1px solid #ddd;
         overflow-y: auto;
       }
       
@@ -215,14 +217,15 @@ export function appInit(shell) {
       
       .word-item {
         padding: 12px;
-        background-color: #3a3a3a;
+        background-color: #e6f0ff;
         border-radius: 4px;
         cursor: pointer;
         transition: background-color 0.2s;
+        border: 1px solid #b3d1ff;
       }
       
       .word-item:hover {
-        background-color: #4a4a4a;
+        background-color: #cce0ff;
       }
       
       .initial-message {
@@ -235,8 +238,8 @@ export function appInit(shell) {
       .word-details {
         width: 400px;
         padding: 20px;
-        background-color: #2c2c2c;
-        border-left: 1px solid #444;
+        background-color: transparent;
+        border-left: 1px solid #ddd;
         overflow-y: auto;
       }
       
@@ -283,11 +286,35 @@ export function appInit(shell) {
     document.head.appendChild(style);
   }
   
+  // Back to menu button
+  function createBackToMenuButton() {
+    const backToMenuBtn = document.createElement('button');
+    backToMenuBtn.className = 'back-to-menu';
+    backToMenuBtn.innerHTML = '<i class="fas fa-home"></i> Menu';
+    backToMenuBtn.style.marginLeft = '10px';
+    backToMenuBtn.style.padding = '5px 10px';
+    backToMenuBtn.style.borderRadius = '4px';
+    backToMenuBtn.style.border = 'none';
+    backToMenuBtn.style.backgroundColor = '#2196F3';
+    backToMenuBtn.style.color = 'white';
+    backToMenuBtn.style.cursor = 'pointer';
+    backToMenuBtn.addEventListener('click', () => {
+      window.location.href = '/';
+    });
+    return backToMenuBtn;
+  }
+
   // Initialize the application
   function init() {
     initUI();
     renderIndex();
     setupEventListeners();
+    
+    // Add back to menu button to header
+    const header = document.querySelector('.app-header');
+    if (header) {
+      header.appendChild(createBackToMenuButton());
+    }
   }
   
   // Render the index characters
