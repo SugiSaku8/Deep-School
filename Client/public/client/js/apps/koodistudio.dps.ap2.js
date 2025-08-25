@@ -550,6 +550,190 @@ export function appInit(shell) {
   // アプリケーションのスタイルを追加
   const styleElement = document.createElement('style');
   styleElement.textContent = `
+    /* メインコンテナ */
+    .koodi-app {
+      display: flex;
+      height: 100vh;
+      width: 100%;
+      background: transparent;
+    }
+    
+    /* サイドバー */
+    .lesson-sidebar {
+      width: 250px;
+      background-color: #f5f5f5;
+      border-right: 1px solid #e0e0e0;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    
+    .lesson-sidebar h2 {
+      margin-top: 0;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+      color: #333;
+    }
+    
+    .lesson-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .lesson-list li {
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    
+    .lesson-list li:hover {
+      background-color: #e9e9e9;
+    }
+    
+    .lesson-list li.active {
+      background-color: #87c1ff;
+      color: white;
+    }
+    
+    /* メインコンテンツ */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: white;
+      overflow: hidden;
+    }
+    
+    .lesson-content {
+      padding: 20px;
+      background-color: white;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .lesson-content h1 {
+      margin-top: 0;
+      color: #333;
+    }
+    
+    /* エディタコンテナ */
+    .editor-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: #1e1e1e;
+      overflow: hidden;
+    }
+    
+    .editor-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #f5f5f5;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .run-button {
+      background-color: rgb(76, 86, 175);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+    
+    .run-button:hover {
+      background-color: rgb(68, 77, 158);
+    }
+    
+    .lesson-navigation {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .nav-button {
+      background-color: #f0f0f0;
+      border: 1px solid #ddd;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .nav-button:hover {
+      background-color: #e0e0e0;
+    }
+    
+    .nav-button.complete-lesson {
+      background-color: rgb(76, 86, 175);
+      color: white;
+      border-color: rgb(76, 86, 175);
+    }
+    
+    .nav-button.complete-lesson:hover {
+      background-color: rgb(68, 77, 158);
+    }
+    
+    /* コードエディタ */
+    #code-editor {
+      flex: 1;
+      overflow: hidden;
+    }
+    
+    .CodeMirror {
+      height: 100%;
+      font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    
+    /* 出力エリア */
+    .output-container {
+      height: 30%;
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+      border-top: 1px solid #333;
+      padding: 10px 20px;
+      overflow-y: auto;
+    }
+    
+    .output-container h3 {
+      margin: 0;
+      padding: 10px 20px;
+      font-size: 0.9rem;
+      background-color: #252526;
+      border-bottom: 1px solid #333;
+    }
+    
+    /* レスポンシブ対応 */
+    @media (max-width: 768px) {
+      .koodi-app {
+        flex-direction: column;
+      }
+      
+      .lesson-sidebar {
+        width: 100%;
+        height: 200px;
+        border-right: none;
+        border-bottom: 1px solid #e0e0e0;
+      }
+      
+      .editor-toolbar {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+      }
+      
+      .nav-button {
+        padding: 4px 8px;
+        font-size: 12px;
+      }
+    }
+    
     /* ローディングとエラースタイル */
     .loading-container {
       display: flex;
@@ -692,6 +876,7 @@ export function appInit(shell) {
       background-color: #f8f9fa;
       border-left: 4px solid #6c63ff;
       border-radius: 4px;
+      color: #5d4037;
     }
     
     .hint strong {
@@ -788,11 +973,6 @@ export function appInit(shell) {
       color: #e0e0e0;
     }
     
-    .output-container h3 {
-      margin: 0;
-      padding: 10px 20px;
-      font-size: 0.9rem;
-      background-color: #252526;
       border-bottom: 1px solid #333;
     }
     
