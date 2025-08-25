@@ -33,6 +33,47 @@ export function appInit(shell) {
   const backButton = document.createElement('button');
   const languageSelect = document.createElement('select');
   
+  // Back to menu button
+  function createBackToMenuButton() {
+    const backToMenuBtn = document.createElement('button');
+    backToMenuBtn.className = 'back-to-menu';
+    backToMenuBtn.innerHTML = '<i class="fas fa-home"></i>';
+    backToMenuBtn.style.marginLeft = '10px';
+    backToMenuBtn.style.padding = '8px';
+    backToMenuBtn.style.borderRadius = '50%';
+    backToMenuBtn.style.border = 'none';
+    backToMenuBtn.style.backgroundColor = '#87c1ff';
+    backToMenuBtn.style.color = 'white';
+    backToMenuBtn.style.cursor = 'pointer';
+    backToMenuBtn.style.display = 'flex';
+    backToMenuBtn.style.alignItems = 'center';
+    backToMenuBtn.style.justifyContent = 'center';
+    backToMenuBtn.style.width = '36px';
+    backToMenuBtn.style.height = '36px';
+    backToMenuBtn.addEventListener('click', () => {
+      shell.loadApp('menu');
+    });
+    
+    // Add hover effects
+    backToMenuBtn.addEventListener('mouseover', () => {
+      backToMenuBtn.style.backgroundColor = '#6ba7e5';
+    });
+    
+    backToMenuBtn.addEventListener('mouseout', () => {
+      backToMenuBtn.style.backgroundColor = '#87c1ff';
+    });
+    
+    backToMenuBtn.addEventListener('mousedown', () => {
+      backToMenuBtn.style.transform = 'scale(0.95)';
+    });
+    
+    backToMenuBtn.addEventListener('mouseup', () => {
+      backToMenuBtn.style.transform = 'scale(1)';
+    });
+    
+    return backToMenuBtn;
+  }
+
   // Initialize the UI
   function initUI() {
     // Create header
@@ -43,6 +84,9 @@ export function appInit(shell) {
     backButton.className = 'back-button';
     backButton.style.display = 'none';
     backButton.innerHTML = '<i class="fas fa-arrow-left"></i>';
+    
+    // Add back to menu button
+    header.appendChild(createBackToMenuButton());
     
     // Title
     const title = document.createElement('div');
@@ -162,15 +206,16 @@ export function appInit(shell) {
       .dictionary-container {
         display: flex;
         height: calc(100vh - 50px);
-        background-color: transparent;
+        background-color: #f5f5f5;
         color: #333;
       }
       
       .index-section {
         width: 80px;
-        background-color: transparent;
-        border-right: 1px solid #ddd;
+        background-color: #f5f5f5;
+        border-right: 1px solid #e0e0e0;
         overflow-y: auto;
+        padding: 10px 0;
       }
       
       .index-title {
@@ -196,7 +241,20 @@ export function appInit(shell) {
         justify-content: center;
         border-radius: 50%;
         cursor: pointer;
-        transition: background-color 0.2s;
+        transition: all 0.2s;
+        background-color: #f5f5f5;
+        border: 1px solid #e0e0e0;
+        color: #333;
+      }
+      
+      .index-char:hover {
+        background-color: #e0e0e0;
+      }
+      
+      .index-char.active {
+        background-color: #87c1ff;
+        color: white;
+        border-color: #6ba7e5;
       }
       
       .index-char:hover, .index-char.active {
@@ -207,40 +265,95 @@ export function appInit(shell) {
         flex: 1;
         padding: 20px;
         overflow-y: auto;
+        background-color: white;
+        border-radius: 8px;
+        margin: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       }
       
       .word-list {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 10px;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 12px;
       }
       
       .word-item {
-        padding: 12px;
-        background-color: #e6f0ff;
-        border-radius: 4px;
+        padding: 14px 18px;
+        background-color: #ffffff;
+        border-radius: 8px;
         cursor: pointer;
-        transition: background-color 0.2s;
-        border: 1px solid #b3d1ff;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid #e0e0e0;
+        margin: 0;
+        font-size: 15px;
+        color: #333;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .word-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(135, 193, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
       }
       
       .word-item:hover {
-        background-color: #cce0ff;
+        background-color: #f8faff;
+        border-color: #6ba7e5;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+      
+      .word-item:hover::before {
+        opacity: 1;
+      }
+      
+      .word-item:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
       }
       
       .initial-message {
         grid-column: 1 / -1;
         text-align: center;
-        padding: 40px 20px;
+        padding: 50px 20px;
         color: #888;
+        font-size: 15px;
+        line-height: 1.6;
+        background-color: #fafafa;
+        border-radius: 8px;
+        margin: 10px 0;
+        border: 1px dashed #e0e0e0;
+      }
+      
+      .initial-message p {
+        margin: 0 0 15px 0;
+        font-size: 16px;
+        color: #666;
+      }
+      
+      .initial-message .hint {
+        font-size: 13px;
+        color: #999;
+        margin-top: 15px;
+        display: block;
       }
       
       .word-details {
         width: 400px;
         padding: 20px;
-        background-color: transparent;
-        border-left: 1px solid #ddd;
+        background-color: white;
+        border-left: 1px solid #e0e0e0;
         overflow-y: auto;
+        border-radius: 0 8px 8px 0;
+        box-shadow: -2px 0 4px rgba(0,0,0,0.05);
       }
       
       .word-header {
@@ -309,6 +422,13 @@ export function appInit(shell) {
     initUI();
     renderIndex();
     setupEventListeners();
+    
+    // Add initial active state to first character
+    const firstChar = document.querySelector('.index-char');
+    if (firstChar) {
+      firstChar.classList.add('active');
+      showWordsForChar(firstChar.textContent);
+    }
     
     // Add back to menu button to header
     const header = document.querySelector('.app-header');
