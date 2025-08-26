@@ -200,21 +200,31 @@ export function appInit(shell) {
         justify-content: center;
         width: 36px;
         height: 36px;
-        border: none;
+        border: 1px solid #d1d1d6;
         border-radius: 8px;
-        background: none;
+        background-color: #ffffff;
         cursor: pointer;
         color: #000000;
         font-size: 17px;
-        transition: background-color 0.2s;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
       }
       
       .tool-button:hover {
         background-color: #f2f2f7;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
       }
       
       .tool-button.active {
-        background-color: #e5e5ea;
+        background-color: #007AFF;
+        color: white;
+        border-color: #0056b3;
+      }
+      
+      .tool-button:active {
+        transform: translateY(1px);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
       }
       
       .page-indicator {
@@ -272,18 +282,21 @@ export function appInit(shell) {
         width: 24px;
         height: 24px;
         border-radius: 50%;
-        border: 2px solid transparent;
+        border: 2px solid #ffffff;
         cursor: pointer;
-        transition: transform 0.1s;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
       }
 
       .color-swatch:hover {
-        transform: scale(1.1);
+        transform: scale(1.15);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
       }
 
       .color-swatch.active {
-        border-color: #007AFF;
-        box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.2);
+        border: 2px solid #007AFF;
+        box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.5);
+        transform: scale(1.1);
       }
 
       .color-picker {
