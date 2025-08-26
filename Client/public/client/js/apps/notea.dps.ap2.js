@@ -587,21 +587,6 @@ export function appInit(shell) {
   // UI Elements
   const pencilTool = document.getElementById('pencil-tool');
   const highlighterTool = document.getElementById('highlighter-tool');
-  const eraserTool = document.getElementById('eraser-tool');
-  const penSizeSelect = document.getElementById('pen-size');
-  const colorPicker = document.getElementById('color-picker');
-  const clearCanvasBtn = document.getElementById('clear-canvas');
-  const saveNoteBtn = document.getElementById('save-note');
-  const newPageBtn = document.getElementById('new-page');
-  const prevPageBtn = document.getElementById('prev-page');
-  const nextPageBtn = document.getElementById('next-page');
-  const undoBtn = document.getElementById('undo-btn');
-  const redoBtn = document.getElementById('redo-btn');
-  const redSheetToggle = document.getElementById('red-sheet-toggle');
-  const redSheet = document.getElementById('red-sheet');
-  const redSheetControls = document.getElementById('red-sheet-controls');
-  const sheetColorInput = document.getElementById('sheet-color');
-  const sheetOpacityInput = document.getElementById('sheet-opacity');
   const noteTitleInput = document.getElementById('note-title');
   const importFileInput = document.getElementById('import-file');
   const pageIndicator = document.getElementById('page-indicator');
@@ -990,14 +975,24 @@ export function appInit(shell) {
   // New note button
   newNoteBtn.addEventListener('click', () => {
     if (confirm('新しいノートを作成しますか？現在のノートは保存されません。')) {
-      paths = [];
+      // Create a new notebook with a single empty page
+      notebook = {
+        pages: [{
+          id: Date.now().toString(),
+          paths: [],
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          title: DEFAULT_NOTE_TITLE
+        }],
+        currentPageIndex: 0
+      };
+      
+      // Reset UI
+      noteTitleInput.value = DEFAULT_NOTE_TITLE;
+      updatePageIndicator();
       redrawCanvas();
-      currentTool = 'pencil';
-      currentColor = '#000000';
-      currentSize = 2;
-      updateActiveTool('pencil-tool');
-      currentToolDisplay.textContent = 'ペン';
-      colorPicker.value = currentColor;
+      saveToHistory();
+      showNotification('新しいノートを作成しました');
     }
   });
 
