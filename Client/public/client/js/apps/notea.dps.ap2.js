@@ -52,6 +52,8 @@ export function appInit(shell) {
             <i class="fas fa-plus"></i>
           </button>
           <div class="divider"></div>
+          <input type="text" id="note-title" class="note-title" value="新しいノート" maxlength="50">
+          <div class="divider"></div>
           <button id="pencil-tool" class="tool-button active" title="シャープペンシル">
             <i class="fas fa-pencil-alt"></i>
           </button>
@@ -220,6 +222,22 @@ export function appInit(shell) {
         margin: 0 4px;
         color: #636366;
         font-weight: 500;
+      }
+
+      .note-title {
+        border: none;
+        background: transparent;
+        font-size: 15px;
+        padding: 6px 12px;
+        border-radius: 8px;
+        min-width: 100px;
+        max-width: 200px;
+        text-overflow: ellipsis;
+      }
+      
+      .note-title:focus {
+        outline: none;
+        background-color: rgba(0, 0, 0, 0.05);
       }
 
       .pen-size-picker {
