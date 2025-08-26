@@ -33,45 +33,65 @@ export function appInit(shell) {
   const backButton = document.createElement('button');
   const languageSelect = document.createElement('select');
   
-  // Back to menu button
+  // Back to menu button - SCR style
   function createBackToMenuButton() {
-    const backToMenuBtn = document.createElement('button');
-    backToMenuBtn.className = 'back-to-menu';
-    backToMenuBtn.innerHTML = '<i class="fas fa-home"></i>';
-    backToMenuBtn.style.marginLeft = '10px';
-    backToMenuBtn.style.padding = '8px';
-    backToMenuBtn.style.borderRadius = '50%';
-    backToMenuBtn.style.border = 'none';
-    backToMenuBtn.style.backgroundColor = '#87c1ff';
-    backToMenuBtn.style.color = 'white';
-    backToMenuBtn.style.cursor = 'pointer';
-    backToMenuBtn.style.display = 'flex';
-    backToMenuBtn.style.alignItems = 'center';
-    backToMenuBtn.style.justifyContent = 'center';
-    backToMenuBtn.style.width = '36px';
-    backToMenuBtn.style.height = '36px';
-    backToMenuBtn.addEventListener('click', () => {
+    const backButton = document.createElement('button');
+    backButton.className = 'scr-back-button';
+    backButton.id = 'skrift-back-btn';
+    backButton.setAttribute('data-lang-key', 'back');
+    backButton.setAttribute('aria-label', '戻る');
+    backButton.innerHTML = `
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15 18L9 12L15 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    `;
+    
+    // Apply SCR style
+    backButton.style.cssText = `
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background-color: #4c56af;
+      border: none;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      padding: 0;
+      z-index: 1000;
+    `;
+    
+    // Add hover and active states
+    backButton.addEventListener('mouseover', () => {
+      backButton.style.backgroundColor = '#3a4280';
+      backButton.style.transform = 'scale(1.05)';
+    });
+    
+    backButton.addEventListener('mouseout', () => {
+      backButton.style.backgroundColor = '#4c56af';
+      backButton.style.transform = 'scale(1)';
+    });
+    
+    backButton.addEventListener('mousedown', () => {
+      backButton.style.transform = 'scale(0.95)';
+    });
+    
+    backButton.addEventListener('mouseup', () => {
+      backButton.style.transform = 'scale(1.05)';
+    });
+    
+    // Add click handler
+    backButton.addEventListener('click', (e) => {
+      e.preventDefault();
       shell.loadApp('menu');
     });
     
-    // Add hover effects
-    backToMenuBtn.addEventListener('mouseover', () => {
-      backToMenuBtn.style.backgroundColor = '#6ba7e5';
-    });
-    
-    backToMenuBtn.addEventListener('mouseout', () => {
-      backToMenuBtn.style.backgroundColor = '#87c1ff';
-    });
-    
-    backToMenuBtn.addEventListener('mousedown', () => {
-      backToMenuBtn.style.transform = 'scale(0.95)';
-    });
-    
-    backToMenuBtn.addEventListener('mouseup', () => {
-      backToMenuBtn.style.transform = 'scale(1)';
-    });
-    
-    return backToMenuBtn;
+    return backButton;
   }
 
   // Initialize the UI
@@ -80,13 +100,17 @@ export function appInit(shell) {
     const header = document.createElement('div');
     header.className = 'app-header';
     
-    // Back button
+    // Add back to menu button (positioned absolutely, so no need to add to header)
+    const menuButton = createBackToMenuButton();
+    document.body.appendChild(menuButton);
+    
+    // Back button (for navigation within the app)
     backButton.className = 'back-button';
     backButton.style.display = 'none';
     backButton.innerHTML = '<i class="fas fa-arrow-left"></i>';
     
-    // Add back to menu button
-    header.appendChild(createBackToMenuButton());
+    // Add back button to header if needed
+    header.appendChild(backButton);
     
     // Title
     const title = document.createElement('div');
@@ -172,10 +196,12 @@ export function appInit(shell) {
       .app-header {
         display: flex;
         align-items: center;
-        padding: 10px 20px;
+        padding: 10px 20px 10px 80px; /* Add left padding for the back button */
         background-color: transparent;
         color: #333;
         border-bottom: 1px solid #ddd;
+        position: relative;
+        z-index: 100;
       }
       
       .back-button {
