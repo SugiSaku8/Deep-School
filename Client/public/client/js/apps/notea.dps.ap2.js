@@ -896,7 +896,7 @@ body {
   //     ...
   //   ]
   // }
-
+/*
   // Constants
   const APP_VERSION = "1.0.0";
   const LOCAL_STORAGE_KEY = "noteAppData";
@@ -1781,4 +1781,5 @@ body {
 
   // Initialize the app
   init();
+  */
 }
