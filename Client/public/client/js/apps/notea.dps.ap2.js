@@ -603,6 +603,7 @@ export function appInit(shell) {
   const prevPageBtn = getElement('prev-page');
   const nextPageBtn = getElement('next-page');
   const newPageBtn = getElement('new-page', false);
+  const newNoteBtn = getElement('new-note', false);
   const penSizeSelect = getElement('pen-size');
   const colorPicker = getElement('color-picker');
   const customColorInput = getElement('custom-color');
