@@ -575,49 +575,115 @@ export function appInit(shell) {
     </style>
   `;
 
-  // Initialize canvas and variables
-  const canvas = document.getElementById('drawing-canvas');
-  const ctx = canvas.getContext('2d');
+  // Initialize variables
   let lastX = 0;
   let lastY = 0;
   let currentColor = '#000000';
   let currentSize = 0.5; // Default pen size in mm
   let currentTool = 'pencil';
 
-  // UI Elements
-  const pencilTool = document.getElementById('pencil-tool');
-  const highlighterTool = document.getElementById('highlighter-tool');
-  const eraserTool = document.getElementById('eraser-tool');
-  const noteTitleInput = document.getElementById('note-title');
-  const importFileInput = document.getElementById('import-file');
-  const pageIndicator = document.getElementById('page-indicator');
-  const currentToolDisplay = document.getElementById('current-tool');
-  const undoBtn = document.getElementById('undo-btn');
-  const redoBtn = document.getElementById('redo-btn');
-  const prevPageBtn = document.getElementById('prev-page');
-  const nextPageBtn = document.getElementById('next-page');
+  // UI Elements with null checks
+  const getElement = (id, required = true) => {
+    const el = document.getElementById(id);
+    if (!el && required) {
+      console.error(`Element with ID '${id}' not found`);
+    }
+    return el;
+  };
+
+  const pencilTool = getElement('pencil-tool');
+  const highlighterTool = getElement('highlighter-tool');
+  const eraserTool = getElement('eraser-tool');
+  const noteTitleInput = getElement('note-title');
+  const importFileInput = getElement('import-file', false);
+  const pageIndicator = getElement('page-indicator');
+  const currentToolDisplay = getElement('current-tool');
+  const undoBtn = getElement('undo-btn');
+  const redoBtn = getElement('redo-btn');
+  const prevPageBtn = getElement('prev-page');
+  const nextPageBtn = getElement('next-page');
+  const penSizeSelect = getElement('pen-size');
+  
+  // Initialize canvas with error handling
+  const canvas = getElement('drawing-canvas');
+  if (!canvas) {
+    console.error('Canvas element not found');
+    return; // Exit if canvas is not available
+  }
+  
+  const ctx = canvas.getContext('2d');
+  if (!ctx) {
+    console.error('Could not get 2D context');
+    return;
+  }
   
 // Set initial tool states
 function updateActiveTool(toolId) {
-    const tools = document.querySelectorAll('.tool');
-    tools.forEach(tool => tool.classList.remove('active'));
-    document.getElementById(toolId).classList.add('active');
-    currentTool = toolId.replace('-tool', '');
+    if (!toolId) return;
+    
+    try {
+        const tools = document.querySelectorAll('.tool');
+        tools.forEach(tool => tool.classList.remove('active'));
+        
+        const toolElement = document.getElementById(toolId);
+        if (toolElement) {
+            toolElement.classList.add('active');
+            currentTool = toolId.replace('-tool', '');
+            
+            // Update tool display if available
+            if (currentToolDisplay) {
+                const toolNames = {
+                    'pencil': 'ペン',
+                    'highlighter': '蛍光ペン',
+                    'eraser': '消しゴム'
+                };
+                currentToolDisplay.textContent = toolNames[currentTool] || currentTool;
+            }
+        }
+    } catch (error) {
+        console.error('Error updating active tool:', error);
+    }
 }
 
 function updatePageIndicator() {
-    const currentPage = getCurrentPage();
-    pageIndicator.textContent = `${notebook.currentPageIndex + 1}/${notebook.pages.length}`;
-    noteTitleInput.value = currentPage.title || DEFAULT_NOTE_TITLE;
+    if (!pageIndicator || !noteTitleInput) return;
+    
+    try {
+        const currentPage = getCurrentPage();
+        if (!currentPage) {
+            console.error('No current page available');
+            return;
+        }
+        
+        pageIndicator.textContent = `${notebook.currentPageIndex + 1}/${notebook.pages.length}`;
+        noteTitleInput.value = currentPage.title || DEFAULT_NOTE_TITLE;
+        
+        // Update button states if buttons exist
+        if (prevPageBtn) prevPageBtn.disabled = notebook.currentPageIndex === 0;
+        if (nextPageBtn) nextPageBtn.disabled = notebook.currentPageIndex >= notebook.pages.length - 1;
+    } catch (error) {
+        console.error('Error updating page indicator:', error);
+    }
     
     // Update button states
     prevPageBtn.disabled = notebook.currentPageIndex === 0;
     nextPageBtn.disabled = notebook.currentPageIndex === notebook.pages.length - 1;
 }
 
-// Get current page data
+// Get current page data with validation
 function getCurrentPage() {
-    return notebook.pages[notebook.currentPageIndex];
+    if (!notebook || !Array.isArray(notebook.pages) || notebook.pages.length === 0) {
+        console.error('Invalid notebook state');
+        return null;
+    }
+    
+    const page = notebook.pages[notebook.currentPageIndex];
+    if (!page) {
+        console.error('Current page not found');
+        return null;
+    }
+    
+    return page;
 }
 
 // Initialize canvas size
