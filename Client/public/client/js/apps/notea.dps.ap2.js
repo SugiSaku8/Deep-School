@@ -11,11 +11,16 @@ export function appInit(shell) {
     console.error("NoteaApp: #app-rootが見つかりません");
     return;
   }
+  shell.log({
+    from: "dp.app.notea.out",
+    message: "NoteaApp: 初期化開始",
+    level: "info",
+  });
   root.innerHTML = `<iframe
 
   width="100%"
   height="100%"
-  src="./notea/index.html">
+  src="/client/js/apps/notea/index.html">
 </iframe>`
  /* root.innerHTML = `
 <style>

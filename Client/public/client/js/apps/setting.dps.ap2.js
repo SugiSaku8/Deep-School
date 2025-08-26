@@ -139,11 +139,11 @@ export function appInit(shell) {
           <h2>アプリケーション情報</h2>
           <div class="setting-item">
             <label>バージョン:</label>
-            <span id="setting-version">0.4.3</span>
+            <span id="setting-version">0.4.4</span>
           </div>
           <div class="setting-item">
             <label>ビルド番号:</label>
-            <span id="setting-build">25C1305X1</span>
+            <span id="setting-build">25C1350X1</span>
           </div>
           <div class="setting-item">
             <label>最終更新:</label>
