@@ -1,5 +1,3 @@
-
-
 // App metadata
  const appMeta = {
   name: "notea",
