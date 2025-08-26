@@ -80,10 +80,14 @@ function importNotebook(file) {
     reader.readAsText(file);
 }
 
-// Initialize
-function init() {
+// Global canvas and context references
+let canvas = null;
+let ctx = null;
+
+// Initialize canvas with error handling
+function initCanvas() {
     // Check if canvas element exists in the DOM
-    const canvas = document.getElementById('drawing-canvas');
+    canvas = document.getElementById('drawing-canvas');
     if (!canvas) {
         const errorMsg = 'エラー: 描画キャンバスが見つかりません。アプリを正しく読み込めませんでした。';
         console.error(errorMsg);
@@ -102,13 +106,38 @@ function init() {
         } else {
             document.body.prepend(errorDiv);
         }
-        return;
+        return false;
     }
-    const ctx = canvas.getContext('2d');
+    
+    // Get 2D context
+    ctx = canvas.getContext('2d');
+    if (!ctx) {
+        console.error('2D context not supported or canvas already initialized with another context type');
+        return false;
+    }
     
     // Store references globally
     window.canvas = canvas;
     window.ctx = ctx;
+    
+    // Set initial canvas size and styles
+    resizeCanvas();
+    
+    // Set default drawing styles
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = currentColor || '#000000';
+    ctx.lineWidth = currentSize || 2;
+    
+    return true;
+}
+
+// Initialize
+function init() {
+    // Initialize canvas first
+    if (!initCanvas()) {
+        return; // Stop initialization if canvas setup fails
+    }
     
     resizeCanvas();
     initColorSwatches();
@@ -636,40 +665,63 @@ function showNotification(message, type = 'info') {
 
   // Initialize canvas size
   function resizeCanvas() {
-    if (!window.canvas) {
+    if (!canvas) {
       console.error('Canvas not initialized');
-      return;
+      return false;
     }
     
-    const container = window.canvas.parentElement;
+    const container = canvas.parentElement;
     if (!container) {
       console.error('Canvas container not found');
-      return;
+      return false;
     }
     
     const rect = container.getBoundingClientRect();
-    window.canvas.width = rect.width * (window.devicePixelRatio || 1);
-    window.canvas.height = rect.height * (window.devicePixelRatio || 1);
-    window.canvas.style.width = rect.width + 'px';
-    window.canvas.style.height = rect.height + 'px';
+    const dpr = window.devicePixelRatio || 1;
     
-    // Set up canvas context
-    if (window.ctx) {
-      window.ctx.lineCap = 'round';
-      window.ctx.lineJoin = 'round';
-      window.ctx.strokeStyle = window.currentColor || '#000000';
-      window.ctx.lineWidth = window.currentSize || 2;
+    // Set the canvas size in display pixels
+    canvas.style.width = `${rect.width}px`;
+    canvas.style.height = `${rect.height}px`;
+    
+    // Set the canvas size in actual pixels (scaled for high DPI displays)
+    canvas.width = Math.floor(rect.width * dpr);
+    canvas.height = Math.floor(rect.height * dpr);
+    
+    // Scale the context to account for high DPI displays
+    if (ctx) {
+      ctx.scale(dpr, dpr);
+      // Reset transform to handle high DPI correctly
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      
+      // Set drawing styles
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.strokeStyle = window.currentColor || '#000000';
+      ctx.lineWidth = window.currentSize || 2;
     }
     
+    // Redraw the canvas content after resize
     redrawCanvas();
+    return true;
   }
 
   // Redraw all paths on the canvas
   function redrawCanvas() {
-    const currentPage = getCurrentPage();
-    if (!currentPage) return;
+    if (!canvas || !ctx) {
+      console.error('Canvas or context not initialized');
+      return false;
+    }
     
+    const currentPage = getCurrentPage();
+    if (!currentPage || !currentPage.paths) {
+      console.error('No current page or paths to draw');
+      return false;
+    }
+    
+    // Clear the canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Save the current context state
     ctx.save();
     
     // Apply device pixel ratio scaling
@@ -1238,20 +1290,25 @@ function saveToHistory() {
     notification.style.transform = 'translateY(0)';
   }
 
-    // Initialize the app
-  init();
+    // Get current page data with validation
+function getCurrentPage() {
+    if (!notebook || !Array.isArray(notebook.pages) || notebook.pages.length === 0) {
+        console.error('Invalid notebook state');
+        return null;
+    }
+    
+    const page = notebook.pages[notebook.currentPageIndex];
+    if (!page) {
+        console.error('Current page not found');
+        return null;
+    }
+    
+    return page;
+}
+
+// Initialize the app
+init();
 } 
-
-
-
-
-
-
-
-
-
-
-
 
 
 export function appInit(shell) {
@@ -2077,21 +2134,6 @@ function updatePageIndicator() {
     nextPageBtn.disabled = notebook.currentPageIndex === notebook.pages.length - 1;
 }
 
-// Get current page data with validation
-function getCurrentPage() {
-    if (!notebook || !Array.isArray(notebook.pages) || notebook.pages.length === 0) {
-        console.error('Invalid notebook state');
-        return null;
-    }
-    
-    const page = notebook.pages[notebook.currentPageIndex];
-    if (!page) {
-        console.error('Current page not found');
-        return null;
-    }
-    
-    return page;
-}
 
 // Initialize canvas size
 function resizeCanvas() {
