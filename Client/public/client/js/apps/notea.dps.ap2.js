@@ -16,12 +16,15 @@ export function appInit(shell) {
     message: "NoteaApp: 初期化開始",
     level: "info",
   });
-  root.innerHTML = `<iframe
+  root.innerHTML = `
+  <div style="height:100%,width:100%">
+  <iframe
 
   width="100%"
   height="100%"
   src="https://sugisaku8.github.io/Deep-School/client/js/apps/notea/index.html">
-</iframe>`
+</iframe>
+</div>`
  /* root.innerHTML = `
 <style>
 
