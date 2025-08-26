@@ -1164,6 +1164,18 @@ function importNotebook(file) {
 
 // Initialize
 function init() {
+    // Initialize canvas first
+    const canvas = document.getElementById('drawing-canvas');
+    if (!canvas) {
+        console.error('Canvas element not found');
+        return;
+    }
+    const ctx = canvas.getContext('2d');
+    
+    // Store references globally
+    window.canvas = canvas;
+    window.ctx = ctx;
+    
     resizeCanvas();
     initColorSwatches();
     updateRedSheet();
