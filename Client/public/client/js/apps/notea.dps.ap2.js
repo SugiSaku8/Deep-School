@@ -40,10 +40,10 @@ if (backButton) {
   // スタイルを直接適用
   backButton.style.cssText = `
     position: absolute;
-    top: 20px;
+    top: 5px;
     left: 20px;
-    width: 44px;
-    height: 44px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
     background-color: #87c1ff;
     border: none;
