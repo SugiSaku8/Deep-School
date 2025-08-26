@@ -1703,12 +1703,31 @@ init();
 
   // Initialize canvas size
   function resizeCanvas() {
-    const container = canvas.parentElement;
+    if (!window.canvas) {
+      console.error('Canvas not initialized');
+      return;
+    }
+    
+    const container = window.canvas.parentElement;
+    if (!container) {
+      console.error('Canvas container not found');
+      return;
+    }
+    
     const rect = container.getBoundingClientRect();
-    canvas.width = rect.width * window.devicePixelRatio;
-    canvas.height = rect.height * window.devicePixelRatio;
-    canvas.style.width = rect.width + 'px';
-    canvas.style.height = rect.height + 'px';
+    window.canvas.width = rect.width * (window.devicePixelRatio || 1);
+    window.canvas.height = rect.height * (window.devicePixelRatio || 1);
+    window.canvas.style.width = rect.width + 'px';
+    window.canvas.style.height = rect.height + 'px';
+    
+    // Set up canvas context
+    if (window.ctx) {
+      window.ctx.lineCap = 'round';
+      window.ctx.lineJoin = 'round';
+      window.ctx.strokeStyle = window.currentColor || '#000000';
+      window.ctx.lineWidth = window.currentSize || 2;
+    }
+    
     redrawCanvas();
   }
 
