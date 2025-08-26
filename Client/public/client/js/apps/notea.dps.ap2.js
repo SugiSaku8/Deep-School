@@ -1,7 +1,7 @@
 
 
 // App metadata
-export const appMeta = {
+ const appMeta = {
   name: "notea",
   title: "Notea",
   icon: "re/ico/notea.png"
