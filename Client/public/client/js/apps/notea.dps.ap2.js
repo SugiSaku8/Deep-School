@@ -4,7 +4,32 @@ export const appMeta = {
   icon: "re/ico/notea.png"
 };
 
-// Save the current notebook state to localStorage
+// Global notebook state
+let notebook = {
+  pages: [{
+    id: Date.now().toString(),
+    paths: [],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    title: 'ノート 1'
+  }],
+  currentPageIndex: 0
+};
+
+// Get current page data with validation
+function getCurrentPage() {
+    if (!notebook || !Array.isArray(notebook.pages) || notebook.pages.length === 0) {
+        console.error('Invalid notebook state');
+        return null;
+    }
+    const page = notebook.pages[notebook.currentPageIndex];
+    if (!page) {
+        console.error('Current page not found');
+        return null;
+    }
+    return page;
+}
+
 function saveNotebook() {
     const notebookData = {
         pages: notebook.pages,
@@ -79,10 +104,6 @@ function importNotebook(file) {
     
     reader.readAsText(file);
 }
-
-// Global canvas and context references
-let canvas = null;
-let ctx = null;
 
 // Initialize canvas with error handling
 function initCanvas() {
@@ -1328,16 +1349,6 @@ export function appInit(shell) {
   let notesList = [];
   let history = [];
   let historyIndex = -1;
-  let notebook = {
-    pages: [{
-      id: Date.now().toString(),
-      paths: [],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      title: DEFAULT_NOTE_TITLE
-    }],
-    currentPageIndex: 0
-  };
   
   // Drawing state
   let isDrawing = false;
