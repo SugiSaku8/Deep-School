@@ -613,7 +613,7 @@ const sheetColorInput = document.getElementById('sheet-color');
 const hiddenColorInput = document.getElementById('hidden-color');
 const sheetOpacityInput = document.getElementById('sheet-opacity');
 const clearCanvasBtn = document.getElementById('clear-canvas');
-const saveCanvasBtn = document.getElementById('save-canvas');
+const saveNoteBtn = document.getElementById('save-canvas');
 
   // Initialize canvas with error handling
   const canvas = getElement('drawing-canvas');
