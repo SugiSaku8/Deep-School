@@ -11,9 +11,15 @@ function appInit(shell) {
     console.error("NoteaApp: #app-rootが見つかりません");
     return;
   }
-  root.innerHTML = `
+  root.innerHTML = `<iframe
+
+  width="100%"
+  height="100%"
+  src="./notea/index.html">
+</iframe>`
+ /* root.innerHTML = `
 <style>
-/* Base Styles */
+
 :root {
     --system-blue: #007AFF;
     --system-red: #FF3B30;
@@ -42,14 +48,12 @@ body {
     overflow: hidden;
 }
 
-/* App Layout */
 .app-container {
     display: flex;
     flex-direction: column;
     height: 100vh;
 }
 
-/* Page Navigation */
 .page-indicator {
     font-size: 14px;
     font-weight: 500;
@@ -59,7 +63,6 @@ body {
     text-align: center;
 }
 
-/* Toolbar */
 .toolbar {
     background-color: var(--system-background-elevated);
     padding: 8px 16px;
@@ -111,7 +114,6 @@ body {
     margin: 0 4px;
 }
 
-/* Canvas */
 .canvas-container {
     flex: 1;
     position: relative;
@@ -134,7 +136,6 @@ body {
     touch-action: none;
 }
 
-/* Color Picker */
 .color-palette {
     display: flex;
     flex-wrap: wrap;
@@ -219,7 +220,6 @@ body {
     display: inline-block;
 }
 
-/* Pen Size Picker */
 .pen-size-picker select {
     padding: 6px 8px;
     border-radius: 6px;
@@ -229,7 +229,6 @@ body {
     cursor: pointer;
 }
 
-/* Modal */
 .modal {
     position: fixed;
     top: 0;
@@ -307,7 +306,6 @@ body {
     gap: 12px;
 }
 
-/* File List */
 .file-list-container {
     max-height: 50vh;
     overflow-y: auto;
@@ -386,7 +384,7 @@ body {
     color: #8e8e93;
 }
 
-/* Buttons */
+
 .button {
     padding: 8px 16px;
     border-radius: 8px;
@@ -441,7 +439,7 @@ body {
     opacity: 0.9;
 }
 
-/* Notes List */
+
 .notes-list {
     max-height: 50vh;
     overflow-y: auto;
@@ -494,7 +492,7 @@ body {
     opacity: 0.9;
 }
 
-/* Notifications */
+
 .notification {
     position: fixed;
     bottom: 20px;
@@ -510,15 +508,15 @@ body {
 }
 
 .notification.success {
-    background-color: #34C759; /* Green */
+    background-color: #34C759;
 }
 
 .notification.error {
-    background-color: #FF3B30; /* Red */
+    background-color: #FF3B30;
 }
 
 .notification.info {
-    background-color: #007AFF; /* Blue */
+    background-color: #007AFF; 
 }
 
 .notification.fade-out {
@@ -547,7 +545,7 @@ body {
     }
 }
 
-/* Dropdown Menu */
+
 .dropdown {
     position: relative;
     display: inline-block;
@@ -679,19 +677,16 @@ body {
     margin: 4px 0;
 }
 
-/* File Operations */
 .file-input {
     display: none;
 }
 
-/* Undo/Redo Buttons */
 #undo-btn:disabled,
 #redo-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
 
-/* Red Sheet */
 .red-sheet {
     position: absolute;
     top: 0;
@@ -732,12 +727,10 @@ body {
     width: 100px;
 }
 
-/* Utility Classes */
 .hidden {
     display: none !important;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .toolbar {
         flex-wrap: wrap;
@@ -879,8 +872,7 @@ body {
         </div>
     </div>
 
-`;
-
+`;*/
   // Note Data Format:
   // {
   //   version: string,        // App version
