@@ -587,6 +587,7 @@ export function appInit(shell) {
   // UI Elements
   const pencilTool = document.getElementById('pencil-tool');
   const highlighterTool = document.getElementById('highlighter-tool');
+  const eraserTool = document.getElementById('eraser-tool');
   const noteTitleInput = document.getElementById('note-title');
   const importFileInput = document.getElementById('import-file');
   const pageIndicator = document.getElementById('page-indicator');
