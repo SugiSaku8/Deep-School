@@ -890,6 +890,18 @@ export function appInit(shell) {
     }
   });
 
+  // Clear the current page's drawing
+  function clearCanvas() {
+    const currentPage = getCurrentPage();
+    if (currentPage && confirm('現在のページの描画を消去しますか？')) {
+      currentPage.paths = [];
+      currentPage.updatedAt = new Date().toISOString();
+      redrawCanvas();
+      saveToHistory();
+      showNotification('ページをクリアしました');
+    }
+  }
+
   // Clear button
   clearCanvasBtn.addEventListener('click', clearCanvas);
 
