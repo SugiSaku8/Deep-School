@@ -591,19 +591,23 @@ export function appInit(shell) {
     return el;
   };
 
-  const pencilTool = getElement('pencil-tool');
-  const highlighterTool = getElement('highlighter-tool');
-  const eraserTool = getElement('eraser-tool');
-  const noteTitleInput = getElement('note-title');
-  const importFileInput = getElement('import-file', false);
-  const pageIndicator = getElement('page-indicator');
-  const currentToolDisplay = getElement('current-tool');
-  const undoBtn = getElement('undo-btn');
-  const redoBtn = getElement('redo-btn');
-  const prevPageBtn = getElement('prev-page');
-  const nextPageBtn = getElement('next-page');
-  const penSizeSelect = getElement('pen-size');
-  
+// UI Elements
+const pencilTool = document.getElementById('pencil-tool');
+const highlighterTool = document.getElementById('highlighter-tool');
+const eraserTool = document.getElementById('eraser-tool');
+const penSizeSelect = document.getElementById('pen-size');
+const colorSwatches = document.querySelectorAll('.color-swatch');
+const customColorInput = document.getElementById('custom-color');
+const colorPicker = document.getElementById('color-picker');
+const redSheetToggle = document.getElementById('red-sheet-toggle');
+const redSheet = document.getElementById('red-sheet');
+const redSheetControls = document.getElementById('red-sheet-controls');
+const sheetColorInput = document.getElementById('sheet-color');
+const hiddenColorInput = document.getElementById('hidden-color');
+const sheetOpacityInput = document.getElementById('sheet-opacity');
+const clearCanvasBtn = document.getElementById('clear-canvas');
+const saveCanvasBtn = document.getElementById('save-canvas');
+
   // Initialize canvas with error handling
   const canvas = getElement('drawing-canvas');
   if (!canvas) {
@@ -617,7 +621,36 @@ export function appInit(shell) {
     return;
   }
   
+  // Initialize color picker if available
+  if (colorPicker && customColorInput) {
+    colorPicker.addEventListener('click', () => customColorInput.click());
+    customColorInput.addEventListener('input', (e) => {
+      currentColor = e.target.value;
+      updateActiveToolColor(currentColor);
+    });
+  }
+  
+  // Initialize color swatches if available
+  if (colorSwatches.length > 0) {
+    colorSwatches.forEach(swatch => {
+      swatch.addEventListener('click', () => {
+        const color = swatch.dataset.color;
+        if (color) {
+          currentColor = color;
+          updateActiveToolColor(color);
+        }
+      });
+    });
+  }
+  
 // Set initial tool states
+function updateActiveToolColor(color) {
+  if (currentToolDisplay) {
+    currentToolDisplay.style.color = color;
+  }
+  // Update any other UI elements that show the current color
+}
+
 function updateActiveTool(toolId) {
     if (!toolId) return;
     
