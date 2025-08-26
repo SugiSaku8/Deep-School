@@ -1164,10 +1164,26 @@ function importNotebook(file) {
 
 // Initialize
 function init() {
-    // Initialize canvas first
+    // Check if canvas element exists in the DOM
     const canvas = document.getElementById('drawing-canvas');
     if (!canvas) {
-        console.error('Canvas element not found');
+        const errorMsg = 'エラー: 描画キャンバスが見つかりません。アプリを正しく読み込めませんでした。';
+        console.error(errorMsg);
+        
+        // Show error message to user
+        const errorDiv = document.createElement('div');
+        errorDiv.style.color = 'red';
+        errorDiv.style.padding = '20px';
+        errorDiv.style.fontWeight = 'bold';
+        errorDiv.textContent = errorMsg;
+        
+        const appRoot = document.getElementById('app-root');
+        if (appRoot) {
+            appRoot.innerHTML = ''; // Clear existing content
+            appRoot.appendChild(errorDiv);
+        } else {
+            document.body.prepend(errorDiv);
+        }
         return;
     }
     const ctx = canvas.getContext('2d');
