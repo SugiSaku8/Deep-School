@@ -335,23 +335,67 @@ function saveNotebook() {
     return notebookData;
 }
 
-// Load notebook from localStorage
-function loadNotebook() {
-    const savedData = localStorage.getItem('notebookData');
-    if (savedData) {
-        try {
-            const parsedData = JSON.parse(savedData);
+// Load notebook from localStorage or data object
+function loadNotebook(data = null) {
+    try {
+        const savedData = data || localStorage.getItem('notebookData');
+        if (savedData) {
+            const parsedData = typeof savedData === 'string' ? JSON.parse(savedData) : savedData;
             if (parsedData.pages && Array.isArray(parsedData.pages)) {
                 notebook.pages = parsedData.pages;
                 notebook.currentPageIndex = parsedData.currentPageIndex || 0;
                 updatePageIndicator();
+                redrawCanvas();
                 return true;
             }
-        } catch (e) {
-            console.error('Failed to load notebook:', e);
         }
+    } catch (e) {
+        console.error('Failed to load notebook:', e);
+        showNotification('ノートの読み込みに失敗しました', 'error');
     }
     return false;
+}
+
+// Export notebook to JSON file
+function exportNotebook() {
+    const data = saveNotebook();
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `notebook-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    showNotification('ノートをエクスポートしました', 'success');
+}
+
+// Import notebook from file
+function importNotebook(file) {
+    const reader = new FileReader();
+    
+    reader.onload = (e) => {
+        try {
+            const data = JSON.parse(e.target.result);
+            if (confirm('現在のノートは上書きされます。よろしいですか？')) {
+                if (loadNotebook(data)) {
+                    showNotification('ノートをインポートしました', 'success');
+                }
+            }
+        } catch (e) {
+            console.error('Failed to import notebook:', e);
+            showNotification('無効なファイル形式です', 'error');
+        }
+    };
+    
+    reader.onerror = () => {
+        showNotification('ファイルの読み込みに失敗しました', 'error');
+    };
+    
+    reader.readAsText(file);
 }
 
 // Initialize
@@ -572,6 +616,27 @@ function init() {
     // Initialize file menu dropdown
     const fileMenu = document.getElementById('file-menu');
     const dropdownContent = document.querySelector('.dropdown-content');
+    const exportBtn = document.getElementById('export-note');
+    const importBtn = document.getElementById('import-note');
+    const clearCanvasBtn = document.getElementById('clear-canvas');
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.json';
+    fileInput.style.display = 'none';
+    document.body.appendChild(fileInput);
+    
+    // Clear canvas function
+    function clearCurrentPage() {
+        const currentPage = getCurrentPage();
+        if (currentPage) {
+            if (confirm('現在のページをクリアしますか？この操作は元に戻せません。')) {
+                currentPage.paths = [];
+                redrawCanvas();
+                saveNotebook();
+                showNotification('ページをクリアしました', 'success');
+            }
+        }
+    }
     
     if (fileMenu && dropdownContent) {
         fileMenu.addEventListener('click', (e) => {
@@ -584,6 +649,36 @@ function init() {
             if (!e.target.closest('.dropdown')) {
                 dropdownContent.classList.remove('show');
             }
+        });
+        
+        // Export button
+        exportBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            exportNotebook();
+            dropdownContent.classList.remove('show');
+        });
+        
+        // Import button
+        importBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            fileInput.click();
+            dropdownContent.classList.remove('show');
+        });
+        
+        // Handle file selection
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                importNotebook(file);
+            }
+            fileInput.value = ''; // Reset input to allow selecting the same file again
+        });
+        
+        // Clear canvas button
+        clearCanvasBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            clearCurrentPage();
+            dropdownContent.classList.remove('show');
         });
     }
 
