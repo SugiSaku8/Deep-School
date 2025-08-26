@@ -1789,154 +1789,133 @@ init();
   });
   
   // Page navigation
-  prevPageBtn.addEventListener('click', () => goToPage(notebook.currentPageIndex - 1));
-  nextPageBtn.addEventListener('click', () => goToPage(notebook.currentPageIndex + 1));
+  if (prevPageBtn) {
+    try {
+      prevPageBtn.addEventListener('click', () => goToPage(notebook.currentPageIndex - 1));
+    } catch (error) {
+      console.error('Error initializing previous page button:', error);
+    }
+  }
+
+  if (nextPageBtn) {
+    try {
+      nextPageBtn.addEventListener('click', () => goToPage(notebook.currentPageIndex + 1));
+    } catch (error) {
+      console.error('Error initializing next page button:', error);
+    }
+  }
   
   // Undo/Redo buttons
-  undoBtn.addEventListener('click', undo);
-  redoBtn.addEventListener('click', redo);
+  if (undoBtn) {
+    try {
+      undoBtn.addEventListener('click', undo);
+    } catch (error) {
+      console.error('Error initializing undo button:', error);
+    }
+  }
+
+  if (redoBtn) {
+    try {
+      redoBtn.addEventListener('click', redo);
+    } catch (error) {
+      console.error('Error initializing redo button:', error);
+    }
+  }
   
   // Red sheet mode
-  redSheetToggle.addEventListener('click', () => {
-    redSheet.style.display = redSheet.style.display === 'none' ? 'block' : 'none';
-    redSheetControls.style.display = redSheetControls.style.display === 'none' ? 'flex' : 'none';
-  });
+  if (redSheetToggle) {
+    redSheetToggle.addEventListener('click', () => {
+      redSheet.style.display = redSheet.style.display === 'none' ? 'block' : 'none';
+      redSheetControls.style.display = redSheetControls.style.display === 'none' ? 'flex' : 'none';
+    });
+  }
   
-  sheetColorInput.addEventListener('input', (e) => {
-    redSheet.style.backgroundColor = e.target.value;
-  });
+  if (sheetColorInput) {
+    sheetColorInput.addEventListener('input', (e) => {
+      redSheet.style.backgroundColor = e.target.value;
+    });
+  }
   
-  sheetOpacityInput.addEventListener('input', (e) => {
-    redSheet.style.opacity = e.target.value;
-  });
+  if (sheetOpacityInput) {
+    sheetOpacityInput.addEventListener('input', (e) => {
+      redSheet.style.opacity = e.target.value;
+    });
+  }
   
   // Note title
-  noteTitleInput.addEventListener('change', (e) => {
-    const currentPage = getCurrentPage();
-    if (currentPage) {
-      currentPage.title = e.target.value || DEFAULT_NOTE_TITLE;
-      currentPage.updatedAt = new Date().toISOString();
-      saveToHistory();
-    }
-  });
+  if (noteTitleInput) {
+    noteTitleInput.addEventListener('change', (e) => {
+      const currentPage = getCurrentPage();
+      if (currentPage) {
+        currentPage.title = e.target.value || DEFAULT_NOTE_TITLE;
+        currentPage.updatedAt = new Date().toISOString();
+        saveToHistory();
+      }
+    });
+  }
   
   // Clear canvas button
-  clearCanvasBtn.addEventListener('click', clearCurrentPage);
+  if (clearCanvasBtn) {
+    clearCanvasBtn.addEventListener('click', clearCurrentPage);
+  }
 
   // Tool selection
-  pencilTool.addEventListener('click', () => {
-    currentTool = 'pencil';
-    currentColor = colorPicker.value;
-    currentSize = parseFloat(penSizeSelect.value);
-    updateActiveTool('pencil-tool');
-    currentToolDisplay.textContent = 'ペン';
-  });
+  const initToolButton = (element, toolId) => {
+    if (element) {
+      try {
+        element.addEventListener('click', () => {
+          currentTool = toolId;
+          switch (toolId) {
+            case 'pencil':
+              currentColor = colorPicker.value;
+              updateActiveTool('pencil-tool');
+              currentToolDisplay.textContent = 'ペン';
+              break;
+            case 'highlighter':
+              currentColor = colorPicker.value + '80'; // Add transparency
+              updateActiveTool('highlighter-tool');
+              currentToolDisplay.textContent = 'マーカー';
+              break;
+            case 'eraser':
+              currentColor = '#ffffff';
+              updateActiveTool('eraser-tool');
+              currentToolDisplay.textContent = '消しゴム';
+              break;
+          }
+        });
+      } catch (error) {
+        console.error(`Error initializing ${toolId}:`, error);
+      }
+    }
+  };
 
-  highlighterTool.addEventListener('click', () => {
-    currentTool = 'highlighter';
-    currentColor = colorPicker.value + '80'; // Add transparency
-    currentSize = parseFloat(penSizeSelect.value) * 2;
-    updateActiveTool('highlighter-tool');
-    currentToolDisplay.textContent = 'マーカー';
-  });
+  if (pencilTool) {
+    initToolButton(pencilTool, 'pencil');
+  }
 
-  eraserTool.addEventListener('click', () => {
-    currentTool = 'eraser';
-    currentColor = '#ffffff';
-    currentSize = parseFloat(penSizeSelect.value) * 2;
-    updateActiveTool('eraser-tool');
-    currentToolDisplay.textContent = '消しゴム';
-  });
+  if (highlighterTool) {
+    initToolButton(highlighterTool, 'highlighter');
+  }
 
-  function updateActiveTool(activeId) {
-    [pencilTool, highlighterTool, eraserTool].forEach(tool => {
-      tool.classList.toggle('active', tool.id === activeId);
-    });
+  if (eraserTool) {
+    initToolButton(eraserTool, 'eraser');
   }
 
   // Pen size change
-  penSizeSelect.addEventListener('change', (e) => {
-    currentSize = parseFloat(e.target.value);
-  });
-
-  // Color picker
-  colorPicker.addEventListener('input', (e) => {
-    currentColor = e.target.value;
-    if (currentTool === 'pencil') {
-      updateActiveTool('pencil-tool');
-    } else if (currentTool === 'highlighter') {
-      updateActiveTool('highlighter-tool');
-    }
-  });
-
-  // Clear the current page's drawing
-  function clearCanvas() {
-    const currentPage = getCurrentPage();
-    if (currentPage && confirm('現在のページの描画を消去しますか？')) {
-      currentPage.paths = [];
-      currentPage.updatedAt = new Date().toISOString();
-      redrawCanvas();
-      saveToHistory();
-      showNotification('ページをクリアしました');
+  if (penSizeSelect) {
+    try {
+      penSizeSelect.addEventListener('change', (e) => {
+        if (e && e.target) {
+          currentSize = parseFloat(e.target.value) || 0.5;
+        }
+      });
+    } catch (error) {
+      console.error('Error initializing pen size selector:', error);
     }
   }
 
-  // Clear button
-  clearCanvasBtn.addEventListener('click', clearCanvas);
-
-  // Save button
-  saveNoteBtn.addEventListener('click', () => {
-    // In a real app, you would implement save functionality
-    alert('ノートを保存しました');
-    saveState();
-  });
-
-  // New note button
-  newNoteBtn.addEventListener('click', () => {
-    if (confirm('新しいノートを作成しますか？現在のノートは保存されません。')) {
-      // Create a new notebook with a single empty page
-      notebook = {
-        pages: [{
-          id: Date.now().toString(),
-          paths: [],
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          title: DEFAULT_NOTE_TITLE
-        }],
-        currentPageIndex: 0
-      };
-      
-      // Reset UI
-      noteTitleInput.value = DEFAULT_NOTE_TITLE;
-      updatePageIndicator();
-      redrawCanvas();
-      saveToHistory();
-      showNotification('新しいノートを作成しました');
-    }
-  });
-
-  // Initialize
-  function init() {
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-    
-    // Load saved notebook if available
-    loadNotebook();
-    
-    // Initialize with empty history
-    saveToHistory();
-    
-    // Set up event listeners for tool buttons
-    pencilTool.addEventListener('click', () => setTool('pencil'));
-    highlighterTool.addEventListener('click', () => setTool('highlighter'));
-    eraserTool.addEventListener('click', () => setTool('eraser'));
-    
-    // Pen size change
-    penSizeSelect.addEventListener('change', (e) => {
-      currentSize = parseFloat(e.target.value);
-    });
-    
-    // Color picker
+  // Color picker
+  if (colorPicker) {
     colorPicker.addEventListener('input', (e) => {
       currentColor = e.target.value;
       if (currentTool === 'pencil') {
@@ -1945,12 +1924,127 @@ init();
         updateActiveTool('highlighter-tool');
       }
     });
+  }
+
+  // Clear the current page's drawing
+  if (clearCanvasBtn) {
+    clearCanvasBtn.addEventListener('click', () => {
+      const currentPage = getCurrentPage();
+      if (currentPage && confirm('現在のページの描画を消去しますか？')) {
+        currentPage.paths = [];
+        currentPage.updatedAt = new Date().toISOString();
+        redrawCanvas();
+        saveToHistory();
+        showNotification('ページをクリアしました');
+      }
+    });
+  }
+
+  // Save button
+  if (saveNoteBtn) {
+    saveNoteBtn.addEventListener('click', () => {
+      // In a real app, you would implement save functionality
+      alert('ノートを保存しました');
+      saveState();
+    });
+  }
+
+  // New note button
+  if (newNoteBtn) {
+    newNoteBtn.addEventListener('click', () => {
+      if (confirm('新しいノートを作成しますか？現在のノートは保存されません。')) {
+        // Create a new notebook with a single empty page
+        notebook = {
+          pages: [{
+            id: Date.now().toString(),
+            paths: [],
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            title: DEFAULT_NOTE_TITLE
+          }],
+          currentPageIndex: 0
+        };
+        
+        // Reset UI
+        noteTitleInput.value = DEFAULT_NOTE_TITLE;
+        updatePageIndicator();
+        redrawCanvas();
+        saveToHistory();
+        showNotification('新しいノートを作成しました');
+      }
+    });
+  }
+
+  // Initialize
+  function init() {
+    if (canvas) {
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+    }
     
+    // Load saved notebook if available
+    loadNotebook();
+    
+    // Initialize with empty history
+    saveToHistory();
+    
+    // Set up event listeners for tool buttons
+    if (pencilTool) {
+      pencilTool.addEventListener('click', () => setTool('pencil'));
+    }
+
+    if (highlighterTool) {
+      highlighterTool.addEventListener('click', () => setTool('highlighter'));
+    }
+
+    if (eraserTool) {
+      eraserTool.addEventListener('click', () => setTool('eraser'));
+    }
+    
+    // Pen size change
+    if (penSizeSelect) {
+      try {
+        penSizeSelect.addEventListener('change', (e) => {
+          currentSize = parseFloat(e.target.value);
+        });
+      } catch (error) {
+        console.error('Error initializing pen size selector:', error);
+      }
+    }
+    
+    // Color picker
+    if (colorPicker) {
+      try {
+        colorPicker.addEventListener('input', (e) => {
+          currentColor = e.target.value;
+          if (currentTool === 'pencil') {
+            updateActiveTool('pencil-tool');
+          } else if (currentTool === 'highlighter') {
+            updateActiveTool('highlighter-tool');
+          }
+        });
+      } catch (error) {
+        console.error('Error initializing color picker:', error);
+      }
+    }
+
     // Save button
-    saveNoteBtn.addEventListener('click', saveNotebook);
+    if (saveNoteBtn) {
+      try {
+        saveNoteBtn.addEventListener('click', saveNotebook);
+      } catch (error) {
+        console.error('Error initializing save button:', error);
+      }
+    }
     
     // New page button
-    newPageBtn.addEventListener('click', addNewPage);
+    if (newPageBtn) {
+      try {
+        newPageBtn.addEventListener('click', addNewPage);
+      } catch (error) {
+        console.error('Error initializing new page button:', error);
+      }
+    }
     
     // Set initial tool
     setTool('pencil');
