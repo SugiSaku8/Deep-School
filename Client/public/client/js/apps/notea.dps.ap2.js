@@ -1,10 +1,30 @@
+
+
 // App metadata
 export const appMeta = {
   name: "notea",
   title: "Notea",
   icon: "re/ico/notea.png"
 };
-
+// App initialization
+function appInit(shell) {
+  const root = document.getElementById('app-root');
+  if (!root) {
+    console.error('NoteaApp: #app-rootが見つかりません');
+    return;
+  }
+  
+  // Initialize the app
+  init();
+  
+  // Set up event listeners
+  window.addEventListener('resize', resizeCanvas);
+  
+  // Log initialization
+  if (shell && shell.log) {
+    shell.log({from: 'dp.app.notea.out', message: 'NoteaApp: 初期化完了', level: 'info'});
+  }
+}
 // Global notebook state
 let notebook = {
   pages: [{
