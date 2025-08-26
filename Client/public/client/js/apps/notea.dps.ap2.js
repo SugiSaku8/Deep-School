@@ -1,4 +1,5 @@
-export const appMeta = {
+// App metadata
+const appMeta = {
   name: "notea",
   title: "Notea",
   icon: "re/ico/notea.png"
@@ -107,6 +108,12 @@ function importNotebook(file) {
 
 // Initialize canvas with error handling
 function initCanvas() {
+    // Wait for DOM to be fully loaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => initCanvas());
+        return false;
+    }
+
     // Check if canvas element exists in the DOM
     canvas = document.getElementById('drawing-canvas');
     if (!canvas) {
@@ -130,45 +137,72 @@ function initCanvas() {
         return false;
     }
     
-    // Get 2D context
-    ctx = canvas.getContext('2d');
-    if (!ctx) {
-        console.error('2D context not supported or canvas already initialized with another context type');
+    try {
+        // Get 2D context
+        ctx = canvas.getContext('2d');
+        if (!ctx) {
+            throw new Error('2D context not supported or canvas already initialized with another context type');
+        }
+        
+        // Store references globally
+        window.canvas = canvas;
+        window.ctx = ctx;
+        
+        // Set initial canvas size and styles
+        resizeCanvas();
+        
+        // Set default drawing styles
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.strokeStyle = window.currentColor || '#000000';
+        ctx.lineWidth = window.currentSize || 2;
+        
+        console.log('Canvas initialized successfully');
+        return true;
+    } catch (error) {
+        console.error('Failed to initialize canvas:', error);
         return false;
     }
-    
-    // Store references globally
-    window.canvas = canvas;
-    window.ctx = ctx;
-    
-    // Set initial canvas size and styles
-    resizeCanvas();
-    
-    // Set default drawing styles
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.strokeStyle = currentColor || '#000000';
-    ctx.lineWidth = currentSize || 2;
-    
-    return true;
 }
 
 // Initialize
 function init() {
-    // Initialize canvas first
-    if (!initCanvas()) {
-        return; // Stop initialization if canvas setup fails
+    // Wait for DOM to be fully loaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+        return;
     }
-    
-    resizeCanvas();
-    initColorSwatches();
-    updateRedSheet();
 
-    // Set initial active states
-    pencilTool.classList.add('active');
+    try {
+        // Initialize canvas first
+        if (!initCanvas()) {
+            console.error('Failed to initialize canvas');
+            return;
+        }
+        
+        // Initialize UI components
+        initColorSwatches();
+        updateRedSheet();
 
-    // Set initial pen size
-    currentSize = parseFloat(penSizeSelect.value);
+        // Set initial active states
+        const pencilTool = document.getElementById('pencil-tool');
+        const penSizeSelect = document.getElementById('pen-size');
+        
+        if (pencilTool) {
+            pencilTool.classList.add('active');
+        }
+
+        // Set initial pen size
+        if (penSizeSelect) {
+            window.currentSize = parseFloat(penSizeSelect.value);
+        } else {
+            window.currentSize = 2; // Default size
+        }
+        
+        console.log('App initialized successfully');
+    } catch (error) {
+        console.error('Error during initialization:', error);
+    }
 
     // Initialize drawing tools
     pencilTool.addEventListener('click', () => {
@@ -655,7 +689,7 @@ function showNotification(message, type = 'info') {
     }, 3000);
 }
 
-// Initialize the app
+
   // Add a new page
   function addNewPage() {
     const newPage = {
@@ -1327,16 +1361,49 @@ function getCurrentPage() {
     return page;
 }
 
-// Initialize the app
-init();
-} 
+function initializeApp() {
+  // Initialize canvas and other components
+  if (!initCanvas()) {
+    console.error('Failed to initialize canvas');
+    return;
+  }
+  
+  // Initialize other components
+  initColorSwatches();
+  updateRedSheet();
+  
+  // Set initial active states
+  const pencilTool = document.getElementById('pencil-tool');
+  const penSizeSelect = document.getElementById('pen-size');
+  
+  if (pencilTool) {
+    pencilTool.classList.add('active');
+  }
 
+  // Set initial pen size
+  if (penSizeSelect) {
+    window.currentSize = parseFloat(penSizeSelect.value);
+  } else {
+    window.currentSize = 2; // Default size
+  }
+  
+  console.log('App initialized successfully');
+}
 
-export function appInit(shell) {
+// App initialization implementation
+function appInit(shell) {
   const root = document.getElementById('app-root');
   if (!root) {
     console.error('NoteApp: #app-rootが見つかりません');
     return;
+  }
+  
+  // Initialize the app when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeApp);
+  } else {
+    // Small delay to ensure all elements are in the DOM
+    setTimeout(initializeApp, 0);
   }
 
   // Constants
@@ -2389,3 +2456,7 @@ function saveNote() {
     lastX = x;
     lastY = y;
 }
+}
+
+// Export public API
+export { appMeta, appInit };
