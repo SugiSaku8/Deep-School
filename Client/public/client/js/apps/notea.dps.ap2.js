@@ -1,11 +1,11 @@
 // App metadata
-const appMeta = {
+export const appMeta = {
   name: "notea",
   title: "Notea",
   icon: "re/ico/notea.png",
 };
 // App initialization
-function appInit(shell) {
+export function appInit(shell) {
   const root = document.getElementById("app-root");
   if (!root) {
     console.error("NoteaApp: #app-rootが見つかりません");
