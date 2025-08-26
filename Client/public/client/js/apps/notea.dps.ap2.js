@@ -350,14 +350,22 @@ export function appInit(shell) {
       }
 
       .color-swatch {
-        width: 24px;
-        height: 24px;
+        width: 28px;
+        height: 28px;
         border-radius: 50%;
-        border: 2px solid #ffffff;
+        border: 2px solid #e5e5ea;
         cursor: pointer;
         transition: all 0.2s ease;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        display: inline-block;
+        vertical-align: middle;
       }
+      
+      .color-swatch.black { background-color: #000000; }
+      .color-swatch.red { background-color: #FF3B30; }
+      .color-swatch.blue { background-color: #007AFF; }
+      .color-swatch.green { background-color: #34C759; }
+      .color-swatch.yellow { background-color: #FFCC00; }
 
       .color-swatch:hover {
         transform: scale(1.15);
@@ -684,13 +692,25 @@ function updateRedSheet() {
     }
   }
   
-  // Initialize color swatches if available
-  if (colorSwatches && colorSwatches.length > 0) {
+  // Initialize color swatches
+  function initColorSwatches() {
     try {
+      const colorSwatches = document.querySelectorAll('.color-swatch');
       colorSwatches.forEach(swatch => {
         if (swatch) {
+          // Set background color from data-color attribute if not already set
+          const color = swatch.dataset.color;
+          if (color && !swatch.style.backgroundColor) {
+            swatch.style.backgroundColor = color;
+          }
+          
           swatch.addEventListener('click', () => {
-            const color = swatch.dataset.color;
+            // Remove active class from all swatches
+            colorSwatches.forEach(s => s.classList.remove('active'));
+            // Add active class to clicked swatch
+            swatch.classList.add('active');
+            
+            // Update current color
             if (color) {
               currentColor = color;
               updateActiveToolColor(color);
@@ -698,10 +718,19 @@ function updateRedSheet() {
           });
         }
       });
+      
+      // Set default active color (black)
+      const defaultSwatch = document.querySelector('.color-swatch.black');
+      if (defaultSwatch) {
+        defaultSwatch.classList.add('active');
+      }
     } catch (error) {
       console.error('Error initializing color swatches:', error);
     }
   }
+  
+  // Initialize color swatches
+  initColorSwatches();
   
 // Set initial tool states
 function updateActiveToolColor(color) {
@@ -1107,24 +1136,58 @@ function init() {
         currentSize = parseFloat(e.target.value);
     });
 
-    // Initialize canvas event listeners
-    canvas.addEventListener('mousedown', startDrawing);
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('mouseup', stopDrawing);
-    canvas.addEventListener('mouseout', stopDrawing);
+    // Initialize canvas event listeners with proper touch support
+    function initCanvasEvents() {
+        // Remove any existing event listeners first
+        canvas.removeEventListener('mousedown', startDrawing);
+        canvas.removeEventListener('mousemove', draw);
+        canvas.removeEventListener('mouseup', stopDrawing);
+        canvas.removeEventListener('mouseout', stopDrawing);
+        canvas.removeEventListener('touchstart', handleTouchStart);
+        canvas.removeEventListener('touchmove', handleTouchMove);
+        canvas.removeEventListener('touchend', handleTouchEnd);
+
+        // Add new event listeners
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+        
+        // Touch support for mobile devices
+        canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+        canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+        canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+    }
     
-    // Touch support for mobile devices
-    canvas.addEventListener('touchstart', (e) => {
+    // Touch event handlers
+    function handleTouchStart(e) {
         e.preventDefault();
-        startDrawing(e.touches[0]);
-    });
+        const touch = e.touches[0];
+        startDrawing({
+            preventDefault: () => {},
+            clientX: touch.clientX,
+            clientY: touch.clientY
+        });
+    }
     
-    canvas.addEventListener('touchmove', (e) => {
+    function handleTouchMove(e) {
         e.preventDefault();
-        draw(e.touches[0]);
-    });
+        if (!isDrawing) return;
+        const touch = e.touches[0];
+        draw({
+            preventDefault: () => {},
+            clientX: touch.clientX,
+            clientY: touch.clientY
+        });
+    }
     
-    canvas.addEventListener('touchend', stopDrawing);
+    function handleTouchEnd(e) {
+        e.preventDefault();
+        stopDrawing();
+    }
+    
+    // Initialize the canvas events
+    initCanvasEvents();
 
     // Initialize page navigation
     document.getElementById('prev-page').addEventListener('click', () => {
@@ -1743,38 +1806,54 @@ init();
     }
   }
 
-  // Event Listeners
-  canvas.addEventListener('mousedown', startDrawing);
-  canvas.addEventListener('mousemove', draw);
-  canvas.addEventListener('mouseup', stopDrawing);
-  canvas.addEventListener('mouseout', stopDrawing);
-
-  // Touch support
-  canvas.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    const touch = e.touches[0];
-    const mouseEvent = new MouseEvent('mousedown', {
-      clientX: touch.clientX,
-      clientY: touch.clientY
+  // Button styling for better visibility
+  function styleButtons() {
+    const buttons = document.querySelectorAll('button, .tool-button, .color-swatch');
+    buttons.forEach(btn => {
+      if (!btn.style.backgroundColor) {
+        // Add default background color if none exists
+        if (btn.classList.contains('color-swatch')) {
+          // Keep color swatch colors as is
+          btn.style.border = '2px solid #333';
+          btn.style.borderRadius = '4px';
+          btn.style.width = '30px';
+          btn.style.height = '30px';
+          btn.style.margin = '2px';
+          btn.style.cursor = 'pointer';
+        } else {
+          // Style tool buttons
+          btn.style.backgroundColor = btn.classList.contains('active') ? '#4a90e2' : '#f0f0f0';
+          btn.style.color = btn.classList.contains('active') ? 'white' : '#333';
+          btn.style.border = '1px solid #ccc';
+          btn.style.borderRadius = '4px';
+          btn.style.padding = '6px 12px';
+          btn.style.margin = '2px';
+          btn.style.cursor = 'pointer';
+          btn.style.transition = 'all 0.2s ease';
+          
+          // Hover effect
+          btn.addEventListener('mouseover', () => {
+            if (!btn.classList.contains('active')) {
+              btn.style.backgroundColor = '#e0e0e0';
+            }
+          });
+          
+          btn.addEventListener('mouseout', () => {
+            if (!btn.classList.contains('active')) {
+              btn.style.backgroundColor = '#f0f0f0';
+            }
+          });
+        }
+      }
     });
-    canvas.dispatchEvent(mouseEvent);
-  }, { passive: false });
-
-  canvas.addEventListener('touchmove', (e) => {
-    e.preventDefault();
-    const touch = e.touches[0];
-    const mouseEvent = new MouseEvent('mousemove', {
-      clientX: touch.clientX,
-      clientY: touch.clientY
-    });
-    canvas.dispatchEvent(mouseEvent);
-  }, { passive: false });
-
-  canvas.addEventListener('touchend', (e) => {
-    e.preventDefault();
-    const mouseEvent = new MouseEvent('mouseup');
-    canvas.dispatchEvent(mouseEvent);
-  });
+  }
+  
+  // Apply button styles when DOM is loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', styleButtons);
+  } else {
+    styleButtons();
+  }
   
   // Keyboard shortcuts
   document.addEventListener('keydown', (e) => {
