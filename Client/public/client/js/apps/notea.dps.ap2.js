@@ -26,7 +26,7 @@ export function appInit(shell) {
   <iframe
 
   width="100%;"
-  height="700px;"
+  height="720px;"
   src="https://sugisaku8.github.io/Deep-School/client/js/apps/notea/index.html">
 </iframe>
 </div>`;
