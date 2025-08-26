@@ -602,6 +602,7 @@ export function appInit(shell) {
   const redoBtn = getElement('redo-btn');
   const prevPageBtn = getElement('prev-page');
   const nextPageBtn = getElement('next-page');
+  const newPageBtn = getElement('new-page', false);
   const penSizeSelect = getElement('pen-size');
   const colorPicker = getElement('color-picker');
   const customColorInput = getElement('custom-color');
