@@ -182,12 +182,25 @@ function redrawCanvas() {
     ctx.drawImage(tempCanvas, 0, 0);
 }
 
+// Get canvas-relative coordinates
+function getCanvasCoordinates(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    
+    const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+    const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+    
+    return {
+        x: (clientX - rect.left) * scaleX,
+        y: (clientY - rect.top) * scaleY
+    };
+}
+
 // Start drawing
 function startDrawing(e) {
     isDrawing = true;
-    const rect = canvas.getBoundingClientRect();
-    const x = (e.clientX || e.touches[0].clientX) - rect.left;
-    const y = (e.clientY || e.touches[0].clientY) - rect.top;
+    const { x, y } = getCanvasCoordinates(e);
 
     lastX = x;
     lastY = y;
@@ -222,9 +235,7 @@ function stopDrawing() {
 function draw(e) {
     if (!isDrawing) return;
 
-    const rect = canvas.getBoundingClientRect();
-    const x = (e.clientX || e.touches[0].clientX) - rect.left;
-    const y = (e.clientY || e.touches[0].clientY) - rect.top;
+    const { x, y } = getCanvasCoordinates(e);
 
     // Add point to current path
     currentPath.points.push({ x, y });
@@ -416,31 +427,6 @@ function init() {
 
     document.getElementById('add-page').addEventListener('click', addNewPage);
 
-    // Update red sheet overlay
-    function updateRedSheet() {
-        const sheetColor = sheetColorInput.value;
-        const hiddenColor = hiddenColorInput.value;
-        const opacity = sheetOpacityInput.value;
-        
-        // Update red sheet style
-        redSheet.style.backgroundColor = sheetColor;
-        redSheet.style.opacity = opacity;
-        
-        // Update mix-blend-mode based on the sheet color
-        // For dark sheets, use 'lighten' to hide dark text
-        // For light sheets, use 'darken' to hide light text
-        const isDark = isColorDark(sheetColor);
-        redSheet.style.mixBlendMode = isDark ? 'lighten' : 'darken';
-        
-        // Update hidden color preview
-        hiddenColorInput.style.backgroundColor = hiddenColor;
-        
-        // Save to local storage
-        localStorage.setItem('redSheetColor', sheetColor);
-        localStorage.setItem('hiddenColor', hiddenColor);
-        localStorage.setItem('sheetOpacity', opacity);
-    }
-    
     // Check if a color is dark
     function isColorDark(color) {
         // Convert hex to RGB
@@ -473,7 +459,8 @@ function init() {
             swatch.setAttribute('title', color);
             swatch.style.backgroundColor = color;
             
-            swatch.addEventListener('click', () => {
+            swatch.addEventListener('click', (e) => {
+                e.stopPropagation();
                 // Remove active class from all swatches
                 colorSwatches.forEach(s => s.classList.remove('active'));
                 // Add active class to clicked swatch
@@ -494,39 +481,172 @@ function init() {
         
         // Initialize custom color picker
         customColorInput.addEventListener('input', (e) => {
+            e.stopPropagation();
             currentColor = e.target.value;
             // Update active state
             document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
         });
+
+        // Initialize color picker button
+        colorPicker.addEventListener('click', (e) => {
+            e.stopPropagation();
+            customColorInput.click();
+        });
+
+        // Prevent color picker from closing when clicking inside
+        customColorInput.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+    }
+
+    // Initialize red sheet
+    function initRedSheet() {
+        // Toggle red sheet visibility
+        redSheetToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            redSheetControls.classList.toggle('hidden');
+            redSheet.classList.toggle('hidden');
+            
+            // Save red sheet visibility state
+            const isVisible = !redSheet.classList.contains('hidden');
+            localStorage.setItem('redSheetVisible', isVisible);
+        });
+
+        // Load saved red sheet settings
+        const savedSheetColor = localStorage.getItem('redSheetColor') || '#FF3B30';
+        const savedHiddenColor = localStorage.getItem('hiddenColor') || '#000000';
+        const savedOpacity = localStorage.getItem('sheetOpacity') || '0.5';
+        const isRedSheetVisible = localStorage.getItem('redSheetVisible') !== 'false';
+
+        sheetColorInput.value = savedSheetColor;
+        hiddenColorInput.value = savedHiddenColor;
+        sheetOpacityInput.value = savedOpacity;
+        
+        // Set initial visibility
+        if (!isRedSheetVisible) {
+            redSheet.classList.add('hidden');
+        } else {
+            redSheet.classList.remove('hidden');
+        }
+
+        // Update on input
+        sheetColorInput.addEventListener('input', updateRedSheet);
+        hiddenColorInput.addEventListener('input', updateRedSheet);
+        sheetOpacityInput.addEventListener('input', updateRedSheet);
+        
+        // Initial update
+        updateRedSheet();
+    }
+    
+    // Update red sheet when controls change
+    function updateRedSheet() {
+        const sheetColor = sheetColorInput.value;
+        const hiddenColor = hiddenColorInput.value;
+        const opacity = sheetOpacityInput.value;
+        
+        // Update red sheet style
+        redSheet.style.backgroundColor = sheetColor;
+        redSheet.style.opacity = opacity;
+        
+        // Update mix-blend-mode based on the sheet color
+        const isDark = isColorDark(sheetColor);
+        redSheet.style.mixBlendMode = isDark ? 'lighten' : 'darken';
+        
+        // Update hidden color preview
+        hiddenColorInput.style.backgroundColor = hiddenColor;
+        
+        // Save to local storage
+        localStorage.setItem('redSheetColor', sheetColor);
+        localStorage.setItem('hiddenColor', hiddenColor);
+        localStorage.setItem('sheetOpacity', opacity);
     }
     
     // Call the function to initialize color swatches
     initColorSwatches();
+    
+    // Initialize red sheet functionality
+    initRedSheet();
+    // Initial update of red sheet
+    updateRedSheet();
+    
+    // Initialize file menu dropdown
+    const fileMenu = document.getElementById('file-menu');
+    const dropdownContent = document.querySelector('.dropdown-content');
+    
+    if (fileMenu && dropdownContent) {
+        fileMenu.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdownContent.classList.toggle('show');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.dropdown')) {
+                dropdownContent.classList.remove('show');
+            }
+        });
+    }
 
-    // Initialize file explorer button
-    document.getElementById('load-note').addEventListener('click', () => {
-        // Create or show file explorer modal
-        const modal = document.getElementById('file-explorer-modal');
+    // Initialize modals
+    const setupModal = (modalId, openBtnId, closeBtnClass) => {
+        const modal = document.getElementById(modalId);
+        const openBtn = document.getElementById(openBtnId);
+        const closeBtns = document.querySelectorAll(closeBtnClass);
+        
+        if (openBtn) {
+            openBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (modal) {
+                    modal.style.display = 'block';
+                }
+            });
+        }
+        
+        closeBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+        
+        // Prevent modal from closing when clicking inside
         if (modal) {
-            modal.style.display = 'block';
+            modal.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
         }
-    });
+    };
     
-    // Close modal when clicking outside
+    // Setup save and load modals
+    setupModal('file-explorer-modal', 'load-note', '.close-modal');
+    setupModal('save-note-modal', 'save-note', '.close-save-modal');
+    
+    // Close modals when clicking outside
     window.addEventListener('click', (e) => {
-        const modal = document.getElementById('file-explorer-modal');
-        if (e.target === modal) {
-            modal.style.display = 'none';
-        }
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => {
+            if (modal.style.display === 'block') {
+                modal.style.display = 'none';
+            }
+        });
     });
     
-    // Close button for file explorer
-    const closeBtn = document.querySelector('.close-modal');
-    if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-            const modal = document.getElementById('file-explorer-modal');
-            if (modal) {
-                modal.style.display = 'none';
+    // Save note button handler
+    const saveNoteBtn = document.getElementById('confirm-save');
+    if (saveNoteBtn) {
+        saveNoteBtn.addEventListener('click', () => {
+            const noteName = document.getElementById('note-name').value.trim();
+            if (noteName) {
+                saveNotebook(noteName);
+                const modal = document.getElementById('save-note-modal');
+                if (modal) {
+                    modal.style.display = 'none';
+                }
+                showNotification('ノートを保存しました', 'success');
+            } else {
+                showNotification('ノート名を入力してください', 'error');
             }
         });
     }

@@ -628,11 +628,11 @@ body {
     box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
 }
 
-.dropdown:hover .dropdown-content {
+.dropdown-content.show {
     display: block;
 }
 
-.dropdown:hover .dropdown-content .red-sheet-controls {
+.dropdown-content.show .red-sheet-controls {
     transform: translateY(0);
     opacity: 1;
     visibility: visible;
@@ -684,17 +684,17 @@ body {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    opacity: 0.5;
     z-index: 10;
-    transition: all 0.3s ease;
-    background-blend-mode: normal, difference;
-    mix-blend-mode: multiply;
-    will-change: background, opacity;
-    display: none;
+    mix-blend-mode: darken;
+    opacity: 0.5;
+    background-color: #FF3B30;
+    display: block;
+    transition: opacity 0.2s ease;
 }
 
-.red-sheet.active {
-    display: block;
+.red-sheet.hidden {
+    opacity: 0;
+    pointer-events: none;
 }
 
 .red-sheet-controls {
