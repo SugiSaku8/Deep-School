@@ -12,6 +12,17 @@
     <div class="app-container">
         <header class="toolbar">
             <div class="tool-group">
+                <button id="prev-page" class="tool-button" title="前のページ">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <span id="page-indicator" class="page-indicator">1/1</span>
+                <button id="next-page" class="tool-button" title="次のページ">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                <button id="add-page" class="tool-button" title="新しいページを追加">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <div class="divider"></div>
                 <button id="pencil-tool" class="tool-button active" title="シャープペンシル">
                     <i class="fas fa-pencil-alt"></i>
                 </button>
@@ -84,6 +95,26 @@
             <canvas id="drawing-canvas"></canvas>
             <div id="red-sheet" class="red-sheet"></div>
         </main>
+    </div>
+
+    <!-- File Explorer Modal -->
+    <div id="file-explorer" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>保存されたノート</h3>
+                <button class="close-button">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="file-list-container">
+                    <ul id="note-list" class="file-list">
+                        <!-- Note items will be added here dynamically -->
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-explorer" class="button secondary">キャンセル</button>
+            </div>
+        </div>
     </div>
 
     <script src="app.js"></script>
