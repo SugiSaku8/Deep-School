@@ -42,26 +42,48 @@ export function appInit(shell) {
       <header class="toolbar">
         <div class="tool-group">
           <button id="prev-page" class="tool-button" title="前のページ">
-            <i class="fas fa-chevron-left"></i>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
           </button>
           <span id="page-indicator" class="page-indicator">1/1</span>
           <button id="next-page" class="tool-button" title="次のページ">
-            <i class="fas fa-chevron-right"></i>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
           </button>
           <button id="add-page" class="tool-button" title="新しいページを追加">
-            <i class="fas fa-plus"></i>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
           </button>
           <div class="divider"></div>
           <input type="text" id="note-title" class="note-title" value="新しいノート" maxlength="50">
           <div class="divider"></div>
-          <button id="pencil-tool" class="tool-button active" title="シャープペンシル">
-            <i class="fas fa-pencil-alt"></i>
+          <button id="pencil-tool" class="tool-button active" title="ペン">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+              <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+              <path d="M2 2l7.586 7.586"></path>
+              <circle cx="11" cy="11" r="2"></circle>
+            </svg>
           </button>
           <button id="highlighter-tool" class="tool-button" title="蛍光ペン">
-            <i class="fas fa-highlighter"></i>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M13 3L3 13l3 3 10-10-3-3z"></path>
+              <path d="M12 14l-2 2"></path>
+              <path d="M4 20h16"></path>
+              <path d="M14 20l2 2"></path>
+              <path d="M10 20l-2 2"></path>
+            </svg>
           </button>
           <button id="eraser-tool" class="tool-button" title="消しゴム">
-            <i class="fas fa-eraser"></i>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 4H8l-7 8 6 6h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2z"></path>
+              <line x1="18" y1="9" x2="12" y2="15"></line>
+              <line x1="12" y1="9" x2="18" y2="15"></line>
+            </svg>
           </button>
           <div class="divider"></div>
           <div class="pen-size-picker">
@@ -100,23 +122,72 @@ export function appInit(shell) {
         <div class="tool-group">
           <div class="dropdown">
             <button id="file-menu" class="tool-button" title="ファイル">
-              <i class="fas fa-file"></i>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 8 9 8 13"></polyline>
+              </svg>
             </button>
             <div class="dropdown-content">
-              <button id="new-note"><i class="fas fa-file"></i> 新規</button>
-              <button id="save-note"><i class="fas fa-save"></i> 保存</button>
-              <button id="export-note"><i class="fas fa-file-export"></i> エクスポート</button>
-              <button id="import-note"><i class="fas fa-file-import"></i> インポート</button>
+              <button id="new-note">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="12" y1="18" x2="12" y2="12"></line>
+                  <line x1="9" y1="15" x2="15" y2="15"></line>
+                </svg>
+                新規
+              </button>
+              <button id="save-note">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                  <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                  <polyline points="7 3 7 8 15 8"></polyline>
+                </svg>
+                保存
+              </button>
+              <button id="export-note">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                エクスポート
+              </button>
+              <button id="import-note">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="17 8 12 3 7 8"></polyline>
+                  <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                インポート
+              </button>
               <div class="divider"></div>
-              <button id="clear-canvas"><i class="fas fa-trash-alt"></i> クリア</button>
+              <button id="clear-canvas">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  <line x1="10" y1="11" x2="10" y2="17"></line>
+                  <line x1="14" y1="11" x2="14" y2="17"></line>
+                </svg>
+                クリア
+              </button>
             </div>
           </div>
           <div class="divider"></div>
           <button id="undo-btn" class="tool-button" title="元に戻す (Ctrl+Z)">
-            <i class="fas fa-undo"></i>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 14 4 9l5-5"/>
+              <path d="M20 20v-7a4 4 0 0 0-4-4H4"/>
+            </svg>
           </button>
           <button id="redo-btn" class="tool-button" title="やり直し (Ctrl+Shift+Z)">
-            <i class="fas fa-redo"></i>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m15 14 5-5-5-5"/>
+              <path d="M4 20v-7a4 4 0 0 1 4-4h12"/>
+            </svg>
           </button>
           <button id="new-note" class="tool-button" title="新規ノート">
             <i class="fas fa-file"></i> 新規
@@ -371,6 +442,10 @@ export function appInit(shell) {
         color: #000000;
         cursor: pointer;
         gap: 12px;
+      }
+      
+      .dropdown-content button svg {
+        flex-shrink: 0;
       }
 
       .dropdown-content button:hover {
