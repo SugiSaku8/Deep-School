@@ -17,6 +17,11 @@ export function appInit(shell) {
     level: "info",
   });
   root.innerHTML = `
+    <button class="scr-back-button" id="scr-back-btn" data-lang-key="back" aria-label="戻る">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15 18L9 12L15 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
   <div style="height:100%,width:100%">
   <iframe
 
@@ -24,7 +29,55 @@ export function appInit(shell) {
   height="700px;"
   src="https://sugisaku8.github.io/Deep-School/client/js/apps/notea/index.html">
 </iframe>
-</div>`
+</div>`;
+const backButton = document.getElementById("scr-back-btn");
+if (backButton) {
+  backButton.onclick = (e) => {
+    e.preventDefault();
+    shell.loadApp("menu");
+  };
+  
+  // スタイルを直接適用
+  backButton.style.cssText = `
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: #87c1ff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    z-index: 1000;
+  `;
+  
+  // ホバー時のスタイル
+  backButton.addEventListener('mouseover', () => {
+    backButton.style.backgroundColor = '#6ba7e5';
+    backButton.style.transform = 'translateY(-2px)';
+  });
+  
+  // 通常時のスタイルに戻す
+  backButton.addEventListener('mouseout', () => {
+    backButton.style.backgroundColor = '#87c1ff';
+    backButton.style.transform = 'translateY(0)';
+  });
+  
+  // クリック時のスタイル
+  backButton.addEventListener('mousedown', () => {
+    backButton.style.transform = 'translateY(0)';
+    backButton.style.backgroundColor = '#5a9ae0';
+  });
+  
+  backButton.addEventListener('mouseup', () => {
+    backButton.style.backgroundColor = '#6ba7e5';
+  });
+}
  /* root.innerHTML = `
 <style>
 
