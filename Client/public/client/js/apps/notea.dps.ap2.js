@@ -606,14 +606,55 @@ export function appInit(shell) {
   const colorPicker = getElement('color-picker');
   const customColorInput = getElement('custom-color');
   const colorSwatches = document.querySelectorAll('.color-swatch');
-const redSheetToggle = document.getElementById('red-sheet-toggle');
-const redSheet = document.getElementById('red-sheet');
-const redSheetControls = document.getElementById('red-sheet-controls');
-const sheetColorInput = document.getElementById('sheet-color');
-const hiddenColorInput = document.getElementById('hidden-color');
-const sheetOpacityInput = document.getElementById('sheet-opacity');
-const clearCanvasBtn = document.getElementById('clear-canvas');
-const saveNoteBtn = document.getElementById('save-canvas');
+// Red sheet related elements
+const redSheetToggle = getElement('red-sheet-toggle', false);
+const redSheet = getElement('red-sheet', false);
+const redSheetControls = getElement('red-sheet-controls', false);
+const sheetColorInput = getElement('sheet-color', false);
+const hiddenColorInput = getElement('hidden-color', false);
+const sheetOpacityInput = getElement('sheet-opacity', false);
+const clearCanvasBtn = getElement('clear-canvas', false);
+const saveNoteBtn = getElement('save-canvas', false);
+
+// Initialize red sheet controls if available
+if (redSheetToggle && redSheet && redSheetControls) {
+  redSheetToggle.addEventListener('click', () => {
+    redSheet.classList.toggle('active');
+    redSheetControls.classList.toggle('hidden');
+  });
+}
+
+// Initialize sheet color controls if available
+if (sheetColorInput && hiddenColorInput && sheetOpacityInput) {
+  sheetColorInput.addEventListener('input', updateRedSheet);
+  hiddenColorInput.addEventListener('input', updateRedSheet);
+  sheetOpacityInput.addEventListener('input', updateRedSheet);
+}
+
+// Clear canvas button
+if (clearCanvasBtn) {
+  clearCanvasBtn.addEventListener('click', clearCurrentPage);
+}
+
+// Save note button
+if (saveNoteBtn) {
+  saveNoteBtn.addEventListener('click', saveNote);
+}
+
+function updateRedSheet() {
+  if (!redSheet || !sheetColorInput || !hiddenColorInput || !sheetOpacityInput) return;
+  
+  const sheetColor = sheetColorInput.value;
+  const hiddenColor = hiddenColorInput.value;
+  const opacity = sheetOpacityInput.value;
+  
+  redSheet.style.backgroundColor = sheetColor;
+  redSheet.style.opacity = opacity;
+  
+  // Apply filter to hide the hidden color
+  redSheet.style.filter = `hue-rotate(0deg) saturate(100%) brightness(100%)`;
+  // Additional CSS filters can be applied here if needed
+}
 
   // Initialize canvas with error handling
   const canvas = getElement('drawing-canvas');
@@ -630,24 +671,34 @@ const saveNoteBtn = document.getElementById('save-canvas');
   
   // Initialize color picker if available
   if (colorPicker && customColorInput) {
-    colorPicker.addEventListener('click', () => customColorInput.click());
-    customColorInput.addEventListener('input', (e) => {
-      currentColor = e.target.value;
-      updateActiveToolColor(currentColor);
-    });
+    try {
+      colorPicker.addEventListener('click', () => customColorInput.click());
+      customColorInput.addEventListener('input', (e) => {
+        currentColor = e.target.value;
+        updateActiveToolColor(currentColor);
+      });
+    } catch (error) {
+      console.error('Error initializing color picker:', error);
+    }
   }
   
   // Initialize color swatches if available
-  if (colorSwatches.length > 0) {
-    colorSwatches.forEach(swatch => {
-      swatch.addEventListener('click', () => {
-        const color = swatch.dataset.color;
-        if (color) {
-          currentColor = color;
-          updateActiveToolColor(color);
+  if (colorSwatches && colorSwatches.length > 0) {
+    try {
+      colorSwatches.forEach(swatch => {
+        if (swatch) {
+          swatch.addEventListener('click', () => {
+            const color = swatch.dataset.color;
+            if (color) {
+              currentColor = color;
+              updateActiveToolColor(color);
+            }
+          });
         }
       });
-    });
+    } catch (error) {
+      console.error('Error initializing color swatches:', error);
+    }
   }
   
 // Set initial tool states
