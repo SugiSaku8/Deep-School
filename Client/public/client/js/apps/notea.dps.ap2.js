@@ -1,11 +1,12 @@
 // App metadata
-const appMeta = {
+export const appMeta = {
   name: "notea",
   title: "Notea",
   icon: "re/ico/notea.png",
 };
+
 // App initialization
-function appInit(shell) {
+export function appInit(shell) {
   const root = document.getElementById("app-root");
   if (!root) {
     console.error("NoteaApp: #app-rootが見つかりません");
@@ -1784,9 +1785,204 @@ body {
     clearTimeout(notification.timeout);
     notification.timeout = setTimeout(() => {
       notification.style.opacity = "0";
+      setTimeout(() => {
+        notification.style.display = "none";
+      }, 300);
     }, 3000);
   }
 
-  // Initialize the app
-  init();
+  // Initialize modals
+const setupModal = (modalId, openBtnId, closeBtnClass) => {
+  const modal = document.getElementById(modalId);
+  const openBtn = document.getElementById(openBtnId);
+  const closeBtns = document.querySelectorAll(closeBtnClass);
+
+  if (openBtn) {
+    openBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (modal) {
+        modal.style.display = "block";
+      }
+    });
+  }
+
+  closeBtns.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (modal) {
+        modal.style.display = "none";
+      }
+    });
+  });
+
+  // Prevent modal from closing when clicking inside
+  if (modal) {
+    modal.addEventListener("click", (e) => {
+      e.stopPropagation();
+    });
+  }
+};
+
+// Setup save and load modals
+setupModal("file-explorer-modal", "load-note", ".close-modal");
+setupModal("save-note-modal", "save-note", ".close-save-modal");
+
+// Close modals when clicking outside
+window.addEventListener("click", (e) => {
+  const modals = document.querySelectorAll(".modal");
+  modals.forEach((modal) => {
+    if (modal.style.display === "block") {
+      modal.style.display = "none";
+    }
+  });
+});
+
+// Save note button handler
+const saveNoteBtn = document.getElementById("confirm-save");
+if (saveNoteBtn) {
+  saveNoteBtn.addEventListener("click", () => {
+    const noteName = document.getElementById("note-name").value.trim();
+    if (noteName) {
+      saveNotebook(noteName);
+      const modal = document.getElementById("save-note-modal");
+      if (modal) {
+        modal.style.display = "none";
+      }
+      showNotification("ノートを保存しました", "success");
+    } else {
+      showNotification("ノート名を入力してください", "error");
+    }
+  });
 }
+
+// Save current state to history
+function saveToHistory() {
+  // Don't save if nothing has changed
+  if (
+    historyIndex >= 0 &&
+    JSON.stringify(history[historyIndex]) === JSON.stringify(notebook.pages)
+  ) {
+    return;
+  }
+
+  // Remove any redo history after current position
+  if (historyIndex < history.length - 1) {
+    history = history.slice(0, historyIndex + 1);
+  }
+
+  // Add current state to history
+  history.push(JSON.parse(JSON.stringify(notebook.pages)));
+  historyIndex++;
+
+  // Limit history size (keep last 50 states)
+  if (history.length > 50) {
+    history.shift();
+    historyIndex--;
+  }
+}
+
+// Load saved notebook or create a new one
+if (!loadNotebook()) {
+  // No saved notebook found, create a default one
+  notebook = {
+    pages: [
+      {
+        id: Date.now().toString(),
+        paths: [],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+    ],
+    currentPageIndex: 0,
+  };
+}
+
+// Update UI
+updatePageIndicator();
+
+// Auto-save every 30 seconds
+setInterval(() => {
+  saveNotebook();
+}, 30000);
+
+// Save before page unload
+window.addEventListener("beforeunload", () => {
+  saveNotebook();
+});
+}
+
+// Make addNewPage globally available
+window.addNewPage = addNewPage;
+
+// Save current state to history
+function saveToHistory() {
+  // Don't save if nothing has changed
+  if (
+    historyIndex >= 0 &&
+    JSON.stringify(history[historyIndex]) === JSON.stringify(notebook.pages)
+  ) {
+    return;
+  }
+
+  // Remove any redo history after current position
+  if (historyIndex < history.length - 1) {
+    history = history.slice(0, historyIndex + 1);
+  }
+
+  // Add current state to history
+  history.push(JSON.parse(JSON.stringify(notebook.pages)));
+  historyIndex++;
+
+  // Limit history size (keep last 50 states)
+  if (history.length > 50) {
+    history.shift();
+    historyIndex--;
+  }
+}
+
+// Show notification to user
+function showNotification(message, type = "info") {
+  // Create notification element if it doesn't exist
+  let notification = document.getElementById("notification");
+  if (!notification) {
+    notification = document.createElement("div");
+    notification.id = "notification";
+    notification.style.position = "fixed";
+    notification.style.bottom = "20px";
+    notification.style.left = "50%";
+    notification.style.transform = "translateX(-50%)";
+    notification.style.padding = "10px 20px";
+    notification.style.borderRadius = "4px";
+    notification.style.color = "white";
+    notification.style.zIndex = "1000";
+    notification.style.opacity = "0";
+    notification.style.transition = "opacity 0.3s ease-in-out";
+    document.body.appendChild(notification);
+  }
+
+  // Set notification content and style based on type
+  notification.textContent = message;
+  notification.style.backgroundColor =
+    type === "success"
+      ? "#4CAF50"
+      : type === "error"
+      ? "#F44336"
+      : type === "warning"
+      ? "#FF9800"
+      : "#2196F3"; // default blue for info
+
+  // Show notification
+  notification.style.opacity = "1";
+
+  // Auto-hide after 3 seconds
+  clearTimeout(notification.timeout);
+  notification.timeout = setTimeout(() => {
+    notification.style.opacity = "0";
+    setTimeout(() => {
+      notification.style.display = "none";
+    }, 300);
+  }, 3000);
+}
+
+// Initialize the app
+init();

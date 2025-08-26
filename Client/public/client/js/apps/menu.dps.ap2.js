@@ -577,13 +577,22 @@ export function appInit(shell) {
         "MenuApp: ユーザー情報 " +
         JSON.stringify({
           name: window.googleUserName,
-          id: window.googleUserId,
-        }),
-      level: "info",
+          id: window.googleUserId
+        })
     });
   }
 
-  // チュートリアルUI挿入（menu画面上でアイコン強調）
+  // Add click handler for Notea menu item
+  const noteaMenuItem = document.getElementById('menu-notea');
+  if (noteaMenuItem) {
+    noteaMenuItem.closest('.menu-item').addEventListener('click', () => {
+      shell.log({from: 'dp.app.menu.out', message: 'Notea アプリを読み込み中...', level: 'info'});
+      shell.loadApp('notea');
+    });
+  } else {
+    shell.log({from: 'dp.app.menu.err', message: 'Notea メニューアイテムが見つかりません', level: 'warn'});
+  }
+
   if (shouldShowTutorial) {
     let step = 0;
     function showTutorialStep(idx) {
