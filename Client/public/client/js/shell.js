@@ -17,6 +17,7 @@ import * as feedbackApp from './apps/feedback.dps.ap2.js';
 import * as moralfruitApp from './apps/moral-fruit.dps.ap2.js';
 import * as koodistudioApp from './apps/koodistudio.dps.ap2.js';
 import * as skriftApp from './apps/skrift.dps.ap2.js';
+import * as noteaApp from './apps/notea.dps.ap2.js';
 
 window.coreConfig = coreConfig;
 window.coreLang = coreLang;
@@ -54,7 +55,8 @@ const appModules = {
   feedback: feedbackApp,
   moralfruit: moralfruitApp,
   koodistudio: koodistudioApp,
-  skrift: skriftApp
+  skrift: skriftApp,
+  notea: noteaApp
 };
 
 // Deep-School ログシステム

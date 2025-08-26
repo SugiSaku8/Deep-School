@@ -140,6 +140,10 @@ class VersionCLI {
               icon = "🍎";
               label = "Moral Fruit";
               break;
+            case "notea":
+              icon = "📝";
+              label = "Notea";
+              break;
           }
           output += `${icon} ${label}: v${value.version} (${value.status})\n`;
           if (value.cycle !== undefined)

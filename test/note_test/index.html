@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ノートアプリ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="toolbar">
+            <div class="tool-group">
+                <button id="pencil-tool" class="tool-button active" title="シャープペンシル">
+                    <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button id="highlighter-tool" class="tool-button" title="蛍光ペン">
+                    <i class="fas fa-highlighter"></i>
+                </button>
+                <button id="eraser-tool" class="tool-button" title="消しゴム">
+                    <i class="fas fa-eraser"></i>
+                </button>
+                <div class="divider"></div>
+                <div class="pen-size-picker">
+                    <select id="pen-size" class="select">
+                        <option value="0.35">0.35mm</option>
+                        <option value="0.5" selected>0.5mm</option>
+                        <option value="0.7">0.7mm</option>
+                        <option value="1.0">1.0mm</option>
+                        <option value="2.5">2.5mm</option>
+                        <option value="5.0">5.0mm</option>
+                        <option value="10.0">10.0mm</option>
+                    </select>
+                </div>
+                <div class="divider"></div>
+                <div class="color-palette">
+                    <button class="color-swatch black active" data-color="#000000" title="黒"></button>
+                    <button class="color-swatch red" data-color="#FF3B30" title="赤"></button>
+                    <button class="color-swatch blue" data-color="#007AFF" title="青"></button>
+                    <button class="color-swatch green" data-color="#34C759" title="緑"></button>
+                    <button class="color-swatch yellow" data-color="#FFCC00" title="黄"></button>
+                    <button id="color-picker" class="color-picker" title="カスタムカラー">
+                        <i class="fas fa-sliders-h"></i>
+                    </button>
+                    <input type="color" id="custom-color" class="hidden" value="#000000">
+                </div>
+                <div class="divider"></div>
+                <button id="red-sheet-toggle" class="tool-button" title="赤シート">
+                    <i class="fas fa-square"></i>
+                </button>
+                <div id="red-sheet-controls" class="red-sheet-controls hidden">
+                    <input type="color" id="sheet-color" value="#FF3B30" title="シートの色">
+                    <input type="color" id="hidden-color" value="#000000" title="隠す色">
+                    <input type="range" id="sheet-opacity" min="0" max="1" step="0.1" value="0.5" title="不透明度">
+                </div>
+            </div>
+            <div class="tool-group">
+                <div class="dropdown">
+                    <button id="file-menu" class="tool-button" title="ファイル">
+                        <i class="fas fa-file"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <button id="new-note"><i class="fas fa-file"></i> 新規</button>
+                        <button id="save-note"><i class="fas fa-save"></i> 保存</button>
+                        <button id="load-note"><i class="fas fa-folder-open"></i> 開く</button>
+                        <button id="export-note"><i class="fas fa-file-export"></i> エクスポート</button>
+                        <button id="import-note"><i class="fas fa-file-import"></i> インポート</button>
+                        <div class="divider"></div>
+                        <button id="clear-canvas"><i class="fas fa-trash-alt"></i> クリア</button>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <button id="undo-btn" class="tool-button" title="元に戻す (Ctrl+Z)">
+                    <i class="fas fa-undo"></i>
+                </button>
+                <button id="redo-btn" class="tool-button" title="やり直し (Ctrl+Shift+Z)">
+                    <i class="fas fa-redo"></i>
+                </button>
+            </div>
+        </header>
+
+        <main class="canvas-container">
+            <canvas id="drawing-canvas"></canvas>
+            <div id="red-sheet" class="red-sheet"></div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

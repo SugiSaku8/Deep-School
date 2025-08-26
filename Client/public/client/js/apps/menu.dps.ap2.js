@@ -62,6 +62,10 @@ export function appInit(shell) {
             SCR
           </div>
         </div>
+         <div class="menu-item">
+          <img src="re/ico/notea.png" alt="Noteaアイコン" class="menu-icon" />
+          <div class="menu-label chalk-text" id="menu-notea" style="cursor: pointer" data-lang-key="menu_notea">Notea</div>
+        </div>
         <div class="menu-item">
           <img src="re/ico/Pickramu.png" alt="Pickramuアイコン" class="menu-icon" />
           <div class="menu-label chalk-text" id="menu-pickramu" style="cursor: pointer" data-lang-key="menu_pickramu">Pickramu</div>
@@ -97,7 +101,7 @@ export function appInit(shell) {
     </div>
     
     <div class="copyright-container horizontal-copyright">
-      <p class="copyright chalk-text left-align" data-lang-key="copyright">(c) 2022-2025 Carnation Studio v0.4.2 25C1285X1</p>
+      <p class="copyright chalk-text left-align" data-lang-key="copyright">(c) 2022-2025 Carnation Studio v0.4.3 25C1305X1</p>
     </div>
   
   <style>
@@ -516,6 +520,10 @@ export function appInit(shell) {
       shell.log({from: 'dp.app.menu.out', message: 'MenuApp: GameMakerを開く', level: 'info'});
       shell.loadApp('gamemaker');
     },*/,
+    "menu-notea": () => {
+      shell.log({from: 'dp.app.menu.out', message: 'MenuApp: Noteaを開く', level: 'info'});
+      shell.loadApp('notea');
+    } ,
     "menu-feedback": () => {
       shell.log({
         from: "dp.app.menu.out",
