@@ -608,5 +608,43 @@ function saveToHistory() {
     }
 }
 
+// Show notification to user
+function showNotification(message, type = 'info') {
+    // Create notification element if it doesn't exist
+    let notification = document.getElementById('notification');
+    if (!notification) {
+        notification = document.createElement('div');
+        notification.id = 'notification';
+        notification.style.position = 'fixed';
+        notification.style.bottom = '20px';
+        notification.style.left = '50%';
+        notification.style.transform = 'translateX(-50%)';
+        notification.style.padding = '10px 20px';
+        notification.style.borderRadius = '4px';
+        notification.style.color = 'white';
+        notification.style.zIndex = '1000';
+        notification.style.opacity = '0';
+        notification.style.transition = 'opacity 0.3s ease-in-out';
+        document.body.appendChild(notification);
+    }
+
+    // Set notification content and style based on type
+    notification.textContent = message;
+    notification.style.backgroundColor = 
+        type === 'success' ? '#4CAF50' : 
+        type === 'error' ? '#F44336' : 
+        type === 'warning' ? '#FF9800' : 
+        '#2196F3'; // default blue for info
+
+    // Show notification
+    notification.style.opacity = '1';
+    
+    // Auto-hide after 3 seconds
+    clearTimeout(notification.timeout);
+    notification.timeout = setTimeout(() => {
+        notification.style.opacity = '0';
+    }, 3000);
+}
+
 // Initialize the app
 init();
