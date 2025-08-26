@@ -591,14 +591,21 @@ export function appInit(shell) {
     return el;
   };
 
-// UI Elements
-const pencilTool = document.getElementById('pencil-tool');
-const highlighterTool = document.getElementById('highlighter-tool');
-const eraserTool = document.getElementById('eraser-tool');
-const penSizeSelect = document.getElementById('pen-size');
-const colorSwatches = document.querySelectorAll('.color-swatch');
-const customColorInput = document.getElementById('custom-color');
-const colorPicker = document.getElementById('color-picker');
+  const pencilTool = getElement('pencil-tool');
+  const highlighterTool = getElement('highlighter-tool');
+  const eraserTool = getElement('eraser-tool');
+  const noteTitleInput = getElement('note-title');
+  const importFileInput = getElement('import-file', false);
+  const pageIndicator = getElement('page-indicator');
+  const currentToolDisplay = getElement('current-tool');
+  const undoBtn = getElement('undo-btn');
+  const redoBtn = getElement('redo-btn');
+  const prevPageBtn = getElement('prev-page');
+  const nextPageBtn = getElement('next-page');
+  const penSizeSelect = getElement('pen-size');
+  const colorPicker = getElement('color-picker');
+  const customColorInput = getElement('custom-color');
+  const colorSwatches = document.querySelectorAll('.color-swatch');
 const redSheetToggle = document.getElementById('red-sheet-toggle');
 const redSheet = document.getElementById('red-sheet');
 const redSheetControls = document.getElementById('red-sheet-controls');
