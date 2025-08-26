@@ -591,6 +591,10 @@ export function appInit(shell) {
   const importFileInput = document.getElementById('import-file');
   const pageIndicator = document.getElementById('page-indicator');
   const currentToolDisplay = document.getElementById('current-tool');
+  const undoBtn = document.getElementById('undo-btn');
+  const redoBtn = document.getElementById('redo-btn');
+  const prevPageBtn = document.getElementById('prev-page');
+  const nextPageBtn = document.getElementById('next-page');
   
 // Set initial tool states
 function updateActiveTool(toolId) {
