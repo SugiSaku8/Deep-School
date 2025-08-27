@@ -364,7 +364,8 @@ function updateNavigation() {
         prevBtn.innerHTML = {
             'ja': '<i class="fas fa-arrow-left"></i> 前へ',
             'en': '<i class="fas fa-arrow-left"></i> Previous',
-            'tl': '<i class="fas fa-arrow-left"></i> Nakaraan'
+            'tl': '<i class="fas fa-arrow-left"></i> Nakaraan',
+            'ko': '<i class="fas fa-arrow-left"></i> 이전'
         }[currentLanguage] || '<i class="fas fa-arrow-left"></i> Previous';
     }
     
@@ -376,14 +377,16 @@ function updateNavigation() {
             nextBtn.innerHTML = {
                 'ja': '完了 <i class="fas fa-check"></i>',
                 'en': 'Finish <i class="fas fa-check"></i>',
-                'tl': 'Tapos na <i class="fas fa-check"></i>'
+                'tl': 'Tapos na <i class="fas fa-check"></i>',
+                'ko': '완료 <i class="fas fa-check"></i>'
             }[currentLanguage] || 'Finish <i class="fas fa-check"></i>';
             nextBtn.classList.add('finish-btn');
         } else {
             nextBtn.innerHTML = {
                 'ja': '次へ <i class="fas fa-arrow-right"></i>',
                 'en': 'Next <i class="fas fa-arrow-right"></i>',
-                'tl': 'Susunod <i class="fas fa-arrow-right"></i>'
+                'tl': 'Susunod <i class="fas fa-arrow-right"></i>',
+                'ko': '다음 <i class="fas fa-arrow-right"></i>'
             }[currentLanguage] || 'Next <i class="fas fa-arrow-right"></i>';
             nextBtn.classList.remove('finish-btn');
         }
@@ -393,10 +396,11 @@ function updateNavigation() {
     if (backBtn) {
         backBtn.innerHTML = `<i class="fas fa-chevron-left"></i> ${
             {
-                'ja': '言語選択に戻る',
-                'en': 'Back to Language',
-                'tl': 'Bumalik sa Wika'
-            }[currentLanguage] || 'Back to Language'
+                'ja': '戻る',
+                'en': 'Back',
+                'tl': 'Bumalik',
+                'ko': '뒤로'
+            }[currentLanguage] || 'Back'
         }`;
     }
     
@@ -412,7 +416,9 @@ function updateDocumentTitle() {
         'en': ['Introduction', 'About Deep-School', 'Design', 'App Integration', 'ToasterMachine', 'SCR App', 
               'Pickramu', 'Notea', 'MoralFruit', 'Koodi Studio', 'Skrift', 'CStore', 'Security', 'Summary'],
         'tl': ['Panimula', 'Tungkol sa Deep-School', 'Disenyo', 'Pagsasama-sama ng mga App', 'ToasterMachine', 'SCR App', 
-              'Pickramu', 'Notea', 'MoralFruit', 'Koodi Studio', 'Skrift', 'CStore', 'Seguridad', 'Buod']
+              'Pickramu', 'Notea', 'MoralFruit', 'Koodi Studio', 'Skrift', 'CStore', 'Seguridad', 'Buod'],
+        'ko': ['시작하기', 'Deep-School 소개', '디자인', '앱 연동', '토스터머신', 'SCR 앱',
+              '픽라무', '노테아', '모럴프루트', '쿠디 스튜디오', '스크리프트', 'C스토어', '보안', '요약']
     };
     
     const title = sectionTitles[currentLanguage]?.[currentSection] || 'Student Council Election';
@@ -438,7 +444,12 @@ document.addEventListener('DOMContentLoaded', async function() {
                         <h1>Error Loading Content</h1>
                     </div>
                     <div class="card-body">
-                        <p>申し訳ありませんが、コンテンツの読み込み中にエラーが発生しました。</p>
+                        <p>${{
+                            'ja': '申し訳ありませんが、コンテンツの読み込み中にエラーが発生しました。',
+                            'en': 'Sorry, an error occurred while loading the content.',
+                            'tl': 'Paumanhin, may naganap na error habang naglo-load ng content.',
+                            'ko': '죄송합니다. 콘텐츠를 불러오는 중 오류가 발생했습니다.'
+                        }[currentLanguage] || 'Sorry, an error occurred while loading the content.'}</p>
                         <p>Sorry, there was an error loading the content.</p>
                         <p>Paumanhin, may naganap na error sa pag-load ng content.</p>
                         <button onclick="window.location.reload()" class="nav-btn">
