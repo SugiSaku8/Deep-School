@@ -3,13 +3,13 @@
     {
       "id": "title",
       "titles": {
-        "ja": "2025 後期生徒会選挙 杉山 瑳久哉 公約",
+        "ja": "2025 後期生徒会選挙　杉山 瑳久哉　公約",
         "en": "2025 Fall Student Council Election: Sugiyama Sakuya's Platform",
         "tl": "2025 Fall Student Council Election: Platform ni Sugiyama Sakuya",
         "ko": "2025년도 후기 학생회 선거 스기야마 사쿠야 공약"
       },
       "content": {
-        "ja": "<div class='election-header'><h1>2025 後期生徒会選挙 杉山 瑳久哉 公約</h1></div>",
+        "ja": "<div class='election-header'><h1>こんにちは。会長に立候補させていただいた、204の杉山瑳久哉(すぎやまさくや)です。<br>これから、詳しい公約を説明します。</h1></div>",
         "en": "<div class='election-header'><h1>2025 Fall Student Council Election: Sugiyama Sakuya's Platform</h1></div>",
         "tl": "<div class='election-header'><h1>2025 Fall Student Council Election: Platform ni Sugiyama Sakuya</h1></div>",
         "ko": "<div class='election-header'><h1>2025년도 후기 학생회 선거 스기야마 사쿠야 공약</h1></div>"
