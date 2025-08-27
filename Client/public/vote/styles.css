@@ -575,3 +575,12 @@ p {
     padding: 3rem;
   }
 }
+.media-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
