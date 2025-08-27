@@ -1,5 +1,5 @@
 import { SimpleAuthManager, SchoolAuthServer } from '../auth/auth.mjs';
-import { showAlert } from './utils/dialog';
+import { showAlert } from '../utils/dialog.js';
 
 export const appMeta = {
   name: "login",
