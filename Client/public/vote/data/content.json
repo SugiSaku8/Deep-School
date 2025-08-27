@@ -5,12 +5,14 @@
       "titles": {
         "ja": "2025 後期生徒会選挙 杉山 瑳久哉 公約",
         "en": "2025 Fall Student Council Election: Sugiyama Sakuya's Platform",
-        "tl": "2025 Fall Student Council Election: Platform ni Sugiyama Sakuya"
+        "tl": "2025 Fall Student Council Election: Platform ni Sugiyama Sakuya",
+        "ko": "2025년도 후기 학생회 선거 스기야마 사쿠야 공약"
       },
       "content": {
         "ja": "<div class='election-header'><h1>2025 後期生徒会選挙 杉山 瑳久哉 公約</h1></div>",
         "en": "<div class='election-header'><h1>2025 Fall Student Council Election: Sugiyama Sakuya's Platform</h1></div>",
-        "tl": "<div class='election-header'><h1>2025 Fall Student Council Election: Platform ni Sugiyama Sakuya</h1></div>"
+        "tl": "<div class='election-header'><h1>2025 Fall Student Council Election: Platform ni Sugiyama Sakuya</h1></div>",
+        "ko": "<div class='election-header'><h1>2025년도 후기 학생회 선거 스기야마 사쿠야 공약</h1></div>"
       }
     },
     {
@@ -18,12 +20,14 @@
       "titles": {
         "ja": "はじめに",
         "en": "Introduction",
-        "tl": "Panimula"
+        "tl": "Panimula",
+        "ko": "시작하며"
       },
       "content": {
-        "ja": "<h2>私が目指す学校</h2><p>私が目指す学校は、すべての人が、楽しく学ぶことができる学校です。\n</p><p>あなたは、学校で、タブレットが活用されていない、と思ったことはありませんか？\n<br>はっきり言って、使いずらいですよね。\n<br>そこで、私は、Deep-Schoolというアプリを制作しました。\n</p>",
+        "ja": "<h2>私が目指す学校</h2><p>私が目指す学校は、すべての人が、楽しく学ぶことができる学校です。<br></p><p>あなたは、学校で、タブレットが活用されていない、と思ったことはありませんか？<br>はっきり言って、使いずらいですよね。<br>そこで、私は、Deep-Schoolというアプリを制作しました。<br></p>",
         "en": "<h2>The School I Aim to Create</h2><p>The school I aim to create is one where everyone can learn with joy. Have you ever felt that tablets aren't being used effectively at school? Let's be honest—they're hard to use, right? That's why I created an app called Deep-School.</p>",
-        "tl": "<h2>Ang Paaralang Nais Kong Makamit</h2><p>Ang paaralang nais kong makamit ay isang lugar kung saan lahat ay maaaring matuto nang may kasiyahan. Naramdaman mo na ba na hindi epektibong ginagamit ang mga tablet sa paaralan? Maging totoo tayo—mahirap gamitin, di ba? Kaya naman gumawa ako ng isang app na tinatawag na Deep-School.</p>"
+        "tl": "<h2>Ang Paaralang Nais Kong Makamit</h2><p>Ang paaralang nais kong makamit ay isang lugar kung saan lahat ay maaaring matuto nang may kasiyahan. Naramdaman mo na ba na hindi epektibong ginagamit ang mga tablet sa paaralan? Maging totoo tayo—mahirap gamitin, di ba? Kaya naman gumawa ako ng isang app na tinatawag na Deep-School.</p>",
+        "ko": "<h2>제가 꿈꾸는 학교</h2><p>제가 꿈꾸는 학교는 모든 사람이 즐겁게 배울 수 있는 학교입니다.<br></p><p>학교에서 태블릿이 제대로 활용되지 못하고 있다고 느낀 적 있나요?<br>솔직히 말해서, 사용하기 어렵죠?<br>그래서 저는 Deep-School이라는 앱을 만들었습니다.<br></p>"
       }
     },
     {
@@ -31,12 +35,14 @@
       "titles": {
         "ja": "Deep-Schoolについて",
         "en": "About Deep-School",
-        "tl": "Tungkol sa Deep-School"
+        "tl": "Tungkol sa Deep-School",
+        "ko": "Deep-School 소개"
       },
       "content": {
-        "ja": "<h2>Deep-Schoolとは</h2><p>Deep-Schoolは、あなたの学びを、たくさんの面からサポートするツールです。\n<br>たくさんツールがあるので、一つ一つ簡単に説明していきます。\n</p>",
+        "ja": "<h2>Deep-Schoolとは</h2><p>Deep-Schoolは、あなたの学びを、たくさんの面からサポートするツールです。<br>たくさんツールがあるので、一つ一つ簡単に説明していきます。<br></p>",
         "en": "<h2>About Deep-School</h2><p>Deep-School is a tool that supports your learning from many angles. Since there are many tools, I'll briefly explain each one.</p>",
-        "tl": "<h2>Tungkol sa Deep-School</h2><p>Ang Deep-School ay isang tool na sumusuporta sa inyong pag-aaral sa maraming paraan. Dahil maraming tools, maikling ipapaliwanag ko ang bawat isa.</p>"
+        "tl": "<h2>Tungkol sa Deep-School</h2><p>Ang Deep-School ay isang tool na sumusuporta sa inyong pag-aaral sa maraming paraan. Dahil maraming tools, maikling ipapaliwanag ko ang bawat isa.</p>",
+        "ko": "<h2>Deep-School 소개</h2><p>Deep-School은 여러분의 학습을 다양한 측면에서 지원하는 도구입니다.<br>많은 도구가 있기 때문에, 하나씩 간단히 설명해 보겠습니다.<br></p>"
       }
     },
     {
@@ -44,12 +50,14 @@
       "titles": {
         "ja": "デザイン",
         "en": "Design",
-        "tl": "Disenyo"
+        "tl": "Disenyo",
+        "ko": "디자인"
       },
       "content": {
-        "ja": "<h2>Deep-Schoolのデザイン</h2><p>シンプルでかつ直感的なデザインを追求しました。\n\n黒板のようなテーマは、皆さんに親しみやすいものになればいいな、と思い採用しました。\n\nまた、アニメーションも、美しく、楽しく、そして自然なものになるように、設計・採用しました。\n</p>",
+        "ja": "<h2>Deep-Schoolのデザイン</h2><p>シンプルでかつ直感的なデザインを追求しました。<br>黒板のようなテーマは、皆さんに親しみやすいものになればいいな、と思い採用しました。<br>また、アニメーションも、美しく、楽しく、そして自然なものになるように、設計・採用しました。<br></p>",
         "en": "<h2>Deep-School's Design</h2><p>I pursued a simple yet intuitive design. I chose a blackboard-like theme hoping it would feel familiar and approachable to everyone. I also designed and implemented animations to be beautiful, enjoyable, and natural.</p>",
-        "tl": "<h2>Disenyo ng Deep-School</h2><p>Hinabol ko ang simple ngunit intuitive na disenyo. Pumili ako ng blackboard-like theme na umaasa kong magiging pamilyar at madaling lapitan para sa lahat. Dinisenyo at nilagay ko rin ang mga animation na magaganda, nakakatuwa, at natural.</p>"
+        "tl": "<h2>Disenyo ng Deep-School</h2><p>Hinabol ko ang simple ngunit intuitive na disenyo. Pumili ako ng blackboard-like theme na umaasa kong magiging pamilyar at madaling lapitan para sa lahat. Dinisenyo at nilagay ko rin ang mga animation na magaganda, nakakatuwa, at natural.</p>",
+        "ko": "<h2>Deep-School 디자인</h2><p>단순하면서도 직관적인 디자인을 추구했습니다.<br>칠판과 같은 테마는 여러분에게 친근하게 다가갈 수 있을 것 같아 채택했습니다.<br>또한 애니메이션도 아름답고 즐겁고 자연스러운 느낌이 들도록 설계하고 적용했습니다.<br></p>"
       }
     },
     {
@@ -57,12 +65,14 @@
       "titles": {
         "ja": "アプリ連携",
         "en": "App Integration",
-        "tl": "Pagsasama-sama ng mga App"
+        "tl": "Pagsasama-sama ng mga App",
+        "ko": "앱 연동"
       },
       "content": {
-        "ja": "<h2>アプリ連携</h2><p>Deep-Schoolには、いくつかのアプリが搭載されています。\n\nそして、すべてのアプリを連携させて使うことができます。\n\n最も多くのアプリでその機能を使うことができるのは、ToasterMachineです。\n\nToasterMachineは、AIを使ってあなたをサポートするツールです。\n\nメニューにある「ToasterMachine」は、ToasterMachineとチャットできるものですが、\n\n実は、すべてのアプリで、このToasterMachineを活用することができます。\n\nどのアプリでも、Ctrl+Shift⇧+Tを押すと、ToasterMachineとチャットすることができます。\n\n今のアプリの画面をToasterMachineに送ることもできます。\n\nそして、もちろんあなたのデータは、私たちを含め誰も見ることができません。\n</p>",
+        "ja": "<h2>アプリ連携</h2><p>Deep-Schoolには、いくつかのアプリが搭載されています。<br>そして、すべてのアプリを連携させて使うことができます。<br>最も多くのアプリでその機能を使うことができるのは、ToasterMachineです。<br>ToasterMachineは、AIを使ってあなたをサポートするツールです。<br>メニューにある「ToasterMachine」は、ToasterMachineとチャットできるものですが、<br>実は、すべてのアプリで、このToasterMachineを活用することができます。<br>どのアプリでも、Ctrl+Shift⇧+Tを押すと、ToasterMachineとチャットすることができます。<br>今のアプリの画面をToasterMachineに送ることもできます。<br>そして、もちろんあなたのデータは、私たちを含め誰も見ることができません。<br></p>",
         "en": "<h2>App Integration</h2><p>Deep-School comes with several built-in apps. You can use all these apps together in a connected way. The app where you can use this feature most extensively is ToasterMachine. ToasterMachine is a tool that uses AI to support you. The 'ToasterMachine' option in the menu lets you chat with ToasterMachine, but actually, you can utilize this ToasterMachine across all apps. Press Ctrl+Shift⇧+T in any app to chat with ToasterMachine. You can also send the current app screen to ToasterMachine. And of course, no one, including us, can see your data.</p>",
-        "tl": "<h2>Pagsasama-sama ng mga App</h2><p>Ang Deep-School ay may kasamang ilang built-in apps. Maaari ninyong gamitin ang lahat ng apps na ito nang magkakakonektang paraan. Ang app kung saan pinakamaaari ninyong gamitin ang feature na ito ay ang ToasterMachine. Ang ToasterMachine ay isang tool na gumagamit ng AI para suportahan kayo. Ang 'ToasterMachine' option sa menu ay nagbibigay-daan sa inyo na makipag-chat sa ToasterMachine, ngunit sa totoo lang, maaari ninyong gamitin ang ToasterMachine sa lahat ng apps. Pindutin ang Ctrl+Shift⇧+T sa anumang app para makipag-chat sa ToasterMachine. Maaari rin ninyong ipadala ang kasalukuyang app screen sa ToasterMachine. At siyempre, walang sinuman, kasama na kami, na makakakita sa inyong data.</p>"
+        "tl": "<h2>Pagsasama-sama ng mga App</h2><p>Ang Deep-School ay may kasamang ilang built-in apps. Maaari ninyong gamitin ang lahat ng apps na ito nang magkakakonektang paraan. Ang app kung saan pinakamaaari ninyong gamitin ang feature na ito ay ang ToasterMachine. Ang ToasterMachine ay isang tool na gumagamit ng AI para suportahan kayo. Ang 'ToasterMachine' option sa menu ay nagbibigay-daan sa inyo na makipag-chat sa ToasterMachine, ngunit sa totoo lang, maaari ninyong gamitin ang ToasterMachine sa lahat ng apps. Pindutin ang Ctrl+Shift⇧+T sa anumang app para makipag-chat sa ToasterMachine. Maaari rin ninyong ipadala ang kasalukuyang app screen sa ToasterMachine. At siyempre, walang sinuman, kasama na kami, na makakakita sa inyong data.</p>",
+        "ko": "<h2>앱 연동</h2><p>Deep-School에는 여러 앱이 내장되어 있습니다.<br>그리고 모든 앱을 연동하여 사용할 수 있습니다.<br>가장 많은 앱에서 이 기능을 사용할 수 있는 것은 ToasterMachine입니다.<br>ToasterMachine은 AI를 사용하여 여러분을 지원하는 도구입니다.<br>메뉴에 있는 'ToasterMachine'은 ToasterMachine과 채팅할 수 있는 기능이지만,<br>사실 모든 앱에서 이 ToasterMachine을 활용할 수 있습니다.<br>어떤 앱에서든 Ctrl+Shift⇧+T를 누르면 ToasterMachine과 채팅할 수 있습니다.<br>현재 앱 화면을 ToasterMachine으로 보낼 수도 있습니다.<br>그리고 물론 여러분의 데이터는 저희를 포함한 누구도 볼 수 없습니다.<br></p>"
       }
     },
     {
@@ -70,12 +80,14 @@
       "titles": {
         "ja": "SCRアプリ",
         "en": "SCR App",
-        "tl": "SCR App"
+        "tl": "SCR App",
+        "ko": "SCR 앱"
       },
       "content": {
-        "ja": "<h2>SCRアプリ</h2><p>このアプリでは、あなたのわからないことを、みんなに質問することができます。\n\nそして、みんなの質問に、誰でも答えることができます。\n\nもし、すぐに答えが知りたい場合は、ToasterMachineに回答してもらうことができます。\n\nToasterMachineと、仲間の力を組み合わせることで、効率的な素晴らしい学習をすることができます。\n</p>",
+        "ja": "<h2>SCRアプリ</h2><p>このアプリでは、あなたのわからないことを、みんなに質問することができます。<br>そして、みんなの質問に、誰でも答えることができます。<br>もし、すぐに答えが知りたい場合は、ToasterMachineに回答してもらうことができます。<br>ToasterMachineと、仲間の力を組み合わせることで、効率的な素晴らしい学習をすることができます。<br></p>",
         "en": "<h2>SCR App</h2><p>This app lets you ask everyone questions about things you don't understand. And anyone can answer everyone's questions. If you need an answer right away, you can get ToasterMachine to respond. By combining ToasterMachine with the power of your peers, you can learn efficiently and effectively, tailored just for you.</p>",
-        "tl": "<h2>SCR App</h2><p>Ang app na ito ay nagbibigay-daan sa inyo na magtanong sa lahat tungkol sa mga bagay na hindi ninyo naiintindihan. At kahit sino ay maaaring sumagot sa mga tanong ng lahat. Kung kailangan ninyo ng sagot kaagad, maaari ninyong hilingin sa ToasterMachine na sumagot. Sa pamamagitan ng pagsasama ng ToasterMachine sa kapangyarihan ng inyong mga kapantay, maaari kayong matuto nang mabisa at epektibo, na naaayon sa inyo.</p>"
+        "tl": "<h2>SCR App</h2><p>Ang app na ito ay nagbibigay-daan sa inyo na magtanong sa lahat tungkol sa mga bagay na hindi ninyo naiintindihan. At kahit sino ay maaaring sumagot sa mga tanong ng lahat. Kung kailangan ninyo ng sagot kaagad, maaari ninyong hilingin sa ToasterMachine na sumagot. Sa pamamagitan ng pagsasama ng ToasterMachine sa kapangyarihan ng inyong mga kapantay, maaari kayong matuto nang mabisa at epektibo, na naaayon sa inyo.</p>",
+        "ko": "<h2>SCR 앱</h2><p>이 앱에서는 여러분이 모르는 것에 대해 모두에게 질문할 수 있습니다.<br>그리고 누구나 다른 사람들의 질문에 답변할 수 있습니다.<br>바로 답변을 원하시면 ToasterMachine에게 답변을 요청할 수 있습니다.<br>ToasterMachine과 동료들의 힘을 합치면 효율적이고 훌륭한 학습을 할 수 있습니다.<br></p>"
       }
     },
     {
@@ -83,12 +95,14 @@
       "titles": {
         "ja": "Pickramu",
         "en": "Pickramu",
-        "tl": "Pickramu"
+        "tl": "Pickramu",
+        "ko": "픽라무"
       },
       "content": {
-        "ja": "<h2>Pickramu</h2><p>「SCR」では質問ができますが、「Pickramu」では、ワークを使った勉強ができます。\n\n「Pickramu」には、独自作成のワークがたくさんあります。\n\nこのワークを活用することで、いつでもどこでも、学習することができます。\n\nもちろん、わからないことはToasterMachineを使って、いつでもサポートを受けることができます。\n</p>",
+        "ja": "<h2>Pickramu</h2><p>「SCR」では質問ができますが、「Pickramu」では、ワークを使った勉強ができます。<br>「Pickramu」には、独自作成のワークがたくさんあります。<br>このワークを活用することで、いつでもどこでも、学習することができます。<br>もちろん、わからないことはToasterMachineを使って、いつでもサポートを受けることができます。<br></p>",
         "en": "<h2>Pickramu</h2><p>While 'SCR' lets you ask questions, 'Pickramu' lets you study using worksheets. 'Pickramu' has tons of original worksheets. Using these worksheets, you can learn anytime, anywhere. Of course, you can always get support for anything you don't understand using ToasterMachine.</p>",
-        "tl": "<h2>Pickramu</h2><p>Habang ang 'SCR' ay nagbibigay-daan sa inyo na magtanong, ang 'Pickramu' naman ay nagbibigay-daan sa inyo na mag-aral gamit ang mga worksheet. Ang 'Pickramu' ay may maraming orihinal na worksheets. Gamit ang mga worksheet na ito, maaari kayong matuto kahit saan, kahit kailan. Siyempre, maaari kayong humingi ng tulong sa anumang hindi ninyo naiintindihan gamit ang ToasterMachine.</p>"
+        "tl": "<h2>Pickramu</h2><p>Habang ang 'SCR' ay nagbibigay-daan sa inyo na magtanong, ang 'Pickramu' naman ay nagbibigay-daan sa inyo na mag-aral gamit ang mga worksheet. Ang 'Pickramu' ay may maraming orihinal na worksheets. Gamit ang mga worksheet na ito, maaari kayong matuto kahit saan, kahit kailan. Siyempre, maaari kayong humingi ng tulong sa anumang hindi ninyo naiintindihan gamit ang ToasterMachine.</p>",
+        "ko": "<h2>픽라무</h2><p>'SCR'에서는 질문을 할 수 있지만, '픽라무'에서는 워크시트를 사용한 공부를 할 수 있습니다.<br>'픽라무'에는 독자적으로 제작된 워크시트가 많이 있습니다.<br>이 워크시트를 활용하면 언제 어디서나 학습할 수 있습니다.<br>물론, 모르는 부분이 있으면 ToasterMachine을 사용하여 언제든지 도움을 받을 수 있습니다.<br></p>"
       }
     },
     {
@@ -96,12 +110,14 @@
       "titles": {
         "ja": "Notea",
         "en": "Notea",
-        "tl": "Notea"
+        "tl": "Notea",
+        "ko": "노테아"
       },
       "content": {
-        "ja": "<h2>Notea</h2><p>学校のワークや、授業メモを作りたい。\n\nそんな時は、「Notea」アプリを使いましょう。\n\nシンプルで、紙のノートっぽさを重視したNoteaは、ページ機能があり、これを活用することで、紙のノートのように、ページ単位での管理ができるようになります。\n\nそして、赤シート機能もあるので、暗記ノートを作るのにもおすすめです。\n\nNoteaでも、ToasterMachineに質問したりすることができます。\n</p>",
+        "ja": "<h2>Notea</h2><p>学校のワークや、授業メモを作りたい。<br>そんな時は、「Notea」アプリを使いましょう。<br>シンプルで、紙のノートっぽさを重視したNoteaは、ページ機能があり、これを活用することで、紙のノートのように、ページ単位での管理ができるようになります。<br>そして、赤シート機能もあるので、暗記ノートを作るのにもおすすめです。<br>Noteaでも、ToasterMachineに質問したりすることができます。<br></p>",
         "en": "<h2>Notea</h2><p>Want to create school workbooks or class notes? That's when you should use the 'Notea' app. Notea is simple and emphasizes a paper notebook feel. It has a page function, allowing you to manage your notes page by page, just like a physical notebook. It also has a red sheet function, making it great for creating flashcards. You can also ask questions to ToasterMachine within Notea.</p>",
-        "tl": "<h2>Notea</h2><p>Gusto mong gumawa ng school workbooks o class notes? Ito ang tamang panahon para gamitin ang 'Notea' app. Ang Notea ay simple at binibigyang-diin ang pakiramdam ng papel na notebook. Mayroon itong page function, na nagbibigay-daan sa inyo na ayusin ang inyong mga tala pahina sa pahina, tulad ng isang pisikal na notebook. Mayroon din itong red sheet function, na mainam para gumawa ng flashcards. Maaari rin kayong magtanong sa ToasterMachine sa loob ng Notea.</p>"
+        "tl": "<h2>Notea</h2><p>Gusto mong gumawa ng school workbooks o class notes? Ito ang tamang panahon para gamitin ang 'Notea' app. Ang Notea ay simple at binibigyang-diin ang pakiramdam ng papel na notebook. Mayroon itong page function, na nagbibigay-daan sa inyo na ayusin ang inyong mga tala pahina sa pahina, tulad ng isang pisikal na notebook. Mayroon din itong red sheet function, na mainam para gumawa ng flashcards. Maaari rin kayong magtanong sa ToasterMachine sa loob ng Notea.</p>",
+        "ko": "<h2>노테아</h2><p>학교 워크시트나 수업 노트를 만들고 싶으신가요?<br>그럴 땐 '노테아' 앱을 사용해보세요.<br>단순함과 종이 노트북 같은 느낌을 중시한 노테아는 페이지 기능이 있어, 종이 노트처럼 페이지별로 관리할 수 있습니다.<br>또한 빨간색 시트 기능도 있어 암기 노트를 만드는 데도 좋습니다.<br>노테아에서도 ToasterMachine에 질문할 수 있습니다.<br></p>"
       }
     },
     {
@@ -109,12 +125,14 @@
       "titles": {
         "ja": "MoralFruit",
         "en": "MoralFruit",
-        "tl": "MoralFruit"
+        "tl": "MoralFruit",
+        "ko": "모럴프루트"
       },
       "content": {
-        "ja": "<h2>MoralFruit</h2><p>これらの基本アプリに加えて、標準搭載の、専門アプリもあります。\n\nMoralFruitは、道徳学習を家でできる画期的なアプリです。\n\nToasterMachineベースのエージェントと、道徳的な、難しい問題を考えることで、p4cのような学習をすることができます。\n\n人と話すのは恥ずかしいあなたでも、道徳という学校でしか学べない教科を、家で学べるようになります。\n</p>",
+        "ja": "<h2>MoralFruit</h2><p>これらの基本アプリに加えて、標準搭載の、専門アプリもあります。<br>MoralFruitは、道徳学習を家でできる画期的なアプリです。<br>ToasterMachineベースのエージェントと、道徳的な、難しい問題を考えることで、p4cのような学習をすることができます。<br>人と話すのは恥ずかしいあなたでも、道徳という学校でしか学べない教科を、家で学べるようになります。<br></p>",
         "en": "<h2>MoralFruit</h2><p>In addition to these core apps, there are also specialized apps included as standard. MoralFruit is a groundbreaking app that lets you study ethics at home. By engaging with ToasterMachine-based agents and contemplating challenging ethical questions, you can experience learning similar to P4C (Philosophy for Children). Even if talking to people makes you feel shy, you can now study ethics—a subject typically only taught at school—right at home.</p>",
-        "tl": "<h2>MoralFruit</h2><p>Bilang karagdagan sa mga pangunahing app na ito, mayroon ding mga espesyalisadong app na kasama bilang pamantayan. Ang MoralFruit ay isang makabagong app na nagbibigay-daan sa iyo na mag-aral ng etika sa bahay. Sa pamamagitan ng pakikipag-ugnayan sa mga ahente na batay sa ToasterMachine at pag-iisip tungkol sa mga mahihirap na tanong sa etika, maaari kang makaranas ng pag-aaral na katulad ng P4C (Philosophy for Children). Kahit na nahihiya kang makipag-usap sa mga tao, maaari ka na ngayong mag-aral ng etika—isang paksa na karaniwan lamang itinuturo sa paaralan—sa mismong bahay mo.</p>"
+        "tl": "<h2>MoralFruit</h2><p>Bilang karagdagan sa mga pangunahing app na ito, mayroon ding mga espesyalisadong app na kasama bilang pamantayan. Ang MoralFruit ay isang makabagong app na nagbibigay-daan sa iyo na mag-aral ng etika sa bahay. Sa pamamagitan ng pakikipag-ugnayan sa mga ahente na batay sa ToasterMachine at pag-iisip tungkol sa mga mahihirap na tanong sa etika, maaari kang makaranas ng pag-aaral na katulad ng P4C (Philosophy for Children). Kahit na nahihiya kang makipag-usap sa mga tao, maaari ka na ngayong mag-aral ng etika—isang paksa na karaniwan lamang itinuturo sa paaralan—sa mismong bahay mo.</p>",
+        "ko": "<h2>모럴프루트</h2><p>이러한 기본 앱 외에도 표준으로 제공되는 전문 앱들이 있습니다.<br>모럴프루트는 가정에서 도덕 학습을 할 수 있는 획기적인 앱입니다.<br>ToasterMachine 기반 에이전트와 함께 윤리적이고 어려운 문제를 고민함으로써 P4C(어린이 철학)와 유사한 학습을 체험할 수 있습니다.<br>타인과 대화하는 것이 부끄러운 분들도, 학교에서만 배울 수 있었던 도덕 과목을 집에서 배울 수 있게 되었습니다.<br></p>"
       }
     },
     {
@@ -122,12 +140,14 @@
       "titles": {
         "ja": "Koodi Studio",
         "en": "Koodi Studio",
-        "tl": "Koodi Studio"
+        "tl": "Koodi Studio",
+        "ko": "쿠디 스튜디오"
       },
       "content": {
-        "ja": "<h2>Koodi Studio</h2><p>Koodi Studioでは、プログラミング学習をすることができます。\n\nToasterMachineとの連携を前提に設計されたアプリで、わからないことがあれば、すぐに聞くことができます。\n\nいくつかのレッスンがあり、すべての学習を終えると、ゲームを制作できるほどまでに上達することができます。\n\nテストも充実していて、家で最高レベルのプログラミング学習をすることができます。\n</p>",
+        "ja": "<h2>Koodi Studio</h2><p>Koodi Studioでは、プログラミング学習をすることができます。<br>ToasterMachineとの連携を前提に設計されたアプリで、わからないことがあれば、すぐに聞くことができます。<br>いくつかのレッスンがあり、すべての学習を終えると、ゲームを制作できるほどまでに上達することができます。<br>テストも充実していて、家で最高レベルのプログラミング学習をすることができます。<br></p>",
         "en": "<h2>Koodi Studio</h2><p>Koodi Studio enables programming learning. Designed to integrate with ToasterMachine, you can ask questions immediately if you get stuck. It offers several lessons, and upon completing all learning, you'll be skilled enough to create games. With comprehensive tests, you can achieve top-level programming learning at home.</p>",
-        "tl": "<h2>Koodi Studio</h2><p>Ang Koodi Studio ay nagbibigay-daan sa pag-aaral ng programming. Dinisenyo upang makipag-ugnayan sa ToasterMachine, maaari kang magtanong kaagad kung ikaw ay mahirapan. Nag-aalok ito ng ilang mga aralin, at sa pagtatapos ng lahat ng pag-aaral, magiging bihasa ka nang sapat upang makalikha ng mga laro. Sa komprehensibong mga pagsusulit, maaari mong makamit ang pinakamataas na antas ng pag-aaral ng programming sa bahay.</p>"
+        "tl": "<h2>Koodi Studio</h2><p>Ang Koodi Studio ay nagbibigay-daan sa pag-aaral ng programming. Dinisenyo upang makipag-ugnayan sa ToasterMachine, maaari kang magtanong kaagad kung ikaw ay mahirapan. Nag-aalok ito ng ilang mga aralin, at sa pagtatapos ng lahat ng pag-aaral, magiging bihasa ka nang sapat upang makalikha ng mga laro. Sa komprehensibong mga pagsusulit, maaari mong makamit ang pinakamataas na antas ng pag-aaral ng programming sa bahay.</p>",
+        "ko": "<h2>쿠디 스튜디오</h2><p>쿠디 스튜디오에서는 프로그래밍 학습을 할 수 있습니다.<br>ToasterMachine과의 연동을 전제로 설계된 앱으로, 모르는 것이 있으면 바로 질문할 수 있습니다.<br>여러 레슨이 준비되어 있으며, 모든 학습을 마치면 게임을 제작할 수 있을 정도로 실력이 향상됩니다.<br>테스트도 충실히 마련되어 있어, 집에서 최고 수준의 프로그래밍 학습을 할 수 있습니다.<br></p>"
       }
     },
     {
@@ -135,12 +155,14 @@
       "titles": {
         "ja": "Skrift",
         "en": "Skrift",
-        "tl": "Skrift"
+        "tl": "Skrift",
+        "ko": "스크리프트"
       },
       "content": {
-        "ja": "<h2>Skrift</h2><p>Skriftというアプリもあります。\n\nこのアプリは、辞書アプリです。\n\nしかし、検索機能がありません。\n\nこれは、紙の辞書の良さを活かしたアプリで、目的の単語を探していると、いろいろな単語が目に入ってくるので、結果的に語彙力の向上につながります。\n</p>",
+        "ja": "<h2>Skrift</h2><p>Skriftというアプリもあります。<br>このアプリは、辞書アプリです。<br>しかし、検索機能がありません。<br>これは、紙の辞書の良さを活かしたアプリで、目的の単語を探していると、いろいろな単語が目に入ってくるので、結果的に語彙力の向上につながります。<br></p>",
         "en": "<h2>Skrift</h2><p>There's also an app called Skrift. This app is a dictionary. However, it lacks a search function. It's an app that leverages the strengths of a paper dictionary. While searching for a specific word, you'll encounter various other words, which ultimately helps improve your vocabulary.</p>",
-        "tl": "<h2>Skrift</h2><p>Mayroon ding app na tinatawag na Skrift. Ang app na ito ay isang diksyonaryo. Gayunpaman, wala itong search function. Ito ay isang app na nagpapakinabang sa mga kalakasan ng isang papel na diksyonaryo. Habang naghahanap ng isang partikular na salita, makikita mo ang iba't ibang salita, na sa huli ay makakatulong na mapabuti ang iyong bokabularyo.</p>"
+        "tl": "<h2>Skrift</h2><p>Mayroon ding app na tinatawag na Skrift. Ang app na ito ay isang diksyonaryo. Gayunpaman, wala itong search function. Ito ay isang app na nagpapakinabang sa mga kalakasan ng isang papel na diksyonaryo. Habang naghahanap ng isang partikular na salita, makikita mo ang iba't ibang salita, na sa huli ay makakatulong na mapabuti ang iyong bokabularyo.</p>",
+        "ko": "<h2>스크리프트</h2><p>스크리프트라는 앱도 있습니다.<br>이 앱은 사전 앱이지만, 검색 기능이 없습니다.<br>종이 사전의 장점을 살린 앱으로, 원하는 단어를 찾는 과정에서 다양한 단어들이 눈에 들어와 어휘력 향상에 도움이 됩니다.<br></p>"
       }
     },
     {
@@ -148,12 +170,14 @@
       "titles": {
         "ja": "CStore",
         "en": "CStore",
-        "tl": "CStore"
+        "tl": "CStore",
+        "ko": "C스토어"
       },
       "content": {
-        "ja": "<h2>CStore</h2><p>もっとたくさんのアプリが欲しい、あなたには、CStoreという便利なシステムがあります。\n\nCStoreでは、専門的なアプリを、簡単に手に入れることができます。\n\nあなたが作ったアプリを公開することもできます。\n\nしかも、すべて無料で利用することができます。\n\nすべてのアプリは、審査を受けてから公開されるので、セキュリティを確保することもできます。\n</p>",
+        "ja": "<h2>CStore</h2><p>もっとたくさんのアプリが欲しい、あなたには、CStoreという便利なシステムがあります。<br>CStoreでは、専門的なアプリを、簡単に手に入れることができます。<br>あなたが作ったアプリを公開することもできます。<br>しかも、すべて無料で利用することができます。<br>すべてのアプリは、審査を受けてから公開されるので、セキュリティを確保することもできます。<br></p>",
         "en": "<h2>CStore</h2><p>For those wanting more apps, there's a convenient system called CStore. At CStore, you can easily obtain specialized apps. You can also publish apps you've created. What's more, everything is available for free. All apps undergo review before publication, ensuring security.</p>",
-        "tl": "<h2>CStore</h2><p>Para sa mga nais ng mas maraming app, mayroong isang maginhawang sistema na tinatawag na CStore. Sa CStore, madali kang makakakuha ng mga espesyalisadong app. Maaari mo ring i-publish ang mga app na iyong ginawa. Higit pa rito, lahat ay magagamit nang libre. Ang lahat ng app ay sumasailalim sa pagsusuri bago i-publish, na nagsisiguro ng seguridad.</p>"
+        "tl": "<h2>CStore</h2><p>Para sa mga nais ng mas maraming app, mayroong isang maginhawang sistema na tinatawag na CStore. Sa CStore, madali kang makakakuha ng mga espesyalisadong app. Maaari mo ring i-publish ang mga app na iyong ginawa. Higit pa rito, lahat ay magagamit nang libre. Ang lahat ng app ay sumasailalim sa pagsusuri bago i-publish, na nagsisiguro ng seguridad.</p>",
+        "ko": "<h2>C스토어</h2><p>더 많은 앱을 원하시는 분들을 위한 편리한 시스템, C스토어가 있습니다.<br>C스토어에서는 전문적인 앱을 쉽게 구할 수 있습니다.<br>여러분이 만든 앱을 공개할 수도 있습니다.<br>게다가 모든 것을 무료로 이용할 수 있습니다.<br>모든 앱은 출시 전 검토를 거치기 때문에 보안도 안전합니다.<br></p>"
       }
     },
     {
@@ -161,12 +185,14 @@
       "titles": {
         "ja": "セキュリティ",
         "en": "Security",
-        "tl": "Seguridad"
+        "tl": "Seguridad",
+        "ko": "보안"
       },
       "content": {
-        "ja": "<h2>セキュリティ</h2><p>でも、こんなたくさんの機能があると、セキュリティが心配ですよね。\n\nそこで私たちは、まだ一般的に使われていない、超強力暗号を利用してデータを保存し、画期的なデータ所有システムを実現しました。\n\nまた、ToasterMachineやSCRアプリには、3重ものフィルタシステムを採用し、みんなが安心して使えるDeep-Schoolを目指しました。\n\nNoteaのデータも、KoodiStudioのデータも、教師などの特別な要求がなければ、絶対にあなた以外誰も見ることはできません。\n</p>",
+        "ja": "<h2>セキュリティ</h2><p>でも、こんなたくさんの機能があると、セキュリティが心配ですよね。<br>そこで私たちは、まだ一般的に使われていない、超強力暗号を利用してデータを保存し、画期的なデータ所有システムを実現しました。<br>また、ToasterMachineやSCRアプリには、3重ものフィルタシステムを採用し、みんなが安心して使えるDeep-Schoolを目指しました。<br>Noteaのデータも、KoodiStudioのデータも、教師などの特別な要求がなければ、絶対にあなた以外誰も見ることはできません。<br></p>",
         "en": "<h2>Security</h2><p>But with so many features, security might be a concern, right? That's why we use ultra-strong encryption, not yet widely adopted, to store data, achieving a groundbreaking data ownership system. Furthermore, ToasterMachine and SCR apps employ a triple-layered filter system, aiming to make Deep-School a place everyone can use with peace of mind. Neither Notea's data nor KoodiStudio's data can ever be viewed by anyone other than you, unless specifically requested by teachers or other authorized personnel.</p>",
-        "tl": "<h2>Seguridad</h2><p>Ngunit sa napakaraming mga tampok, maaaring maging isang alalahanin ang seguridad, tama ba? Iyon ang dahilan kung bakit gumagamit kami ng ultra-strong encryption, na hindi pa malawakang ginagamit, upang mag-imbak ng data, na nakakamit ang isang makabagong sistema ng pagmamay-ari ng data. Bukod dito, ang ToasterMachine at SCR apps ay gumagamit ng triple-layered filter system, na naglalayong gawing isang lugar ang Deep-School kung saan maaaring gamitin ng lahat nang may kapanatagan ng loob. Ang data ng Notea o KoodiStudio ay hindi maaaring matingnan ng sinuman maliban sa iyo, maliban kung partikular na hiniling ng mga guro o ibang awtorisadong tauhan.</p>"
+        "tl": "<h2>Seguridad</h2><p>Ngunit sa napakaraming mga tampok, maaaring maging isang alalahanin ang seguridad, tama ba? Iyon ang dahilan kung bakit gumagamit kami ng ultra-strong encryption, na hindi pa malawakang ginagamit, upang mag-imbak ng data, na nakakamit ang isang makabagong sistema ng pagmamay-ari ng data. Bukod dito, ang ToasterMachine at SCR apps ay gumagamit ng triple-layered filter system, na naglalayong gawing isang lugar ang Deep-School kung saan maaaring gamitin ng lahat nang may kapanatagan ng loob. Ang data ng Notea o KoodiStudio ay hindi maaaring matingnan ng sinuman maliban sa iyo, maliban kung partikular na hiniling ng mga guro o ibang awtorisadong tauhan.</p>",
+        "ko": "<h2>보안</h2><p>이렇게 많은 기능이 있으면 보안이 걱정되시겠죠?<br>그래서 저희는 아직 일반적으로 사용되지 않는 초강력 암호화를 사용하여 데이터를 저장하고, 혁신적인 데이터 소유 시스템을 구현했습니다.<br>또한 ToasterMachine과 SCR 앱에는 3중 필터 시스템을 도입하여 모두가 안심하고 사용할 수 있는 Deep-School을 만들고자 했습니다.<br>노테아의 데이터도, 쿠디 스튜디오의 데이터도 교사 등의 특별한 요청이 없는 한, 절대로 여러분 외에는 아무도 볼 수 없습니다.<br></p>"
       }
     },
     {
@@ -177,7 +203,7 @@
         "tl": "Buod"
       },
       "content": {
-        "ja": "<h2>まとめ</h2><p>Deep-Schoolは、みんなが安心して使える革命的な学習システムです。\n\nこのシステムが導入されれば、もっと効率的に、楽しく、そして安全に学べる環境が整います。\n\n環境さえ整えば、かなりの余裕が生まれて、今までできなかったことも色々できるようになるでしょう。\n\n学校が楽しく学べる場所になるか、今のままかは、あなたの手によって変えられることです。\n\nあなたが、学校を変えられるのは、今しかないかもしれません。\n\n少しでも学校を、もっと楽しく、もっと安全に、もっと効率的に学べる場所にしたいと思うなら、私、杉山 瑳久哉（すぎやま さくや）に投票お願いします。\n\nぜひ、みんなで、学校での学びに革命を起こしましょう。</p>",
+        "ja": "<h2>まとめ</h2><p>Deep-Schoolは、みんなが安心して使える革命的な学習システムです。<br>このシステムが導入されれば、もっと効率的に、楽しく、そして安全に学べる環境が整います。<br>環境さえ整えば、かなりの余裕が生まれて、今までできなかったことも色々できるようになるでしょう。<br>学校が楽しく学べる場所になるか、今のままかは、あなたの手によって変えられることです。<br>あなたが、学校を変えられるのは、今しかないかもしれません。<br>少しでも学校を、もっと楽しく、もっと安全に、もっと効率的に学べる場所にしたいと思うなら、私、杉山 瑳久哉（すぎやま さくや）に投票お願いします。<br>ぜひ、みんなで、学校での学びに革命を起こしましょう。</p>",
         "en": "<h2>Summary</h2><p>Deep-School is a revolutionary learning system everyone can use with confidence. Implementing this system creates an environment for learning that is more efficient, enjoyable, and secure. With the right environment in place, you'll gain significant flexibility, enabling you to do many things previously impossible. Whether school becomes a place where learning is enjoyable or remains as it is now is something you can change. Now may be the only time you can change school. If you want to make school even a little more enjoyable, safer, and a place where learning is more efficient, please vote for me, Sakuya Sugiyama. Let's all work together to revolutionize learning at school.</p>",
         "tl": "<h2>Buod</h2><p>Ang Deep-School ay isang rebolusyonaryong sistema ng pag-aaral na maaaring gamitin ng lahat nang may kumpiyansa. Ang pagpapatupad ng sistemang ito ay lumilikha ng isang kapaligiran para sa pag-aaral na mas mahusay, kasiya-siya, at ligtas. Sa tamang kapaligiran, makakakuha ka ng makabuluhang kakayahang umangkop, na nagbibigay-daan sa iyo na gawin ang maraming bagay na dati ay imposible. Kung ang paaralan ay magiging isang lugar kung saan kasiya-siya ang pag-aaral o mananatili ito kung ano ito ngayon ay isang bagay na maaari mong baguhin. Ngayon ay maaaring ang tanging oras na maaari mong baguhin ang paaralan. Kung nais mong gawing mas kasiya-siya, mas ligtas, at isang lugar kung saan mas mahusay ang pag-aaral ang paaralan, mangyaring iboto ninyo ako, si Sakuya Sugiyama. Magtulungan tayong lahat upang baguhin ang paraan ng pag-aaral sa paaralan.</p>"
       }
