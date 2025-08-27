@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025 後期生徒会選挙 - 杉山　瑳久哉</title>
+    <link rel="icon" type="image/png" href="data/img/VOTE_ICON.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="nav-buttons" style="display: none;">
+        <div class="nav-group">
+            <button class="nav-btn back" onclick="goBack()">
+                <i class="fas fa-chevron-left"></i> 言語選択に戻る
+            </button>
+        </div>
+        <div class="nav-group">
+            <button class="nav-btn prev" onclick="navigate('prev')" disabled>
+                <i class="fas fa-arrow-left"></i> 前へ
+            </button>
+            <button class="nav-btn next" onclick="navigate('next')">
+                次へ <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div class="gradient-bg">
+        <div class="container" id="content-container">
+            <!-- Language Selection Screen -->
+            <div id="language-screen" class="card">
+                <div class="card-header">
+                    <div class="header-icon">
+                        <img src="data/img/VOTE_ICON.png" alt="Vote Icon" class="vote-icon">
+                    </div>
+                    <h1>言語を選んでください</h1>
+                    <p>Select your language</p>
+                    <p>Piliin ang inyong wika</p>
+                </div>
+                <div class="card-body">
+                    <div class="language-grid">
+                        <div class="language-card" onclick="selectLanguage('ja')">
+                            <div class="card-icon">
+                                <img src="data/img/japan.svg" alt="日本語" class="language-flag">
+                            </div>
+                            <h3>日本語</h3>
+                            <p>Japanese</p>
+                        </div>
+                        <div class="language-card" onclick="selectLanguage('en')">
+                            <div class="card-icon">
+                                <img src="data/img/english.svg" alt="English" class="language-flag">
+                            </div>
+                            <h3>English</h3>
+                            <p>English</p>
+                        </div>
+                        <div class="language-card" onclick="selectLanguage('tl')">
+                            <div class="card-icon">
+                                <img src="data/img/philipin.svg" alt="Tagalog" class="language-flag">
+                            </div>
+                            <h3>Tagalog</h3>
+                            <p>Filipino</p>
+                        </div>
+                        <div class="language-card" onclick="selectLanguage('ko')">
+                            <div class="card-icon">
+                                <img src="data/img/korea.svg" alt="한국어" class="language-flag">
+                            </div>
+                            <h3>한국어</h3>
+                            <p>Korean</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Japanese Content -->
+            <div id="ja-content" class="content-section">
+                <div class="card">
+                    <div class="card-header">
+                        <a href="#" class="back-button" onclick="goBack()">
+                            <i class="fas fa-arrow-left"></i> 言語選択に戻る
+                        </a>
+                        <h1>2025 後期生徒会選挙 杉山 瑳久哉 公約</h1>
+                    </div>
+                    <div class="card-body">
+                        <p>私が目指す学校は、すべての人が、楽しく学ぶことができる学校です。</p>
+                        <p>あなたは、学校で、タブレットが活用されていない、と思ったことはありませんか？ はっきり言って、使いずらいですよね。 そこで、私は、Deep-Schoolというアプリを制作しました。</p>
+                        
+                        <h2>Deep-Schoolについて</h2>
+                        <p>Deep-Schoolは、あなたの学びを、たくさんの面からサポートするツールです。たくさんツールがあるので、一つ一つ簡単に説明していきます。</p>
+                        
+                        <h3>デザイン</h3>
+                        <p>シンプルでかつ直感的なデザインを追求しました。黒板のようなテーマは、皆さんに親しみやすいものになればいいな、と思い採用しました。また、アニメーションも、美しく、楽しく、そして自然なものになるように、設計・採用しました。</p>
+                        
+                        <h3>アプリ連携</h3>
+                        <p>Deep-Schoolには、いくつかのアプリが搭載されています。そして、すべてのアプリを連携させて使うことができます。最も多くのアプリでその機能を使うことができるのは、ToasterMachineです。</p>
+                        
+                        <h3>ToasterMachine</h3>
+                        <p>ToasterMachineは、AIを使ってあなたをサポートするツールです。メニューにある「ToasterMachine」は、ToasterMachineとチャットできるものですが、実は、すべてのアプリで、このToasterMachineを活用することができます。どのアプリでも、Ctrl+Shift⇧+Tを押すと、ToasterMachineとチャットすることができます。今のアプリの画面をToasterMachineに送ることもできます。そして、もちろんあなたのデータは、私たちを含め誰も見ることができません。</p>
+                        
+                        <h3>SCRアプリ</h3>
+                        <p>このToasterMachineと連携すると素晴らしい効果を生むのが、「SCR」アプリです。このアプリでは、あなたのわからないことを、みんなに質問することができます。そして、みんなの質問に、誰でも答えることができます。もし、すぐに答えが知りたい場合は、ToasterMachineに回答してもらうことができます。ToasterMachineと、仲間の力を組み合わせることで、効率的で、あなたのために素晴らしい学習をすることができます。</p>
+                        
+                        <h3>Pickramu</h3>
+                        <p>「SCR」では質問ができますが、「Pickramu」では、ワークを使った勉強ができます。「Pickramu」には、独自作成のワークがたくさんあります。このワークを活用することで、いつでもどこでも、学習することができます。もちろん、わからないことはToasterMachineを使って、いつでもサポートを受けることができます。</p>
+                        
+                        <h3>Notea</h3>
+                        <p>学校のワークや、授業メモを作りたい。そんな時は、「Notea」アプリを使いましょう。シンプルで、紙のノートっぽさを重視したNoteaは、ページ機能があり、これを活用することで、紙のノートのように、ページ単位での管理ができるようになります。そして、赤シート機能もあるので、暗記ノートを作るのにもおすすめです。Noteaでも、ToasterMachineに質問したりすることができます。</p>
+                        
+                        <h3>MoralFruit</h3>
+                        <p>これらの基本アプリに加えて、標準搭載の、専門アプリもあります。MoralFruitは、道徳学習を家でできる画期的なアプリです。ToasterMachineベースのエージェントと、道徳的な、難しい問題を考えることで、p4cのような学習をすることができます。人と話すのは恥ずかしいあなたでも、道徳という学校でしか学べない教科を、家で学べるようになります。</p>
+                        
+                        <h3>Koodi Studio</h3>
+                        <p>Koodi Studioでは、プログラミング学習をすることができます。ToasterMachineとの連携を前提に設計されたアプリで、わからないことがあれば、すぐに聞くことができます。いくつかのレッスンがあり、すべての学習を終えると、ゲームを制作できるほどまでに上達することができます。テストも充実していて、家で最高レベルのプログラミング学習をすることができます。</p>
+                        
+                        <h3>Skrift</h3>
+                        <p>Skriftというアプリもあります。このアプリは、辞書アプリです。しかし、検索機能がありません。これは、紙の辞書の良さを活かしたアプリで、目的の単語を探していると、いろいろな単語が目に入ってくるので、結果的に語彙力の向上につながります。</p>
+                        
+                        <h3>CStore</h3>
+                        <p>もっとたくさんのアプリが欲しい、あなたには、CStoreという便利なシステムがあります。CStoreでは、専門的なアプリを、簡単に手に入れることができます。あなたが作ったアプリを公開することもできます。しかも、すべて無料で利用することができます。すべてのアプリは、審査を受けてから公開されるので、セキュリティを確保することもできます。</p>
+                        
+                        <h3>セキュリティ</h3>
+                        <p>でも、こんなたくさんの機能があると、セキュリティが心配ですよね。そこで私たちは、まだ一般的に使われていない、超強力暗号を利用してデータを保存し、画期的なデータ所有システムを実現しました。また、ToasterMachineやSCRアプリには、3重ものフィルタシステムを採用し、みんなが安心して使えるDeep-Schoolを目指しました。Noteaのデータも、KoodiStudioのデータも、教師などの特別な要求がなければ、絶対にあなた以外誰も見ること
+                        
+                        <h3>CStore</h3>
+                        <p>もっとたくさんのアプリが欲しい、あなたには、CStoreという便利なシステムがあります。CStoreでは、専門的なアプリを、簡単に手に入れることができます。あなたが作ったアプリを公開することもできます。しかも、すべて無料で利用することができます。すべてのアプリは、審査を受けてから公開されるので、セキュリティを確保することもできます。</p>
+                        
+                        <h3>セキュリティ</h3>
+                        <p>でも、こんなたくさんの機能があると、セキュリティが心配ですよね。そこで私たちは、まだ一般的に使われていない、超強力暗号を利用してデータを保存し、画期的なデータ所有システムを実現しました。また、ToasterMachineやSCRアプリには、3重ものフィルタシステムを採用し、みんなが安心して使えるDeep-Schoolを目指しました。Noteaのデータも、KoodiStudioのデータも、教師などの特別な要求がなければ、絶対にあなた以外誰も見ることはできません。</p>
+                        
+                        <h3>まとめ</h3>
+                        <p>Deep-Schoolは、みんなが安心して使える革命的な学習システムです。このシステムが導入されれば、もっと効率的に、楽しく、そして安全に学べる環境が整います。環境さえ整えば、かなりの余裕が生まれて、今までできなかったことも色々できるようになるでしょう。学校が楽しく学べる場所になるか、今のままかは、あなたの手によって変えられることです。あなたが、学校を変えられるのは、今しかないかもしれません。少しでも学校を、もっと楽しく、もっと安全に、もっと効率的に学べる場所にしたいと思うなら、私、杉山 瑳久哉（すぎやま さくや）に投票お願いします。ぜひ、みんなで、学校での学びに革命を起こしましょう。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- English Content -->
+            <div id="en-content" class="content-section">
+                <div class="card">
+                    <div class="card-header">
+                        <a href="#" class="back-button" onclick="goBack()">
+                            <i class="fas fa-arrow-left"></i> Back to Language Selection
+                        </a>
+                        <h1>2025 Fall Student Council Election: Sugiyama Sakuya's Platform</h1>
+                    </div>
+                    <div class="card-body">
+                        <p>The school I aim to create is one where everyone can learn with joy.</p>
+                        <p>Have you ever felt that tablets aren't being used effectively at school? Let's be honest—they're hard to use, right? That's why I created an app called Deep-School.</p>
+                        
+                        <h2>About Deep-School</h2>
+                        <p>Deep-School is a tool that supports your learning from many angles. Since there are many tools, I'll briefly explain each one.</p>
+                        
+                        <h3>Design</h3>
+                        <p>I pursued a simple yet intuitive design. I chose a blackboard-like theme hoping it would feel familiar and approachable to everyone. I also designed and implemented animations to be beautiful, enjoyable, and natural.</p>
+                        
+                        <h3>App Integration</h3>
+                        <p>Deep-School comes with several built-in apps. You can use all these apps together in a connected way. The app where you can use this feature most extensively is ToasterMachine.</p>
+                        
+                        <h3>ToasterMachine</h3>
+                        <p>ToasterMachine is a tool that uses AI to support you. The "ToasterMachine" option in the menu lets you chat with ToasterMachine, but actually, you can utilize this ToasterMachine across all apps. Press Ctrl+Shift⇧+T in any app to chat with ToasterMachine. You can also send the current app screen to ToasterMachine. And of course, no one, including us, can see your data.</p>
+                        
+                        <h3>SCR App</h3>
+                        <p>The app that produces amazing results when integrated with ToasterMachine is "SCR". This app lets you ask everyone questions about things you don't understand. And anyone can answer everyone's questions. If you need an answer right away, you can get ToasterMachine to respond. By combining ToasterMachine with the power of your peers, you can learn efficiently and effectively, tailored just for you.</p>
+                        
+                        <h3>Pickramu</h3>
+                        <p>While "SCR" lets you ask questions, "Pickramu" lets you study using worksheets. "Pickramu" has tons of original worksheets. Using these worksheets, you can learn anytime, anywhere. Of course, you can always get support for anything you don't understand using ToasterMachine.</p>
+                        
+                        <h3>Notea</h3>
+                        <p>Want to create school workbooks or class notes? That's when you should use the "Notea" app. Notea is simple and emphasizes a paper notebook feel. It has a page function, allowing you to manage your notes page by page, just like a physical notebook. It also has a red sheet function, making it great for creating flashcards. You can also ask questions to ToasterMachine within Notea.</p>
+                        
+                        <h3>MoralFruit</h3>
+                        <p>In addition to these core apps, there are also specialized apps included as standard. MoralFruit is a groundbreaking app that lets you study ethics at home. By engaging with ToasterMachine-based agents and contemplating challenging ethical questions, you can experience learning similar to P4C (Philosophy for Children). Even if talking to people makes you feel shy, you can now study ethics—a subject typically only taught at school—right at home.</p>
+                        
+                        <h3>Koodi Studio</h3>
+                        <p>Koodi Studio enables programming learning. Designed to integrate with ToasterMachine, you can ask questions immediately if you get stuck. It offers several lessons, and upon completing all learning, you'll be skilled enough to create games. With comprehensive tests, you can achieve top-level programming learning at home.</p>
+                        
+                        <h3>Skrift</h3>
+                        <p>There's also an app called Skrift. This app is a dictionary. However, it lacks a search function. It's an app that leverages the strengths of a paper dictionary. While searching for a specific word, you'll encounter various other words, which ultimately helps improve your vocabulary.</p>
+                        
+                        <h3>CStore</h3>
+                        <p>For those wanting more apps, there's a convenient system called CStore. At CStore, you can easily obtain specialized apps. You can also publish apps you've created. What's more, everything is available for free. All apps undergo review before publication, ensuring security.</p>
+                        
+                        <h3>Security</h3>
+                        <p>But with so many features, security might be a concern, right? That's why we use ultra-strong encryption, not yet widely adopted, to store data, achieving a groundbreaking data ownership system. Furthermore, ToasterMachine and SCR apps employ a triple-layered filter system, aiming to make Deep-School a place everyone can use with peace of mind. Neither Notea's data nor KoodiStudio's data can ever be viewed by anyone other than you, unless specifically requested by teachers or other authorized personnel.</p>
+                        
+                        <h3>Summary</h3>
+                        <p>Deep-School is a revolutionary learning system everyone can use with confidence. Implementing this system creates an environment for learning that is more efficient, enjoyable, and secure. With the right environment in place, you'll gain significant flexibility, enabling you to do many things previously impossible. Whether school becomes a place where learning is enjoyable or remains as it is now is something you can change. Now may be the only time you can change school. If you want to make school even a little more enjoyable, safer, and a place where learning is more efficient, please vote for me, Sakuya Sugiyama. Let's all work together to revolutionize learning at school.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Korean Content -->
+            <div id="ko-content" class="content-section">
+                <div class="card">
+                    <div class="card-header">
+                        <a href="#" class="back-button" onclick="goBack()">
+                            <i class="fas fa-arrow-left"></i> 언어 선택으로 돌아가기
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <p>제가 만들고자 하는 학교는 모든 사람이 즐겁게 배울 수 있는 학교입니다.</p>
+                        <p>학교에서 태블릿이 제대로 활용되지 못하고 있다고 느낀 적 있나요? 솔직히 말해서, 사용하기 어렵죠? 그래서 저는 Deep-School이라는 앱을 만들었습니다.</p>
+                        
+                        <h2>Deep-School에 대하여</h2>
+                        <p>Deep-School은 여러분의 학습을 다각도로 지원하는 도구입니다. 기능이 많아서 각각을 간단히 설명해드리겠습니다.</p>
+                        
+                        <h3>디자인</h3>
+                        <p>먼저 Deep-School의 디자인에 대해서요. 심플하면서도 직관적인 디자인을 추구했습니다. 모든 사람이 친숙하고 접근하기 쉽게 느끼길 바라며 칠판 같은 테마를 선택했습니다. 또한 애니메이션을 아름답고 즐겁고 자연스럽게 디자인하고 구현했습니다.</p>
+                        
+                        <h3>앱 간 연동</h3>
+                        <p>Deep-School에는 여러 내장 앱이 있습니다. 이 모든 앱들을 연결해서 함께 사용할 수 있어요. 이 기능을 가장 폭넓게 활용할 수 있는 앱이 바로 ToasterMachine입니다.</p>
+                        
+                        <h3>ToasterMachine</h3>
+                        <p>ToasterMachine은 AI를 사용해 여러분을 지원하는 도구입니다. 메뉴의 "ToasterMachine" 옵션을 통해 ToasterMachine과 채팅할 수 있지만, 실제로는 모든 앱에서 이 ToasterMachine을 활용할 수 있습니다. 어떤 앱에서든 Ctrl+Shift⇧+T를 누르면 ToasterMachine과 채팅할 수 있어요. 현재 앱 화면을 ToasterMachine에게 보낼 수도 있습니다. 그리고 물론, 저희를 포함해 그 누구도 여러분의 데이터를 볼 수 없습니다.</p>
+                        
+                        <h3>SCR 앱</h3>
+                        <p>ToasterMachine과 연동했을 때 놀라운 효과를 보이는 앱이 "SCR"입니다. 이 앱을 통해 이해가 안 되는 것들에 대해 모든 사람에게 질문할 수 있어요. 그리고 누구든지 모든 사람의 질문에 답변할 수 있습니다. 당장 답변이 필요하다면 ToasterMachine이 응답하도록 할 수 있어요. ToasterMachine과 동료들의 힘을 합쳐서, 여러분만을 위한 효율적이고 효과적인 학습을 할 수 있습니다.</p>
+                        
+                        <h3>Pickramu</h3>
+                        <p>"SCR"이 질문하는 앱이라면, "Pickramu"는 워크시트를 사용해 공부하는 앱입니다. "Pickramu"에는 수많은 오리지널 워크시트가 있어요. 이 워크시트들을 사용해서 언제 어디서든 학습할 수 있습니다. 물론 이해가 안 되는 것은 언제나 ToasterMachine을 이용해 도움을 받을 수 있어요.</p>
+                        
+                        <h3>Notea</h3>
+                        <p>학교 워크북이나 수업 노트를 만들고 싶다고요? 그럴 때 사용해야 하는 것이 "Notea" 앱입니다. Notea는 심플하면서 종이 노트의 감각을 중시합니다. 페이지 기능이 있어서 실제 노트처럼 페이지별로 노트를 관리할 수 있어요. 빨간 시 기능도 있어서 암기카드 만들기에도 최적입니다. Notea 안에서도 ToasterMachine에게 질문할 수 있어요.</p>
+                        
+                        <h3>MoralFruit</h3>
+                        <p>이런 핵심 앱들 외에도 특화된 앱들이 기본으로 포함되어 있습니다. MoralFruit은 집에서 윤리를 공부할 수 있는 획기적인 앱입니다. ToasterMachine 기반 에이전트와 대화하며 어려운 윤리적 질문을 고민함으로써, P4C(어린이 철학)와 유사한 학습을 경험할 수 있어요. 사람과 대화하는 게 부끄럽다 해도, 이제 보통 학교에서만 배우는 윤리를 집에서 공부할 수 있습니다.</p>
+                        
+                        <h3>Koodi Studio</h3>
+                        <p>Koodi Studio는 프로그래밍 학습이 가능합니다. ToasterMachine과의 연동을 고려해 설계되어, 막히는 부분이 있으면 즉시 질문할 수 있어요. 여러 레슨을 제공하며, 모든 학습을 완료하면 게임을 만들 수 있을 정도의 실력을 갖게 됩니다. 충실한 테스트를 통해 집에서도 최고 수준의 프로그래밍 학습을 달성할 수 있어요.</p>
+                        
+                        <h3>Skrift</h3>
+                        <p>Skrift라는 앱도 있습니다. 이 앱은 사전입니다. 하지만 검색 기능이 없어요. 종이 사전의 장점을 살린 앱입니다. 특정 단어를 찾는 과정에서 다양한 다른 단어들을 접하게 되어, 결과적으로 어휘력 향상에 도움이 됩니다.</p>
+                        
+                        <h3>CStore</h3>
+                        <p>더 많은 앱을 원하는 분들을 위해 CStore라는 편리한 시스템이 있습니다. CStore에서는 특화된 앱들을 쉽게 구할 수 있어요. 여러분이 만든 앱을 공개할 수도 있습니다. 더욱이 모든 것이 무료로 이용 가능합니다. 모든 앱은 공개 전 심사를 거쳐 보안이 보장됩니다.</p>
+                        
+                        <h3>보안</h3>
+                        <p>하지만 이렇게 많은 기능이 있으면 보안이 걱정되겠죠? 그래서 저희는 아직 널리 보급되지 않은 초강력 암호화를 사용해 데이터를 저장하여, 획기적인 데이터 소유권 시스템을 달성했습니다. 또한 ToasterMachine과 SCR 앱에는 3중 필터링 시스템을 적용해, Deep-School이 모든 사람이 안심하고 사용할 수 있는 곳이 되도록 노력하고 있습니다. Notea의 데이터든 KoodiStudio의 데이터든, 선생님이나 기타 권한을 가진 분들이 특별히 요청하지 않는 한 여러분 외에는 그 누구도 절대 볼 수 없습니다.</p>
+                        
+                        <h3>요약</h3>
+                        <p>Deep-School은 모든 사람이 안심하고 사용할 수 있는 혁신적인 학습 시스템입니다. 이 시스템을 도입하면 더욱 효율적이고, 즐겁고, 안전한 학습 환경이 만들어집니다. 올바른 환경이 갖춰지면 여러분은 상당한 유연성을 얻게 되어, 지금까지 불가능했던 많은 일들을 할 수 있게 됩니다. 학교가 학습이 즐거운 곳이 될지, 아니면 지금처럼 그대로 있을지는 여러분이 바꿀 수 있습니다. 지금이야말로 학교를 바꿀 수 있는 유일한 때일지도 모릅니다. 학교를 조금이라도 더 즐겁고, 더 안전하고, 학습이 더 효율적인 곳으로 만들고 싶다면, 저 스기야마 사쿠야에게 투표해 주세요. 모두 함께 학교에서의 학습을 혁신해 봅시다.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tagalog Content -->
+            <div id="tl-content" class="content-section">
+                <div class="card">
+                    <div class="card-header">
+                        <a href="#" class="back-button" onclick="goBack()">
+                            <i class="fas fa-arrow-left"></i> Bumalik sa Pagpili ng Wika
+                        </a>
+                        <h1>2025 Fall Student Council Election: Platform ni Sugiyama Sakuya</h1>
+                    </div>
+                    <div class="card-body">
+                        <p>Ang paaralang nais kong makamit ay isang lugar kung saan lahat ay maaaring matuto nang may kasiyahan.</p>
+                        <p>Naramdaman mo na ba na hindi epektibong ginagamit ang mga tablet sa paaralan? Maging totoo tayo—mahirap gamitin, di ba? Kaya naman gumawa ako ng isang app na tinatawag na Deep-School.</p>
+                        
+                        <h2>Tungkol sa Deep-School</h2>
+                        <p>Ang Deep-School ay isang tool na sumusuporta sa inyong pag-aaral sa maraming paraan. Dahil maraming tools, maikling ipapaliwanag ko ang bawat isa.</p>
+                        
+                        <h3>Disenyo</h3>
+                        <p>Hinabol ko ang simple ngunit intuitive na disenyo. Pumili ako ng blackboard-like theme na umaasa kong magiging pamilyar at madaling lapitan para sa lahat. Dinisenyo at nilagay ko rin ang mga animation na magaganda, nakakatuwa, at natural.</p>
+                        
+                        <h3>Pagsasama-sama ng mga App</h3>
+                        <p>Ang Deep-School ay may kasamang ilang built-in apps. Maaari ninyong gamitin ang lahat ng apps na ito nang magkakakonektang paraan. Ang app kung saan pinakamaaari ninyong gamitin ang feature na ito ay ang ToasterMachine.</p>
+                        
+                        <h3>ToasterMachine</h3>
+                        <p>Ang ToasterMachine ay isang tool na gumagamit ng AI para suportahan kayo. Ang "ToasterMachine" option sa menu ay nagbibigay-daan sa inyo na makipag-chat sa ToasterMachine, ngunit sa totoo lang, maaari ninyong gamitin ang ToasterMachine sa lahat ng apps. Pindutin ang Ctrl+Shift⇧+T sa anumang app para makipag-chat sa ToasterMachine. Maaari rin ninyong ipadala ang kasalukuyang app screen sa ToasterMachine. At siyempre, walang sinuman, kasama na kami, na makakakita sa inyong data.</p>
+                        
+                        <h3>SCR App</h3>
+                        <p>Ang app na gumagawa ng kamangha-manghang resulta kapag pinagsama sa ToasterMachine ay ang "SCR". Ang app na ito ay nagbibigay-daan sa inyo na magtanong sa lahat tungkol sa mga bagay na hindi ninyo nauunawaan. At kahit sino ay maaaring sagutin ang mga tanong ng lahat. Kung kailangan ninyo ng sagot kaagad, maaari ninyong hingin sa ToasterMachine na tumugon. Sa pamamagitan ng pagsasama ng ToasterMachine sa kapangyarihan ng inyong mga kapantay, maaari kayong matuto nang mabisa at epektibo, na naaayon sa inyo.</p>
+                        
+                        <h3>Pickramu</h3>
+                        <p>Habang ang "SCR" ay nagpapahintulot sa iyong magtanong, ang "Pickramu" naman ay nagpapahintulot sa iyong mag-aral gamit ang mga worksheet. Ang "Pickramu" ay may maraming orihinal na worksheet. Sa paggamit ng mga worksheet na ito, maaari kang matuto kahit saan at kahit kailan. Siyempre, maaari ka ring humingi ng tulong sa ToasterMachine para sa anumang hindi mo naiintindihan.</p>
+                        
+                        <h3>Notea</h3>
+                        <p>Gusto mo bang gumawa ng school workbook o class notes? Dapat mong gamitin ang "Notea" app. Ang Notea ay simple at binibigyang-diin ang pakiramdam ng papel na notebook. Mayroon itong page function, na nagbibigay-daan sa iyong pamahalaan ang iyong mga tala nang paisa-isa, tulad ng isang pisikal na notebook. Mayroon din itong red sheet function, na ginagawang mainam ito para sa paggawa ng flashcards. Maaari ka ring magtanong sa ToasterMachine sa loob ng Notea.</p>
+                        
+                        <h3>MoralFruit</h3>
+                        <p>Bilang karagdagan sa mga pangunahing app na ito, mayroon ding mga dalubhasang app na kasama bilang pamantayan. Ang MoralFruit ay isang makabagong app na nagpapahintulot sa iyong mag-aral ng etika sa bahay. Sa pamamagitan ng pakikipag-ugnayan sa mga ahente ng ToasterMachine at pag-iisip ng mga mahihirap na etikal na tanong, maaari kang makaranas ng pag-aaral na katulad ng P4C (Philosophy for Children). Kahit na nahihiya kang makipag-usap sa mga tao, maaari ka na ngayong mag-aral ng etika—isang paksa na karaniwan lamang itinuturo sa paaralan—sa iyong tahanan.</p>
+                        
+                        <h3>Koodi Studio</h3>
+                        <p>Ang Koodi Studio ay nagbibigay-daan sa pag-aaral ng programming. Dinisenyo upang isama ang ToasterMachine, maaari kang magtanong kaagad kung may hindi ka naiintindihan. Nag-aalok ito ng ilang mga aralin, at sa pagtatapos ng lahat ng pag-aaral, magiging bihasa ka hanggang sa makakaya mong gumawa ng mga laro. Sa komprehensibong mga pagsusulit, maaari kang makamit ang pinakamataas na antas ng pag-aaral ng programming sa bahay.</p>
+                        
+                        <h3>Skrift</h3>
+                        <p>Mayroon ding app na tinatawag na Skrift. Ang app na ito ay isang diksyonaryo. Gayunpaman, wala itong search function. Ito ay isang app na nagpapahusay sa mga pakinabang ng isang papel na diksyonaryo. Habang naghahanap ka ng isang partikular na salita, makikita mo ang iba't ibang mga salita, na sa huli ay makakatulong sa pagpapabuti ng iyong bokabularyo.</p>
+                        
+                        <h3>CStore</h3>
+                        <p>Para sa mga nagnanais ng mas maraming app, mayroong isang maginhawang sistema na tinatawag na CStore. Sa CStore, madali kang makakakuha ng mga dalubhasang app. Maaari mo ring i-publish ang mga app na iyong ginawa. Higit pa rito, lahat ay magagamit nang libre. Ang lahat ng app ay sumasailalim sa pagsusuri bago i-publish, na nagsisiguro ng seguridad.</p>
+                        
+                        <h3>Seguridad</h3>
+                        <p>Ngunit sa dami ng mga tampok na ito, maaaring mag-alala ka tungkol sa seguridad, tama ba? Iyon ang dahilan kung bakit gumagamit kami ng ultra-strong encryption, na hindi pa laganap na ginagamit, upang iimbak ang data, na nakakamit ang isang makabagong sistema ng pagmamay-ari ng data. Bukod dito, ang ToasterMachine at SCR apps ay gumagamit ng triple-layered filter system, na naglalayong gawing isang lugar kung saan maaaring gumamit ng walang takot ang lahat ang Deep-School. Ang data ng Notea at KoodiStudio ay hindi maaaring matingnan ng sinuman maliban sa iyo, maliban na lamang kung partikular na hiniling ng mga guro o ibang awtorisadong tauhan.</p>
+                        
+                        <h3>Buod</h3>
+                        <p>Ang Deep-School ay isang rebolusyonaryong sistema ng pag-aaral na maaaring gamitin ng lahat nang may kumpiyansa. Ang pagpapatupad ng sistemang ito ay lumilikha ng isang kapaligiran para sa pag-aaral na mas mahusay, kasiya-siya, at ligtas. Sa tamang kapaligiran, makakakuha ka ng malaking kakayahang umangkop, na magbibigay-daan sa iyong gawin ang maraming bagay na dati ay hindi mo magawa. Kung ang paaralan ay magiging isang lugar kung saan kasiya-siya ang pag-aaral o mananatiling tulad ng dati ay isang bagay na maaari mong baguhin. Ngayon ay maaaring ang tanging pagkakataon na maaari mong baguhin ang paaralan. Kung nais mong gawing mas kasiya-siya, mas ligtas, at isang lugar kung saan mas mahusay ang pag-aaral ang paaralan, mangyaring iboto ninyo ako, si Sakuya Sugiyama. Sama-sama nating baguhin ang paraan ng pag-aaral sa paaralan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="900" height="600" fill="#fcd116" version="1.1" viewBox="-28 -45 135 90" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="m-28-45h135v45.506l-114 44.494z" fill="#007AFF" stroke-width=".87088"/>
+  <path d="m-7 0h114v45h-135z" fill="#007AFF" stroke-width=".86602"/>
+  <path d="m30.456 0-58.456 45v-90z" fill="#fff" stroke-width=".86602"/>
+  <circle cx="-7" r="6.75" stroke-width=".75" fill="#007AFF"/>
+  <g id="c" transform="matrix(.75 0 0 .75 -7 0)" fill="#007AFF">
+    <g id="b">
+      <path id="a" d="m0 0-3.164-15.909 0.945-0.946zm0 0-1.169-17.831 1.169-1.169 1.169 1.169zm0 0 2.219-16.855 0.945 0.946z"/>
+      <use transform="scale(-1)" width="100%" height="100%" xlink:href="#a"/>
+    </g>
+    <use transform="rotate(90)" width="100%" height="100%" xlink:href="#b"/>
+  </g>
+  <use transform="rotate(45 -7 0)" width="100%" height="100%" xlink:href="#c"/>
+  <path id="s" d="m23.706 0-2.5365 0.882-0.05475 2.6842-1.6222-2.1398-2.5702 0.77775 1.5338-2.2042-1.5338-2.2042 2.5702 0.77775 1.6222-2.1398 0.05475 2.6842z" stroke-width=".75" fill="#007AFF"/>
+  <use transform="rotate(120 -10.95 4.2182)" width="100%" height="100%" xlink:href="#s"/>
+  <use transform="rotate(240 -10.95 -4.2184)" width="100%" height="100%" xlink:href="#s"/>
+</svg>
