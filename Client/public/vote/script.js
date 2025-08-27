@@ -323,8 +323,8 @@ function goBack() {
     currentSection = 0;
     
     // Clear content container
-    document.getElementById('content-container').innerHTML = '';
-    
+   document.getElementById('title-section').style.display = 'block';
+
     // Hide navigation buttons
     document.querySelector('.nav-buttons').style.display = 'none';
     
