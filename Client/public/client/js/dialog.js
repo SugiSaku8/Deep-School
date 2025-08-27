@@ -1,5 +1,5 @@
 // Import styles
-import '../css/dialog.css';
+import 'dialog.css';
 
 class Dialog {
   constructor(options) {

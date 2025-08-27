@@ -1,0 +1,89 @@
+/* Dialog Styles */
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.dialog-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.dialog {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.dialog-overlay.visible .dialog {
+    transform: translateY(0);
+}
+
+.dialog-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dialog-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.dialog-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.dialog-close:hover {
+    opacity: 1;
+}
+
+.dialog-body {
+    padding: 20px;
+}
+
+.dialog-footer {
+    padding: 12px 20px;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .dialog {
+        width: 95%;
+    }
+    
+    .dialog-body {
+        padding: 16px;
+    }
+}
