@@ -9,6 +9,7 @@ export const appMeta = {
   title: "ToasterMachine",
   icon: "re/ico/tm.png",
 };
+import { showAlert } from '../utils/dialog.js';
 
 export function appInit(shell) {
   const processor = new GeminiProcessor();

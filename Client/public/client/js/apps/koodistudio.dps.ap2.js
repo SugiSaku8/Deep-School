@@ -4,7 +4,7 @@ export const appMeta = {
   icon: "re/ico/Koodi-Studio-icon.png",
   description: "インタラクティブにJavaScriptを学べるコードエディタ"
 };
-import { showAlert } from './utils/dialog';
+import { showAlert } from '../utils/dialog.js';
 // レッスンデータ
 const lessons = [
   {

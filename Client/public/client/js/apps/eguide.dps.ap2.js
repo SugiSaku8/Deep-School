@@ -3,7 +3,7 @@ export const appMeta = {
   title: "eGuide",
   icon: "re/ico/eguide.svg"
 };
-import { showAlert } from './utils/dialog';
+import { showAlert } from '../utils/dialog.js';
 
 
 export const appHtml = `

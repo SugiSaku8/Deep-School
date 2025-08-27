@@ -3,6 +3,7 @@ export const appMeta = {
   title: "eストア",
   icon: "re/ico/estore.png"
 };
+import { showAlert } from '../utils/dialog.js';
 
 export function appInit(shell) {
   const root = document.getElementById('app-root');
