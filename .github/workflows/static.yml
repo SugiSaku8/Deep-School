@@ -36,6 +36,7 @@ jobs:
       - name: Create rewrite rule
         run: |
           echo "/client 200" >> ./Client/public/client/_redirects
+          echo "/vote 200" >> ./Client/public/vote/_redirects
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

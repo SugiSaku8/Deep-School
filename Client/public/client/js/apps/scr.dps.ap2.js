@@ -487,7 +487,7 @@ async function fetchFeed(highlightId) {
         const replyText = textarea.value.trim();
 
         if (!replyText) {
-          alert("返信内容を入力してください");
+          showAlert("返信内容を入力してください","SCR返信システム");
           return;
         }
 
@@ -553,7 +553,7 @@ async function fetchFeed(highlightId) {
       await fetchFeed();
     } catch (e) {
       console.error("[SCR] Reply submission failed after retries:", e);
-      alert(`返信に失敗しました: ${e.message}`);
+      showAlert(`返信に失敗しました: ${e.message}`,'SCR返信システム');
     }
   }
 
@@ -610,7 +610,7 @@ async function fetchFeed(highlightId) {
       }
     } catch (e) {
       console.error("[SCR] Post submission failed after retries:", e);
-      alert(`投稿に失敗しました: ${e.message}`);
+      ShowAlert(`投稿に失敗しました: ${e.message}`,'SCR投稿システム');
     }
   }
 

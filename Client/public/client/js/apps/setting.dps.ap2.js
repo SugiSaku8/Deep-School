@@ -545,7 +545,7 @@ function exportData() {
       message: "SettingApp: データエクスポートエラー " + error,
       level: "error",
     });
-    alert("データのエクスポートに失敗しました");
+    showAlert("データのエクスポートに失敗しました","Deep-School UserData Manager");
   }
 }
 
@@ -577,14 +577,14 @@ function importData() {
               message: "SettingApp: データをインポートしました",
               level: "info",
             });
-            alert("データのインポートが完了しました");
+            showAlert("データのインポートが完了しました","Deep-School UserData Manager");
           } catch (error) {
             shell.log({
               from: "dp.app.setting.err",
               message: "SettingApp: データインポートエラー " + error,
               level: "error",
             });
-            alert("データのインポートに失敗しました");
+            showAlert("データのインポートに失敗しました","Deep-School UserData Manager");
           }
         };
         reader.readAsText(file);
@@ -597,7 +597,7 @@ function importData() {
       message: "SettingApp: データインポートエラー " + error,
       level: "error",
     });
-    alert("データのインポートに失敗しました");
+    showAlert("データのインポートに失敗しました","Deep-School UserData Manager");
   }
 }
 
@@ -615,14 +615,14 @@ function clearData(shell) {
       message: "SettingApp: データをクリアしました",
       level: "info",
     });
-    alert("データのクリアが完了しました");
+    showAlert("データのクリアが完了しました","Deep-School UserData Manager");
   } catch (error) {
     shell.log({
       from: "dp.app.setting.err",
       message: "SettingApp: データクリアエラー " + error,
       level: "error",
     });
-    alert("データのクリアに失敗しました");
+    showAlert("データのクリアに失敗しました","Deep-School UserData Manager");
   }
 }
 
@@ -943,14 +943,14 @@ function createBackup() {
       message: "SettingApp: バックアップを作成しました",
       level: "info",
     });
-    alert("バックアップが正常に作成されました");
+    showAlert("バックアップが正常に作成されました","Deep-School Backup Manager");
   } catch (error) {
     shell.log({
       from: "dp.app.setting.err",
       message: "SettingApp: バックアップ作成エラー " + error,
       level: "error",
     });
-    alert("バックアップの作成に失敗しました");
+    showAlert("バックアップの作成に失敗しました","Deep-School Backup Manager");
   }
 }
 
@@ -1001,8 +1001,9 @@ function restoreBackup() {
               message: "SettingApp: バックアップを復元しました",
               level: "info",
             });
-            alert(
-              "バックアップの復元が完了しました。ページを再読み込みしてください。"
+            showAlert(
+              "バックアップの復元が完了しました。ページを再読み込みしてください。",
+              "Deep-School Backup Manager"
             );
 
             // ページを再読み込み
@@ -1015,7 +1016,7 @@ function restoreBackup() {
               message: "SettingApp: バックアップ復元エラー " + error,
               level: "error",
             });
-            alert("バックアップの復元に失敗しました: " + error.message);
+            showAlert("バックアップの復元に失敗しました: " + error.message,"Deep-School Backup Manager");
           }
         };
         reader.readAsText(file);
@@ -1028,7 +1029,7 @@ function restoreBackup() {
       message: "SettingApp: バックアップ復元エラー " + error,
       level: "error",
     });
-    alert("バックアップの復元に失敗しました");
+    showAlert("バックアップの復元に失敗しました","Deep-School Backup Manager");
   }
 }
 
@@ -1046,17 +1047,17 @@ function checkForUpdates() {
 
       if (confirm(updateMessage)) {
         // 実際のアプリケーションでは、ここでアップデートをダウンロード
-        alert(
-          "アップデートのダウンロードを開始しました。\nダウンロードが完了したら、アプリケーションを再起動してください。"
+        showAlert(
+          "アップデートのダウンロードを開始しました。\nダウンロードが完了したら、アプリケーションを再起動してください。","Deep-School Updater"
         );
       }
     } else {
-      alert(
+      showAlert(
         "お使いのアプリケーションは最新バージョンです。\n\n現在のバージョン: " +
           currentVersion +
           " (" +
           currentBuild +
-          ")"
+          ")","Deep-School Updater"
       );
     }
 
@@ -1071,7 +1072,7 @@ function checkForUpdates() {
       message: "SettingApp: アップデートチェックエラー " + error,
       level: "error",
     });
-    alert("アップデートチェックに失敗しました");
+    showAlert("アップデートチェックに失敗しました","Deep-School Updater");
   }
 }
 

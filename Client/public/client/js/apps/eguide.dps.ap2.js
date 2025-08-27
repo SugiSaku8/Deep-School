@@ -3,6 +3,8 @@ export const appMeta = {
   title: "eGuide",
   icon: "re/ico/eguide.svg"
 };
+import { showAlert } from './utils/dialog';
+
 
 export const appHtml = `
   <div id="ai-teacher-app" style="max-width: 1200px; margin: 0 auto; padding: 20px;">
@@ -240,7 +242,7 @@ export function appInit(shell) {
   function showQuiz() {
     const lesson = lessons[currentLessonIndex];
     if (!lesson.quiz || lesson.quiz.length === 0) {
-      alert('このレッスンにはクイズがありません。');
+      showAlert('このレッスンにはクイズがありません。', 'eGuide');
       return;
     }
     
@@ -289,7 +291,7 @@ export function appInit(shell) {
       message += '\n\nもう一度復習してみましょう。';
     }
     
-    alert(message);
+    showAlert(message);
     document.getElementById('quiz-modal').style.display = 'none';
   }
   
@@ -414,7 +416,7 @@ export function appInit(shell) {
       
     } catch (error) {
       console.error('レッスン作成エラー:', error);
-      alert('レッスンの作成中にエラーが発生しました: ' + error.message);
+      showAlert('レッスンの作成中にエラーが発生しました: ' + error.message,"eGuide");
     } finally {
       // ローディングメッセージを削除
       if (document.body.contains(loadingMessage)) {

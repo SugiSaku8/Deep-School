@@ -1,4 +1,5 @@
 import { SimpleAuthManager, SchoolAuthServer } from '../auth/auth.mjs';
+import { showAlert } from './utils/dialog';
 
 export const appMeta = {
   name: "login",
@@ -354,7 +355,7 @@ export function appInit(shell) {
         shell.loadApp('menu');
       } catch (error) {
         shell.log({from: 'dp.app.login.err', message: 'LoginApp: 学校IDログインエラー ' + error, level: 'error'});
-        alert('ログインに失敗しました');
+        showAlert('ログインに失敗しました','Deep-School　ログインシステム');
       }
     };
   }

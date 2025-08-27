@@ -4,7 +4,7 @@ export const appMeta = {
   icon: "re/ico/Koodi-Studio-icon.png",
   description: "インタラクティブにJavaScriptを学べるコードエディタ"
 };
-
+import { showAlert } from './utils/dialog';
 // レッスンデータ
 const lessons = [
   {
@@ -379,7 +379,7 @@ function setupEventListeners() {
 
   if (btnPrev) btnPrev.onclick = () => loadLesson(Math.max(0, currentLessonIndex - 1));
   if (btnNext) btnNext.onclick = () => loadLesson(Math.min(lessons.length - 1, currentLessonIndex + 1));
-  if (btnComplete) btnComplete.onclick = () => alert('おめでとうございます！すべてのレッスンを完了しました！');
+  if (btnComplete) btnComplete.onclick = () => showAlert('おめでとうございます！すべてのレッスンを完了しました！','KoodiStudio');
 
   // --- Lesson list (event delegation) ---
   const lessonList = document.querySelector('.lesson-list');

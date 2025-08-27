@@ -12,6 +12,45 @@ class GeminiProcessor {
   }
 
   /**
+   * 現在のブラウザウィンドウのスクリーンショットを撮影する
+   * @returns {Promise<string>} スクリーンショットのData URL
+   */
+  async captureScreenshot() {
+    try {
+      // ブラウザのスクリーンショットAPIを使用
+      const stream = await navigator.mediaDevices.getDisplayMedia({
+        video: {
+          cursor: 'never',
+          displaySurface: 'browser'
+        },
+        audio: false,
+        preferCurrentTab: true,
+        selfBrowserSurface: 'exclude'
+      });
+
+      // ビデオトラックからフレームをキャプチャ
+      const track = stream.getVideoTracks()[0];
+      const imageCapture = new ImageCapture(track);
+      const bitmap = await imageCapture.grabFrame();
+      
+      // ストリームを停止
+      track.stop();
+      
+      // キャンバスに描画してData URLに変換
+      const canvas = document.createElement('canvas');
+      canvas.width = bitmap.width;
+      canvas.height = bitmap.height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(bitmap, 0, 0);
+      
+      return canvas.toDataURL('image/png');
+    } catch (error) {
+      console.error('スクリーンショットの撮影に失敗しました:', error);
+      throw new Error('スクリーンショットを撮影できませんでした');
+    }
+  }
+
+  /**
    * 質問を解析して要約を生成する
    * @param {string} question ユーザーからの質問
    * @returns {Promise<string>} 要約結果
@@ -149,9 +188,27 @@ class GeminiProcessor {
   }
 
   /**
+   * 画像データをBase64エンコードするヘルパー関数
+   * @param {File|string} fileOrDataUrl 画像ファイルまたはData URL
+   * @returns {Promise<string>} Base64エンコードされた画像データ
+   */
+  async encodeImageToBase64(fileOrDataUrl) {
+    if (typeof fileOrDataUrl === 'string' && fileOrDataUrl.startsWith('data:')) {
+      return fileOrDataUrl.split(',')[1];
+    }
+    
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target.result.split(',')[1]);
+      reader.onerror = (e) => reject(e);
+      reader.readAsDataURL(fileOrDataUrl);
+    });
+  }
+
+  /**
    * 会話履歴を含めたGemini API呼び出し
-   * @param {string} message 現在のユーザー発言
-   * @param {Array<{role: string, content: string}>} conversationHistory 会話履歴
+   * @param {string|{text: string, images: Array<File|string>}} message 現在のユーザー発言（テキストまたは画像を含むオブジェクト）
+   * @param {Array<{role: string, content: string|object}>} conversationHistory 会話履歴
    * @returns {Promise<string>} Gemini APIの応答
    */
   async sendMessageWithHistory(message, conversationHistory = []) {
@@ -164,26 +221,79 @@ class GeminiProcessor {
 絶対にユーザーに同じ質問を二回以上しないでください。
 内部的な資料（覚書など）について、ユーザーに言及しないでください。
 必要に応じて、ユーザーに役立つ最新の情報や効果的な学習アプローチを組み込んでください。
-あなたの役割は、ユーザーのポテンシャルを最大限に引き出し、自律的な学習を促す最高の学習パートナーであることです。`;
+あなたの役割は、ユーザーのポテンシャルを最大限に引き出し、自律的な学習を促す最高の学習パートナーであることです`;
 
     const contents = [
-      {
-        role: "user",
-        parts: [{ text: systemPrompt }]
-      }
-    ];
+    {
+      role: "user",
+      parts: [{ text: systemPrompt }]
+    }
+  ];
 
-    conversationHistory.forEach(msg => {
+  // 会話履歴を追加
+  for (const msg of conversationHistory) {
+    const role = msg.role === 'user' ? 'user' : 'model';
+    
+    if (typeof msg.content === 'string') {
       contents.push({
-        role: msg.role === 'user' ? 'user' : 'model',
+        role,
         parts: [{ text: msg.content }]
       });
-    });
+    } else if (msg.content.images) {
+      // 画像メッセージの処理
+      const parts = [];
+      
+      // 画像を追加
+      for (const imgData of msg.content.images) {
+        const base64Data = await encodeImageToBase64(imgData);
+        const mimeType = imgData.type || 'image/jpeg';
+        parts.push({
+          inlineData: {
+            mimeType,
+            data: base64Data
+          }
+        });
+      }
+      
+      // テキストがあれば追加
+      if (msg.content.text) {
+        parts.push({ text: msg.content.text });
+      }
+      
+      contents.push({ role, parts });
+    }
+  }
 
-    contents.push({
-      role: 'user',
-      parts: [{ text: message }]
-    });
+  // 現在のメッセージを追加
+  const currentParts = [];
+  
+  // 画像が含まれている場合
+  if (typeof message === 'object' && message.images) {
+    // 画像を追加
+    for (const imgData of message.images) {
+      const base64Data = await encodeImageToBase64(imgData);
+      const mimeType = imgData.type || 'image/jpeg';
+      currentParts.push({
+        inlineData: {
+          mimeType,
+          data: base64Data
+        }
+      });
+    }
+    
+    // テキストがあれば追加
+    if (message.text) {
+      currentParts.push({ text: message.text });
+    }
+  } else {
+    // テキストのみの場合
+    currentParts.push({ text: message });
+  }
+  
+  contents.push({
+    role: 'user',
+    parts: currentParts
+  });
 
     const requestBody = {
       contents: contents,

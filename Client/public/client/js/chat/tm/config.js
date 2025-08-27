@@ -17,7 +17,7 @@ export default GEMINI_CONFIG;
  * @property {string} SAFETY_SETTINGS[].threshold - ブロック閾値。
  */
 const CONFIG = {
-  API_KEY: "AIzaSyDo7xQq1dIHy1j4xNCmZh2vyzX3rE74PF0",
+  API_KEY: "AIzaSyBcRmayGEgf2EA3WItMg9djgoNv4QN2Hnc",
   API_URL:
     'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
   GENERATION_CONFIG: {
