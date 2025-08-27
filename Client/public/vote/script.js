@@ -7,7 +7,7 @@ let sectionsData = [];
 async function loadContent() {
     try {
         // Use absolute path from the root of the website
-        const response = await fetch('/vote/data/content.json', {
+        const response = await fetch('https://sugisaku8.github.io/Deep-School/vote/data/content.json', {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
