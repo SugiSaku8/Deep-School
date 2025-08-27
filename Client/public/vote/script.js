@@ -57,7 +57,7 @@ function selectLanguage(lang) {
     const languageScreen = document.getElementById('language-screen');
     const navButtons = document.querySelector('.nav-buttons');
     
-    if (languageScreen) languageScreen.classList.remove('active');
+    if (languageScreen) languageScreen.style.display = 'none';
     if (navButtons) navButtons.style.display = 'flex';
     
     // Show selected language content
