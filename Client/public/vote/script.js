@@ -322,14 +322,16 @@ function goBack() {
     // Reset current section
     currentSection = 0;
     
-    // Clear content container
-   document.getElementById('content-container').style.display = 'none';
-
-    // Hide navigation buttons
-    document.querySelector('.nav-buttons').style.display = 'none';
+    // Hide all content sections
+    document.querySelectorAll('.content-section').forEach(section => {
+        section.style.display = 'none';
+    });
     
     // Show language selection screen
     document.getElementById('language-screen').style.display = 'block';
+    
+    // Hide navigation buttons
+    document.querySelector('.nav-buttons').style.display = 'none';
     
     // Clear URL hash
     history.pushState('', document.title, window.location.pathname + window.location.search);
