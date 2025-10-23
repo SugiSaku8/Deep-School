@@ -1,6 +1,4 @@
 // Import styles
-import 'dialog.css';
-
 class Dialog {
   constructor(options) {
     this.options = options;
