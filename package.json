@@ -51,7 +51,7 @@
   "dependencies": {
     "@wasm-tool/wasm-pack-plugin": "^1.7.0",
     "assemblyscript": "^0.28.3",
-    "nodemailer": "^7.0.5",
+    "nodemailer": "^8.0.2",
     "standalone": "^0.0.1",
     "webpack": "^5.100.2",
     "webpack-cli": "^6.0.1"
